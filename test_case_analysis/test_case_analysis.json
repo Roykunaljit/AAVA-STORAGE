@@ -1,0 +1,3739 @@
+{
+  "meta": {
+    "analysis_version": "1.0",
+    "analyzed_at": "2025-01-15T10:30:00Z",
+    "source_file": "TEST-CASE/C44873414.xlsx",
+    "source_repository": "AAVA-STORAGE",
+    "source_branch": "main",
+    "analyzer": "Senior Test Case Analyst Agent",
+    "total_test_cases": 1,
+    "total_test_steps": 15,
+    "total_unique_ui_elements": 23,
+    "total_assertions": 15,
+    "total_pages_identified": 3,
+    "total_preconditions": 4,
+    "total_test_data_fields": 12,
+    "total_locators_needed": 23,
+    "total_action_methods_needed": 28,
+    "total_assertion_methods_needed": 15,
+    "total_page_objects_needed": 3,
+    "analysis_completeness": "full"
+  },
+  "excel_structure": {
+    "total_sheets": 1,
+    "sheet_names": [
+      "Sheet1"
+    ],
+    "columns_found": [
+      "Resource Name",
+      "TC ID",
+      "Test Category (Smoke, Regression)",
+      "Title",
+      "Section",
+      "Section Hierarchy",
+      "PreConditions",
+      "Steps",
+      "Categorize",
+      "Analysis Status",
+      "Complexity",
+      "Automation Feasibility",
+      "Query(Yes/No)",
+      "Query",
+      "Comment",
+      "Column_16"
+    ],
+    "total_rows": 2,
+    "notes": "Excel file contains 1 test case with detailed multi-step test scenario. The Steps column contains multiple numbered steps with embedded expected results. Test case is marked as Complex with Visual (UX) + functional categorization."
+  },
+  "test_cases": [
+    {
+      "test_case_metadata": {
+        "test_case_id": "C44873414",
+        "title": "Billing Cycle Period card",
+        "description": "Test case to verify the Billing Cycle Period card functionality on Print and Payment History page for paused Instant Ink subscription plans with various page limits (25/50/100/300/700 pages). Validates display of pause information, complimentary pages progress bar, additional pages tracking, tooltips, and page count accuracy.",
+        "module": "Instant Supply",
+        "sub_module": "Dashboard - Extended > Pause Plan > Print and Payment History page with 25/50/100/300/700 pages plan",
+        "priority": "Medium",
+        "severity": "Medium",
+        "test_type": "Regression",
+        "tags": [
+          "regression",
+          "instant_ink",
+          "pause_plan",
+          "billing_cycle",
+          "print_history",
+          "payment_history",
+          "visual_ux",
+          "functional"
+        ],
+        "author": "Nitish",
+        "environment": null,
+        "browser_device": "Desktop and Mobile/Tablet (responsive testing required)",
+        "status": null,
+        "custom_fields": {
+          "section": "Print and Payment History page with 25/50/100/300/700 pages plan",
+          "section_hierarchy": "Instant Supply > Regression Test > 2 - Medium > Dashboard - Extended > Pause Plan > Print and Payment History page with 25/50/100/300/700 pages plan",
+          "categorize": "Visual (Ux) + functional",
+          "analysis_status": "To be discussed: Specific Ink printer? 4.Click the Pause Plan button on CIT modal or \"Pause Instant Ink\" link to trigger the pause plan. Manual execution for pages on overview to be performed and verified the same",
+          "complexity": "Complex",
+          "automation_feasibility": null,
+          "query_yes_no": null,
+          "query": null,
+          "comment": null
+        }
+      },
+      "preconditions": [
+        {
+          "precondition_number": 1,
+          "raw_text": "Enroll the Ink printer with 50 pages plan or higher.",
+          "interpreted_meaning": "A printer must be enrolled in the HP Instant Ink service with a subscription plan of at least 50 pages per month. This requires either API-based enrollment setup or manual enrollment before test execution. The printer must be successfully registered and associated with a valid Instant Ink account.",
+          "precondition_type": "data_setup",
+          "is_inferred": false,
+          "implied_components": [
+            {
+              "component_type": "api_helper",
+              "component_name_suggestion": "enroll_printer_with_instant_ink",
+              "reason": "Need API helper to enroll printer with specific plan programmatically for test setup"
+            },
+            {
+              "component_type": "test_data",
+              "component_name_suggestion": "printer_enrollment_data",
+              "reason": "Need printer ID, account credentials, and plan details (50+ pages) for enrollment"
+            },
+            {
+              "component_type": "assertion",
+              "component_name_suggestion": "verify_printer_enrolled_successfully",
+              "reason": "Need to verify enrollment was successful before proceeding with test"
+            },
+            {
+              "component_type": "utility",
+              "component_name_suggestion": "get_printer_enrollment_status",
+              "reason": "Need utility to check current enrollment status of printer"
+            }
+          ]
+        },
+        {
+          "precondition_number": 2,
+          "raw_text": "Make sure the Subscription has no free months info.",
+          "interpreted_meaning": "The Instant Ink subscription associated with the enrolled printer must not have any free trial months or promotional free months active. This ensures the billing cycle behaves as expected for a regular paid subscription. May require API call to verify subscription details or database query.",
+          "precondition_type": "state",
+          "is_inferred": false,
+          "implied_components": [
+            {
+              "component_type": "api_helper",
+              "component_name_suggestion": "get_subscription_details",
+              "reason": "Need API helper to retrieve subscription information and verify no free months"
+            },
+            {
+              "component_type": "assertion",
+              "component_name_suggestion": "verify_no_free_months_in_subscription",
+              "reason": "Need to assert that free months field is null or zero"
+            },
+            {
+              "component_type": "utility",
+              "component_name_suggestion": "validate_subscription_state",
+              "reason": "Need utility to validate subscription is in correct state for testing"
+            }
+          ]
+        },
+        {
+          "precondition_number": 3,
+          "raw_text": "Make sure the subscription is \"subscribed\" status.",
+          "interpreted_meaning": "The Instant Ink subscription status must be in 'subscribed' state (active and not cancelled, paused, or expired). This is a critical precondition that determines whether the subscription is actively billing. Requires verification through API or database query before test execution.",
+          "precondition_type": "state",
+          "is_inferred": false,
+          "implied_components": [
+            {
+              "component_type": "api_helper",
+              "component_name_suggestion": "get_subscription_status",
+              "reason": "Need API helper to retrieve current subscription status"
+            },
+            {
+              "component_type": "assertion",
+              "component_name_suggestion": "verify_subscription_status_is_subscribed",
+              "reason": "Need to assert subscription status equals 'subscribed'"
+            },
+            {
+              "component_type": "test_data",
+              "component_name_suggestion": "expected_subscription_status",
+              "reason": "Need expected status value 'subscribed' for comparison"
+            }
+          ]
+        },
+        {
+          "precondition_number": 4,
+          "raw_text": "Click the Pause Plan button on CIT modal or \"Pause Instant Ink\" link to trigger the pause plan.",
+          "interpreted_meaning": "Before the main test steps begin, the user must navigate to the appropriate location (CIT modal or Instant Ink page) and click either the 'Pause Plan' button or 'Pause Instant Ink' link to initiate the plan pause action. This changes the subscription state from 'subscribed' to 'paused'. This is both a navigation and state-change precondition.",
+          "precondition_type": "state",
+          "is_inferred": false,
+          "implied_components": [
+            {
+              "component_type": "page_object",
+              "component_name_suggestion": "InstantInkPage",
+              "reason": "Need page object for the Instant Ink page where pause link exists"
+            },
+            {
+              "component_type": "page_object",
+              "component_name_suggestion": "CITModal",
+              "reason": "Need page object for CIT modal if pause button is there"
+            },
+            {
+              "component_type": "locator",
+              "component_name_suggestion": "pause_plan_button",
+              "reason": "Need locator for Pause Plan button on CIT modal"
+            },
+            {
+              "component_type": "locator",
+              "component_name_suggestion": "pause_instant_ink_link",
+              "reason": "Need locator for Pause Instant Ink link"
+            },
+            {
+              "component_type": "action_method",
+              "component_name_suggestion": "click_pause_plan",
+              "reason": "Need method to click pause plan button or link"
+            },
+            {
+              "component_type": "action_method",
+              "component_name_suggestion": "navigate_to_instant_ink_page",
+              "reason": "Need method to navigate to Instant Ink page"
+            },
+            {
+              "component_type": "assertion",
+              "component_name_suggestion": "verify_plan_paused_successfully",
+              "reason": "Need to verify plan pause action completed successfully"
+            },
+            {
+              "component_type": "utility",
+              "component_name_suggestion": "wait_for_pause_confirmation",
+              "reason": "Need to wait for pause confirmation message or status change"
+            }
+          ]
+        }
+      ],
+      "test_steps": [
+        {
+          "step_number": 1,
+          "raw_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "raw_expected_result": null,
+          "raw_test_data": null,
+          "interpreted_action": "Navigate to the Print and Payment History page which is located under the HP Instant Ink section. This requires either clicking a navigation link/menu item or directly navigating to a URL. The page must fully load before proceeding to next step.",
+          "action_type": "navigate_to_url",
+          "sub_actions": [
+            {
+              "sub_action_number": 1,
+              "action": "Navigate to Print and Payment History page",
+              "action_type": "navigate_to_url",
+              "element_involved": "print_payment_history_link",
+              "data_needed": "print_payment_history_url"
+            }
+          ],
+          "ui_elements_involved": [
+            {
+              "element_type": "link",
+              "element_name": "print_payment_history_link",
+              "element_identifier_hint": "Link or menu item with text 'Print and Payment History' or similar under HP Instant Ink section",
+              "interaction_type": "click",
+              "page_context": "InstantInkPage or DashboardPage",
+              "is_inferred": false,
+              "required_state": "visible_and_clickable"
+            }
+          ],
+          "navigation_involved": {
+            "is_navigation_step": true,
+            "from_page": "InstantInkPage or DashboardPage",
+            "to_page": "PrintAndPaymentHistoryPage",
+            "navigation_method": "link_click",
+            "url_hint": "/instant-ink/print-payment-history or similar",
+            "expected_page_indicator": "Print and Payment History page title or heading visible"
+          },
+          "test_data_needed": [
+            {
+              "data_field_name": "print_payment_history_url",
+              "data_type": "url",
+              "sample_value": "https://app.hp.com/instant-ink/print-payment-history",
+              "is_provided_in_test_case": false,
+              "constraints": "Must be valid URL for Print and Payment History page",
+              "data_source": "environment_config",
+              "is_sensitive": false,
+              "used_for": "Navigation to target page"
+            }
+          ],
+          "assertions": [
+            {
+              "assertion_number": 1,
+              "assertion_type": "page_loaded",
+              "target_element": "print_payment_history_page",
+              "expected_value": "Page loaded successfully",
+              "assertion_description": "Verify Print and Payment History page loads successfully",
+              "is_hard_assertion": true,
+              "is_inferred": true,
+              "suggested_method_name": "verify_print_payment_history_page_loaded"
+            }
+          ],
+          "wait_conditions": [
+            {
+              "wait_type": "page_load_wait",
+              "wait_target": "PrintAndPaymentHistoryPage",
+              "suggested_timeout_seconds": 30,
+              "wait_description": "Wait for Print and Payment History page to fully load",
+              "when": "after_action"
+            }
+          ],
+          "error_scenarios": [
+            {
+              "error_description": "Page fails to load or times out",
+              "error_indicator": "Page title not found or timeout exception",
+              "error_type": "page_load_failure",
+              "recovery_action": "retry_once_then_fail",
+              "impact": "Cannot proceed with test"
+            }
+          ],
+          "dependencies": {
+            "depends_on_step": null,
+            "dependency_type": null,
+            "dependency_detail": "First step - depends on preconditions being met"
+          },
+          "api_calls_implied": [
+            {
+              "api_endpoint_hint": "GET /instant-ink/print-payment-history",
+              "http_method": "GET",
+              "purpose": "Load Print and Payment History page data",
+              "is_explicit": false,
+              "is_inferred": true
+            }
+          ],
+          "step_complexity": "low",
+          "automation_notes_for_step": "Standard navigation step. Ensure URL is configurable. Add page load verification."
+        },
+        {
+          "step_number": 2,
+          "raw_action": "Check the Billing Cycle Period card.",
+          "raw_expected_result": "Verify the plan pause information is not displayed.",
+          "raw_test_data": null,
+          "interpreted_action": "Locate the Billing Cycle Period card component on the Print and Payment History page and verify its content. At this point (before 32 days shift), the plan pause information should NOT be visible on this card. This is a visual verification step requiring element visibility checks.",
+          "action_type": "verification",
+          "sub_actions": [
+            {
+              "sub_action_number": 1,
+              "action": "Locate Billing Cycle Period card",
+              "action_type": "wait",
+              "element_involved": "billing_cycle_period_card",
+              "data_needed": null
+            },
+            {
+              "sub_action_number": 2,
+              "action": "Verify plan pause information is not displayed",
+              "action_type": "verification",
+              "element_involved": "plan_pause_information",
+              "data_needed": null
+            }
+          ],
+          "ui_elements_involved": [
+            {
+              "element_type": "section",
+              "element_name": "billing_cycle_period_card",
+              "element_identifier_hint": "Card or section with heading 'Billing Cycle Period' or similar",
+              "interaction_type": "wait_for_visible",
+              "page_context": "PrintAndPaymentHistoryPage",
+              "is_inferred": false,
+              "required_state": "visible"
+            },
+            {
+              "element_type": "text_display",
+              "element_name": "plan_pause_information",
+              "element_identifier_hint": "Text or label showing plan pause information within Billing Cycle Period card",
+              "interaction_type": "none_just_verify",
+              "page_context": "PrintAndPaymentHistoryPage",
+              "is_inferred": false,
+              "required_state": "not_visible"
+            }
+          ],
+          "navigation_involved": {
+            "is_navigation_step": false,
+            "from_page": null,
+            "to_page": null,
+            "navigation_method": null,
+            "url_hint": null,
+            "expected_page_indicator": null
+          },
+          "test_data_needed": [],
+          "assertions": [
+            {
+              "assertion_number": 1,
+              "assertion_type": "element_visible",
+              "target_element": "billing_cycle_period_card",
+              "expected_value": "visible",
+              "assertion_description": "Verify Billing Cycle Period card is visible on the page",
+              "is_hard_assertion": true,
+              "is_inferred": true,
+              "suggested_method_name": "verify_billing_cycle_period_card_visible"
+            },
+            {
+              "assertion_number": 2,
+              "assertion_type": "element_not_visible",
+              "target_element": "plan_pause_information",
+              "expected_value": "not visible",
+              "assertion_description": "Verify the plan pause information is NOT displayed on the Billing Cycle Period card before 32 days shift",
+              "is_hard_assertion": true,
+              "is_inferred": false,
+              "suggested_method_name": "verify_plan_pause_info_not_displayed"
+            }
+          ],
+          "wait_conditions": [
+            {
+              "wait_type": "explicit_wait_visible",
+              "wait_target": "billing_cycle_period_card",
+              "suggested_timeout_seconds": 10,
+              "wait_description": "Wait for Billing Cycle Period card to be visible",
+              "when": "before_action"
+            }
+          ],
+          "error_scenarios": [
+            {
+              "error_description": "Billing Cycle Period card not found on page",
+              "error_indicator": "Element not found exception",
+              "error_type": "element_not_found",
+              "recovery_action": "fail_with_screenshot",
+              "impact": "Cannot verify card content"
+            }
+          ],
+          "dependencies": {
+            "depends_on_step": 1,
+            "dependency_type": "state_from_previous",
+            "dependency_detail": "Requires being on Print and Payment History page from step 1"
+          },
+          "api_calls_implied": [],
+          "step_complexity": "low",
+          "automation_notes_for_step": "Simple visibility check. Ensure robust locator for card and pause information element."
+        },
+        {
+          "step_number": 3,
+          "raw_action": "Even shift 32 days and trigger billing charge.",
+          "raw_expected_result": null,
+          "raw_test_data": "32 days",
+          "interpreted_action": "Simulate a time shift of 32 days forward to trigger the next billing cycle charge. This is a backend operation that likely requires API call or database manipulation to advance the subscription billing date by 32 days. This simulates the passage of time without actually waiting 32 days.",
+          "action_type": "api_call",
+          "sub_actions": [
+            {
+              "sub_action_number": 1,
+              "action": "Shift subscription date by 32 days",
+              "action_type": "api_call",
+              "element_involved": null,
+              "data_needed": "days_to_shift"
+            },
+            {
+              "sub_action_number": 2,
+              "action": "Trigger billing charge",
+              "action_type": "api_call",
+              "element_involved": null,
+              "data_needed": null
+            }
+          ],
+          "ui_elements_involved": [],
+          "navigation_involved": {
+            "is_navigation_step": false,
+            "from_page": null,
+            "to_page": null,
+            "navigation_method": null,
+            "url_hint": null,
+            "expected_page_indicator": null
+          },
+          "test_data_needed": [
+            {
+              "data_field_name": "days_to_shift",
+              "data_type": "integer",
+              "sample_value": "32",
+              "is_provided_in_test_case": true,
+              "constraints": "Must be 32 days to trigger next billing cycle",
+              "data_source": "hardcoded",
+              "is_sensitive": false,
+              "used_for": "Time shift simulation"
+            }
+          ],
+          "assertions": [
+            {
+              "assertion_number": 1,
+              "assertion_type": "api_response_status",
+              "target_element": "time_shift_api",
+              "expected_value": "200 or success",
+              "assertion_description": "Verify time shift API call succeeds",
+              "is_hard_assertion": true,
+              "is_inferred": true,
+              "suggested_method_name": "verify_time_shift_successful"
+            },
+            {
+              "assertion_number": 2,
+              "assertion_type": "api_response_status",
+              "target_element": "billing_charge_api",
+              "expected_value": "200 or success",
+              "assertion_description": "Verify billing charge is triggered successfully",
+              "is_hard_assertion": true,
+              "is_inferred": true,
+              "suggested_method_name": "verify_billing_charge_triggered"
+            }
+          ],
+          "wait_conditions": [
+            {
+              "wait_type": "custom_condition",
+              "wait_target": "billing_charge_completion",
+              "suggested_timeout_seconds": 60,
+              "wait_description": "Wait for billing charge processing to complete",
+              "when": "after_action"
+            }
+          ],
+          "error_scenarios": [
+            {
+              "error_description": "Time shift API fails",
+              "error_indicator": "API returns error status",
+              "error_type": "api_failure",
+              "recovery_action": "fail",
+              "impact": "Cannot proceed with test as billing cycle won't advance"
+            },
+            {
+              "error_description": "Billing charge fails to trigger",
+              "error_indicator": "Billing status not updated",
+              "error_type": "business_logic_failure",
+              "recovery_action": "fail",
+              "impact": "Test scenario cannot be validated"
+            }
+          ],
+          "dependencies": {
+            "depends_on_step": 2,
+            "dependency_type": "state_from_previous",
+            "dependency_detail": "Requires initial state verification from step 2 before time shift"
+          },
+          "api_calls_implied": [
+            {
+              "api_endpoint_hint": "POST /api/subscription/shift-date",
+              "http_method": "POST",
+              "purpose": "Shift subscription billing date by specified days",
+              "is_explicit": false,
+              "is_inferred": true
+            },
+            {
+              "api_endpoint_hint": "POST /api/billing/trigger-charge",
+              "http_method": "POST",
+              "purpose": "Manually trigger billing charge for subscription",
+              "is_explicit": false,
+              "is_inferred": true
+            }
+          ],
+          "step_complexity": "high",
+          "automation_notes_for_step": "Requires backend API access for time manipulation. This is a critical step that changes system state. Ensure proper API authentication and error handling."
+        },
+        {
+          "step_number": 4,
+          "raw_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "raw_expected_result": null,
+          "raw_test_data": null,
+          "interpreted_action": "Navigate back to (or refresh) the Print and Payment History page to see the updated state after the 32-day time shift and billing charge. This is the same navigation as step 1 but now the page should show different data reflecting the billing cycle change.",
+          "action_type": "navigate_to_url",
+          "sub_actions": [
+            {
+              "sub_action_number": 1,
+              "action": "Navigate to or refresh Print and Payment History page",
+              "action_type": "navigate_to_url",
+              "element_involved": "print_payment_history_link",
+              "data_needed": "print_payment_history_url"
+            }
+          ],
+          "ui_elements_involved": [
+            {
+              "element_type": "link",
+              "element_name": "print_payment_history_link",
+              "element_identifier_hint": "Link or menu item with text 'Print and Payment History' or similar",
+              "interaction_type": "click",
+              "page_context": "InstantInkPage or DashboardPage",
+              "is_inferred": false,
+              "required_state": "visible_and_clickable"
+            }
+          ],
+          "navigation_involved": {
+            "is_navigation_step": true,
+            "from_page": "Current page",
+            "to_page": "PrintAndPaymentHistoryPage",
+            "navigation_method": "link_click",
+            "url_hint": "/instant-ink/print-payment-history",
+            "expected_page_indicator": "Print and Payment History page loaded with updated data"
+          },
+          "test_data_needed": [
+            {
+              "data_field_name": "print_payment_history_url",
+              "data_type": "url",
+              "sample_value": "https://app.hp.com/instant-ink/print-payment-history",
+              "is_provided_in_test_case": false,
+              "constraints": "Must be valid URL",
+              "data_source": "environment_config",
+              "is_sensitive": false,
+              "used_for": "Navigation"
+            }
+          ],
+          "assertions": [
+            {
+              "assertion_number": 1,
+              "assertion_type": "page_loaded",
+              "target_element": "print_payment_history_page",
+              "expected_value": "Page loaded with updated data",
+              "assertion_description": "Verify Print and Payment History page loads with updated billing cycle data",
+              "is_hard_assertion": true,
+              "is_inferred": true,
+              "suggested_method_name": "verify_page_loaded_with_updated_data"
+            }
+          ],
+          "wait_conditions": [
+            {
+              "wait_type": "page_load_wait",
+              "wait_target": "PrintAndPaymentHistoryPage",
+              "suggested_timeout_seconds": 30,
+              "wait_description": "Wait for page to reload with updated data",
+              "when": "after_action"
+            }
+          ],
+          "error_scenarios": [
+            {
+              "error_description": "Page fails to load updated data",
+              "error_indicator": "Old data still displayed",
+              "error_type": "data_refresh_failure",
+              "recovery_action": "retry_refresh",
+              "impact": "Cannot verify updated state"
+            }
+          ],
+          "dependencies": {
+            "depends_on_step": 3,
+            "dependency_type": "state_from_previous",
+            "dependency_detail": "Requires time shift and billing charge from step 3 to complete"
+          },
+          "api_calls_implied": [
+            {
+              "api_endpoint_hint": "GET /instant-ink/print-payment-history",
+              "http_method": "GET",
+              "purpose": "Load updated page data after billing cycle change",
+              "is_explicit": false,
+              "is_inferred": true
+            }
+          ],
+          "step_complexity": "low",
+          "automation_notes_for_step": "Same as step 1 but context is different - now expecting updated data. May need cache clearing or hard refresh."
+        },
+        {
+          "step_number": 5,
+          "raw_action": "Check the Billing Cycle Period card.",
+          "raw_expected_result": "Verify the plan pause information is displayed well.",
+          "raw_test_data": null,
+          "interpreted_action": "Locate the Billing Cycle Period card again and this time verify that the plan pause information IS displayed correctly. This is the opposite verification from step 2 - now after the billing cycle, the pause information should be visible. The test case includes a screenshot reference (index.php?/attachments/get/35447537) suggesting visual validation.",
+          "action_type": "verification",
+          "sub_actions": [
+            {
+              "sub_action_number": 1,
+              "action": "Locate Billing Cycle Period card",
+              "action_type": "wait",
+              "element_involved": "billing_cycle_period_card",
+              "data_needed": null
+            },
+            {
+              "sub_action_number": 2,
+              "action": "Verify plan pause information is displayed",
+              "action_type": "verification",
+              "element_involved": "plan_pause_information",
+              "data_needed": null
+            }
+          ],
+          "ui_elements_involved": [
+            {
+              "element_type": "section",
+              "element_name": "billing_cycle_period_card",
+              "element_identifier_hint": "Card or section with heading 'Billing Cycle Period'",
+              "interaction_type": "wait_for_visible",
+              "page_context": "PrintAndPaymentHistoryPage",
+              "is_inferred": false,
+              "required_state": "visible"
+            },
+            {
+              "element_type": "text_display",
+              "element_name": "plan_pause_information",
+              "element_identifier_hint": "Text or label showing plan pause information within Billing Cycle Period card",
+              "interaction_type": "read_text",
+              "page_context": "PrintAndPaymentHistoryPage",
+              "is_inferred": false,
+              "required_state": "visible"
+            }
+          ],
+          "navigation_involved": {
+            "is_navigation_step": false,
+            "from_page": null,
+            "to_page": null,
+            "navigation_method": null,
+            "url_hint": null,
+            "expected_page_indicator": null
+          },
+          "test_data_needed": [],
+          "assertions": [
+            {
+              "assertion_number": 1,
+              "assertion_type": "element_visible",
+              "target_element": "billing_cycle_period_card",
+              "expected_value": "visible",
+              "assertion_description": "Verify Billing Cycle Period card is visible",
+              "is_hard_assertion": true,
+              "is_inferred": true,
+              "suggested_method_name": "verify_billing_cycle_period_card_visible"
+            },
+            {
+              "assertion_number": 2,
+              "assertion_type": "element_visible",
+              "target_element": "plan_pause_information",
+              "expected_value": "visible and displayed well",
+              "assertion_description": "Verify the plan pause information IS displayed correctly on the Billing Cycle Period card after billing cycle",
+              "is_hard_assertion": true,
+              "is_inferred": false,
+              "suggested_method_name": "verify_plan_pause_info_displayed_correctly"
+            }
+          ],
+          "wait_conditions": [
+            {
+              "wait_type": "explicit_wait_visible",
+              "wait_target": "billing_cycle_period_card",
+              "suggested_timeout_seconds": 10,
+              "wait_description": "Wait for Billing Cycle Period card to be visible",
+              "when": "before_action"
+            },
+            {
+              "wait_type": "explicit_wait_visible",
+              "wait_target": "plan_pause_information",
+              "suggested_timeout_seconds": 10,
+              "wait_description": "Wait for plan pause information to be visible",
+              "when": "before_action"
+            }
+          ],
+          "error_scenarios": [
+            {
+              "error_description": "Plan pause information not displayed after billing cycle",
+              "error_indicator": "Element not visible or not found",
+              "error_type": "display_failure",
+              "recovery_action": "fail_with_screenshot",
+              "impact": "Core functionality failure"
+            }
+          ],
+          "dependencies": {
+            "depends_on_step": 4,
+            "dependency_type": "state_from_previous",
+            "dependency_detail": "Requires page reload from step 4 with updated billing data"
+          },
+          "api_calls_implied": [],
+          "step_complexity": "medium",
+          "automation_notes_for_step": "Visual verification step. May require screenshot comparison or OCR for 'displayed well' validation. Reference screenshot provided in test case."
+        },
+        {
+          "step_number": 6,
+          "raw_action": "Check the progress bar.",
+          "raw_expected_result": "Verify the Complimentary pages progress bar is displayed well.",
+          "raw_test_data": null,
+          "interpreted_action": "Locate and verify the Complimentary pages progress bar element within the Billing Cycle Period card. Verify it is visible and rendered correctly. This is a visual UI component validation.",
+          "action_type": "verification",
+          "sub_actions": [
+            {
+              "sub_action_number": 1,
+              "action": "Locate Complimentary pages progress bar",
+              "action_type": "wait",
+              "element_involved": "complimentary_pages_progress_bar",
+              "data_needed": null
+            },
+            {
+              "sub_action_number": 2,
+              "action": "Verify progress bar is displayed correctly",
+              "action_type": "verification",
+              "element_involved": "complimentary_pages_progress_bar",
+              "data_needed": null
+            }
+          ],
+          "ui_elements_involved": [
+            {
+              "element_type": "progress_bar",
+              "element_name": "complimentary_pages_progress_bar",
+              "element_identifier_hint": "Progress bar element associated with 'Complimentary pages' label",
+              "interaction_type": "wait_for_visible",
+              "page_context": "PrintAndPaymentHistoryPage",
+              "is_inferred": false,
+              "required_state": "visible"
+            }
+          ],
+          "navigation_involved": {
+            "is_navigation_step": false,
+            "from_page": null,
+            "to_page": null,
+            "navigation_method": null,
+            "url_hint": null,
+            "expected_page_indicator": null
+          },
+          "test_data_needed": [],
+          "assertions": [
+            {
+              "assertion_number": 1,
+              "assertion_type": "element_visible",
+              "target_element": "complimentary_pages_progress_bar",
+              "expected_value": "visible and displayed well",
+              "assertion_description": "Verify the Complimentary pages progress bar is visible and rendered correctly",
+              "is_hard_assertion": true,
+              "is_inferred": false,
+              "suggested_method_name": "verify_complimentary_pages_progress_bar_displayed"
+            }
+          ],
+          "wait_conditions": [
+            {
+              "wait_type": "explicit_wait_visible",
+              "wait_target": "complimentary_pages_progress_bar",
+              "suggested_timeout_seconds": 10,
+              "wait_description": "Wait for progress bar to be visible",
+              "when": "before_action"
+            }
+          ],
+          "error_scenarios": [
+            {
+              "error_description": "Progress bar not displayed",
+              "error_indicator": "Element not found or not visible",
+              "error_type": "display_failure",
+              "recovery_action": "fail_with_screenshot",
+              "impact": "UI component missing"
+            }
+          ],
+          "dependencies": {
+            "depends_on_step": 5,
+            "dependency_type": "state_from_previous",
+            "dependency_detail": "Requires Billing Cycle Period card to be visible from step 5"
+          },
+          "api_calls_implied": [],
+          "step_complexity": "low",
+          "automation_notes_for_step": "Visual verification of progress bar component. May need CSS property checks for proper rendering."
+        },
+        {
+          "step_number": 7,
+          "raw_action": "For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "raw_expected_result": "Verify a tooltip with correct message is displayed well.",
+          "raw_test_data": null,
+          "interpreted_action": "This is a responsive test step with different actions based on device type. On desktop, hover over the info icon next to Complimentary pages to trigger tooltip. On mobile/tablet, click the info icon. In both cases, verify that a tooltip appears with the correct informational message. This requires device detection and conditional action execution.",
+          "action_type": "hover",
+          "sub_actions": [
+            {
+              "sub_action_number": 1,
+              "action": "Detect device type (Desktop vs Mobile/Tablet)",
+              "action_type": "other",
+              "element_involved": null,
+              "data_needed": "device_type"
+            },
+            {
+              "sub_action_number": 2,
+              "action": "If Desktop: Hover over info icon",
+              "action_type": "hover",
+              "element_involved": "complimentary_pages_info_icon",
+              "data_needed": null
+            },
+            {
+              "sub_action_number": 3,
+              "action": "If Mobile/Tablet: Click info icon",
+              "action_type": "click",
+              "element_involved": "complimentary_pages_info_icon",
+              "data_needed": null
+            },
+            {
+              "sub_action_number": 4,
+              "action": "Wait for tooltip to appear",
+              "action_type": "wait",
+              "element_involved": "complimentary_pages_tooltip",
+              "data_needed": null
+            }
+          ],
+          "ui_elements_involved": [
+            {
+              "element_type": "icon",
+              "element_name": "complimentary_pages_info_icon",
+              "element_identifier_hint": "Info icon (typically 'i' in circle) next to Complimentary pages label",
+              "interaction_type": "hover_over",
+              "page_context": "PrintAndPaymentHistoryPage",
+              "is_inferred": false,
+              "required_state": "visible_and_clickable"
+            },
+            {
+              "element_type": "tooltip",
+              "element_name": "complimentary_pages_tooltip",
+              "element_identifier_hint": "Tooltip that appears when hovering/clicking info icon",
+              "interaction_type": "read_text",
+              "page_context": "PrintAndPaymentHistoryPage",
+              "is_inferred": false,
+              "required_state": "visible"
+            }
+          ],
+          "navigation_involved": {
+            "is_navigation_step": false,
+            "from_page": null,
+            "to_page": null,
+            "navigation_method": null,
+            "url_hint": null,
+            "expected_page_indicator": null
+          },
+          "test_data_needed": [
+            {
+              "data_field_name": "device_type",
+              "data_type": "string",
+              "sample_value": "desktop",
+              "is_provided_in_test_case": false,
+              "constraints": "Must be 'desktop', 'mobile', or 'tablet'",
+              "data_source": "runtime_generated",
+              "is_sensitive": false,
+              "used_for": "Conditional action execution based on device"
+            },
+            {
+              "data_field_name": "expected_tooltip_message",
+              "data_type": "string",
+              "sample_value": "Complimentary pages are provided during pause plan period",
+              "is_provided_in_test_case": false,
+              "constraints": "Must match actual tooltip text",
+              "data_source": "test_data_file",
+              "is_sensitive": false,
+              "used_for": "Tooltip text validation"
+            }
+          ],
+          "assertions": [
+            {
+              "assertion_number": 1,
+              "assertion_type": "element_visible",
+              "target_element": "complimentary_pages_tooltip",
+              "expected_value": "visible",
+              "assertion_description": "Verify tooltip appears after hover/click on info icon",
+              "is_hard_assertion": true,
+              "is_inferred": true,
+              "suggested_method_name": "verify_tooltip_displayed"
+            },
+            {
+              "assertion_number": 2,
+              "assertion_type": "text_contains",
+              "target_element": "complimentary_pages_tooltip",
+              "expected_value": "correct message",
+              "assertion_description": "Verify tooltip displays the correct informational message",
+              "is_hard_assertion": true,
+              "is_inferred": false,
+              "suggested_method_name": "verify_tooltip_message_correct"
+            }
+          ],
+          "wait_conditions": [
+            {
+              "wait_type": "explicit_wait_visible",
+              "wait_target": "complimentary_pages_tooltip",
+              "suggested_timeout_seconds": 5,
+              "wait_description": "Wait for tooltip to appear after hover/click",
+              "when": "after_action"
+            }
+          ],
+          "error_scenarios": [
+            {
+              "error_description": "Tooltip does not appear on hover/click",
+              "error_indicator": "Tooltip element not visible within timeout",
+              "error_type": "interaction_failure",
+              "recovery_action": "retry_once_then_fail",
+              "impact": "Tooltip functionality broken"
+            },
+            {
+              "error_description": "Tooltip shows incorrect message",
+              "error_indicator": "Text mismatch",
+              "error_type": "content_error",
+              "recovery_action": "fail_with_screenshot",
+              "impact": "Incorrect information displayed to user"
+            }
+          ],
+          "dependencies": {
+            "depends_on_step": 6,
+            "dependency_type": "state_from_previous",
+            "dependency_detail": "Requires progress bar and info icon to be visible from step 6"
+          },
+          "api_calls_implied": [],
+          "step_complexity": "medium",
+          "automation_notes_for_step": "Requires responsive testing with device detection. Hover action for desktop, click for mobile. Ensure tooltip locator is robust as tooltips often have dynamic positioning."
+        },
+        {
+          "step_number": 8,
+          "raw_action": "Check the Complimentary pages value.",
+          "raw_expected_result": "Verify the value is displayed as \"0 of 10(Pause Plan) used\".",
+          "raw_test_data": "0 of 10(Pause Plan) used",
+          "interpreted_action": "Locate the text element that displays the Complimentary pages usage value and verify it shows exactly '0 of 10(Pause Plan) used'. This indicates that at the start of the pause plan period, 0 out of 10 complimentary pages have been used. This is a text content verification.",
+          "action_type": "verification",
+          "sub_actions": [
+            {
+              "sub_action_number": 1,
+              "action": "Locate Complimentary pages value text",
+              "action_type": "wait",
+              "element_involved": "complimentary_pages_value_text",
+              "data_needed": null
+            },
+            {
+              "sub_action_number": 2,
+              "action": "Read and verify text content",
+              "action_type": "verification",
+              "element_involved": "complimentary_pages_value_text",
+              "data_needed": "expected_complimentary_pages_value"
+            }
+          ],
+          "ui_elements_involved": [
+            {
+              "element_type": "text_display",
+              "element_name": "complimentary_pages_value_text",
+              "element_identifier_hint": "Text element showing usage like '0 of 10(Pause Plan) used' near Complimentary pages progress bar",
+              "interaction_type": "read_text",
+              "page_context": "PrintAndPaymentHistoryPage",
+              "is_inferred": false,
+              "required_state": "visible"
+            }
+          ],
+          "navigation_involved": {
+            "is_navigation_step": false,
+            "from_page": null,
+            "to_page": null,
+            "navigation_method": null,
+            "url_hint": null,
+            "expected_page_indicator": null
+          },
+          "test_data_needed": [
+            {
+              "data_field_name": "expected_complimentary_pages_value",
+              "data_type": "string",
+              "sample_value": "0 of 10(Pause Plan) used",
+              "is_provided_in_test_case": true,
+              "constraints": "Must match exact format including parentheses and spacing",
+              "data_source": "hardcoded",
+              "is_sensitive": false,
+              "used_for": "Text content validation"
+            }
+          ],
+          "assertions": [
+            {
+              "assertion_number": 1,
+              "assertion_type": "text_equals",
+              "target_element": "complimentary_pages_value_text",
+              "expected_value": "0 of 10(Pause Plan) used",
+              "assertion_description": "Verify Complimentary pages value displays exactly '0 of 10(Pause Plan) used'",
+              "is_hard_assertion": true,
+              "is_inferred": false,
+              "suggested_method_name": "verify_complimentary_pages_value_correct"
+            }
+          ],
+          "wait_conditions": [
+            {
+              "wait_type": "explicit_wait_visible",
+              "wait_target": "complimentary_pages_value_text",
+              "suggested_timeout_seconds": 10,
+              "wait_description": "Wait for value text to be visible",
+              "when": "before_action"
+            }
+          ],
+          "error_scenarios": [
+            {
+              "error_description": "Value text not displayed",
+              "error_indicator": "Element not found",
+              "error_type": "display_failure",
+              "recovery_action": "fail_with_screenshot",
+              "impact": "Cannot verify page count"
+            },
+            {
+              "error_description": "Value shows incorrect count",
+              "error_indicator": "Text mismatch",
+              "error_type": "data_error",
+              "recovery_action": "fail_with_screenshot",
+              "impact": "Incorrect page count displayed"
+            }
+          ],
+          "dependencies": {
+            "depends_on_step": 6,
+            "dependency_type": "state_from_previous",
+            "dependency_detail": "Requires progress bar section to be visible"
+          },
+          "api_calls_implied": [],
+          "step_complexity": "low",
+          "automation_notes_for_step": "Exact text match required. Be careful with whitespace and special characters in assertion."
+        },
+        {
+          "step_number": 9,
+          "raw_action": "Check the message below \"Complimentary pages\".",
+          "raw_expected_result": "Verify the information with correct plan info is displayed well.",
+          "raw_test_data": null,
+          "interpreted_action": "Locate and verify the informational message displayed below the 'Complimentary pages' section. This message should contain correct plan information relevant to the paused plan. The exact message content is not specified but should be validated for presence and correctness.",
+          "action_type": "verification",
+          "sub_actions": [
+            {
+              "sub_action_number": 1,
+              "action": "Locate message below Complimentary pages",
+              "action_type": "wait",
+              "element_involved": "complimentary_pages_message",
+              "data_needed": null
+            },
+            {
+              "sub_action_number": 2,
+              "action": "Verify message contains correct plan info",
+              "action_type": "verification",
+              "element_involved": "complimentary_pages_message",
+              "data_needed": "expected_plan_info"
+            }
+          ],
+          "ui_elements_involved": [
+            {
+              "element_type": "text_display",
+              "element_name": "complimentary_pages_message",
+              "element_identifier_hint": "Text or paragraph element below Complimentary pages section containing plan information",
+              "interaction_type": "read_text",
+              "page_context": "PrintAndPaymentHistoryPage",
+              "is_inferred": false,
+              "required_state": "visible"
+            }
+          ],
+          "navigation_involved": {
+            "is_navigation_step": false,
+            "from_page": null,
+            "to_page": null,
+            "navigation_method": null,
+            "url_hint": null,
+            "expected_page_indicator": null
+          },
+          "test_data_needed": [
+            {
+              "data_field_name": "expected_plan_info",
+              "data_type": "string",
+              "sample_value": "You have 10 complimentary pages during your pause plan period",
+              "is_provided_in_test_case": false,
+              "constraints": "Must contain correct plan details",
+              "data_source": "test_data_file",
+              "is_sensitive": false,
+              "used_for": "Message content validation"
+            }
+          ],
+          "assertions": [
+            {
+              "assertion_number": 1,
+              "assertion_type": "element_visible",
+              "target_element": "complimentary_pages_message",
+              "expected_value": "visible",
+              "assertion_description": "Verify message below Complimentary pages is visible",
+              "is_hard_assertion": true,
+              "is_inferred": true,
+              "suggested_method_name": "verify_complimentary_pages_message_visible"
+            },
+            {
+              "assertion_number": 2,
+              "assertion_type": "text_contains",
+              "target_element": "complimentary_pages_message",
+              "expected_value": "correct plan info",
+              "assertion_description": "Verify message contains correct plan information",
+              "is_hard_assertion": true,
+              "is_inferred": false,
+              "suggested_method_name": "verify_complimentary_pages_message_correct"
+            }
+          ],
+          "wait_conditions": [
+            {
+              "wait_type": "explicit_wait_visible",
+              "wait_target": "complimentary_pages_message",
+              "suggested_timeout_seconds": 10,
+              "wait_description": "Wait for message to be visible",
+              "when": "before_action"
+            }
+          ],
+          "error_scenarios": [
+            {
+              "error_description": "Message not displayed",
+              "error_indicator": "Element not found",
+              "error_type": "display_failure",
+              "recovery_action": "fail_with_screenshot",
+              "impact": "Information missing from UI"
+            },
+            {
+              "error_description": "Message contains incorrect plan info",
+              "error_indicator": "Text content mismatch",
+              "error_type": "content_error",
+              "recovery_action": "fail_with_screenshot",
+              "impact": "Incorrect information shown to user"
+            }
+          ],
+          "dependencies": {
+            "depends_on_step": 8,
+            "dependency_type": "state_from_previous",
+            "dependency_detail": "Requires Complimentary pages section to be visible"
+          },
+          "api_calls_implied": [],
+          "step_complexity": "low",
+          "automation_notes_for_step": "Text validation step. May need flexible matching if exact message varies by plan type."
+        },
+        {
+          "step_number": 10,
+          "raw_action": "Print some pages(less than the plan, such as 6 pages). Refresh the dashboard page.",
+          "raw_expected_result": "Verify the \"Complimentary pages\" progress bar is filled with the black color and the value is displayed as correct (such as \"6 of 10 used\").",
+          "raw_test_data": "6 pages",
+          "interpreted_action": "Simulate printing 6 pages (less than the 10 complimentary pages limit). This likely requires an API call or backend operation to register printed pages. Then refresh the dashboard page to see the updated progress bar. Verify the progress bar shows 6 of 10 pages used and is filled with black color to the appropriate percentage (60%).",
+          "action_type": "multi_action_composite",
+          "sub_actions": [
+            {
+              "sub_action_number": 1,
+              "action": "Simulate printing 6 pages",
+              "action_type": "api_call",
+              "element_involved": null,
+              "data_needed": "pages_to_print"
+            },
+            {
+              "sub_action_number": 2,
+              "action": "Refresh dashboard page",
+              "action_type": "navigate_to_url",
+              "element_involved": null,
+              "data_needed": null
+            },
+            {
+              "sub_action_number": 3,
+              "action": "Verify progress bar fill and value",
+              "action_type": "verification",
+              "element_involved": "complimentary_pages_progress_bar",
+              "data_needed": "expected_pages_used"
+            }
+          ],
+          "ui_elements_involved": [
+            {
+              "element_type": "progress_bar",
+              "element_name": "complimentary_pages_progress_bar",
+              "element_identifier_hint": "Progress bar for Complimentary pages",
+              "interaction_type": "read_attribute",
+              "page_context": "PrintAndPaymentHistoryPage",
+              "is_inferred": false,
+              "required_state": "visible"
+            },
+            {
+              "element_type": "text_display",
+              "element_name": "complimentary_pages_value_text",
+              "element_identifier_hint": "Text showing pages used like '6 of 10 used'",
+              "interaction_type": "read_text",
+              "page_context": "PrintAndPaymentHistoryPage",
+              "is_inferred": false,
+              "required_state": "visible"
+            }
+          ],
+          "navigation_involved": {
+            "is_navigation_step": true,
+            "from_page": "PrintAndPaymentHistoryPage",
+            "to_page": "PrintAndPaymentHistoryPage",
+            "navigation_method": "redirect",
+            "url_hint": "Refresh current page",
+            "expected_page_indicator": "Page reloaded with updated data"
+          },
+          "test_data_needed": [
+            {
+              "data_field_name": "pages_to_print",
+              "data_type": "integer",
+              "sample_value": "6",
+              "is_provided_in_test_case": true,
+              "constraints": "Must be less than complimentary pages limit (10)",
+              "data_source": "hardcoded",
+              "is_sensitive": false,
+              "used_for": "Simulating page printing"
+            },
+            {
+              "data_field_name": "expected_pages_used",
+              "data_type": "string",
+              "sample_value": "6 of 10 used",
+              "is_provided_in_test_case": true,
+              "constraints": "Must reflect actual pages printed",
+              "data_source": "calculated",
+              "is_sensitive": false,
+              "used_for": "Progress bar value validation"
+            },
+            {
+              "data_field_name": "expected_progress_percentage",
+              "data_type": "integer",
+              "sample_value": "60",
+              "is_provided_in_test_case": false,
+              "constraints": "Should be 60% for 6 of 10 pages",
+              "data_source": "calculated",
+              "is_sensitive": false,
+              "used_for": "Progress bar fill validation"
+            }
+          ],
+          "assertions": [
+            {
+              "assertion_number": 1,
+              "assertion_type": "css_property",
+              "target_element": "complimentary_pages_progress_bar",
+              "expected_value": "black color fill at 60%",
+              "assertion_description": "Verify progress bar is filled with black color to 60% (6 of 10 pages)",
+              "is_hard_assertion": true,
+              "is_inferred": false,
+              "suggested_method_name": "verify_progress_bar_fill_color_and_percentage"
+            },
+            {
+              "assertion_number": 2,
+              "assertion_type": "text_equals",
+              "target_element": "complimentary_pages_value_text",
+              "expected_value": "6 of 10 used",
+              "assertion_description": "Verify value displays '6 of 10 used' after printing 6 pages",
+              "is_hard_assertion": true,
+              "is_inferred": false,
+              "suggested_method_name": "verify_complimentary_pages_value_updated"
+            }
+          ],
+          "wait_conditions": [
+            {
+              "wait_type": "page_load_wait",
+              "wait_target": "PrintAndPaymentHistoryPage",
+              "suggested_timeout_seconds": 30,
+              "wait_description": "Wait for page to refresh with updated data",
+              "when": "after_action"
+            },
+            {
+              "wait_type": "explicit_wait_visible",
+              "wait_target": "complimentary_pages_progress_bar",
+              "suggested_timeout_seconds": 10,
+              "wait_description": "Wait for progress bar to update",
+              "when": "after_action"
+            }
+          ],
+          "error_scenarios": [
+            {
+              "error_description": "Print simulation API fails",
+              "error_indicator": "API error response",
+              "error_type": "api_failure",
+              "recovery_action": "fail",
+              "impact": "Cannot simulate printing"
+            },
+            {
+              "error_description": "Progress bar does not update after refresh",
+              "error_indicator": "Still shows 0 of 10",
+              "error_type": "data_refresh_failure",
+              "recovery_action": "retry_refresh",
+              "impact": "UI not reflecting backend state"
+            },
+            {
+              "error_description": "Progress bar color is incorrect",
+              "error_indicator": "Color is not black",
+              "error_type": "visual_error",
+              "recovery_action": "fail_with_screenshot",
+              "impact": "Visual display issue"
+            }
+          ],
+          "dependencies": {
+            "depends_on_step": 9,
+            "dependency_type": "state_from_previous",
+            "dependency_detail": "Requires initial state with 0 pages used"
+          },
+          "api_calls_implied": [
+            {
+              "api_endpoint_hint": "POST /api/printer/simulate-print",
+              "http_method": "POST",
+              "purpose": "Simulate printing specified number of pages",
+              "is_explicit": false,
+              "is_inferred": true
+            }
+          ],
+          "step_complexity": "high",
+          "automation_notes_for_step": "Complex step involving API call, page refresh, and visual validation. Need to verify both progress bar fill percentage and color (CSS properties) plus text value."
+        },
+        {
+          "step_number": 11,
+          "raw_action": "Continue to print some pages(more than the plan, such as 15 pages). Refresh the dashboard page.",
+          "raw_expected_result": "Verify the progress bars for \"Complimentary pages\" and \"Additional pages\" are displayed well.",
+          "raw_test_data": "15 pages total (10 complimentary + 5 additional)",
+          "interpreted_action": "Continue printing to exceed the complimentary pages limit. Print enough pages so the total reaches 15 (meaning 10 complimentary pages are fully used and 5 additional pages are used). Refresh the page and verify that now TWO progress bars are displayed: one for Complimentary pages (fully filled) and a new one for Additional pages (showing 5 pages used).",
+          "action_type": "multi_action_composite",
+          "sub_actions": [
+            {
+              "sub_action_number": 1,
+              "action": "Simulate printing additional pages to reach 15 total",
+              "action_type": "api_call",
+              "element_involved": null,
+              "data_needed": "additional_pages_to_print"
+            },
+            {
+              "sub_action_number": 2,
+              "action": "Refresh dashboard page",
+              "action_type": "navigate_to_url",
+              "element_involved": null,
+              "data_needed": null
+            },
+            {
+              "sub_action_number": 3,
+              "action": "Verify both progress bars are displayed",
+              "action_type": "verification",
+              "element_involved": "complimentary_pages_progress_bar",
+              "data_needed": null
+            },
+            {
+              "sub_action_number": 4,
+              "action": "Verify Additional pages progress bar is displayed",
+              "action_type": "verification",
+              "element_involved": "additional_pages_progress_bar",
+              "data_needed": null
+            }
+          ],
+          "ui_elements_involved": [
+            {
+              "element_type": "progress_bar",
+              "element_name": "complimentary_pages_progress_bar",
+              "element_identifier_hint": "Progress bar for Complimentary pages",
+              "interaction_type": "wait_for_visible",
+              "page_context": "PrintAndPaymentHistoryPage",
+              "is_inferred": false,
+              "required_state": "visible"
+            },
+            {
+              "element_type": "progress_bar",
+              "element_name": "additional_pages_progress_bar",
+              "element_identifier_hint": "Progress bar for Additional pages (appears when complimentary pages exceeded)",
+              "interaction_type": "wait_for_visible",
+              "page_context": "PrintAndPaymentHistoryPage",
+              "is_inferred": false,
+              "required_state": "visible"
+            }
+          ],
+          "navigation_involved": {
+            "is_navigation_step": true,
+            "from_page": "PrintAndPaymentHistoryPage",
+            "to_page": "PrintAndPaymentHistoryPage",
+            "navigation_method": "redirect",
+            "url_hint": "Refresh current page",
+            "expected_page_indicator": "Page reloaded with both progress bars"
+          },
+          "test_data_needed": [
+            {
+              "data_field_name": "additional_pages_to_print",
+              "data_type": "integer",
+              "sample_value": "9",
+              "is_provided_in_test_case": false,
+              "constraints": "Should bring total to 15 pages (6 already printed + 9 more)",
+              "data_source": "calculated",
+              "is_sensitive": false,
+              "used_for": "Simulating additional printing"
+            },
+            {
+              "data_field_name": "total_pages_printed",
+              "data_type": "integer",
+              "sample_value": "15",
+              "is_provided_in_test_case": true,
+              "constraints": "Must exceed complimentary pages limit",
+              "data_source": "calculated",
+              "is_sensitive": false,
+              "used_for": "Validation reference"
+            }
+          ],
+          "assertions": [
+            {
+              "assertion_number": 1,
+              "assertion_type": "element_visible",
+              "target_element": "complimentary_pages_progress_bar",
+              "expected_value": "visible and displayed well",
+              "assertion_description": "Verify Complimentary pages progress bar is still displayed",
+              "is_hard_assertion": true,
+              "is_inferred": false,
+              "suggested_method_name": "verify_complimentary_pages_progress_bar_displayed"
+            },
+            {
+              "assertion_number": 2,
+              "assertion_type": "element_visible",
+              "target_element": "additional_pages_progress_bar",
+              "expected_value": "visible and displayed well",
+              "assertion_description": "Verify Additional pages progress bar is now displayed after exceeding complimentary limit",
+              "is_hard_assertion": true,
+              "is_inferred": false,
+              "suggested_method_name": "verify_additional_pages_progress_bar_displayed"
+            }
+          ],
+          "wait_conditions": [
+            {
+              "wait_type": "page_load_wait",
+              "wait_target": "PrintAndPaymentHistoryPage",
+              "suggested_timeout_seconds": 30,
+              "wait_description": "Wait for page refresh",
+              "when": "after_action"
+            },
+            {
+              "wait_type": "explicit_wait_visible",
+              "wait_target": "additional_pages_progress_bar",
+              "suggested_timeout_seconds": 10,
+              "wait_description": "Wait for Additional pages progress bar to appear",
+              "when": "after_action"
+            }
+          ],
+          "error_scenarios": [
+            {
+              "error_description": "Additional pages progress bar does not appear",
+              "error_indicator": "Element not found after exceeding limit",
+              "error_type": "display_failure",
+              "recovery_action": "fail_with_screenshot",
+              "impact": "UI not showing additional pages tracking"
+            },
+            {
+              "error_description": "Print simulation fails",
+              "error_indicator": "API error",
+              "error_type": "api_failure",
+              "recovery_action": "fail",
+              "impact": "Cannot simulate printing"
+            }
+          ],
+          "dependencies": {
+            "depends_on_step": 10,
+            "dependency_type": "data_from_previous",
+            "dependency_detail": "Requires 6 pages already printed from step 10"
+          },
+          "api_calls_implied": [
+            {
+              "api_endpoint_hint": "POST /api/printer/simulate-print",
+              "http_method": "POST",
+              "purpose": "Simulate printing additional pages beyond complimentary limit",
+              "is_explicit": false,
+              "is_inferred": true
+            }
+          ],
+          "step_complexity": "high",
+          "automation_notes_for_step": "Critical step that tests overflow behavior. Need to verify new UI element (Additional pages progress bar) appears dynamically."
+        },
+        {
+          "step_number": 12,
+          "raw_action": "Check the \"Additional pages\" progress bar.",
+          "raw_expected_result": "Verify the progress bar is filled with the Yellow color and the value is displayed correctly(such as \"5 of 10 used\").",
+          "raw_test_data": "5 of 10 used, Yellow color",
+          "interpreted_action": "Locate the Additional pages progress bar and verify its visual properties and value. The progress bar should be filled with yellow color (not black like complimentary pages) and should show '5 of 10 used' indicating 5 additional pages have been used out of a 10-page additional block.",
+          "action_type": "verification",
+          "sub_actions": [
+            {
+              "sub_action_number": 1,
+              "action": "Locate Additional pages progress bar",
+              "action_type": "wait",
+              "element_involved": "additional_pages_progress_bar",
+              "data_needed": null
+            },
+            {
+              "sub_action_number": 2,
+              "action": "Verify progress bar color is yellow",
+              "action_type": "verification",
+              "element_involved": "additional_pages_progress_bar",
+              "data_needed": "expected_color"
+            },
+            {
+              "sub_action_number": 3,
+              "action": "Verify value displays correctly",
+              "action_type": "verification",
+              "element_involved": "additional_pages_value_text",
+              "data_needed": "expected_value"
+            }
+          ],
+          "ui_elements_involved": [
+            {
+              "element_type": "progress_bar",
+              "element_name": "additional_pages_progress_bar",
+              "element_identifier_hint": "Progress bar for Additional pages with yellow fill",
+              "interaction_type": "read_attribute",
+              "page_context": "PrintAndPaymentHistoryPage",
+              "is_inferred": false,
+              "required_state": "visible"
+            },
+            {
+              "element_type": "text_display",
+              "element_name": "additional_pages_value_text",
+              "element_identifier_hint": "Text showing additional pages used like '5 of 10 used'",
+              "interaction_type": "read_text",
+              "page_context": "PrintAndPaymentHistoryPage",
+              "is_inferred": false,
+              "required_state": "visible"
+            }
+          ],
+          "navigation_involved": {
+            "is_navigation_step": false,
+            "from_page": null,
+            "to_page": null,
+            "navigation_method": null,
+            "url_hint": null,
+            "expected_page_indicator": null
+          },
+          "test_data_needed": [
+            {
+              "data_field_name": "expected_color",
+              "data_type": "string",
+              "sample_value": "yellow",
+              "is_provided_in_test_case": true,
+              "constraints": "Must be yellow color (hex or RGB value)",
+              "data_source": "hardcoded",
+              "is_sensitive": false,
+              "used_for": "Progress bar color validation"
+            },
+            {
+              "data_field_name": "expected_value",
+              "data_type": "string",
+              "sample_value": "5 of 10 used",
+              "is_provided_in_test_case": true,
+              "constraints": "Must show correct additional pages count",
+              "data_source": "calculated",
+              "is_sensitive": false,
+              "used_for": "Value text validation"
+            }
+          ],
+          "assertions": [
+            {
+              "assertion_number": 1,
+              "assertion_type": "css_property",
+              "target_element": "additional_pages_progress_bar",
+              "expected_value": "yellow color fill at 50%",
+              "assertion_description": "Verify Additional pages progress bar is filled with yellow color to 50% (5 of 10 pages)",
+              "is_hard_assertion": true,
+              "is_inferred": false,
+              "suggested_method_name": "verify_additional_pages_progress_bar_color_and_fill"
+            },
+            {
+              "assertion_number": 2,
+              "assertion_type": "text_equals",
+              "target_element": "additional_pages_value_text",
+              "expected_value": "5 of 10 used",
+              "assertion_description": "Verify Additional pages value displays '5 of 10 used'",
+              "is_hard_assertion": true,
+              "is_inferred": false,
+              "suggested_method_name": "verify_additional_pages_value_correct"
+            }
+          ],
+          "wait_conditions": [
+            {
+              "wait_type": "explicit_wait_visible",
+              "wait_target": "additional_pages_progress_bar",
+              "suggested_timeout_seconds": 10,
+              "wait_description": "Wait for Additional pages progress bar to be visible",
+              "when": "before_action"
+            }
+          ],
+          "error_scenarios": [
+            {
+              "error_description": "Progress bar color is not yellow",
+              "error_indicator": "CSS color property mismatch",
+              "error_type": "visual_error",
+              "recovery_action": "fail_with_screenshot",
+              "impact": "Visual differentiation between complimentary and additional pages lost"
+            },
+            {
+              "error_description": "Value shows incorrect count",
+              "error_indicator": "Text mismatch",
+              "error_type": "data_error",
+              "recovery_action": "fail_with_screenshot",
+              "impact": "Incorrect page count displayed"
+            }
+          ],
+          "dependencies": {
+            "depends_on_step": 11,
+            "dependency_type": "state_from_previous",
+            "dependency_detail": "Requires Additional pages progress bar to be displayed from step 11"
+          },
+          "api_calls_implied": [],
+          "step_complexity": "medium",
+          "automation_notes_for_step": "Visual validation requiring CSS property checks for color. Need to verify both color (yellow) and fill percentage (50%)."
+        },
+        {
+          "step_number": 13,
+          "raw_action": "Check the icon. For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "raw_expected_result": "Verify the info icon is displayed well behind the string \"Additional pages\". Verify a tooltip with correct message is displayed well.",
+          "raw_test_data": null,
+          "interpreted_action": "First verify that an info icon is displayed next to the 'Additional pages' label. Then, similar to step 7, perform device-specific interaction: hover on desktop or click on mobile/tablet. Verify that a tooltip appears with the correct informational message about additional pages.",
+          "action_type": "multi_action_composite",
+          "sub_actions": [
+            {
+              "sub_action_number": 1,
+              "action": "Verify info icon is displayed",
+              "action_type": "verification",
+              "element_involved": "additional_pages_info_icon",
+              "data_needed": null
+            },
+            {
+              "sub_action_number": 2,
+              "action": "Detect device type",
+              "action_type": "other",
+              "element_involved": null,
+              "data_needed": "device_type"
+            },
+            {
+              "sub_action_number": 3,
+              "action": "If Desktop: Hover over info icon",
+              "action_type": "hover",
+              "element_involved": "additional_pages_info_icon",
+              "data_needed": null
+            },
+            {
+              "sub_action_number": 4,
+              "action": "If Mobile/Tablet: Click info icon",
+              "action_type": "click",
+              "element_involved": "additional_pages_info_icon",
+              "data_needed": null
+            },
+            {
+              "sub_action_number": 5,
+              "action": "Verify tooltip appears with correct message",
+              "action_type": "verification",
+              "element_involved": "additional_pages_tooltip",
+              "data_needed": "expected_tooltip_message"
+            }
+          ],
+          "ui_elements_involved": [
+            {
+              "element_type": "icon",
+              "element_name": "additional_pages_info_icon",
+              "element_identifier_hint": "Info icon next to 'Additional pages' label",
+              "interaction_type": "hover_over",
+              "page_context": "PrintAndPaymentHistoryPage",
+              "is_inferred": false,
+              "required_state": "visible_and_clickable"
+            },
+            {
+              "element_type": "tooltip",
+              "element_name": "additional_pages_tooltip",
+              "element_identifier_hint": "Tooltip that appears when hovering/clicking Additional pages info icon",
+              "interaction_type": "read_text",
+              "page_context": "PrintAndPaymentHistoryPage",
+              "is_inferred": false,
+              "required_state": "visible"
+            }
+          ],
+          "navigation_involved": {
+            "is_navigation_step": false,
+            "from_page": null,
+            "to_page": null,
+            "navigation_method": null,
+            "url_hint": null,
+            "expected_page_indicator": null
+          },
+          "test_data_needed": [
+            {
+              "data_field_name": "device_type",
+              "data_type": "string",
+              "sample_value": "desktop",
+              "is_provided_in_test_case": false,
+              "constraints": "Must be 'desktop', 'mobile', or 'tablet'",
+              "data_source": "runtime_generated",
+              "is_sensitive": false,
+              "used_for": "Conditional action execution"
+            },
+            {
+              "data_field_name": "expected_tooltip_message",
+              "data_type": "string",
+              "sample_value": "Additional pages are charged in blocks of 10 pages",
+              "is_provided_in_test_case": false,
+              "constraints": "Must match actual tooltip text",
+              "data_source": "test_data_file",
+              "is_sensitive": false,
+              "used_for": "Tooltip text validation"
+            }
+          ],
+          "assertions": [
+            {
+              "assertion_number": 1,
+              "assertion_type": "element_visible",
+              "target_element": "additional_pages_info_icon",
+              "expected_value": "visible and displayed well",
+              "assertion_description": "Verify info icon is displayed next to Additional pages label",
+              "is_hard_assertion": true,
+              "is_inferred": false,
+              "suggested_method_name": "verify_additional_pages_info_icon_displayed"
+            },
+            {
+              "assertion_number": 2,
+              "assertion_type": "element_visible",
+              "target_element": "additional_pages_tooltip",
+              "expected_value": "visible",
+              "assertion_description": "Verify tooltip appears after hover/click on info icon",
+              "is_hard_assertion": true,
+              "is_inferred": true,
+              "suggested_method_name": "verify_additional_pages_tooltip_displayed"
+            },
+            {
+              "assertion_number": 3,
+              "assertion_type": "text_contains",
+              "target_element": "additional_pages_tooltip",
+              "expected_value": "correct message",
+              "assertion_description": "Verify tooltip displays correct informational message about additional pages",
+              "is_hard_assertion": true,
+              "is_inferred": false,
+              "suggested_method_name": "verify_additional_pages_tooltip_message_correct"
+            }
+          ],
+          "wait_conditions": [
+            {
+              "wait_type": "explicit_wait_visible",
+              "wait_target": "additional_pages_info_icon",
+              "suggested_timeout_seconds": 10,
+              "wait_description": "Wait for info icon to be visible",
+              "when": "before_action"
+            },
+            {
+              "wait_type": "explicit_wait_visible",
+              "wait_target": "additional_pages_tooltip",
+              "suggested_timeout_seconds": 5,
+              "wait_description": "Wait for tooltip to appear after hover/click",
+              "when": "after_action"
+            }
+          ],
+          "error_scenarios": [
+            {
+              "error_description": "Info icon not displayed",
+              "error_indicator": "Element not found",
+              "error_type": "display_failure",
+              "recovery_action": "fail_with_screenshot",
+              "impact": "Help icon missing from UI"
+            },
+            {
+              "error_description": "Tooltip does not appear",
+              "error_indicator": "Tooltip not visible within timeout",
+              "error_type": "interaction_failure",
+              "recovery_action": "retry_once_then_fail",
+              "impact": "Tooltip functionality broken"
+            },
+            {
+              "error_description": "Tooltip shows incorrect message",
+              "error_indicator": "Text mismatch",
+              "error_type": "content_error",
+              "recovery_action": "fail_with_screenshot",
+              "impact": "Incorrect information displayed"
+            }
+          ],
+          "dependencies": {
+            "depends_on_step": 12,
+            "dependency_type": "state_from_previous",
+            "dependency_detail": "Requires Additional pages section to be visible from step 12"
+          },
+          "api_calls_implied": [],
+          "step_complexity": "medium",
+          "automation_notes_for_step": "Similar to step 7 but for Additional pages section. Requires responsive testing with device detection."
+        },
+        {
+          "step_number": 14,
+          "raw_action": "Check the message below \"Additional pages\".",
+          "raw_expected_result": "Verify a message with the amount of blocks already bought is displayed well.",
+          "raw_test_data": null,
+          "interpreted_action": "Locate and verify the informational message displayed below the 'Additional pages' section. This message should indicate how many blocks of additional pages have been purchased/used. The exact message format is not specified but should contain block count information.",
+          "action_type": "verification",
+          "sub_actions": [
+            {
+              "sub_action_number": 1,
+              "action": "Locate message below Additional pages",
+              "action_type": "wait",
+              "element_involved": "additional_pages_message",
+              "data_needed": null
+            },
+            {
+              "sub_action_number": 2,
+              "action": "Verify message contains block count info",
+              "action_type": "verification",
+              "element_involved": "additional_pages_message",
+              "data_needed": "expected_block_info"
+            }
+          ],
+          "ui_elements_involved": [
+            {
+              "element_type": "text_display",
+              "element_name": "additional_pages_message",
+              "element_identifier_hint": "Text or paragraph element below Additional pages section showing block purchase information",
+              "interaction_type": "read_text",
+              "page_context": "PrintAndPaymentHistoryPage",
+              "is_inferred": false,
+              "required_state": "visible"
+            }
+          ],
+          "navigation_involved": {
+            "is_navigation_step": false,
+            "from_page": null,
+            "to_page": null,
+            "navigation_method": null,
+            "url_hint": null,
+            "expected_page_indicator": null
+          },
+          "test_data_needed": [
+            {
+              "data_field_name": "expected_block_info",
+              "data_type": "string",
+              "sample_value": "1 block of additional pages purchased",
+              "is_provided_in_test_case": false,
+              "constraints": "Must contain block count information",
+              "data_source": "test_data_file",
+              "is_sensitive": false,
+              "used_for": "Message content validation"
+            }
+          ],
+          "assertions": [
+            {
+              "assertion_number": 1,
+              "assertion_type": "element_visible",
+              "target_element": "additional_pages_message",
+              "expected_value": "visible and displayed well",
+              "assertion_description": "Verify message below Additional pages is visible",
+              "is_hard_assertion": true,
+              "is_inferred": true,
+              "suggested_method_name": "verify_additional_pages_message_visible"
+            },
+            {
+              "assertion_number": 2,
+              "assertion_type": "text_contains",
+              "target_element": "additional_pages_message",
+              "expected_value": "amount of blocks already bought",
+              "assertion_description": "Verify message contains information about blocks of additional pages purchased",
+              "is_hard_assertion": true,
+              "is_inferred": false,
+              "suggested_method_name": "verify_additional_pages_message_contains_block_info"
+            }
+          ],
+          "wait_conditions": [
+            {
+              "wait_type": "explicit_wait_visible",
+              "wait_target": "additional_pages_message",
+              "suggested_timeout_seconds": 10,
+              "wait_description": "Wait for message to be visible",
+              "when": "before_action"
+            }
+          ],
+          "error_scenarios": [
+            {
+              "error_description": "Message not displayed",
+              "error_indicator": "Element not found",
+              "error_type": "display_failure",
+              "recovery_action": "fail_with_screenshot",
+              "impact": "Information missing from UI"
+            },
+            {
+              "error_description": "Message does not contain block information",
+              "error_indicator": "Text content missing expected info",
+              "error_type": "content_error",
+              "recovery_action": "fail_with_screenshot",
+              "impact": "Incomplete information displayed"
+            }
+          ],
+          "dependencies": {
+            "depends_on_step": 13,
+            "dependency_type": "state_from_previous",
+            "dependency_detail": "Requires Additional pages section to be visible"
+          },
+          "api_calls_implied": [],
+          "step_complexity": "low",
+          "automation_notes_for_step": "Text validation step. Need to verify message contains block count information."
+        },
+        {
+          "step_number": 15,
+          "raw_action": "Check the Complimentary pages progress bar. Check total pages printed info.",
+          "raw_expected_result": "Verify the \"Complimentary pages\" progress bar is full filled with the black color and the value is displayed correctly (such as \"10 of 10 used\"). Verify correct number(such as 15 pages) displayed according to the printed pages.",
+          "raw_test_data": "10 of 10 used (complimentary), 15 pages total",
+          "interpreted_action": "Final verification step. Check that the Complimentary pages progress bar is now completely filled (100%) with black color showing '10 of 10 used'. Also verify that the total pages printed counter shows 15 pages, which is the sum of 10 complimentary pages and 5 additional pages. This validates the complete state after all printing actions.",
+          "action_type": "verification",
+          "sub_actions": [
+            {
+              "sub_action_number": 1,
+              "action": "Verify Complimentary pages progress bar is full",
+              "action_type": "verification",
+              "element_involved": "complimentary_pages_progress_bar",
+              "data_needed": "expected_complimentary_value"
+            },
+            {
+              "sub_action_number": 2,
+              "action": "Verify progress bar is filled with black color",
+              "action_type": "verification",
+              "element_involved": "complimentary_pages_progress_bar",
+              "data_needed": "expected_color"
+            },
+            {
+              "sub_action_number": 3,
+              "action": "Verify total pages printed count",
+              "action_type": "verification",
+              "element_involved": "total_pages_printed_text",
+              "data_needed": "expected_total_pages"
+            }
+          ],
+          "ui_elements_involved": [
+            {
+              "element_type": "progress_bar",
+              "element_name": "complimentary_pages_progress_bar",
+              "element_identifier_hint": "Progress bar for Complimentary pages",
+              "interaction_type": "read_attribute",
+              "page_context": "PrintAndPaymentHistoryPage",
+              "is_inferred": false,
+              "required_state": "visible"
+            },
+            {
+              "element_type": "text_display",
+              "element_name": "complimentary_pages_value_text",
+              "element_identifier_hint": "Text showing '10 of 10 used'",
+              "interaction_type": "read_text",
+              "page_context": "PrintAndPaymentHistoryPage",
+              "is_inferred": false,
+              "required_state": "visible"
+            },
+            {
+              "element_type": "text_display",
+              "element_name": "total_pages_printed_text",
+              "element_identifier_hint": "Text element showing total pages printed count (15 pages)",
+              "interaction_type": "read_text",
+              "page_context": "PrintAndPaymentHistoryPage",
+              "is_inferred": false,
+              "required_state": "visible"
+            }
+          ],
+          "navigation_involved": {
+            "is_navigation_step": false,
+            "from_page": null,
+            "to_page": null,
+            "navigation_method": null,
+            "url_hint": null,
+            "expected_page_indicator": null
+          },
+          "test_data_needed": [
+            {
+              "data_field_name": "expected_complimentary_value",
+              "data_type": "string",
+              "sample_value": "10 of 10 used",
+              "is_provided_in_test_case": true,
+              "constraints": "Must show full usage of complimentary pages",
+              "data_source": "hardcoded",
+              "is_sensitive": false,
+              "used_for": "Complimentary pages value validation"
+            },
+            {
+              "data_field_name": "expected_color",
+              "data_type": "string",
+              "sample_value": "black",
+              "is_provided_in_test_case": true,
+              "constraints": "Must be black color",
+              "data_source": "hardcoded",
+              "is_sensitive": false,
+              "used_for": "Progress bar color validation"
+            },
+            {
+              "data_field_name": "expected_total_pages",
+              "data_type": "string",
+              "sample_value": "15 pages",
+              "is_provided_in_test_case": true,
+              "constraints": "Must equal sum of complimentary and additional pages",
+              "data_source": "calculated",
+              "is_sensitive": false,
+              "used_for": "Total pages count validation"
+            }
+          ],
+          "assertions": [
+            {
+              "assertion_number": 1,
+              "assertion_type": "css_property",
+              "target_element": "complimentary_pages_progress_bar",
+              "expected_value": "black color fill at 100%",
+              "assertion_description": "Verify Complimentary pages progress bar is completely filled (100%) with black color",
+              "is_hard_assertion": true,
+              "is_inferred": false,
+              "suggested_method_name": "verify_complimentary_pages_progress_bar_full"
+            },
+            {
+              "assertion_number": 2,
+              "assertion_type": "text_equals",
+              "target_element": "complimentary_pages_value_text",
+              "expected_value": "10 of 10 used",
+              "assertion_description": "Verify Complimentary pages value displays '10 of 10 used'",
+              "is_hard_assertion": true,
+              "is_inferred": false,
+              "suggested_method_name": "verify_complimentary_pages_value_full"
+            },
+            {
+              "assertion_number": 3,
+              "assertion_type": "text_contains",
+              "target_element": "total_pages_printed_text",
+              "expected_value": "15 pages",
+              "assertion_description": "Verify total pages printed displays 15 pages (10 complimentary + 5 additional)",
+              "is_hard_assertion": true,
+              "is_inferred": false,
+              "suggested_method_name": "verify_total_pages_printed_correct"
+            }
+          ],
+          "wait_conditions": [
+            {
+              "wait_type": "explicit_wait_visible",
+              "wait_target": "complimentary_pages_progress_bar",
+              "suggested_timeout_seconds": 10,
+              "wait_description": "Wait for progress bar to be visible",
+              "when": "before_action"
+            },
+            {
+              "wait_type": "explicit_wait_visible",
+              "wait_target": "total_pages_printed_text",
+              "suggested_timeout_seconds": 10,
+              "wait_description": "Wait for total pages count to be visible",
+              "when": "before_action"
+            }
+          ],
+          "error_scenarios": [
+            {
+              "error_description": "Complimentary pages not showing full usage",
+              "error_indicator": "Value not '10 of 10 used'",
+              "error_type": "data_error",
+              "recovery_action": "fail_with_screenshot",
+              "impact": "Page count calculation incorrect"
+            },
+            {
+              "error_description": "Total pages count incorrect",
+              "error_indicator": "Does not show 15 pages",
+              "error_type": "data_error",
+              "recovery_action": "fail_with_screenshot",
+              "impact": "Total count not summing correctly"
+            },
+            {
+              "error_description": "Progress bar not fully filled",
+              "error_indicator": "Fill percentage less than 100%",
+              "error_type": "visual_error",
+              "recovery_action": "fail_with_screenshot",
+              "impact": "Visual representation incorrect"
+            }
+          ],
+          "dependencies": {
+            "depends_on_step": 14,
+            "dependency_type": "state_from_previous",
+            "dependency_detail": "Requires all previous printing actions to be completed"
+          },
+          "api_calls_implied": [],
+          "step_complexity": "medium",
+          "automation_notes_for_step": "Final validation step verifying complete state. Need to check multiple elements: progress bar fill, color, value text, and total count."
+        }
+      ],
+      "postconditions": [
+        {
+          "postcondition_number": 1,
+          "raw_text": null,
+          "interpreted_meaning": "After test completion, the subscription should be returned to its original state or cleaned up. This may include resetting the printed pages count, removing test data, or unpausing the plan if needed for other tests.",
+          "cleanup_components_needed": [
+            {
+              "component_type": "api_helper",
+              "component_name_suggestion": "reset_printer_page_count",
+              "reason": "Need to reset printed pages count to clean state"
+            },
+            {
+              "component_type": "api_helper",
+              "component_name_suggestion": "unpause_subscription",
+              "reason": "May need to unpause subscription if other tests require active state"
+            },
+            {
+              "component_type": "utility",
+              "component_name_suggestion": "cleanup_test_data",
+              "reason": "Clean up any test data created during execution"
+            }
+          ]
+        }
+      ],
+      "test_data_requirements": [
+        {
+          "data_field": "printer_id",
+          "data_type": "string",
+          "used_in_steps": [
+            1
+          ],
+          "sample_value": "PRINTER_12345",
+          "is_provided": false,
+          "generation_strategy": "test_data_file",
+          "constraints": "Must be valid enrolled printer ID",
+          "is_sensitive": false,
+          "category": "printer_enrollment"
+        },
+        {
+          "data_field": "subscription_plan",
+          "data_type": "string",
+          "used_in_steps": [
+            1
+          ],
+          "sample_value": "50_pages_plan",
+          "is_provided": true,
+          "generation_strategy": "hardcoded",
+          "constraints": "Must be 50 pages or higher plan",
+          "is_sensitive": false,
+          "category": "subscription"
+        },
+        {
+          "data_field": "days_to_shift",
+          "data_type": "integer",
+          "used_in_steps": [
+            3
+          ],
+          "sample_value": "32",
+          "is_provided": true,
+          "generation_strategy": "hardcoded",
+          "constraints": "Must be 32 days to trigger billing cycle",
+          "is_sensitive": false,
+          "category": "time_manipulation"
+        },
+        {
+          "data_field": "pages_to_print_first",
+          "data_type": "integer",
+          "used_in_steps": [
+            10
+          ],
+          "sample_value": "6",
+          "is_provided": true,
+          "generation_strategy": "hardcoded",
+          "constraints": "Must be less than complimentary pages limit (10)",
+          "is_sensitive": false,
+          "category": "printing"
+        },
+        {
+          "data_field": "pages_to_print_second",
+          "data_type": "integer",
+          "used_in_steps": [
+            11
+          ],
+          "sample_value": "9",
+          "is_provided": false,
+          "generation_strategy": "calculated",
+          "constraints": "Should bring total to 15 pages",
+          "is_sensitive": false,
+          "category": "printing"
+        },
+        {
+          "data_field": "total_pages_printed",
+          "data_type": "integer",
+          "used_in_steps": [
+            15
+          ],
+          "sample_value": "15",
+          "is_provided": true,
+          "generation_strategy": "calculated",
+          "constraints": "Sum of all printed pages",
+          "is_sensitive": false,
+          "category": "printing"
+        },
+        {
+          "data_field": "complimentary_pages_limit",
+          "data_type": "integer",
+          "used_in_steps": [
+            8,
+            10,
+            15
+          ],
+          "sample_value": "10",
+          "is_provided": true,
+          "generation_strategy": "hardcoded",
+          "constraints": "Fixed at 10 for pause plan",
+          "is_sensitive": false,
+          "category": "plan_limits"
+        },
+        {
+          "data_field": "additional_pages_block_size",
+          "data_type": "integer",
+          "used_in_steps": [
+            12
+          ],
+          "sample_value": "10",
+          "is_provided": true,
+          "generation_strategy": "hardcoded",
+          "constraints": "Additional pages sold in blocks of 10",
+          "is_sensitive": false,
+          "category": "plan_limits"
+        },
+        {
+          "data_field": "expected_complimentary_tooltip_message",
+          "data_type": "string",
+          "used_in_steps": [
+            7
+          ],
+          "sample_value": "Complimentary pages are provided during pause plan period",
+          "is_provided": false,
+          "generation_strategy": "test_data_file",
+          "constraints": "Must match actual tooltip text",
+          "is_sensitive": false,
+          "category": "ui_text"
+        },
+        {
+          "data_field": "expected_additional_tooltip_message",
+          "data_type": "string",
+          "used_in_steps": [
+            13
+          ],
+          "sample_value": "Additional pages are charged in blocks of 10 pages",
+          "is_provided": false,
+          "generation_strategy": "test_data_file",
+          "constraints": "Must match actual tooltip text",
+          "is_sensitive": false,
+          "category": "ui_text"
+        },
+        {
+          "data_field": "print_payment_history_url",
+          "data_type": "url",
+          "used_in_steps": [
+            1,
+            4
+          ],
+          "sample_value": "https://app.hp.com/instant-ink/print-payment-history",
+          "is_provided": false,
+          "generation_strategy": "environment_config",
+          "constraints": "Must be valid URL",
+          "is_sensitive": false,
+          "category": "navigation"
+        },
+        {
+          "data_field": "device_type",
+          "data_type": "string",
+          "used_in_steps": [
+            7,
+            13
+          ],
+          "sample_value": "desktop",
+          "is_provided": false,
+          "generation_strategy": "runtime_generated",
+          "constraints": "Must be 'desktop', 'mobile', or 'tablet'",
+          "is_sensitive": false,
+          "category": "test_execution"
+        }
+      ],
+      "pages_identified": [
+        {
+          "page_name": "InstantInkPage",
+          "page_name_pascal_case": "InstantInkPage",
+          "page_url_hint": "/instant-ink",
+          "appears_in_steps": [
+            1
+          ],
+          "elements_on_this_page": [
+            {
+              "element_name": "print_payment_history_link",
+              "element_type": "link"
+            },
+            {
+              "element_name": "pause_instant_ink_link",
+              "element_type": "link"
+            }
+          ],
+          "actions_on_this_page": [
+            "navigate_to_print_payment_history",
+            "click_pause_instant_ink_link"
+          ],
+          "navigates_to": [
+            "PrintAndPaymentHistoryPage"
+          ],
+          "navigated_from": [
+            "DashboardPage"
+          ],
+          "is_entry_point": false
+        },
+        {
+          "page_name": "PrintAndPaymentHistoryPage",
+          "page_name_pascal_case": "PrintAndPaymentHistoryPage",
+          "page_url_hint": "/instant-ink/print-payment-history",
+          "appears_in_steps": [
+            1,
+            2,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "elements_on_this_page": [
+            {
+              "element_name": "billing_cycle_period_card",
+              "element_type": "section"
+            },
+            {
+              "element_name": "plan_pause_information",
+              "element_type": "text_display"
+            },
+            {
+              "element_name": "complimentary_pages_progress_bar",
+              "element_type": "progress_bar"
+            },
+            {
+              "element_name": "complimentary_pages_value_text",
+              "element_type": "text_display"
+            },
+            {
+              "element_name": "complimentary_pages_info_icon",
+              "element_type": "icon"
+            },
+            {
+              "element_name": "complimentary_pages_tooltip",
+              "element_type": "tooltip"
+            },
+            {
+              "element_name": "complimentary_pages_message",
+              "element_type": "text_display"
+            },
+            {
+              "element_name": "additional_pages_progress_bar",
+              "element_type": "progress_bar"
+            },
+            {
+              "element_name": "additional_pages_value_text",
+              "element_type": "text_display"
+            },
+            {
+              "element_name": "additional_pages_info_icon",
+              "element_type": "icon"
+            },
+            {
+              "element_name": "additional_pages_tooltip",
+              "element_type": "tooltip"
+            },
+            {
+              "element_name": "additional_pages_message",
+              "element_type": "text_display"
+            },
+            {
+              "element_name": "total_pages_printed_text",
+              "element_type": "text_display"
+            }
+          ],
+          "actions_on_this_page": [
+            "verify_billing_cycle_card",
+            "verify_progress_bars",
+            "hover_info_icons",
+            "click_info_icons",
+            "read_tooltips",
+            "verify_page_counts"
+          ],
+          "navigates_to": [],
+          "navigated_from": [
+            "InstantInkPage"
+          ],
+          "is_entry_point": false
+        },
+        {
+          "page_name": "CITModal",
+          "page_name_pascal_case": "CITModal",
+          "page_url_hint": null,
+          "appears_in_steps": [],
+          "elements_on_this_page": [
+            {
+              "element_name": "pause_plan_button",
+              "element_type": "button"
+            }
+          ],
+          "actions_on_this_page": [
+            "click_pause_plan_button"
+          ],
+          "navigates_to": [],
+          "navigated_from": [],
+          "is_entry_point": false
+        }
+      ],
+      "flow_analysis": {
+        "flow_sequence": [
+          {
+            "order": 1,
+            "page": "InstantInkPage",
+            "action_summary": "Navigate to Print and Payment History page",
+            "steps_involved": [
+              1
+            ]
+          },
+          {
+            "order": 2,
+            "page": "PrintAndPaymentHistoryPage",
+            "action_summary": "Verify Billing Cycle Period card shows no pause info initially",
+            "steps_involved": [
+              2
+            ]
+          },
+          {
+            "order": 3,
+            "page": "Backend/API",
+            "action_summary": "Shift time by 32 days and trigger billing charge",
+            "steps_involved": [
+              3
+            ]
+          },
+          {
+            "order": 4,
+            "page": "PrintAndPaymentHistoryPage",
+            "action_summary": "Return to page and verify pause info now displayed",
+            "steps_involved": [
+              4,
+              5
+            ]
+          },
+          {
+            "order": 5,
+            "page": "PrintAndPaymentHistoryPage",
+            "action_summary": "Verify Complimentary pages progress bar and tooltip",
+            "steps_involved": [
+              6,
+              7,
+              8,
+              9
+            ]
+          },
+          {
+            "order": 6,
+            "page": "Backend/API + PrintAndPaymentHistoryPage",
+            "action_summary": "Print 6 pages and verify progress bar updates",
+            "steps_involved": [
+              10
+            ]
+          },
+          {
+            "order": 7,
+            "page": "Backend/API + PrintAndPaymentHistoryPage",
+            "action_summary": "Print additional pages to exceed limit and verify Additional pages section appears",
+            "steps_involved": [
+              11,
+              12,
+              13,
+              14
+            ]
+          },
+          {
+            "order": 8,
+            "page": "PrintAndPaymentHistoryPage",
+            "action_summary": "Final verification of complete state with full complimentary pages and total count",
+            "steps_involved": [
+              15
+            ]
+          }
+        ],
+        "critical_path": "Navigate to Print and Payment History → Verify initial state (no pause info) → Time shift 32 days → Verify pause info displayed → Verify Complimentary pages section → Print pages within limit → Print pages exceeding limit → Verify Additional pages section → Verify final complete state",
+        "alternate_paths": [],
+        "error_paths": [
+          {
+            "path_name": "Page load failure",
+            "trigger": "Print and Payment History page fails to load",
+            "expected_behavior": "Test should fail with error message and screenshot",
+            "is_explicitly_in_test_case": false,
+            "is_inferred": true
+          },
+          {
+            "path_name": "Time shift API failure",
+            "trigger": "API call to shift time fails",
+            "expected_behavior": "Test should fail as billing cycle cannot be advanced",
+            "is_explicitly_in_test_case": false,
+            "is_inferred": true
+          },
+          {
+            "path_name": "Print simulation failure",
+            "trigger": "API call to simulate printing fails",
+            "expected_behavior": "Test should fail as page counts cannot be updated",
+            "is_explicitly_in_test_case": false,
+            "is_inferred": true
+          }
+        ],
+        "setup_requirements": [
+          "Printer must be enrolled with 50+ pages plan",
+          "Subscription must have no free months",
+          "Subscription must be in 'subscribed' status",
+          "Plan must be paused before test execution",
+          "API access for time manipulation and print simulation",
+          "Test data for expected tooltip messages and UI text"
+        ],
+        "teardown_requirements": [
+          "Reset printed pages count to 0",
+          "Optionally unpause subscription if needed for other tests",
+          "Clean up any test data created",
+          "Close browser session"
+        ],
+        "total_page_transitions": 3,
+        "estimated_execution_time_seconds": 180
+      }
+    }
+  ],
+  "component_needs_summary": {
+    "page_objects_needed": [
+      {
+        "page_name": "InstantInkPage",
+        "purpose": "Represents the HP Instant Ink main page with navigation links to sub-pages and pause plan functionality",
+        "elements_count": 2,
+        "actions_count": 2,
+        "priority": "high",
+        "used_in_test_cases": [
+          "C44873414"
+        ]
+      },
+      {
+        "page_name": "PrintAndPaymentHistoryPage",
+        "purpose": "Represents the Print and Payment History page showing billing cycle information, progress bars for complimentary and additional pages, tooltips, and page count tracking",
+        "elements_count": 13,
+        "actions_count": 6,
+        "priority": "critical",
+        "used_in_test_cases": [
+          "C44873414"
+        ]
+      },
+      {
+        "page_name": "CITModal",
+        "purpose": "Represents the CIT modal dialog containing the Pause Plan button",
+        "elements_count": 1,
+        "actions_count": 1,
+        "priority": "medium",
+        "used_in_test_cases": [
+          "C44873414"
+        ]
+      }
+    ],
+    "locators_needed": [
+      {
+        "element_name": "print_payment_history_link",
+        "element_type": "link",
+        "page": "InstantInkPage",
+        "locator_strategy_suggestion": "link_text",
+        "locator_value_hint": "Print and Payment History or similar text",
+        "interaction_types": [
+          "click"
+        ],
+        "used_in_steps": [
+          1,
+          4
+        ],
+        "priority": "critical"
+      },
+      {
+        "element_name": "pause_instant_ink_link",
+        "element_type": "link",
+        "page": "InstantInkPage",
+        "locator_strategy_suggestion": "link_text",
+        "locator_value_hint": "Pause Instant Ink",
+        "interaction_types": [
+          "click"
+        ],
+        "used_in_steps": [],
+        "priority": "high"
+      },
+      {
+        "element_name": "pause_plan_button",
+        "element_type": "button",
+        "page": "CITModal",
+        "locator_strategy_suggestion": "css_selector",
+        "locator_value_hint": "button with text 'Pause Plan'",
+        "interaction_types": [
+          "click"
+        ],
+        "used_in_steps": [],
+        "priority": "high"
+      },
+      {
+        "element_name": "billing_cycle_period_card",
+        "element_type": "section",
+        "page": "PrintAndPaymentHistoryPage",
+        "locator_strategy_suggestion": "css_selector",
+        "locator_value_hint": "section or div with heading containing 'Billing Cycle Period'",
+        "interaction_types": [
+          "wait_for_visible"
+        ],
+        "used_in_steps": [
+          2,
+          5
+        ],
+        "priority": "critical"
+      },
+      {
+        "element_name": "plan_pause_information",
+        "element_type": "text_display",
+        "page": "PrintAndPaymentHistoryPage",
+        "locator_strategy_suggestion": "css_selector",
+        "locator_value_hint": "text element within billing cycle card showing pause information",
+        "interaction_types": [
+          "read_text",
+          "wait_for_visible"
+        ],
+        "used_in_steps": [
+          2,
+          5
+        ],
+        "priority": "critical"
+      },
+      {
+        "element_name": "complimentary_pages_progress_bar",
+        "element_type": "progress_bar",
+        "page": "PrintAndPaymentHistoryPage",
+        "locator_strategy_suggestion": "css_selector",
+        "locator_value_hint": "progress bar element associated with 'Complimentary pages' label",
+        "interaction_types": [
+          "wait_for_visible",
+          "read_attribute"
+        ],
+        "used_in_steps": [
+          6,
+          10,
+          11,
+          15
+        ],
+        "priority": "critical"
+      },
+      {
+        "element_name": "complimentary_pages_value_text",
+        "element_type": "text_display",
+        "page": "PrintAndPaymentHistoryPage",
+        "locator_strategy_suggestion": "css_selector",
+        "locator_value_hint": "text showing format like '0 of 10(Pause Plan) used'",
+        "interaction_types": [
+          "read_text"
+        ],
+        "used_in_steps": [
+          8,
+          10,
+          15
+        ],
+        "priority": "critical"
+      },
+      {
+        "element_name": "complimentary_pages_info_icon",
+        "element_type": "icon",
+        "page": "PrintAndPaymentHistoryPage",
+        "locator_strategy_suggestion": "css_selector",
+        "locator_value_hint": "info icon (i in circle) next to Complimentary pages label",
+        "interaction_types": [
+          "hover_over",
+          "click"
+        ],
+        "used_in_steps": [
+          7
+        ],
+        "priority": "high"
+      },
+      {
+        "element_name": "complimentary_pages_tooltip",
+        "element_type": "tooltip",
+        "page": "PrintAndPaymentHistoryPage",
+        "locator_strategy_suggestion": "css_selector",
+        "locator_value_hint": "tooltip div that appears on hover/click of complimentary pages info icon",
+        "interaction_types": [
+          "read_text",
+          "wait_for_visible"
+        ],
+        "used_in_steps": [
+          7
+        ],
+        "priority": "high"
+      },
+      {
+        "element_name": "complimentary_pages_message",
+        "element_type": "text_display",
+        "page": "PrintAndPaymentHistoryPage",
+        "locator_strategy_suggestion": "css_selector",
+        "locator_value_hint": "text element below Complimentary pages section with plan information",
+        "interaction_types": [
+          "read_text"
+        ],
+        "used_in_steps": [
+          9
+        ],
+        "priority": "medium"
+      },
+      {
+        "element_name": "additional_pages_progress_bar",
+        "element_type": "progress_bar",
+        "page": "PrintAndPaymentHistoryPage",
+        "locator_strategy_suggestion": "css_selector",
+        "locator_value_hint": "progress bar element associated with 'Additional pages' label, filled with yellow color",
+        "interaction_types": [
+          "wait_for_visible",
+          "read_attribute"
+        ],
+        "used_in_steps": [
+          11,
+          12
+        ],
+        "priority": "critical"
+      },
+      {
+        "element_name": "additional_pages_value_text",
+        "element_type": "text_display",
+        "page": "PrintAndPaymentHistoryPage",
+        "locator_strategy_suggestion": "css_selector",
+        "locator_value_hint": "text showing format like '5 of 10 used' for additional pages",
+        "interaction_types": [
+          "read_text"
+        ],
+        "used_in_steps": [
+          12
+        ],
+        "priority": "critical"
+      },
+      {
+        "element_name": "additional_pages_info_icon",
+        "element_type": "icon",
+        "page": "PrintAndPaymentHistoryPage",
+        "locator_strategy_suggestion": "css_selector",
+        "locator_value_hint": "info icon next to Additional pages label",
+        "interaction_types": [
+          "hover_over",
+          "click"
+        ],
+        "used_in_steps": [
+          13
+        ],
+        "priority": "high"
+      },
+      {
+        "element_name": "additional_pages_tooltip",
+        "element_type": "tooltip",
+        "page": "PrintAndPaymentHistoryPage",
+        "locator_strategy_suggestion": "css_selector",
+        "locator_value_hint": "tooltip div that appears on hover/click of additional pages info icon",
+        "interaction_types": [
+          "read_text",
+          "wait_for_visible"
+        ],
+        "used_in_steps": [
+          13
+        ],
+        "priority": "high"
+      },
+      {
+        "element_name": "additional_pages_message",
+        "element_type": "text_display",
+        "page": "PrintAndPaymentHistoryPage",
+        "locator_strategy_suggestion": "css_selector",
+        "locator_value_hint": "text element below Additional pages section showing block purchase information",
+        "interaction_types": [
+          "read_text"
+        ],
+        "used_in_steps": [
+          14
+        ],
+        "priority": "medium"
+      },
+      {
+        "element_name": "total_pages_printed_text",
+        "element_type": "text_display",
+        "page": "PrintAndPaymentHistoryPage",
+        "locator_strategy_suggestion": "css_selector",
+        "locator_value_hint": "text element showing total pages printed count",
+        "interaction_types": [
+          "read_text"
+        ],
+        "used_in_steps": [
+          15
+        ],
+        "priority": "critical"
+      }
+    ],
+    "action_methods_needed": [
+      {
+        "method_name_suggestion": "navigate_to_print_payment_history_page",
+        "action_type": "navigate_to_url",
+        "page": "InstantInkPage",
+        "parameters": [],
+        "description": "Navigates to the Print and Payment History page by clicking the link or directly accessing URL",
+        "used_in_steps": [
+          1,
+          4
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "click_pause_instant_ink_link",
+        "action_type": "click",
+        "page": "InstantInkPage",
+        "parameters": [],
+        "description": "Clicks the Pause Instant Ink link to initiate plan pause",
+        "used_in_steps": [],
+        "priority": "high"
+      },
+      {
+        "method_name_suggestion": "click_pause_plan_button",
+        "action_type": "click",
+        "page": "CITModal",
+        "parameters": [],
+        "description": "Clicks the Pause Plan button on CIT modal",
+        "used_in_steps": [],
+        "priority": "high"
+      },
+      {
+        "method_name_suggestion": "get_billing_cycle_period_card",
+        "action_type": "wait",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Locates and returns the Billing Cycle Period card element",
+        "used_in_steps": [
+          2,
+          5
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "is_plan_pause_information_displayed",
+        "action_type": "verification",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Checks if plan pause information is visible on the Billing Cycle Period card",
+        "used_in_steps": [
+          2,
+          5
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "get_complimentary_pages_progress_bar",
+        "action_type": "wait",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Locates and returns the Complimentary pages progress bar element",
+        "used_in_steps": [
+          6,
+          10,
+          11,
+          15
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "hover_complimentary_pages_info_icon",
+        "action_type": "hover",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Hovers mouse over the info icon next to Complimentary pages (desktop)",
+        "used_in_steps": [
+          7
+        ],
+        "priority": "high"
+      },
+      {
+        "method_name_suggestion": "click_complimentary_pages_info_icon",
+        "action_type": "click",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Clicks the info icon next to Complimentary pages (mobile/tablet)",
+        "used_in_steps": [
+          7
+        ],
+        "priority": "high"
+      },
+      {
+        "method_name_suggestion": "get_complimentary_pages_tooltip_text",
+        "action_type": "read_text",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Reads and returns the text content of the Complimentary pages tooltip",
+        "used_in_steps": [
+          7
+        ],
+        "priority": "high"
+      },
+      {
+        "method_name_suggestion": "get_complimentary_pages_value",
+        "action_type": "read_text",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Reads and returns the Complimentary pages usage value text (e.g., '6 of 10 used')",
+        "used_in_steps": [
+          8,
+          10,
+          15
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "get_complimentary_pages_message",
+        "action_type": "read_text",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Reads and returns the informational message below Complimentary pages section",
+        "used_in_steps": [
+          9
+        ],
+        "priority": "medium"
+      },
+      {
+        "method_name_suggestion": "get_additional_pages_progress_bar",
+        "action_type": "wait",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Locates and returns the Additional pages progress bar element",
+        "used_in_steps": [
+          11,
+          12
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "get_additional_pages_value",
+        "action_type": "read_text",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Reads and returns the Additional pages usage value text (e.g., '5 of 10 used')",
+        "used_in_steps": [
+          12
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "hover_additional_pages_info_icon",
+        "action_type": "hover",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Hovers mouse over the info icon next to Additional pages (desktop)",
+        "used_in_steps": [
+          13
+        ],
+        "priority": "high"
+      },
+      {
+        "method_name_suggestion": "click_additional_pages_info_icon",
+        "action_type": "click",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Clicks the info icon next to Additional pages (mobile/tablet)",
+        "used_in_steps": [
+          13
+        ],
+        "priority": "high"
+      },
+      {
+        "method_name_suggestion": "get_additional_pages_tooltip_text",
+        "action_type": "read_text",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Reads and returns the text content of the Additional pages tooltip",
+        "used_in_steps": [
+          13
+        ],
+        "priority": "high"
+      },
+      {
+        "method_name_suggestion": "get_additional_pages_message",
+        "action_type": "read_text",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Reads and returns the informational message below Additional pages section",
+        "used_in_steps": [
+          14
+        ],
+        "priority": "medium"
+      },
+      {
+        "method_name_suggestion": "get_total_pages_printed",
+        "action_type": "read_text",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Reads and returns the total pages printed count",
+        "used_in_steps": [
+          15
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "get_progress_bar_fill_percentage",
+        "action_type": "read_attribute",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [
+          "progress_bar_element"
+        ],
+        "description": "Gets the fill percentage of a progress bar element by reading CSS width or aria-valuenow attribute",
+        "used_in_steps": [
+          10,
+          12,
+          15
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "get_progress_bar_color",
+        "action_type": "read_attribute",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [
+          "progress_bar_element"
+        ],
+        "description": "Gets the fill color of a progress bar element by reading CSS background-color property",
+        "used_in_steps": [
+          10,
+          12,
+          15
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "refresh_page",
+        "action_type": "navigate_to_url",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Refreshes the current page to load updated data",
+        "used_in_steps": [
+          10,
+          11
+        ],
+        "priority": "high"
+      },
+      {
+        "method_name_suggestion": "detect_device_type",
+        "action_type": "other",
+        "page": "Any",
+        "parameters": [],
+        "description": "Detects and returns the current device type (desktop, mobile, tablet) for conditional action execution",
+        "used_in_steps": [
+          7,
+          13
+        ],
+        "priority": "medium"
+      },
+      {
+        "method_name_suggestion": "shift_subscription_date",
+        "action_type": "api_call",
+        "page": "Backend",
+        "parameters": [
+          "days_to_shift: int"
+        ],
+        "description": "API call to shift subscription billing date forward by specified number of days",
+        "used_in_steps": [
+          3
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "trigger_billing_charge",
+        "action_type": "api_call",
+        "page": "Backend",
+        "parameters": [],
+        "description": "API call to manually trigger billing charge for subscription",
+        "used_in_steps": [
+          3
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "simulate_print_pages",
+        "action_type": "api_call",
+        "page": "Backend",
+        "parameters": [
+          "pages_count: int"
+        ],
+        "description": "API call to simulate printing specified number of pages",
+        "used_in_steps": [
+          10,
+          11
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "enroll_printer_with_plan",
+        "action_type": "api_call",
+        "page": "Backend",
+        "parameters": [
+          "printer_id: str",
+          "plan_type: str"
+        ],
+        "description": "API call to enroll printer with specified Instant Ink plan",
+        "used_in_steps": [],
+        "priority": "high"
+      },
+      {
+        "method_name_suggestion": "get_subscription_status",
+        "action_type": "api_call",
+        "page": "Backend",
+        "parameters": [],
+        "description": "API call to retrieve current subscription status",
+        "used_in_steps": [],
+        "priority": "high"
+      },
+      {
+        "method_name_suggestion": "pause_subscription",
+        "action_type": "api_call",
+        "page": "Backend",
+        "parameters": [],
+        "description": "API call to pause the subscription",
+        "used_in_steps": [],
+        "priority": "high"
+      }
+    ],
+    "assertion_methods_needed": [
+      {
+        "method_name_suggestion": "verify_print_payment_history_page_loaded",
+        "assertion_type": "page_loaded",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Verifies that Print and Payment History page has loaded successfully",
+        "used_in_steps": [
+          1,
+          4
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "verify_billing_cycle_period_card_visible",
+        "assertion_type": "element_visible",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Verifies Billing Cycle Period card is visible on the page",
+        "used_in_steps": [
+          2,
+          5
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "verify_plan_pause_info_not_displayed",
+        "assertion_type": "element_not_visible",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Verifies plan pause information is NOT displayed (before billing cycle)",
+        "used_in_steps": [
+          2
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "verify_plan_pause_info_displayed_correctly",
+        "assertion_type": "element_visible",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Verifies plan pause information IS displayed correctly (after billing cycle)",
+        "used_in_steps": [
+          5
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "verify_complimentary_pages_progress_bar_displayed",
+        "assertion_type": "element_visible",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Verifies Complimentary pages progress bar is visible and displayed well",
+        "used_in_steps": [
+          6,
+          11
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "verify_tooltip_displayed",
+        "assertion_type": "element_visible",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Verifies tooltip appears after hover/click on info icon",
+        "used_in_steps": [
+          7,
+          13
+        ],
+        "priority": "high"
+      },
+      {
+        "method_name_suggestion": "verify_tooltip_message_correct",
+        "assertion_type": "text_contains",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [
+          "expected_message: str"
+        ],
+        "description": "Verifies tooltip displays the correct informational message",
+        "used_in_steps": [
+          7,
+          13
+        ],
+        "priority": "high"
+      },
+      {
+        "method_name_suggestion": "verify_complimentary_pages_value_correct",
+        "assertion_type": "text_equals",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [
+          "expected_value: str"
+        ],
+        "description": "Verifies Complimentary pages value displays expected text (e.g., '0 of 10(Pause Plan) used')",
+        "used_in_steps": [
+          8,
+          10,
+          15
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "verify_complimentary_pages_message_correct",
+        "assertion_type": "text_contains",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [
+          "expected_content: str"
+        ],
+        "description": "Verifies message below Complimentary pages contains correct plan information",
+        "used_in_steps": [
+          9
+        ],
+        "priority": "medium"
+      },
+      {
+        "method_name_suggestion": "verify_progress_bar_fill_color_and_percentage",
+        "assertion_type": "css_property",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [
+          "expected_color: str",
+          "expected_percentage: int"
+        ],
+        "description": "Verifies progress bar is filled with expected color to expected percentage",
+        "used_in_steps": [
+          10,
+          12,
+          15
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "verify_additional_pages_progress_bar_displayed",
+        "assertion_type": "element_visible",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [],
+        "description": "Verifies Additional pages progress bar is displayed after exceeding complimentary limit",
+        "used_in_steps": [
+          11
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "verify_additional_pages_value_correct",
+        "assertion_type": "text_equals",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [
+          "expected_value: str"
+        ],
+        "description": "Verifies Additional pages value displays expected text (e.g., '5 of 10 used')",
+        "used_in_steps": [
+          12
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "verify_additional_pages_message_contains_block_info",
+        "assertion_type": "text_contains",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [
+          "expected_content: str"
+        ],
+        "description": "Verifies message below Additional pages contains block purchase information",
+        "used_in_steps": [
+          14
+        ],
+        "priority": "medium"
+      },
+      {
+        "method_name_suggestion": "verify_total_pages_printed_correct",
+        "assertion_type": "text_contains",
+        "page": "PrintAndPaymentHistoryPage",
+        "parameters": [
+          "expected_count: str"
+        ],
+        "description": "Verifies total pages printed displays correct count",
+        "used_in_steps": [
+          15
+        ],
+        "priority": "critical"
+      },
+      {
+        "method_name_suggestion": "verify_time_shift_successful",
+        "assertion_type": "api_response_status",
+        "page": "Backend",
+        "parameters": [],
+        "description": "Verifies time shift API call succeeds",
+        "used_in_steps": [
+          3
+        ],
+        "priority": "critical"
+      }
+    ],
+    "utility_functions_needed": [
+      {
+        "function_name_suggestion": "wait_for_page_load",
+        "purpose": "Generic utility to wait for a page to fully load with configurable timeout",
+        "parameters": [
+          "timeout: int"
+        ],
+        "category": "wait_helper",
+        "priority": "critical"
+      },
+      {
+        "function_name_suggestion": "wait_for_element_visible",
+        "purpose": "Waits for a specific element to become visible with explicit wait",
+        "parameters": [
+          "element_locator",
+          "timeout: int"
+        ],
+        "category": "wait_helper",
+        "priority": "critical"
+      },
+      {
+        "function_name_suggestion": "take_screenshot_on_failure",
+        "purpose": "Captures screenshot when a test step fails for debugging",
+        "parameters": [
+          "test_name: str",
+          "step_number: int"
+        ],
+        "category": "debug_helper",
+        "priority": "high"
+      },
+      {
+        "function_name_suggestion": "get_css_property_value",
+        "purpose": "Gets the value of a CSS property for an element (e.g., background-color, width)",
+        "parameters": [
+          "element",
+          "property_name: str"
+        ],
+        "category": "element_helper",
+        "priority": "critical"
+      },
+      {
+        "function_name_suggestion": "calculate_progress_percentage",
+        "purpose": "Calculates expected progress bar percentage based on used/total values",
+        "parameters": [
+          "used: int",
+          "total: int"
+        ],
+        "category": "calculation_helper",
+        "priority": "medium"
+      },
+      {
+        "function_name_suggestion": "parse_page_count_text",
+        "purpose": "Parses text like '6 of 10 used' to extract used and total values",
+        "parameters": [
+          "text: str"
+        ],
+        "category": "text_parser",
+        "priority": "medium"
+      },
+      {
+        "function_name_suggestion": "refresh_browser_page",
+        "purpose": "Refreshes the current browser page and waits for reload",
+        "parameters": [],
+        "category": "navigation_helper",
+        "priority": "high"
+      },
+      {
+        "function_name_suggestion": "get_device_type_from_browser",
+        "purpose": "Detects device type (desktop/mobile/tablet) from browser viewport or user agent",
+        "parameters": [],
+        "category": "device_helper",
+        "priority": "medium"
+      },
+      {
+        "function_name_suggestion": "wait_for_ajax_complete",
+        "purpose": "Waits for all AJAX requests to complete before proceeding",
+        "parameters": [
+          "timeout: int"
+        ],
+        "category": "wait_helper",
+        "priority": "high"
+      },
+      {
+        "function_name_suggestion": "scroll_element_into_view",
+        "purpose": "Scrolls page to bring element into viewport",
+        "parameters": [
+          "element"
+        ],
+        "category": "element_helper",
+        "priority": "medium"
+      }
+    ],
+    "api_helpers_needed": [
+      {
+        "function_name_suggestion": "enroll_printer_via_api",
+        "purpose": "Enrolls a printer with Instant Ink service via API for test setup",
+        "http_method": "POST",
+        "endpoint_hint": "/api/printer/enroll",
+        "parameters": [
+          "printer_id: str",
+          "plan_type: str",
+          "account_credentials"
+        ],
+        "category": "data_setup",
+        "priority": "high",
+        "is_inferred": true
+      },
+      {
+        "function_name_suggestion": "get_subscription_details_via_api",
+        "purpose": "Retrieves subscription details including status, free months, plan info via API",
+        "http_method": "GET",
+        "endpoint_hint": "/api/subscription/{subscription_id}",
+        "parameters": [
+          "subscription_id: str"
+        ],
+        "category": "data_verification",
+        "priority": "high",
+        "is_inferred": true
+      },
+      {
+        "function_name_suggestion": "shift_subscription_date_via_api",
+        "purpose": "Shifts subscription billing date forward by specified days via API",
+        "http_method": "POST",
+        "endpoint_hint": "/api/subscription/shift-date",
+        "parameters": [
+          "subscription_id: str",
+          "days: int"
+        ],
+        "category": "time_manipulation",
+        "priority": "critical",
+        "is_inferred": true
+      },
+      {
+        "function_name_suggestion": "trigger_billing_charge_via_api",
+        "purpose": "Manually triggers billing charge for subscription via API",
+        "http_method": "POST",
+        "endpoint_hint": "/api/billing/trigger-charge",
+        "parameters": [
+          "subscription_id: str"
+        ],
+        "category": "billing_operation",
+        "priority": "critical",
+        "is_inferred": true
+      },
+      {
+        "function_name_suggestion": "simulate_print_pages_via_api",
+        "purpose": "Simulates printing specified number of pages via API",
+        "http_method": "POST",
+        "endpoint_hint": "/api/printer/simulate-print",
+        "parameters": [
+          "printer_id: str",
+          "pages_count: int"
+        ],
+        "category": "print_simulation",
+        "priority": "critical",
+        "is_inferred": true
+      },
+      {
+        "function_name_suggestion": "reset_printer_page_count_via_api",
+        "purpose": "Resets printed pages count to 0 for cleanup via API",
+        "http_method": "POST",
+        "endpoint_hint": "/api/printer/reset-count",
+        "parameters": [
+          "printer_id: str"
+        ],
+        "category": "cleanup",
+        "priority": "medium",
+        "is_inferred": true
+      },
+      {
+        "function_name_suggestion": "pause_subscription_via_api",
+        "purpose": "Pauses subscription via API for precondition setup",
+        "http_method": "POST",
+        "endpoint_hint": "/api/subscription/pause",
+        "parameters": [
+          "subscription_id: str"
+        ],
+        "category": "data_setup",
+        "priority": "high",
+        "is_inferred": true
+      },
+      {
+        "function_name_suggestion": "unpause_subscription_via_api",
+        "purpose": "Unpauses subscription via API for cleanup",
+        "http_method": "POST",
+        "endpoint_hint": "/api/subscription/unpause",
+        "parameters": [
+          "subscription_id: str"
+        ],
+        "category": "cleanup",
+        "priority": "medium",
+        "is_inferred": true
+      }
+    ],
+    "test_data_setup_needed": [
+      {
+        "setup_name": "enrolled_printer_with_50_pages_plan",
+        "purpose": "Provide enrolled printer with 50+ pages Instant Ink plan",
+        "data_fields": [
+          "printer_id",
+          "subscription_id",
+          "plan_type",
+          "account_credentials"
+        ],
+        "setup_method": "api_based_enrollment",
+        "priority": "critical",
+        "used_in_test_cases": [
+          "C44873414"
+        ]
+      },
+      {
+        "setup_name": "paused_subscription_state",
+        "purpose": "Ensure subscription is in paused state before test execution",
+        "data_fields": [
+          "subscription_id",
+          "pause_status"
+        ],
+        "setup_method": "api_call_to_pause",
+        "priority": "critical",
+        "used_in_test_cases": [
+          "C44873414"
+        ]
+      },
+      {
+        "setup_name": "tooltip_expected_messages",
+        "purpose": "Provide expected tooltip messages for validation",
+        "data_fields": [
+          "complimentary_pages_tooltip_text",
+          "additional_pages_tooltip_text"
+        ],
+        "setup_method": "test_data_file",
+        "priority": "high",
+        "used_in_test_cases": [
+          "C44873414"
+        ]
+      },
+      {
+        "setup_name": "page_count_test_data",
+        "purpose": "Provide page count values for printing simulation",
+        "data_fields": [
+          "initial_pages_to_print",
+          "additional_pages_to_print",
+          "complimentary_limit",
+          "additional_block_size"
+        ],
+        "setup_method": "test_data_file",
+        "priority": "critical",
+        "used_in_test_cases": [
+          "C44873414"
+        ]
+      }
+    ],
+    "configuration_needed": [
+      {
+        "config_key": "base_url",
+        "purpose": "Base URL of the HP Instant Ink application",
+        "sample_value": "https://app.hp.com",
+        "config_source": "environment_config",
+        "priority": "critical"
+      },
+      {
+        "config_key": "api_base_url",
+        "purpose": "Base URL for backend API calls",
+        "sample_value": "https://api.hp.com",
+        "config_source": "environment_config",
+        "priority": "critical"
+      },
+      {
+        "config_key": "api_auth_token",
+        "purpose": "Authentication token for API calls",
+        "sample_value": "Bearer xyz123...",
+        "config_source": "environment_config",
+        "priority": "critical"
+      },
+      {
+        "config_key": "default_timeout",
+        "purpose": "Default timeout for waits in seconds",
+        "sample_value": "30",
+        "config_source": "environment_config",
+        "priority": "high"
+      },
+      {
+        "config_key": "page_load_timeout",
+        "purpose": "Timeout for page load waits in seconds",
+        "sample_value": "60",
+        "config_source": "environment_config",
+        "priority": "high"
+      },
+      {
+        "config_key": "browser",
+        "purpose": "Browser to run tests on",
+        "sample_value": "chrome",
+        "config_source": "environment_config",
+        "priority": "high"
+      },
+      {
+        "config_key": "device_type",
+        "purpose": "Device type for responsive testing (desktop/mobile/tablet)",
+        "sample_value": "desktop",
+        "config_source": "test_config",
+        "priority": "medium"
+      },
+      {
+        "config_key": "screenshot_on_failure",
+        "purpose": "Whether to capture screenshots on test failure",
+        "sample_value": "true",
+        "config_source": "test_config",
+        "priority": "medium"
+      },
+      {
+        "config_key": "test_printer_id",
+        "purpose": "Printer ID to use for testing",
+        "sample_value": "PRINTER_TEST_001",
+        "config_source": "test_data_config",
+        "priority": "critical"
+      },
+      {
+        "config_key": "test_subscription_id",
+        "purpose": "Subscription ID to use for testing",
+        "sample_value": "SUB_TEST_001",
+        "config_source": "test_data_config",
+        "priority": "critical"
+      }
+    ]
+  },
+  "automation_notes": {
+    "complexity_assessment": "very_high",
+    "complexity_justification": "This is a very complex test case involving multiple factors: (1) Requires backend API integration for time manipulation and print simulation which are not standard UI automation tasks, (2) Tests responsive behavior with different interactions for desktop vs mobile/tablet, (3) Involves dynamic UI elements that appear conditionally (Additional pages section only appears after exceeding limit), (4) Requires visual validation of progress bar colors and fill percentages which needs CSS property checks, (5) Tests state changes across multiple page refreshes with data persistence, (6) Involves tooltip interactions with hover and click based on device type, (7) Requires precise text matching with special formatting like '0 of 10(Pause Plan) used', (8) Has complex preconditions requiring specific subscription state setup, (9) Tests billing cycle behavior which is time-dependent, (10) Requires verification of multiple progress bars with different colors and behaviors simultaneously.",
+    "estimated_locator_count": 23,
+    "estimated_page_objects": 3,
+    "estimated_action_methods": 28,
+    "estimated_assertions": 15,
+    "estimated_utility_functions": 10,
+    "estimated_api_helpers": 8,
+    "risks": [
+      {
+        "risk": "Backend API availability and authentication - Test heavily depends on API calls for time manipulation and print simulation. If API is not available or authentication fails, test cannot proceed.",
+        "severity": "critical",
+        "mitigation": "Implement robust API authentication mechanism with token refresh. Add API health checks before test execution. Have fallback mechanism or skip test if API unavailable."
+      },
+      {
+        "risk": "Dynamic element locators - Progress bars, tooltips, and conditional elements like Additional pages section may have dynamic IDs or classes making locators fragile.",
+        "severity": "high",
+        "mitigation": "Use data-testid attributes if available. Prefer CSS selectors based on stable attributes. Implement retry logic for element location."
+      },
+      {
+        "risk": "Timing issues - Multiple page refreshes and API calls create timing dependencies. Progress bars may not update immediately after API calls.",
+        "severity": "high",
+        "mitigation": "Use explicit waits with proper conditions. Wait for specific element states (visible, text contains) rather than fixed delays. Implement polling mechanism to verify data updates."
+      },
+      {
+        "risk": "Responsive testing complexity - Different interactions for desktop vs mobile/tablet (hover vs click) increases test complexity and potential for device detection failures.",
+        "severity": "medium",
+        "mitigation": "Implement reliable device type detection. Test on actual mobile devices or emulators. Have separate test configurations for different device types."
+      },
+      {
+        "risk": "Visual validation accuracy - Verifying progress bar colors (black vs yellow) and fill percentages requires CSS property checks which may vary across browsers.",
+        "severity": "medium",
+        "mitigation": "Use normalized color values (hex or RGB). Allow small tolerance in percentage calculations. Test across target browsers to establish baseline."
+      },
+      {
+        "risk": "Test data dependencies - Test requires specific printer enrollment, subscription state, and plan configuration. If preconditions are not met, test will fail.",
+        "severity": "high",
+        "mitigation": "Implement robust test data setup using API helpers. Verify all preconditions before starting main test steps. Use dedicated test accounts/printers."
+      },
+      {
+        "risk": "State persistence across refreshes - Test assumes data persists correctly across page refreshes. Cache issues or backend delays could cause stale data.",
+        "severity": "medium",
+        "mitigation": "Implement cache clearing before refreshes. Add verification that data has actually updated by checking timestamps or version numbers if available."
+      },
+      {
+        "risk": "Tooltip interaction flakiness - Tooltips may not appear consistently on hover, especially in headless browser mode.",
+        "severity": "medium",
+        "mitigation": "Use JavaScript executor to trigger tooltip display if hover fails. Implement retry logic for tooltip interactions. Consider using click instead of hover even on desktop for reliability."
+      },
+      {
+        "risk": "Text format variations - Expected text like '0 of 10(Pause Plan) used' may have spacing or formatting variations across environments.",
+        "severity": "low",
+        "mitigation": "Use flexible text matching (contains, regex) instead of exact equals where appropriate. Normalize whitespace before comparison."
+      },
+      {
+        "risk": "Billing cycle simulation accuracy - Time shift of 32 days may not perfectly simulate real billing cycle behavior if there are edge cases or business logic complexities.",
+        "severity": "medium",
+        "mitigation": "Validate time shift behavior with backend team. Test with different time shift values. Verify billing charge actually occurs by checking backend state."
+      }
+    ],
+    "recommendations": [
+      "Implement comprehensive Page Object Model with separate classes for InstantInkPage, PrintAndPaymentHistoryPage, and CITModal. Each page object should encapsulate all locators and action methods for that page.",
+      "Create dedicated API helper class for all backend operations (enrollment, time shift, billing trigger, print simulation). This should handle authentication, request/response parsing, and error handling.",
+      "Implement device detection utility that can reliably determine device type and conditionally execute hover vs click actions. Consider parameterizing tests to run on multiple device types.",
+      "Create custom assertion methods for progress bar validation that can check both color and fill percentage in a single call. This should handle color normalization and percentage tolerance.",
+      "Use test data management framework (e.g., JSON files, database, or API) to provide all test data including printer IDs, subscription IDs, expected tooltip messages, and page count values. Do not hardcode test data in test scripts.",
+      "Implement comprehensive wait strategy using explicit waits with custom expected conditions. Create reusable wait utilities for common patterns like 'wait for text to change', 'wait for progress bar to update'.",
+      "Add extensive logging at each step to track test execution flow, API responses, element states, and assertion results. This is critical for debugging failures in this complex test.",
+      "Implement screenshot capture not just on failure but also at key checkpoints (after each major state change) to create visual test evidence.",
+      "Create cleanup utilities that can reset test state (unpause subscription, reset page counts) to ensure test can be run repeatedly without manual intervention.",
+      "Consider breaking this large test into smaller focused tests if possible, or at least implement clear test phases with independent verification points.",
+      "Implement retry logic for flaky operations like tooltip interactions and page refreshes with data verification.",
+      "Use configuration management to externalize all environment-specific values (URLs, timeouts, credentials) and device-specific settings.",
+      "Add API response validation to ensure backend operations actually succeeded before proceeding with UI verification.",
+      "Implement visual regression testing for progress bars if possible, using screenshot comparison tools to validate 'displayed well' requirements.",
+      "Create test data setup and teardown hooks that run before and after test to ensure clean state. Use API helpers for efficient setup/teardown."
+    ],
+    "special_handling_notes": [
+      "This test requires BACKEND API ACCESS which is not typical for UI automation. Ensure API endpoints are documented and accessible from test environment.",
+      "The test involves TIME MANIPULATION which affects billing cycles. Coordinate with backend team to ensure test environment supports time shifting without affecting other tests or production data.",
+      "RESPONSIVE TESTING is required - test must run on both desktop and mobile/tablet with different interaction patterns. Consider using separate test configurations or parameterized tests.",
+      "VISUAL VALIDATION of progress bar colors and fill percentages requires CSS property checks. Standard text-based assertions are insufficient.",
+      "The test has CONDITIONAL UI ELEMENTS - Additional pages section only appears after exceeding complimentary limit. Locators for these elements must handle element not found gracefully initially.",
+      "TOOLTIP INTERACTIONS may not work in headless browser mode. Consider running this test in headed mode or using JavaScript to trigger tooltips.",
+      "The test involves MULTIPLE PAGE REFRESHES with data persistence verification. Implement robust data update verification rather than assuming refresh shows latest data.",
+      "EXACT TEXT MATCHING is required for some assertions (e.g., '0 of 10(Pause Plan) used'). Be careful with whitespace, special characters, and formatting.",
+      "The test has COMPLEX PRECONDITIONS that must be set up via API before test execution. Consider implementing a dedicated setup phase or fixture.",
+      "BILLING SIMULATION is a critical part of this test. Ensure test environment has proper billing simulation capabilities and does not affect real billing systems.",
+      "The test validates 'displayed well' which is subjective. Work with product team to define specific acceptance criteria for visual validation.",
+      "Consider implementing VISUAL REGRESSION TESTING using screenshot comparison tools for the 'displayed well' validations.",
+      "The test involves PROGRESS BAR PERCENTAGE CALCULATIONS. Implement calculation utilities and allow small tolerance for rounding differences.",
+      "DEVICE TYPE DETECTION is required for conditional actions. Ensure detection mechanism is reliable across test environments.",
+      "The test has LONG EXECUTION TIME due to multiple API calls and page refreshes. Optimize where possible but maintain test integrity."
+    ],
+    "framework_compatibility_notes": "This test case analysis is structured for the Aura automation framework. All component names follow Aura naming conventions (snake_case for elements/methods, PascalCase for page objects). The analysis assumes Aura framework provides: (1) Page Object Model support with base page class, (2) API testing capabilities with request/response handling, (3) Explicit wait utilities with custom expected conditions, (4) Configuration management for environment-specific values, (5) Test data management capabilities, (6) Screenshot capture on failure, (7) Logging framework, (8) Device/browser management for responsive testing. If Aura framework lacks any of these capabilities, additional infrastructure will need to be built. The component_needs_summary section provides detailed mapping requirements that can be used to search Aura codebase for existing implementations or identify gaps that need new development."
+  }
+}
