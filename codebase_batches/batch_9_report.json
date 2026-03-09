@@ -1,0 +1,3543 @@
+{
+  "batch_metadata": {
+    "batch_id": 9,
+    "total_batches": 18,
+    "remaining_after_this": 9,
+    "analyzed_at": "2025-01-15T12:30:00Z",
+    "analyzer": "Senior Codebase Analyst Agent",
+    "files_in_batch": 5,
+    "files_succeeded": 5,
+    "files_failed": 0,
+    "failed_files": [],
+    "storage_repo": "AAVA-STORAGE",
+    "report_path": "codebase_batches/batch_9_report.json"
+  },
+  "analyzed_files": [
+    "AURA-main (1) 1/AURA-main/helper/hpid_helper.py",
+    "AURA-main (1) 1/AURA-main/helper/landing_page_helper.py",
+    "AURA-main (1) 1/AURA-main/helper/oss_emulator_helper.py",
+    "AURA-main (1) 1/AURA-main/helper/overview_helper.py",
+    "AURA-main (1) 1/AURA-main/helper/print_history_helper.py"
+  ],
+  "file_analyses": [
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/helper/hpid_helper.py",
+      "file_name": "hpid_helper.py",
+      "file_extension": ".py",
+      "file_size_bytes": 2700,
+      "language": "Python",
+      "file_category": "helper",
+      "file_purpose": "Helper module providing utility methods for HP ID (HPID) authentication operations including sign-in, sign-up, account verification, and country selection dismissal. Contains static methods for complete authentication flows used during test setup and user onboarding scenarios.",
+      "imports": [
+        {
+          "import_statement": "from pages.hpid_page import HPIDPage",
+          "module": "pages.hpid_page",
+          "imported_names": [
+            "HPIDPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "import test_flows_common.test_flows_common as common",
+          "module": "test_flows_common.test_flows_common",
+          "imported_names": [
+            "common"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from core.settings import GlobalState, framework_logger",
+          "module": "core.settings",
+          "imported_names": [
+            "GlobalState",
+            "framework_logger"
+          ],
+          "is_external": false,
+          "is_internal": true
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "HPIDHelper",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Provides static utility methods for HP ID authentication operations. Contains methods for dismissing country selection popups, performing sign-in with credentials, completing full sign-in flows, creating new user accounts with sign-up, verifying account codes via email, and completing full sign-up flows. All methods are static and work with Playwright page objects to automate HPID authentication workflows.",
+          "how_to_import": "from helper.hpid_helper import HPIDHelper",
+          "how_to_instantiate": "HPIDHelper is used via static methods - no instantiation needed. Call HPIDHelper.sign_in(page, email, password) directly.",
+          "total_methods": 6,
+          "total_locators": 0
+        }
+      ],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "dismiss_select_country",
+          "method_signature": "@staticmethod\ndef dismiss_select_country(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page where country selector popup may appear"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Attempts to dismiss the country selector popup that may appear on the HPID page. Creates an HPIDPage instance with the provided page object. Uses a try-except block to click the first country selector button using hpid_page.country_selector_button.first.click(). If the button is not found or any exception occurs during the click, the exception is silently caught and passed, allowing the flow to continue without interruption. This is a defensive method used to handle optional UI elements that may or may not be present.",
+          "locators_used": [
+            "country_selector_button"
+          ],
+          "calls_to": [
+            "HPIDPage(page)",
+            "hpid_page.country_selector_button.first.click()"
+          ],
+          "usage_example": "HPIDHelper.dismiss_select_country(page)",
+          "belongs_to_class": "HPIDHelper",
+          "lines_of_code": 6
+        },
+        {
+          "method_name": "sign_in",
+          "method_signature": "@staticmethod\ndef sign_in(page, email, password)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the HPID sign-in page"
+            },
+            {
+              "name": "email",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "User email address for HP ID authentication"
+            },
+            {
+              "name": "password",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "User password for HP ID authentication"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Performs the HP ID sign-in process with provided credentials. Creates an HPIDPage instance. First fills the username field with the provided email using hpid_page.username.fill(email). Then clicks the username form submit button using hpid_page.user_name_form_submit.click() to proceed to the password entry screen. Next fills the password field with the provided password using hpid_page.password.fill(password). Finally clicks the sign-in button using hpid_page.sign_in.click() to complete the authentication. This method handles the two-step HPID login flow where username and password are entered on separate screens.",
+          "locators_used": [
+            "username",
+            "user_name_form_submit",
+            "password",
+            "sign_in"
+          ],
+          "calls_to": [
+            "HPIDPage(page)",
+            "hpid_page.username.fill()",
+            "hpid_page.user_name_form_submit.click()",
+            "hpid_page.password.fill()",
+            "hpid_page.sign_in.click()"
+          ],
+          "usage_example": "HPIDHelper.sign_in(page, 'testuser@example.com', 'SecurePass123!')",
+          "belongs_to_class": "HPIDHelper",
+          "lines_of_code": 6
+        },
+        {
+          "method_name": "complete_sign_in",
+          "method_signature": "@staticmethod\ndef complete_sign_in(page, email, password)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the HPID page"
+            },
+            {
+              "name": "email",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "User email address for HP ID authentication"
+            },
+            {
+              "name": "password",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "User password for HP ID authentication"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Performs the complete end-to-end HP ID sign-in flow including handling optional country selection popup. First calls HPIDHelper.dismiss_select_country(page) to dismiss any country selector popup that may appear. Creates an HPIDPage instance. Waits for the sign-in option button to be visible with a 20-second timeout using hpid_page.wait.sign_in_option(timeout=20000), then clicks it to navigate to the sign-in form. Finally calls HPIDHelper.sign_in(page, email, password) to complete the actual authentication with credentials. This is a composite method that combines multiple steps into a complete sign-in workflow.",
+          "locators_used": [
+            "sign_in_option"
+          ],
+          "calls_to": [
+            "HPIDHelper.dismiss_select_country()",
+            "HPIDPage(page)",
+            "hpid_page.wait.sign_in_option()",
+            "HPIDHelper.sign_in()"
+          ],
+          "usage_example": "HPIDHelper.complete_sign_in(page, 'testuser@example.com', 'SecurePass123!')",
+          "belongs_to_class": "HPIDHelper",
+          "lines_of_code": 6
+        },
+        {
+          "method_name": "sign_up",
+          "method_signature": "@staticmethod\ndef sign_up(page, email, password)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the HPID sign-up page"
+            },
+            {
+              "name": "email",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Email address for the new HP ID account"
+            },
+            {
+              "name": "password",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Password for the new HP ID account"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Creates a new HP ID account by filling out the sign-up form with provided credentials and default user information. Creates an HPIDPage instance. Fills the first name field with the hardcoded value 'InstantInk' using hpid_page.firstName.fill('InstantInk'). Fills the last name field with the hardcoded value 'User' using hpid_page.lastName.fill('User'). Fills the email field with the provided email parameter using hpid_page.email.fill(email). Fills the password field with the provided password parameter using hpid_page.password.fill(password). Clicks the market checkbox using hpid_page.market.click() to accept terms. Finally clicks the create account button using hpid_page.create_account_button.click() to submit the registration form.",
+          "locators_used": [
+            "firstName",
+            "lastName",
+            "email",
+            "password",
+            "market",
+            "create_account_button"
+          ],
+          "calls_to": [
+            "HPIDPage(page)",
+            "hpid_page.firstName.fill()",
+            "hpid_page.lastName.fill()",
+            "hpid_page.email.fill()",
+            "hpid_page.password.fill()",
+            "hpid_page.market.click()",
+            "hpid_page.create_account_button.click()"
+          ],
+          "usage_example": "HPIDHelper.sign_up(page, 'newuser@example.com', 'NewPass123!')",
+          "belongs_to_class": "HPIDHelper",
+          "lines_of_code": 8
+        },
+        {
+          "method_name": "confirm_account_code",
+          "method_signature": "@staticmethod\ndef confirm_account_code(page, email)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the HPID verification page"
+            },
+            {
+              "name": "email",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Email address where the verification code was sent"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Confirms the HP ID account by retrieving and entering the verification code sent to the user's email. Creates an HPIDPage instance and waits for the submit code button to be visible with a 20-second timeout using hpid_page.wait.submit_code(timeout=20000). Sets up a retry mechanism with 3 attempts and 10-second wait intervals. In each retry loop, waits for the specified timeout using page.wait_for_timeout(wait_time * 1000), then calls common.fetch_verification_code(email) to retrieve the verification code from the email. If a verification code is successfully retrieved, fills the code input field using hpid_page.code.fill(verification_code), clicks the submit code button using hpid_page.submit_code.click(), and logs a success message with the email, stack, country code, and language code from GlobalState. If the code retrieval fails, logs a warning and retries. If all retries fail, logs an error message. Finally waits for the page to fully load using page.wait_for_load_state('load').",
+          "locators_used": [
+            "submit_code",
+            "code"
+          ],
+          "calls_to": [
+            "HPIDPage(page)",
+            "hpid_page.wait.submit_code()",
+            "page.wait_for_timeout()",
+            "common.fetch_verification_code()",
+            "hpid_page.code.fill()",
+            "hpid_page.submit_code.click()",
+            "framework_logger.info()",
+            "framework_logger.warning()",
+            "framework_logger.error()",
+            "page.wait_for_load_state()"
+          ],
+          "usage_example": "HPIDHelper.confirm_account_code(page, 'newuser@example.com')",
+          "belongs_to_class": "HPIDHelper",
+          "lines_of_code": 20
+        },
+        {
+          "method_name": "complete_sign_up",
+          "method_signature": "@staticmethod\ndef complete_sign_up(page, tenant_email)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the HPID page"
+            },
+            {
+              "name": "tenant_email",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Email address for the new tenant account to be created"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Performs the complete end-to-end HP ID sign-up flow including country selection dismissal, account creation, and email verification. First calls HPIDHelper.dismiss_select_country(page) to dismiss any country selector popup. Creates an HPIDPage instance and waits for the create account button to be visible with a 20-second timeout using hpid_page.wait.create_account_button_data(timeout=20000), then clicks it to navigate to the sign-up form. Calls HPIDHelper.sign_up(page, tenant_email, common.DEFAULT_PASSWORD) to fill out and submit the registration form using the provided tenant email and the default password from the common module. Finally calls HPIDHelper.confirm_account_code(page, tenant_email) to retrieve the verification code from email and complete the account verification process. This is a high-level composite method that orchestrates the entire new user onboarding workflow.",
+          "locators_used": [
+            "create_account_button_data"
+          ],
+          "calls_to": [
+            "HPIDHelper.dismiss_select_country()",
+            "HPIDPage(page)",
+            "hpid_page.wait.create_account_button_data()",
+            "HPIDHelper.sign_up()",
+            "HPIDHelper.confirm_account_code()",
+            "common.DEFAULT_PASSWORD"
+          ],
+          "usage_example": "HPIDHelper.complete_sign_up(page, 'newtenant@example.com')",
+          "belongs_to_class": "HPIDHelper",
+          "lines_of_code": 6
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This helper class follows a static utility pattern with no instance state. All methods are static and operate on Playwright page objects passed as parameters. The class provides both granular methods (sign_in, sign_up) and composite methods (complete_sign_in, complete_sign_up) that combine multiple steps. The confirm_account_code method implements a retry mechanism for fetching verification codes from email, which is a common pattern for handling email-based verification in test automation. The class uses the common module for shared utilities like DEFAULT_PASSWORD and fetch_verification_code, and GlobalState for environment configuration. All methods interact with the HPIDPage page object to locate and interact with UI elements."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/helper/landing_page_helper.py",
+      "file_name": "landing_page_helper.py",
+      "file_extension": ".py",
+      "file_size_bytes": 41239,
+      "language": "Python",
+      "file_category": "helper",
+      "file_purpose": "Comprehensive helper module for landing page operations including page access, navigation, section validation, hyperlink verification, cookie settings, FAQ validation, country selection, and emergency banner validation. Provides methods for both desktop (OOBE) and mobile (MOBE) viewport testing scenarios.",
+      "imports": [
+        {
+          "import_statement": "import re",
+          "module": "re",
+          "imported_names": [
+            "re"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import time",
+          "module": "time",
+          "imported_names": [
+            "time"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from core.utils import load_locale_data",
+          "module": "core.utils",
+          "imported_names": [
+            "load_locale_data"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.landing_page import LandingPage",
+          "module": "pages.landing_page",
+          "imported_names": [
+            "LandingPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.privacy_banner_page import PrivacyBannerPage",
+          "module": "pages.privacy_banner_page",
+          "imported_names": [
+            "PrivacyBannerPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.printer_selection_page import PrinterSelectionPage",
+          "module": "pages.printer_selection_page",
+          "imported_names": [
+            "PrinterSelectionPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.printer_updates_page import PrinterUpdatesPage",
+          "module": "pages.printer_updates_page",
+          "imported_names": [
+            "PrinterUpdatesPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.confirmation_page import ConfirmationPage",
+          "module": "pages.confirmation_page",
+          "imported_names": [
+            "ConfirmationPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.thank_you_page import ThankYouPage",
+          "module": "pages.thank_you_page",
+          "imported_names": [
+            "ThankYouPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.tos_hp_smart_page import TermsOfServiceHPSmartPage",
+          "module": "pages.tos_hp_smart_page",
+          "imported_names": [
+            "TermsOfServiceHPSmartPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from playwright.sync_api import expect",
+          "module": "playwright.sync_api",
+          "imported_names": [
+            "expect"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from core.settings import framework_logger",
+          "module": "core.settings",
+          "imported_names": [
+            "framework_logger"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "import test_flows_common.test_flows_common as common",
+          "module": "test_flows_common.test_flows_common",
+          "imported_names": [
+            "common"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from test_flows.LandingPage.landing_page import landing_page",
+          "module": "test_flows.LandingPage.landing_page",
+          "imported_names": [
+            "landing_page"
+          ],
+          "is_external": false,
+          "is_internal": true
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "LandingPageHelper",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Provides comprehensive static utility methods for testing and validating the Instant Ink landing page. Contains methods for opening and accessing the landing page with privacy banner handling, verifying refer-a-friend (RaF) banners and footnotes, validating page sections are in viewport after navigation, testing consumer landing page flows for both desktop (OOBE) and mobile (MOBE) viewports, validating never worry sections, verifying footer hyperlinks, testing cookie settings, validating FAQ links and content, selecting countries, and validating emergency banners with different color schemes. All methods are static and designed to be called without instantiation.",
+          "how_to_import": "from helper.landing_page_helper import LandingPageHelper",
+          "how_to_instantiate": "LandingPageHelper is used via static methods - no instantiation needed. Call LandingPageHelper.access(page) directly.",
+          "total_methods": 14,
+          "total_locators": 0
+        }
+      ],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "open",
+          "method_signature": "@staticmethod\ndef open(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance to navigate to the landing page"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "navigation",
+          "what_it_does": "Navigates to the Instant Ink landing page URL. Uses page.goto() to navigate to the URL stored in common._instantink_url with a 120-second timeout. After navigation completes, waits for the page load state to reach 'load' using page.wait_for_load_state('load') to ensure the page is fully loaded before proceeding. This is a basic navigation method that does not handle any popups or banners.",
+          "locators_used": [],
+          "calls_to": [
+            "page.goto()",
+            "page.wait_for_load_state()",
+            "common._instantink_url"
+          ],
+          "usage_example": "LandingPageHelper.open(page)",
+          "belongs_to_class": "LandingPageHelper",
+          "lines_of_code": 3
+        },
+        {
+          "method_name": "access",
+          "method_signature": "@staticmethod\ndef access(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance to access the landing page"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "navigation",
+          "what_it_does": "Accesses the landing page and handles common popups and banners that may appear. First calls LandingPageHelper.open(page) to navigate to the landing page URL. Creates a PrivacyBannerPage instance and calls privacy_banner_page.accept_privacy_banner() to accept the privacy consent banner if it appears. Creates a LandingPage instance and attempts to close any promotional banner by clicking landing_page.close_banner using a try-except block. If the close banner button is not found or cannot be clicked, the exception is caught and a message is printed. This method provides a clean landing page state ready for testing by dismissing common overlays.",
+          "locators_used": [
+            "close_banner"
+          ],
+          "calls_to": [
+            "LandingPageHelper.open()",
+            "PrivacyBannerPage(page)",
+            "privacy_banner_page.accept_privacy_banner()",
+            "LandingPage(page)",
+            "landing_page.close_banner.click()",
+            "print()"
+          ],
+          "usage_example": "LandingPageHelper.access(page)",
+          "belongs_to_class": "LandingPageHelper",
+          "lines_of_code": 10
+        },
+        {
+          "method_name": "verify_raf_banner_with_free_months",
+          "method_signature": "@staticmethod\ndef verify_raf_banner_with_free_months(page, expected_months=1)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance where the RaF banner should be visible"
+            },
+            {
+              "name": "expected_months",
+              "type": null,
+              "default_value": "1",
+              "is_required": false,
+              "description": "Number of free months expected to be displayed in the RaF banner text. Defaults to 1."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies that the Refer-a-Friend (RaF) banner is visible on the landing page and contains the expected text about free months. Creates a LandingPage instance and locates the RaF banner element using page.locator(landing_page.elements.raf_banner). Uses Playwright's expect() to verify the banner is visible with a 30-second timeout. Retrieves the banner text content using raf_banner.text_content(). Constructs the expected text string as 'You have {expected_months} free month of HP Instant Ink'. Asserts that the expected text is present in the actual banner text using a Python assert statement with a descriptive error message. Logs a success message with a checkmark using framework_logger.info() if the verification passes. Returns True upon successful verification.",
+          "locators_used": [
+            "raf_banner"
+          ],
+          "calls_to": [
+            "LandingPage(page)",
+            "page.locator()",
+            "expect().to_be_visible()",
+            "raf_banner.text_content()",
+            "framework_logger.info()"
+          ],
+          "usage_example": "LandingPageHelper.verify_raf_banner_with_free_months(page, expected_months=2)",
+          "belongs_to_class": "LandingPageHelper",
+          "lines_of_code": 10
+        },
+        {
+          "method_name": "verify_raf_footnote_on_landing_page",
+          "method_signature": "@staticmethod\ndef verify_raf_footnote_on_landing_page(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance where the RaF footnote should be visible"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies that the Refer-a-Friend (RaF) footnote is visible on the landing page. Creates a LandingPage instance and locates the RaF footnote element using page.locator(landing_page.elements.raf_footnote). Uses Playwright's expect() to verify the footnote element is visible with a 30-second timeout. This is a simple visibility check without text content validation.",
+          "locators_used": [
+            "raf_footnote"
+          ],
+          "calls_to": [
+            "LandingPage(page)",
+            "page.locator()",
+            "expect().to_be_visible()"
+          ],
+          "usage_example": "LandingPageHelper.verify_raf_footnote_on_landing_page(page)",
+          "belongs_to_class": "LandingPageHelper",
+          "lines_of_code": 4
+        },
+        {
+          "method_name": "verify_section_is_in_viewport",
+          "method_signature": "@staticmethod\ndef verify_section_is_in_viewport(page, section_selector)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance to evaluate JavaScript on"
+            },
+            {
+              "name": "section_selector",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "CSS selector string for the section element to check viewport visibility"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies whether a page section is currently visible within the browser viewport. Uses page.evaluate() to execute JavaScript code in the browser context. The JavaScript code takes the section_selector as a parameter, uses document.querySelector() to find the element, returns false if the element is not found, otherwise gets the element's bounding rectangle using getBoundingClientRect(). Checks if the element's top edge is at or below the viewport top (rect.top >= 0) and if the element's bottom edge is at or above the viewport bottom (rect.bottom <= window.innerHeight or document.documentElement.clientHeight). Returns true if both conditions are met, meaning the section is fully visible in the viewport, otherwise returns false. This method is useful for validating that anchor link navigation scrolls the target section into view.",
+          "locators_used": [],
+          "calls_to": [
+            "page.evaluate()"
+          ],
+          "usage_example": "is_visible = LandingPageHelper.verify_section_is_in_viewport(page, '#faqs-section')",
+          "belongs_to_class": "LandingPageHelper",
+          "lines_of_code": 13
+        },
+        {
+          "method_name": "consumer_landing_page_oobe",
+          "method_signature": "@staticmethod\ndef consumer_landing_page_oobe(page, callback=None)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for desktop viewport testing"
+            },
+            {
+              "name": "callback",
+              "type": null,
+              "default_value": "None",
+              "is_required": false,
+              "description": "Optional callback function to capture screenshots or perform custom actions. Called with (step_name, page, screenshot_only=True) signature."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Tests the complete consumer landing page flow for desktop (OOBE - Out Of Box Experience) viewport. Navigates to the hardcoded stage1 landing page URL. Attempts to accept the privacy banner using a try-except block with a 10-second timeout. Waits for the sign-up header button to be visible with a 200-second timeout, then clicks it. Attempts to accept the privacy banner again after navigation. Waits for the HPID page to be visible with a 50-second timeout. Calls the optional callback function for the signup_function step if provided. Logs success for the sign-up function. Returns to the landing page URL and accepts the privacy banner again. Tests the How It Works section by clicking the tab, waiting 5 seconds for scroll animation, verifying the section is visible, checking if it's in viewport using verify_section_is_in_viewport(), logging the result, and calling the callback. Repeats similar testing for Instant Paper Plan section, Plans section, and FAQs section. Each section test includes clicking the navigation tab, waiting for scroll, verifying visibility, checking viewport position, logging results, and calling the callback. All operations are wrapped in a try-except block that logs any errors encountered.",
+          "locators_used": [
+            "sign_up_header_button",
+            "hpid_page",
+            "how_it_works_tab",
+            "how_it_works_section",
+            "instant_paper_tab",
+            "instant_paper_section",
+            "plans_tab",
+            "plans_section",
+            "faqs_tab",
+            "faqs_section"
+          ],
+          "calls_to": [
+            "page.goto()",
+            "page.wait_for_selector()",
+            "landing_page.sign_up_header_button.wait_for()",
+            "landing_page.sign_up_header_button.click()",
+            "landing_page.hpid_page.wait_for()",
+            "callback()",
+            "framework_logger.info()",
+            "framework_logger.debug()",
+            "framework_logger.error()",
+            "landing_page.how_it_works_tab.wait_for()",
+            "landing_page.how_it_works_tab.click()",
+            "time.sleep()",
+            "landing_page.how_it_works_section.wait_for()",
+            "LandingPageHelper.verify_section_is_in_viewport()",
+            "landing_page.instant_paper_tab.wait_for()",
+            "landing_page.instant_paper_tab.click()",
+            "landing_page.instant_paper_section.wait_for()",
+            "landing_page.plans_tab.wait_for()",
+            "landing_page.plans_tab.click()",
+            "landing_page.plans_section.wait_for()",
+            "landing_page.faqs_tab.wait_for()",
+            "landing_page.faqs_tab.click()",
+            "landing_page.faqs_section.wait_for()"
+          ],
+          "usage_example": "LandingPageHelper.consumer_landing_page_oobe(page, callback=my_screenshot_function)",
+          "belongs_to_class": "LandingPageHelper",
+          "lines_of_code": 70
+        },
+        {
+          "method_name": "consumer_landing_page_mobe",
+          "method_signature": "@staticmethod\ndef consumer_landing_page_mobe(page, callback=None)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for mobile viewport testing"
+            },
+            {
+              "name": "callback",
+              "type": null,
+              "default_value": "None",
+              "is_required": false,
+              "description": "Optional callback function to capture screenshots or perform custom actions. Called with (step_name, page, screenshot_only=True) signature."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Tests the complete consumer landing page flow for mobile (MOBE - Mobile Experience) viewport. Similar to consumer_landing_page_oobe but adapted for mobile navigation patterns. Navigates to the hardcoded stage1 landing page URL. Attempts to accept the privacy banner. Waits for the mobile menu button to be visible with a 200-second timeout, then clicks it to open the mobile menu. Waits for the mobile sign-up button to be visible, then clicks it. Attempts to accept the privacy banner again. Waits for the HPID page to be visible. Calls the optional callback for the signup_function step. Logs success. Returns to the landing page and opens the mobile menu again. Tests the How It Works section by clicking the mobile tab, waiting for scroll, verifying visibility and viewport position, logging results, and calling the callback. Opens the mobile menu again before testing each subsequent section. Tests Instant Paper Plan section, Plans section, and FAQs section using the same pattern - opening mobile menu, clicking the mobile-specific tab, waiting for scroll, verifying visibility and viewport position, logging results, and calling the callback. All operations are wrapped in a try-except block that logs any errors.",
+          "locators_used": [
+            "mobe_menu_button",
+            "mobe_sign_up_button",
+            "hpid_page",
+            "mobe_how_it_works_tab",
+            "how_it_works_section",
+            "mobe_instant_paper_tab",
+            "mobe_instant_paper_section",
+            "mobe_plans_tab",
+            "plans_section",
+            "mobe_faqs_tab",
+            "mobe_faqs_section"
+          ],
+          "calls_to": [
+            "page.goto()",
+            "page.wait_for_selector()",
+            "landing_page.mobe_menu_button.wait_for()",
+            "landing_page.mobe_menu_button.click()",
+            "landing_page.mobe_sign_up_button.wait_for()",
+            "landing_page.mobe_sign_up_button.click()",
+            "landing_page.hpid_page.wait_for()",
+            "callback()",
+            "framework_logger.info()",
+            "framework_logger.debug()",
+            "framework_logger.error()",
+            "landing_page.mobe_how_it_works_tab.wait_for()",
+            "landing_page.mobe_how_it_works_tab.click()",
+            "time.sleep()",
+            "landing_page.how_it_works_section.wait_for()",
+            "LandingPageHelper.verify_section_is_in_viewport()",
+            "landing_page.mobe_instant_paper_tab.wait_for()",
+            "landing_page.mobe_instant_paper_tab.click()",
+            "landing_page.mobe_instant_paper_section.wait_for()",
+            "landing_page.mobe_plans_tab.wait_for()",
+            "landing_page.mobe_plans_tab.click()",
+            "landing_page.plans_section.wait_for()",
+            "landing_page.mobe_faqs_tab.wait_for()",
+            "landing_page.mobe_faqs_tab.click()",
+            "landing_page.mobe_faqs_section.wait_for()"
+          ],
+          "usage_example": "LandingPageHelper.consumer_landing_page_mobe(page, callback=my_screenshot_function)",
+          "belongs_to_class": "LandingPageHelper",
+          "lines_of_code": 80
+        },
+        {
+          "method_name": "validate_never_worry_section_oobe",
+          "method_signature": "@staticmethod\ndef validate_never_worry_section_oobe(page, callback=None)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for desktop viewport"
+            },
+            {
+              "name": "callback",
+              "type": null,
+              "default_value": "None",
+              "is_required": false,
+              "description": "Optional callback function for screenshots or custom actions"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Validates the 'Never worry about running out of ink again' section on the landing page for desktop viewport. Creates a LandingPage instance. Waits for the never_worry_section element to be visible with a 50-second timeout using landing_page.never_worry_section.wait_for(state='visible', timeout=50000). Scrolls the section into view if needed using landing_page.never_worry_section.scroll_into_view_if_needed(timeout=50000). Logs a success message using framework_logger.info(). Calls the optional callback function with the step name 'never_worry' if provided. All operations are wrapped in a try-except block that logs any errors using framework_logger.error().",
+          "locators_used": [
+            "never_worry_section"
+          ],
+          "calls_to": [
+            "LandingPage(page)",
+            "landing_page.never_worry_section.wait_for()",
+            "landing_page.never_worry_section.scroll_into_view_if_needed()",
+            "framework_logger.info()",
+            "callback()",
+            "framework_logger.error()"
+          ],
+          "usage_example": "LandingPageHelper.validate_never_worry_section_oobe(page, callback=my_callback)",
+          "belongs_to_class": "LandingPageHelper",
+          "lines_of_code": 9
+        },
+        {
+          "method_name": "validate_never_worry_section_mobe",
+          "method_signature": "@staticmethod\ndef validate_never_worry_section_mobe(page, callback=None)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for mobile viewport"
+            },
+            {
+              "name": "callback",
+              "type": null,
+              "default_value": "None",
+              "is_required": false,
+              "description": "Optional callback function for screenshots or custom actions"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Validates the 'Never worry about running out of ink again' section on the landing page for mobile viewport. Creates a LandingPage instance. Waits for the mobe_never_work_section element to be visible with a 50-second timeout using landing_page.mobe_never_work_section.wait_for(state='visible', timeout=50000). Scrolls the section into view if needed using landing_page.mobe_never_work_section.scroll_into_view_if_needed(timeout=50000). Logs a success message using framework_logger.info(). Calls the optional callback function with the step name 'never_worry' if provided. All operations are wrapped in a try-except block that logs any errors using framework_logger.error().",
+          "locators_used": [
+            "mobe_never_work_section"
+          ],
+          "calls_to": [
+            "LandingPage(page)",
+            "landing_page.mobe_never_work_section.wait_for()",
+            "landing_page.mobe_never_work_section.scroll_into_view_if_needed()",
+            "framework_logger.info()",
+            "callback()",
+            "framework_logger.error()"
+          ],
+          "usage_example": "LandingPageHelper.validate_never_worry_section_mobe(page, callback=my_callback)",
+          "belongs_to_class": "LandingPageHelper",
+          "lines_of_code": 9
+        },
+        {
+          "method_name": "hyperlinks_validation",
+          "method_signature": "@staticmethod\ndef hyperlinks_validation(page, callback=None)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for desktop viewport hyperlink testing"
+            },
+            {
+              "name": "callback",
+              "type": null,
+              "default_value": "None",
+              "is_required": false,
+              "description": "Optional callback function for screenshots of opened pages"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Validates all footer hyperlinks on the landing page for desktop viewport by clicking each link and verifying the destination URL. Creates a LandingPage instance. For each footer link (HP.com, Privacy Statement, HP Connected Terms of Use, Cookie Settings, Your Privacy Choices, Instant Ink Terms of Service), the method waits for the link to be visible, scrolls it into view if needed, uses page.context.expect_page() to capture the new tab that opens when the link is clicked, brings the new page to front, waits for it to load with a 60-second timeout, uses Playwright's expect() with a regex pattern to verify the URL matches the expected destination, logs success, calls the optional callback with the new page for screenshots, and closes the new tab. For some links like Privacy Statement and Cookie Settings, adds a 5-second sleep before verification to allow full page load. All operations are wrapped in a try-except block that logs any errors using framework_logger.error().",
+          "locators_used": [
+            "footer_hp_link",
+            "footer_privacy_statement",
+            "footer_terms_of_use",
+            "footer_cookies",
+            "footer_privacy_choice",
+            "footer_iitos"
+          ],
+          "calls_to": [
+            "LandingPage(page)",
+            "landing_page.footer_hp_link.wait_for()",
+            "landing_page.footer_hp_link.scroll_into_view_if_needed()",
+            "page.context.expect_page()",
+            "landing_page.footer_hp_link.click()",
+            "new_page.wait_for_load_state()",
+            "expect().to_have_url()",
+            "framework_logger.info()",
+            "callback()",
+            "new_page.close()",
+            "time.sleep()",
+            "framework_logger.error()"
+          ],
+          "usage_example": "LandingPageHelper.hyperlinks_validation(page, callback=my_screenshot_callback)",
+          "belongs_to_class": "LandingPageHelper",
+          "lines_of_code": 70
+        },
+        {
+          "method_name": "hyperlinks_validation_mobe",
+          "method_signature": "@staticmethod\ndef hyperlinks_validation_mobe(page, callback=None)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for mobile viewport hyperlink testing"
+            },
+            {
+              "name": "callback",
+              "type": null,
+              "default_value": "None",
+              "is_required": false,
+              "description": "Optional callback function for screenshots of opened pages"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Validates all footer hyperlinks on the landing page for mobile viewport. Identical to hyperlinks_validation() but sets the viewport size to mobile dimensions (400x740) for each new page opened using new_page.set_viewport_size({'width': 400, 'height': 740}). Creates a LandingPage instance. For each footer link (HP.com, Privacy Statement, HP Connected Terms of Use, Cookie Settings, Your Privacy Choices, Instant Ink Terms of Service), waits for visibility, scrolls into view, captures the new tab with page.context.expect_page(), sets mobile viewport size, waits for load, verifies URL with regex pattern, logs success, calls callback, and closes the tab. All operations are wrapped in a try-except block that logs errors.",
+          "locators_used": [
+            "footer_hp_link",
+            "footer_privacy_statement",
+            "footer_terms_of_use",
+            "footer_cookies",
+            "footer_privacy_choice",
+            "footer_iitos"
+          ],
+          "calls_to": [
+            "LandingPage(page)",
+            "landing_page.footer_hp_link.wait_for()",
+            "landing_page.footer_hp_link.scroll_into_view_if_needed()",
+            "page.context.expect_page()",
+            "landing_page.footer_hp_link.click()",
+            "new_page.set_viewport_size()",
+            "new_page.wait_for_load_state()",
+            "expect().to_have_url()",
+            "framework_logger.info()",
+            "callback()",
+            "new_page.close()",
+            "framework_logger.error()"
+          ],
+          "usage_example": "LandingPageHelper.hyperlinks_validation_mobe(page, callback=my_screenshot_callback)",
+          "belongs_to_class": "LandingPageHelper",
+          "lines_of_code": 75
+        },
+        {
+          "method_name": "cookies_settings_oobe",
+          "method_signature": "@staticmethod\ndef cookies_settings_oobe(page, callback=None)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for desktop viewport cookie settings testing"
+            },
+            {
+              "name": "callback",
+              "type": null,
+              "default_value": "None",
+              "is_required": false,
+              "description": "Optional callback function for screenshots"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Validates the cookie settings functionality on the landing page for desktop viewport. Creates a LandingPage instance. Waits for the footer cookies link to be visible with a 50-second timeout. Uses page.context.expect_page() to capture the new tab that opens when the cookies link is clicked. Waits for the new page to load with a 60-second timeout. Verifies the URL matches the HP cookie policy page using expect().to_have_url() with a regex pattern. Logs success. Scrolls the cookies preference button into view if needed using new_page.locator().scroll_into_view_if_needed(). Waits for the cookies preference button to be visible and clicks it. Logs success. Waits 5 seconds for the cookie preference modal to appear using time.sleep(5). Retrieves the cookie preference title text using new_page.locator().text_content(). Verifies the title equals 'Privacy Preference Center' and logs the result. Waits for the close button to be visible. Calls the optional callback with the new page for screenshots. Clicks the close button to dismiss the modal. Logs success. Closes the new tab. All operations are wrapped in a try-except block that logs errors.",
+          "locators_used": [
+            "footer_cookies",
+            "cookies_preference",
+            "cookies_preference_title",
+            "cookies_preference_close"
+          ],
+          "calls_to": [
+            "LandingPage(page)",
+            "landing_page.footer_cookies.wait_for()",
+            "page.context.expect_page()",
+            "landing_page.footer_cookies.click()",
+            "new_page.wait_for_load_state()",
+            "expect().to_have_url()",
+            "framework_logger.info()",
+            "new_page.locator().scroll_into_view_if_needed()",
+            "new_page.locator().wait_for()",
+            "new_page.locator().click()",
+            "time.sleep()",
+            "new_page.locator().text_content()",
+            "framework_logger.error()",
+            "callback()",
+            "new_page.close()"
+          ],
+          "usage_example": "LandingPageHelper.cookies_settings_oobe(page, callback=my_callback)",
+          "belongs_to_class": "LandingPageHelper",
+          "lines_of_code": 25
+        },
+        {
+          "method_name": "cookies_settings_mobe",
+          "method_signature": "@staticmethod\ndef cookies_settings_mobe(page, callback=None)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for mobile viewport cookie settings testing"
+            },
+            {
+              "name": "callback",
+              "type": null,
+              "default_value": "None",
+              "is_required": false,
+              "description": "Optional callback function for screenshots"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Validates the cookie settings functionality on the landing page for mobile viewport. Identical to cookies_settings_oobe() but sets the viewport size to mobile dimensions (400x740) using new_page.set_viewport_size({'width': 400, 'height': 740}) after opening the new tab. Creates a LandingPage instance. Waits for the footer cookies link. Captures the new tab. Sets mobile viewport size. Waits for load. Verifies URL. Logs success. Scrolls cookies preference button into view. Waits for visibility and clicks it. Logs success. Waits 5 seconds for modal. Retrieves and verifies title text. Waits for close button. Calls callback. Clicks close button. Logs success. Closes tab. All wrapped in try-except with error logging. Note: The method has a stray line 'expect(raf_footnote).to_be_visible(timeout=30000)' at the end which appears to be a copy-paste error and is not related to cookie settings.",
+          "locators_used": [
+            "footer_cookies",
+            "cookies_preference",
+            "cookies_preference_title",
+            "cookies_preference_close"
+          ],
+          "calls_to": [
+            "LandingPage(page)",
+            "landing_page.footer_cookies.wait_for()",
+            "page.context.expect_page()",
+            "landing_page.footer_cookies.click()",
+            "new_page.set_viewport_size()",
+            "new_page.wait_for_load_state()",
+            "expect().to_have_url()",
+            "framework_logger.info()",
+            "new_page.locator().scroll_into_view_if_needed()",
+            "new_page.locator().wait_for()",
+            "new_page.locator().click()",
+            "time.sleep()",
+            "new_page.locator().text_content()",
+            "framework_logger.error()",
+            "callback()",
+            "new_page.close()"
+          ],
+          "usage_example": "LandingPageHelper.cookies_settings_mobe(page, callback=my_callback)",
+          "belongs_to_class": "LandingPageHelper",
+          "lines_of_code": 26
+        },
+        {
+          "method_name": "validate_faq_links",
+          "method_signature": "@staticmethod\ndef validate_faq_links(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for FAQ link validation"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Validates all FAQ links on the landing page by iterating through FAQ sections and clicking each link to verify it opens correctly. Creates a LandingPage instance and stores the original page URL. Scrolls the FAQs section into view and verifies it's visible. Defines a list of FAQ sections with tuples containing section name and section ID: General, Monthly plans, Yearly plans, and Pay As You Print plans. For each section, logs the section name, navigates back to the original URL if needed, locates the section tab using data-testid and aria-controls attributes, clicks the tab, waits 500ms. Checks if a 'Show more' button exists and clicks it if present. Locates all question buttons within the section using a selector for buttons with aria-controls attributes. Iterates through each question by index. For each question, re-locates the questions list, clicks the question button, waits 300ms, gets the aria-controls ID, locates the answer element by ID, verifies the answer is visible with a 3-second timeout. Locates all links within the answer. For each link, re-locates the answer and links, gets the link href attribute, skips mailto and tel links. Clicks the link, waits 2 seconds, gets all pages in the context, brings the last page to front, waits for networkidle with 35-second timeout. Tries to verify HP branding image is visible with 3-second timeout and logs success, or if that fails, verifies the URL contains '/terms' with 30-second timeout and logs success. Closes the new page. Navigates back to original URL, waits for domcontentloaded, re-opens the section tab, clicks show more if needed, re-opens the question. After processing all links in a question, closes the question. Uses extensive try-except blocks to handle failures gracefully and continue testing remaining items. Logs warnings for failed links and sections.",
+          "locators_used": [
+            "faqs_section"
+          ],
+          "calls_to": [
+            "LandingPage(page)",
+            "page.url",
+            "landing_page.faqs_section.scroll_into_view_if_needed()",
+            "expect().to_be_visible()",
+            "framework_logger.info()",
+            "page.goto()",
+            "page.wait_for_load_state()",
+            "page.locator()",
+            "page.wait_for_timeout()",
+            "question.click()",
+            "question.get_attribute()",
+            "answer.locator()",
+            "links.count()",
+            "link.get_attribute()",
+            "link.click()",
+            "page.context.pages",
+            "last_page.bring_to_front()",
+            "last_page.wait_for_load_state()",
+            "expect().to_have_url()",
+            "last_page.close()",
+            "framework_logger.warning()"
+          ],
+          "usage_example": "LandingPageHelper.validate_faq_links(page)",
+          "belongs_to_class": "LandingPageHelper",
+          "lines_of_code": 120
+        },
+        {
+          "method_name": "select_country",
+          "method_signature": "@staticmethod\ndef select_country(page, country=\"United States\")",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for country selection"
+            },
+            {
+              "name": "country",
+              "type": null,
+              "default_value": "\"United States\"",
+              "is_required": false,
+              "description": "Country name to select from the country selector. Defaults to 'United States'."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Selects a country from the country selector on the landing page. Creates a LandingPage instance and clicks the flag icon to open the country selector using landing_page.flag_icon.click(). Loads the locale data mapping using load_locale_data() which returns a dictionary mapping country names to locale information. Retrieves the languages list and country code for the specified country from the locale map. Gets the first language from the languages list. Converts the country code to lowercase. Constructs the locale code string in the format 'language-countrycode' (e.g., 'en-us'). Locates the country selector element using the data-testid attribute with the locale code and clicks it to select the country.",
+          "locators_used": [
+            "flag_icon"
+          ],
+          "calls_to": [
+            "LandingPage(page)",
+            "landing_page.flag_icon.click()",
+            "load_locale_data()",
+            "page.locator()"
+          ],
+          "usage_example": "LandingPageHelper.select_country(page, country='Finland')",
+          "belongs_to_class": "LandingPageHelper",
+          "lines_of_code": 10
+        },
+        {
+          "method_name": "validate_new_emergency_banner",
+          "method_signature": "@staticmethod\ndef validate_new_emergency_banner(page, country=\"United States\")",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for emergency banner validation"
+            },
+            {
+              "name": "country",
+              "type": null,
+              "default_value": "\"United States\"",
+              "is_required": false,
+              "description": "Country name to validate the emergency banner for. Defaults to 'United States'."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Validates the emergency banner on the landing page has the correct background color and icon for the specified country. Creates a LandingPage instance. Locates the emergency banner's parent element using landing_page.emergency_banner.locator('..'). Calls common.get_font_details(banner_element) to retrieve CSS properties including background color. Extracts the detected background color from the returned data. Logs the detected color. Defines a country_configs dictionary mapping country names to their expected banner configurations including name, expected_color (RGB string), and expected_icon_path (SVG path data or None). Retrieves the configuration for the target country from the dictionary. Logs the country and banner name being tested. Asserts the detected color matches the expected color using a Python assert statement with a descriptive error message. Logs success. If the expected_icon_path is not None (for countries like Finland, Portugal, Australia, Norway, Poland, Estonia), locates the SVG path element within the emergency banner, gets its 'd' attribute value, and asserts it matches the expected SVG path data. Logs success. If expected_icon_path is None (for Bulgaria with orange banner), locates the element with class 'orangeBannerIcon', asserts its count is greater than 0, and logs success. Finally logs overall validation success for the banner type.",
+          "locators_used": [
+            "emergency_banner"
+          ],
+          "calls_to": [
+            "LandingPage(page)",
+            "landing_page.emergency_banner.locator()",
+            "common.get_font_details()",
+            "framework_logger.info()",
+            "page.locator()",
+            "landing_page.emergency_banner.locator().get_attribute()"
+          ],
+          "usage_example": "LandingPageHelper.validate_new_emergency_banner(page, country='Finland')",
+          "belongs_to_class": "LandingPageHelper",
+          "lines_of_code": 60
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This is an extensive helper class with 14 static methods covering comprehensive landing page testing scenarios. The class provides separate methods for desktop (OOBE) and mobile (MOBE) viewport testing, which is a best practice for responsive web testing. The consumer_landing_page_oobe and consumer_landing_page_mobe methods are particularly complex, testing multiple page sections with navigation, visibility checks, and viewport validation. The hyperlinks_validation methods test all footer links by opening them in new tabs and verifying URLs. The validate_faq_links method is highly complex with nested loops to test all FAQ sections, questions, and embedded links. The validate_new_emergency_banner method demonstrates data-driven testing with a configuration dictionary for different countries. The class uses optional callback parameters throughout for screenshot capture, making it flexible for different reporting needs. All methods use try-except blocks for error handling and extensive logging with framework_logger. The class depends on multiple page objects (LandingPage, PrivacyBannerPage, etc.) and utility modules (common, load_locale_data). This helper is designed for end-to-end landing page validation in automated test suites."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/helper/oss_emulator_helper.py",
+      "file_name": "oss_emulator_helper.py",
+      "file_extension": ".py",
+      "file_size_bytes": 5746,
+      "language": "Python",
+      "file_category": "helper",
+      "file_purpose": "Helper module providing utility methods for OSS (Online Setup Service) emulator operations including accessing the emulator, signing in, configuring printer details, selecting app types, starting flows, and handling various setup scenarios like OOBE and POOBE (Post Out Of Box Experience) flows. Used for printer enrollment and setup testing.",
+      "imports": [
+        {
+          "import_statement": "import re",
+          "module": "re",
+          "imported_names": [
+            "re"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import time",
+          "module": "time",
+          "imported_names": [
+            "time"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import base64",
+          "module": "base64",
+          "imported_names": [
+            "base64"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import test_flows_common.test_flows_common as common",
+          "module": "test_flows_common.test_flows_common",
+          "imported_names": [
+            "common"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.oss_emulator_page import OssEmulatorPage",
+          "module": "pages.oss_emulator_page",
+          "imported_names": [
+            "OssEmulatorPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from core.settings import framework_logger, GlobalState",
+          "module": "core.settings",
+          "imported_names": [
+            "framework_logger",
+            "GlobalState"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from asyncio import wait",
+          "module": "asyncio",
+          "imported_names": [
+            "wait"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from playwright.sync_api import expect",
+          "module": "playwright.sync_api",
+          "imported_names": [
+            "expect"
+          ],
+          "is_external": true,
+          "is_internal": false
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "OssEmulatorHelper",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Provides static utility methods for interacting with the OSS (Online Setup Service) emulator used for printer setup and enrollment testing. Contains methods for navigating to the emulator, signing in with HPID, clicking specific buttons like the 3-month trial button, filling printer configuration details (serial number, SKU, UUID, cloud ID, fingerprint, language, country), selecting app types, starting setup flows, configuring POOBE flows, accepting connected printing services, declining HP Plus, continuing through dynamic security notices and value propositions, selecting printer replacement options, activating HP Plus, selecting countries, verifying reminder checkboxes and trial text, and accessing learn more pages. All methods are static and designed to work with Playwright page objects.",
+          "how_to_import": "from helper.oss_emulator_helper import OssEmulatorHelper",
+          "how_to_instantiate": "OssEmulatorHelper is used via static methods - no instantiation needed. Call OssEmulatorHelper.access_oss_emulator(page) directly.",
+          "total_methods": 17,
+          "total_locators": 0
+        }
+      ],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "access_oss_emulator",
+          "method_signature": "@staticmethod\ndef access_oss_emulator(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance to navigate to the OSS emulator"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "navigation",
+          "what_it_does": "Navigates to the OSS emulator URL. Uses page.goto() to navigate to the URL stored in common._oss_url. Waits for the page load state to reach 'load' with a 60-second timeout using page.wait_for_load_state('load', timeout=60000) to ensure the emulator page is fully loaded before proceeding.",
+          "locators_used": [],
+          "calls_to": [
+            "page.goto()",
+            "page.wait_for_load_state()",
+            "common._oss_url"
+          ],
+          "usage_example": "OssEmulatorHelper.access_oss_emulator(page)",
+          "belongs_to_class": "OssEmulatorHelper",
+          "lines_of_code": 3
+        },
+        {
+          "method_name": "sign_in_oss_emulator",
+          "method_signature": "@staticmethod\ndef sign_in_oss_emulator(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the OSS emulator"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Signs in to the OSS emulator using HPID authentication. Creates an OssEmulatorPage instance. Clicks the dev tab using oss_emulator_page.dev_tab.click() to navigate to the developer options. Then clicks the OSS HPID login button using oss_emulator_page.oss_hpid_login.click() to initiate the HPID sign-in flow.",
+          "locators_used": [
+            "dev_tab",
+            "oss_hpid_login"
+          ],
+          "calls_to": [
+            "OssEmulatorPage(page)",
+            "oss_emulator_page.dev_tab.click()",
+            "oss_emulator_page.oss_hpid_login.click()"
+          ],
+          "usage_example": "OssEmulatorHelper.sign_in_oss_emulator(page)",
+          "belongs_to_class": "OssEmulatorHelper",
+          "lines_of_code": 4
+        },
+        {
+          "method_name": "click_3m_button",
+          "method_signature": "@staticmethod\ndef click_3m_button(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the OSS emulator"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Clicks the 3-month trial button (Yeti 3M) in the OSS emulator. Creates an OssEmulatorPage instance. Waits for 5 seconds using time.sleep(5) to allow the page to stabilize. Then clicks the yeti_3m button with a 60-second timeout using oss_emulator_page.yeti_3m.click(timeout=60000).",
+          "locators_used": [
+            "yeti_3m"
+          ],
+          "calls_to": [
+            "OssEmulatorPage(page)",
+            "time.sleep()",
+            "oss_emulator_page.yeti_3m.click()"
+          ],
+          "usage_example": "OssEmulatorHelper.click_3m_button(page)",
+          "belongs_to_class": "OssEmulatorHelper",
+          "lines_of_code": 4
+        },
+        {
+          "method_name": "fill_oss_emulator",
+          "method_signature": "@staticmethod\ndef fill_oss_emulator(page, printer)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the OSS emulator"
+            },
+            {
+              "name": "printer",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Printer object containing entity_id, model_number, device_uuid, postcard (base64 encoded), and fingerprint (base64 encoded) attributes"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Fills the OSS emulator form with printer configuration details. Creates an OssEmulatorPage instance. Fills the serial number field with printer.entity_id using oss_emulator_page.serial_number.fill(). Fills the SKU field with printer.model_number. Fills the UUID field with printer.device_uuid. Decodes the base64-encoded postcard value using base64.b64decode(printer.postcard).decode('utf-8') and fills the cloud_id field. Decodes the base64-encoded fingerprint value using base64.b64decode(printer.fingerprint).decode('utf-8') and fills the first fingerprint field. Selects 'completed' option for the language_config dropdown using oss_emulator_page.language_config.select_option('completed'). Selects 'completed' option for the country_config dropdown using oss_emulator_page.country_config.select_option('completed').",
+          "locators_used": [
+            "serial_number",
+            "sku",
+            "uuid",
+            "cloud_id",
+            "fingerprint",
+            "language_config",
+            "country_config"
+          ],
+          "calls_to": [
+            "OssEmulatorPage(page)",
+            "oss_emulator_page.serial_number.fill()",
+            "oss_emulator_page.sku.fill()",
+            "oss_emulator_page.uuid.fill()",
+            "base64.b64decode()",
+            "oss_emulator_page.cloud_id.fill()",
+            "oss_emulator_page.fingerprint.first.fill()",
+            "oss_emulator_page.language_config.select_option()",
+            "oss_emulator_page.country_config.select_option()"
+          ],
+          "usage_example": "OssEmulatorHelper.fill_oss_emulator(page, printer_object)",
+          "belongs_to_class": "OssEmulatorHelper",
+          "lines_of_code": 8
+        },
+        {
+          "method_name": "select_app_type",
+          "method_signature": "@staticmethod\ndef select_app_type(page, app_type: str = None)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the OSS emulator"
+            },
+            {
+              "name": "app_type",
+              "type": "str",
+              "default_value": "None",
+              "is_required": false,
+              "description": "App type to select in the emulator. If None, uses common._simulator_platform or defaults to 'Gotham'."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Selects the app type in the OSS emulator. Determines the app type to use by first checking if the app_type parameter is provided, otherwise uses common._simulator_platform, or defaults to 'Gotham' if neither is available. Creates an OssEmulatorPage instance. Clicks the app tab using oss_emulator_page.app_tab.click() to navigate to the app configuration section. Selects the determined app type from the app_type dropdown using oss_emulator_page.app_type.select_option(app_type).",
+          "locators_used": [
+            "app_tab",
+            "app_type"
+          ],
+          "calls_to": [
+            "OssEmulatorPage(page)",
+            "oss_emulator_page.app_tab.click()",
+            "oss_emulator_page.app_type.select_option()",
+            "common._simulator_platform"
+          ],
+          "usage_example": "OssEmulatorHelper.select_app_type(page, app_type='Gotham')",
+          "belongs_to_class": "OssEmulatorHelper",
+          "lines_of_code": 5
+        },
+        {
+          "method_name": "start_oss_emulator",
+          "method_signature": "@staticmethod\ndef start_oss_emulator(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the OSS emulator"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Starts the OSS emulator flow. Creates an OssEmulatorPage instance. Clicks the start flow button using oss_emulator_page.start_flow_button.click() to initiate the printer setup flow in the emulator.",
+          "locators_used": [
+            "start_flow_button"
+          ],
+          "calls_to": [
+            "OssEmulatorPage(page)",
+            "oss_emulator_page.start_flow_button.click()"
+          ],
+          "usage_example": "OssEmulatorHelper.start_oss_emulator(page)",
+          "belongs_to_class": "OssEmulatorHelper",
+          "lines_of_code": 3
+        },
+        {
+          "method_name": "setup_oss_emulator",
+          "method_signature": "@staticmethod\ndef setup_oss_emulator(page, printer)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the OSS emulator"
+            },
+            {
+              "name": "printer",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Printer object with configuration details"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Performs the complete OSS emulator setup flow by orchestrating multiple helper methods. Calls OssEmulatorHelper.access_oss_emulator(page) to navigate to the emulator. Calls OssEmulatorHelper.sign_in_oss_emulator(page) to sign in with HPID. Calls OssEmulatorHelper.click_3m_button(page) to select the 3-month trial option. Calls OssEmulatorHelper.fill_oss_emulator(page, printer) to fill in all printer configuration details. Calls OssEmulatorHelper.select_app_type(page) to select the app type. Finally calls OssEmulatorHelper.start_oss_emulator(page) to start the setup flow. This is a high-level composite method that combines all setup steps into a single call.",
+          "locators_used": [],
+          "calls_to": [
+            "OssEmulatorHelper.access_oss_emulator()",
+            "OssEmulatorHelper.sign_in_oss_emulator()",
+            "OssEmulatorHelper.click_3m_button()",
+            "OssEmulatorHelper.fill_oss_emulator()",
+            "OssEmulatorHelper.select_app_type()",
+            "OssEmulatorHelper.start_oss_emulator()"
+          ],
+          "usage_example": "OssEmulatorHelper.setup_oss_emulator(page, printer_object)",
+          "belongs_to_class": "OssEmulatorHelper",
+          "lines_of_code": 6
+        },
+        {
+          "method_name": "setup_poobe_flow",
+          "method_signature": "@staticmethod\ndef setup_poobe_flow(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the OSS emulator"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Configures the OSS emulator for Post Out Of Box Experience (POOBE) flow. Creates an OssEmulatorPage instance. Clicks the app_post_oobe_agreements_features option using oss_emulator_page.app_post_oobe_agreements_features.click() to enable POOBE mode. Clicks the subscription_checkbox using oss_emulator_page.subscription_checkbox.click() to enable subscription features. Clicks the oobe_checkbox using oss_emulator_page.oobe_checkbox.click() to enable OOBE features.",
+          "locators_used": [
+            "app_post_oobe_agreements_features",
+            "subscription_checkbox",
+            "oobe_checkbox"
+          ],
+          "calls_to": [
+            "OssEmulatorPage(page)",
+            "oss_emulator_page.app_post_oobe_agreements_features.click()",
+            "oss_emulator_page.subscription_checkbox.click()",
+            "oss_emulator_page.oobe_checkbox.click()"
+          ],
+          "usage_example": "OssEmulatorHelper.setup_poobe_flow(page)",
+          "belongs_to_class": "OssEmulatorHelper",
+          "lines_of_code": 5
+        },
+        {
+          "method_name": "setup_oss_emulator_poobe_flow",
+          "method_signature": "@staticmethod\ndef setup_oss_emulator_poobe_flow(page, printer)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the OSS emulator"
+            },
+            {
+              "name": "printer",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Printer object with configuration details"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Performs the complete OSS emulator setup flow for POOBE (Post Out Of Box Experience) scenarios. Calls OssEmulatorHelper.access_oss_emulator(page) to navigate to the emulator. Calls OssEmulatorHelper.sign_in_oss_emulator(page) to sign in with HPID. Calls OssEmulatorHelper.click_3m_button(page) to select the 3-month trial. Calls OssEmulatorHelper.fill_oss_emulator(page, printer) to fill printer details. Calls OssEmulatorHelper.select_app_type(page) to select the app type. Calls OssEmulatorHelper.setup_poobe_flow(page) to configure POOBE-specific settings. Finally calls OssEmulatorHelper.start_oss_emulator(page) to start the flow. This is a composite method specifically for POOBE testing scenarios.",
+          "locators_used": [],
+          "calls_to": [
+            "OssEmulatorHelper.access_oss_emulator()",
+            "OssEmulatorHelper.sign_in_oss_emulator()",
+            "OssEmulatorHelper.click_3m_button()",
+            "OssEmulatorHelper.fill_oss_emulator()",
+            "OssEmulatorHelper.select_app_type()",
+            "OssEmulatorHelper.setup_poobe_flow()",
+            "OssEmulatorHelper.start_oss_emulator()"
+          ],
+          "usage_example": "OssEmulatorHelper.setup_oss_emulator_poobe_flow(page, printer_object)",
+          "belongs_to_class": "OssEmulatorHelper",
+          "lines_of_code": 7
+        },
+        {
+          "method_name": "accept_connected_printing_services",
+          "method_signature": "@staticmethod\ndef accept_connected_printing_services(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for accepting connected printing services"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Accepts the connected printing services agreement. Creates an OssEmulatorPage instance. Waits for the page to fully load with a 120-second timeout using page.wait_for_load_state('load', timeout=120000). Then clicks the accept all button using oss_emulator_page.accept_all_button.click() to accept all connected printing services terms.",
+          "locators_used": [
+            "accept_all_button"
+          ],
+          "calls_to": [
+            "OssEmulatorPage(page)",
+            "page.wait_for_load_state()",
+            "oss_emulator_page.accept_all_button.click()"
+          ],
+          "usage_example": "OssEmulatorHelper.accept_connected_printing_services(page)",
+          "belongs_to_class": "OssEmulatorHelper",
+          "lines_of_code": 4
+        },
+        {
+          "method_name": "decline_hp_plus",
+          "method_signature": "@staticmethod\ndef decline_hp_plus(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for declining HP Plus"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Declines the HP Plus offer during printer setup. Creates an OssEmulatorPage instance. Clicks the last 'do not activate HP Plus' option with a 120-second timeout using oss_emulator_page.do_not_activate_hp_plus.last.click(timeout=120000). Then clicks the decline HP Plus button using oss_emulator_page.decline_hp_plus.click() to confirm the decline action.",
+          "locators_used": [
+            "do_not_activate_hp_plus",
+            "decline_hp_plus"
+          ],
+          "calls_to": [
+            "OssEmulatorPage(page)",
+            "oss_emulator_page.do_not_activate_hp_plus.last.click()",
+            "oss_emulator_page.decline_hp_plus.click()"
+          ],
+          "usage_example": "OssEmulatorHelper.decline_hp_plus(page)",
+          "belongs_to_class": "OssEmulatorHelper",
+          "lines_of_code": 4
+        },
+        {
+          "method_name": "continue_dynamic_security_notice",
+          "method_signature": "@staticmethod\ndef continue_dynamic_security_notice(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for continuing past dynamic security notice"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Continues past the dynamic security notice screen. Creates an OssEmulatorPage instance. Clicks the dynamic security continue button with a 200-second timeout using oss_emulator_page.ds_continue_button.click(timeout=200000) to proceed past the security notice.",
+          "locators_used": [
+            "ds_continue_button"
+          ],
+          "calls_to": [
+            "OssEmulatorPage(page)",
+            "oss_emulator_page.ds_continue_button.click()"
+          ],
+          "usage_example": "OssEmulatorHelper.continue_dynamic_security_notice(page)",
+          "belongs_to_class": "OssEmulatorHelper",
+          "lines_of_code": 3
+        },
+        {
+          "method_name": "continue_value_proposition",
+          "method_signature": "@staticmethod\ndef continue_value_proposition(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for continuing past value proposition"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Continues past the value proposition screen. Creates an OssEmulatorPage instance. Clicks the next button with a 120-second timeout using oss_emulator_page.next_button.click(timeout=120000) to proceed past the value proposition presentation.",
+          "locators_used": [
+            "next_button"
+          ],
+          "calls_to": [
+            "OssEmulatorPage(page)",
+            "oss_emulator_page.next_button.click()"
+          ],
+          "usage_example": "OssEmulatorHelper.continue_value_proposition(page)",
+          "belongs_to_class": "OssEmulatorHelper",
+          "lines_of_code": 3
+        },
+        {
+          "method_name": "select_replace_printer_and_continue",
+          "method_signature": "@staticmethod\ndef select_replace_printer_and_continue(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for selecting replace printer option"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Selects the replace printer option and continues. Creates an OssEmulatorPage instance. Clicks the second replace printer radio button using oss_emulator_page.replace_printer_radio_button.nth(1).click() to select the replace printer option. Then clicks the continue button using oss_emulator_page.continue_button.click() to proceed with the printer replacement flow.",
+          "locators_used": [
+            "replace_printer_radio_button",
+            "continue_button"
+          ],
+          "calls_to": [
+            "OssEmulatorPage(page)",
+            "oss_emulator_page.replace_printer_radio_button.nth().click()",
+            "oss_emulator_page.continue_button.click()"
+          ],
+          "usage_example": "OssEmulatorHelper.select_replace_printer_and_continue(page)",
+          "belongs_to_class": "OssEmulatorHelper",
+          "lines_of_code": 4
+        },
+        {
+          "method_name": "activate_hp_plus",
+          "method_signature": "@staticmethod\ndef activate_hp_plus(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for activating HP Plus"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Activates HP Plus during printer setup. Creates an OssEmulatorPage instance. Clicks the HP Plus continue button using oss_emulator_page.Hp_Plus_Continue_button.click() to proceed to the activation screen. Then clicks the Activate HP Plus button using oss_emulator_page.Activate_HP_Plus.click() to confirm and activate HP Plus.",
+          "locators_used": [
+            "Hp_Plus_Continue_button",
+            "Activate_HP_Plus"
+          ],
+          "calls_to": [
+            "OssEmulatorPage(page)",
+            "oss_emulator_page.Hp_Plus_Continue_button.click()",
+            "oss_emulator_page.Activate_HP_Plus.click()"
+          ],
+          "usage_example": "OssEmulatorHelper.activate_hp_plus(page)",
+          "belongs_to_class": "OssEmulatorHelper",
+          "lines_of_code": 4
+        },
+        {
+          "method_name": "country_select",
+          "method_signature": "@staticmethod\ndef country_select(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for country selection"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Selects a country in the OSS emulator based on GlobalState configuration. Creates an OssEmulatorPage instance. Locates the country selector element using the country code from GlobalState.country_code with the selector pattern f\"[id='{GlobalState.country_code}']\". Wraps the selection logic in a try-except block. Scrolls the country selector into view if needed using select_country.scroll_into_view_if_needed(). Checks if the country selector is visible with a 100-second timeout. If visible, logs the country code using framework_logger.info(), clicks the country selector, and clicks the continue selection button using oss_emulator_page.continue_selection.click(). Waits 10 seconds using time.sleep(10) after selection. If any exception occurs, the except block passes silently allowing the flow to continue.",
+          "locators_used": [
+            "continue_selection"
+          ],
+          "calls_to": [
+            "OssEmulatorPage(page)",
+            "page.locator()",
+            "select_country.scroll_into_view_if_needed()",
+            "select_country.is_visible()",
+            "framework_logger.info()",
+            "select_country.click()",
+            "oss_emulator_page.continue_selection.click()",
+            "time.sleep()",
+            "GlobalState.country_code"
+          ],
+          "usage_example": "OssEmulatorHelper.country_select(page)",
+          "belongs_to_class": "OssEmulatorHelper",
+          "lines_of_code": 12
+        },
+        {
+          "method_name": "verify_reminder_checkbox_and_trial_text",
+          "method_signature": "@staticmethod\ndef verify_reminder_checkbox_and_trial_text(page, expected_months)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for verification"
+            },
+            {
+              "name": "expected_months",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Number of months expected in the trial text"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies the reminder checkbox is visible, checked, and contains the correct trial text. Locates the reminder checkbox using the data-testid 'instant-ink-reminder'. Uses Playwright's expect() to verify the checkbox is visible with a 500-second timeout. Verifies the checkbox is checked with a 2-second timeout using expect().to_be_checked(). Locates the reminder text element using the class selector starting with 'styles__CheckBoxText'. Uses expect().to_have_text() with a regex pattern to verify the text matches 'Remind me 2 weeks before my {expected_months}-month trial of HP Instant Ink expires.' where the expected_months value is interpolated into the pattern. Locates the trial info disclaimer using data-testid 'general-monthly-fee-disclaimer'. Verifies it is visible. Verifies it has the exact text 'After the trial, a monthly fee will be automatically charged unless canceled.' using expect().to_have_text().",
+          "locators_used": [],
+          "calls_to": [
+            "page.locator()",
+            "expect().to_be_visible()",
+            "expect().to_be_checked()",
+            "expect().to_have_text()"
+          ],
+          "usage_example": "OssEmulatorHelper.verify_reminder_checkbox_and_trial_text(page, expected_months=3)",
+          "belongs_to_class": "OssEmulatorHelper",
+          "lines_of_code": 7
+        },
+        {
+          "method_name": "access_learn_more",
+          "method_signature": "@staticmethod\ndef access_learn_more(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for accessing learn more"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Accesses the learn more page by clicking the learn more button. Creates an OssEmulatorPage instance. Clicks the learn more button with a 120-second timeout using oss_emulator_page.learn_more_button.click(timeout=120000) to navigate to additional information about the service.",
+          "locators_used": [
+            "learn_more_button"
+          ],
+          "calls_to": [
+            "OssEmulatorPage(page)",
+            "oss_emulator_page.learn_more_button.click()"
+          ],
+          "usage_example": "OssEmulatorHelper.access_learn_more(page)",
+          "belongs_to_class": "OssEmulatorHelper",
+          "lines_of_code": 3
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This helper class provides comprehensive OSS emulator automation with 17 static methods. The class follows a pattern of providing both granular methods (access_oss_emulator, sign_in_oss_emulator, fill_oss_emulator) and composite methods (setup_oss_emulator, setup_oss_emulator_poobe_flow) that orchestrate multiple steps. The fill_oss_emulator method demonstrates handling of base64-encoded printer credentials. The class supports both standard OOBE and POOBE (Post Out Of Box Experience) flows with dedicated setup methods. Methods like decline_hp_plus and activate_hp_plus provide flexibility for testing different enrollment scenarios. The verify_reminder_checkbox_and_trial_text method shows complex verification logic with regex pattern matching. The country_select method uses GlobalState for environment-specific configuration. All methods use generous timeouts (60-200 seconds) appropriate for emulator interactions which may be slower than real UI. The class depends on the OssEmulatorPage page object for all UI interactions and uses common module for shared configuration like _oss_url and _simulator_platform."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/helper/overview_helper.py",
+      "file_name": "overview_helper.py",
+      "file_extension": ".py",
+      "file_size_bytes": 7301,
+      "language": "Python",
+      "file_category": "helper",
+      "file_purpose": "Helper module providing utility methods for overview page operations including cartridge verification, printer status section validation, plan suggestion banner verification, plan upgrade information validation, unsubscribed status card verification, and invoice download functionality. Used for dashboard overview page testing scenarios.",
+      "imports": [
+        {
+          "import_statement": "import re",
+          "module": "re",
+          "imported_names": [
+            "re"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from pages.overview_page import OverviewPage",
+          "module": "pages.overview_page",
+          "imported_names": [
+            "OverviewPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from helper.enrollment_helper import EnrollmentHelper",
+          "module": "helper.enrollment_helper",
+          "imported_names": [
+            "EnrollmentHelper"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.confirmation_page import ConfirmationPage",
+          "module": "pages.confirmation_page",
+          "imported_names": [
+            "ConfirmationPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from playwright.sync_api import expect",
+          "module": "playwright.sync_api",
+          "imported_names": [
+            "expect"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from core.settings import framework_logger",
+          "module": "core.settings",
+          "imported_names": [
+            "framework_logger"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "import re",
+          "module": "re",
+          "imported_names": [
+            "re"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import os",
+          "module": "os",
+          "imported_names": [
+            "os"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import time",
+          "module": "time",
+          "imported_names": [
+            "time"
+          ],
+          "is_external": true,
+          "is_internal": false
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "OverviewHelper",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Provides static utility methods for testing and validating the overview page of the Instant Ink dashboard. Contains methods for verifying cartridge installation messages for different cartridge types (K, C, M, Y, CMY), validating multiple cartridge type combinations, checking the number of printers in status-grouped sections, verifying plan suggestion banners for upgrading or downgrading, validating plan upgrade information, verifying unsubscribed status cards with action buttons, testing HP shop ink link navigation, testing enroll printer again functionality, and downloading past invoices. All methods are static and designed for use in test automation scenarios.",
+          "how_to_import": "from helper.overview_helper import OverviewHelper",
+          "how_to_instantiate": "OverviewHelper is used via static methods - no instantiation needed. Call OverviewHelper.verify_cartridge_installed_message(page, 'k') directly.",
+          "total_methods": 9,
+          "total_locators": 0
+        }
+      ],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "verify_cartridge_installed_message",
+          "method_signature": "@staticmethod\ndef verify_cartridge_installed_message(page, cartridge)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the overview page"
+            },
+            {
+              "name": "cartridge",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Comma-separated string of cartridge types to verify (e.g., 'k', 'c,m,y', 'cmy')"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies that cartridge installed messages are visible on the overview page for specified cartridge types. Creates an OverviewPage instance. Splits the cartridge parameter by comma to get a list of cartridge types. Defines a cartridge_locators dictionary mapping cartridge type codes ('k', 'c', 'm', 'y', 'cmy') to their corresponding selector strings retrieved from overview_page.get_selector(). Iterates through each cartridge type in the list. For each cartridge type, strips whitespace, checks if it exists in the cartridge_locators dictionary, and raises a RuntimeError if invalid. Waits for the cartridge element to be visible with a 20-second timeout using page.wait_for_selector(). Asserts that the cartridge element is visible using assert cartridge_element.is_visible() with a descriptive error message. This method validates that the correct cartridge status indicators are displayed on the overview page.",
+          "locators_used": [
+            "kCartridgeItem",
+            "cCartridgeItem",
+            "mCartridgeItem",
+            "yCartridgeItem",
+            "cmyCartridgeItem"
+          ],
+          "calls_to": [
+            "OverviewPage(page)",
+            "overview_page.get_selector()",
+            "page.wait_for_selector()",
+            "cartridge_element.is_visible()"
+          ],
+          "usage_example": "OverviewHelper.verify_cartridge_installed_message(page, 'k,c,m,y')",
+          "belongs_to_class": "OverviewHelper",
+          "lines_of_code": 15
+        },
+        {
+          "method_name": "verify_multiple_cartridge_types_installed_message",
+          "method_signature": "@staticmethod\ndef verify_multiple_cartridge_types_installed_message(page, cartridge, cartridge2)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the overview page"
+            },
+            {
+              "name": "cartridge",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "First cartridge type or combination to try verifying"
+            },
+            {
+              "name": "cartridge2",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Second cartridge type or combination to try if first fails"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Attempts to verify cartridge installed messages for multiple cartridge type combinations with fallback logic. Uses a try-except block to first attempt verifying the cartridge parameter by calling OverviewHelper.verify_cartridge_installed_message(page, cartridge). If a RuntimeError is raised (indicating the first cartridge type is invalid or not found), catches the exception and attempts to verify the cartridge2 parameter by calling OverviewHelper.verify_cartridge_installed_message(page, cartridge2). This method is useful when a printer may have different cartridge configurations and you want to verify either configuration is valid.",
+          "locators_used": [],
+          "calls_to": [
+            "OverviewHelper.verify_cartridge_installed_message()"
+          ],
+          "usage_example": "OverviewHelper.verify_multiple_cartridge_types_installed_message(page, 'k,c,m,y', 'cmy')",
+          "belongs_to_class": "OverviewHelper",
+          "lines_of_code": 5
+        },
+        {
+          "method_name": "number_of_printers_in_section",
+          "method_signature": "@staticmethod\ndef number_of_printers_in_section(page, group, number)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the overview page"
+            },
+            {
+              "name": "group",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Name of the printer status group section to check (e.g., 'Active', 'Inactive', 'Needs Attention')"
+            },
+            {
+              "name": "number",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Expected number of printers - either 'only one' or 'more than one'"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies the number of printers in a specific status group section on the overview page. Creates an OverviewPage instance. Retrieves all printer status section elements using overview_page.printers_grouped_by_status.all(). Initializes printers_grouped to None. Iterates through each section element checking if the group parameter text is present in the element's inner text. If found, assigns that element to printers_grouped and breaks the loop. Asserts that printers_grouped is not None and is visible, with an error message if the section is not found. Asserts that the group text is present in the section's inner text. Locates all printer selector option elements within the section using overview_page.printer_selector_option and gets them as a list. If number parameter is 'only one', asserts the list length equals 1. If number parameter is 'more than one', asserts the list length is greater than 1. If number parameter is neither, raises an Exception with 'Invalid number of printers'. This method validates printer grouping and counting on the overview page.",
+          "locators_used": [
+            "printers_grouped_by_status",
+            "printer_selector_option"
+          ],
+          "calls_to": [
+            "OverviewPage(page)",
+            "overview_page.printers_grouped_by_status.all()",
+            "element.inner_text()",
+            "printers_grouped.is_visible()",
+            "printers_grouped.locator().all()"
+          ],
+          "usage_example": "OverviewHelper.number_of_printers_in_section(page, 'Active', 'more than one')",
+          "belongs_to_class": "OverviewHelper",
+          "lines_of_code": 20
+        },
+        {
+          "method_name": "verify_plan_suggestion_banner",
+          "method_signature": "@staticmethod\ndef verify_plan_suggestion_banner(page, banner_type=\"downgrading\")",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the overview page"
+            },
+            {
+              "name": "banner_type",
+              "type": null,
+              "default_value": "\"downgrading\"",
+              "is_required": false,
+              "description": "Type of plan suggestion banner to verify - either 'downgrading' or 'upgrading'. Defaults to 'downgrading'."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies that a plan suggestion banner is visible on the overview page and contains appropriate text for the specified banner type. Creates an OverviewPage instance. Gets the plan suggestion banner selector using overview_page.get_selector('plan_suggestion_banner'). Locates the banner element using page.locator(). Waits for the banner to be visible with a 30-second timeout using banner_locator.wait_for(state='visible', timeout=30000). Uses Playwright's expect() to verify the banner is visible. Retrieves the banner text content and converts it to lowercase. If banner_type is 'downgrading', defines a list of downgrade keywords ('downgrading', 'lower plan', 'reduce', 'save money', 'smaller plan') and asserts that at least one keyword is present in the banner text using any() and a list comprehension. If banner_type is 'upgrading', defines a list of upgrade keywords ('upgrading', 'higher plan', 'more pages', 'increase', 'larger plan') and asserts at least one is present. If banner_type is neither, raises a ValueError. Prints a success message with a checkmark. Returns the banner_locator for further use.",
+          "locators_used": [
+            "plan_suggestion_banner"
+          ],
+          "calls_to": [
+            "OverviewPage(page)",
+            "overview_page.get_selector()",
+            "page.locator()",
+            "banner_locator.wait_for()",
+            "expect().to_be_visible()",
+            "banner_locator.text_content()",
+            "print()"
+          ],
+          "usage_example": "banner = OverviewHelper.verify_plan_suggestion_banner(page, banner_type='upgrading')",
+          "belongs_to_class": "OverviewHelper",
+          "lines_of_code": 20
+        },
+        {
+          "method_name": "sees_plan_upgraded_information_on_overview_page",
+          "method_signature": "@staticmethod\ndef sees_plan_upgraded_information_on_overview_page(page, plan: str)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the overview page"
+            },
+            {
+              "name": "plan",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "Expected number of pages in the upgraded plan as a string"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies that the plan information on the overview page displays the correct upgraded plan page count. Creates an OverviewPage instance. Uses Playwright's expect() to verify the plan_information element is visible with a 120-second timeout. Retrieves the inner text of the plan_information element using overview_page.plan_information.inner_text(). Removes periods and commas from the text using replace() to normalize the format. Uses re.findall() with the pattern r'\\d+' to extract all numeric values from the text into a list. Gets the second number from the list (index 1) which represents the plan pages. Asserts that the extracted plan pages value as a string equals the provided plan parameter as a string. This method validates that plan upgrade changes are correctly reflected on the overview page.",
+          "locators_used": [
+            "plan_information"
+          ],
+          "calls_to": [
+            "OverviewPage(page)",
+            "expect().to_be_visible()",
+            "overview_page.plan_information.inner_text()",
+            "re.findall()"
+          ],
+          "usage_example": "OverviewHelper.sees_plan_upgraded_information_on_overview_page(page, plan='100')",
+          "belongs_to_class": "OverviewHelper",
+          "lines_of_code": 8
+        },
+        {
+          "method_name": "verify_unsubscribed_status_card",
+          "method_signature": "@staticmethod\ndef verify_unsubscribed_status_card(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the overview page"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies that the unsubscribed status card is displayed with all expected action buttons. Creates an OverviewPage instance. Uses Playwright's expect() to verify three elements are visible: the 'Enroll printer again' button with a 150-second timeout using expect(overview_page.unsubscribed_enroll_printer_again_button).to_be_visible(timeout=150000), the 'HP Shop Ink' button with a 30-second timeout, and the 'Download past invoices' link with a 30-second timeout. This method validates that users who have unsubscribed see the appropriate options to re-enroll, purchase ink, or access their invoice history.",
+          "locators_used": [
+            "unsubscribed_enroll_printer_again_button",
+            "unsubscribed_hp_shop_ink_button",
+            "unsubscribed_download_past_invoices"
+          ],
+          "calls_to": [
+            "OverviewPage(page)",
+            "expect().to_be_visible()"
+          ],
+          "usage_example": "OverviewHelper.verify_unsubscribed_status_card(page)",
+          "belongs_to_class": "OverviewHelper",
+          "lines_of_code": 6
+        },
+        {
+          "method_name": "click_hp_shop_ink_and_verify_url",
+          "method_signature": "@staticmethod\ndef click_hp_shop_ink_and_verify_url(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the overview page"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Clicks the HP Shop Ink button on the unsubscribed status card and verifies it navigates to the correct shop page. Creates an OverviewPage instance. Uses expect() to verify the unsubscribed_hp_shop_ink_button is visible with a 30-second timeout. Uses page.context.expect_page() to capture the new tab that opens when the button is clicked. Clicks the HP Shop Ink button using overview_page.unsubscribed_hp_shop_ink_button.click(). Gets the new tab page object from the context. Uses expect() with a regex pattern to verify the new tab's URL contains '/shop/pdp' with a 30-second timeout. Closes the new tab using new_tab.close(). This method validates that the HP Shop Ink link correctly navigates to the HP ink product page.",
+          "locators_used": [
+            "unsubscribed_hp_shop_ink_button"
+          ],
+          "calls_to": [
+            "OverviewPage(page)",
+            "expect().to_be_visible()",
+            "page.context.expect_page()",
+            "overview_page.unsubscribed_hp_shop_ink_button.click()",
+            "expect().to_have_url()",
+            "new_tab.close()"
+          ],
+          "usage_example": "OverviewHelper.click_hp_shop_ink_and_verify_url(page)",
+          "belongs_to_class": "OverviewHelper",
+          "lines_of_code": 8
+        },
+        {
+          "method_name": "click_enroll_printer_again_and_verify_enrollment",
+          "method_signature": "@staticmethod\ndef click_enroll_printer_again_and_verify_enrollment(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the overview page"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Clicks the 'Enroll printer again' button on the unsubscribed status card and verifies the enrollment flow starts correctly. Creates an OverviewPage instance. Clicks the unsubscribed_enroll_printer_again_button using overview_page.unsubscribed_enroll_printer_again_button.click(). Uses page.context.expect_page() to capture the new enrollment page that opens. Gets the new page object and brings it to front using enrollment_page.bring_to_front(). Uses a try-except block to attempt accepting automatic printer updates by calling EnrollmentHelper.accept_automatic_printer_updates(enrollment_page) and logs success if the page appears. If the page is not found, logs that it was already passed. Creates a ConfirmationPage instance with the enrollment page. Uses expect() to verify the v3_content_area element is visible with a 120-second timeout, confirming the enrollment flow reached the confirmation page. Closes the enrollment page using enrollment_page.close(). This method validates the re-enrollment flow for previously unsubscribed users.",
+          "locators_used": [
+            "unsubscribed_enroll_printer_again_button",
+            "v3_content_area"
+          ],
+          "calls_to": [
+            "OverviewPage(page)",
+            "overview_page.unsubscribed_enroll_printer_again_button.click()",
+            "page.context.expect_page()",
+            "enrollment_page.bring_to_front()",
+            "EnrollmentHelper.accept_automatic_printer_updates()",
+            "framework_logger.info()",
+            "ConfirmationPage()",
+            "expect().to_be_visible()",
+            "enrollment_page.close()"
+          ],
+          "usage_example": "OverviewHelper.click_enroll_printer_again_and_verify_enrollment(page)",
+          "belongs_to_class": "OverviewHelper",
+          "lines_of_code": 15
+        },
+        {
+          "method_name": "download_past_invoices_on_status_card",
+          "method_signature": "@staticmethod\ndef download_past_invoices_on_status_card(page, invoices_directory=\"/tmp/downloads\")",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the overview page"
+            },
+            {
+              "name": "invoices_directory",
+              "type": null,
+              "default_value": "\"/tmp/downloads\"",
+              "is_required": false,
+              "description": "Directory path where the invoice PDF should be saved. Defaults to '/tmp/downloads'."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Downloads past invoices from the unsubscribed status card and verifies the PDF file is created. Creates an OverviewPage instance. Uses expect() to verify the unsubscribed_download_past_invoices link is visible with a 30-second timeout. Creates the invoices directory if it doesn't exist using os.makedirs(invoices_directory, exist_ok=True). Uses page.context.expect_page() to capture the new PDF page that opens when the download link is clicked. Clicks the download past invoices link using overview_page.unsubscribed_download_past_invoices.click(). Gets the PDF page object and brings it to front using pdf_page.bring_to_front(). Waits 3 seconds using time.sleep(3) for the PDF to load. Constructs the PDF file path using os.path.join(invoices_directory, 'invoice.pdf'). Saves the PDF using pdf_page.pdf(path=pdf_file). Closes the PDF page using pdf_page.close(). Waits 2 seconds. Asserts that the PDF file exists at the expected path using os.path.exists() with a descriptive error message. Takes a screenshot of the page and saves it to the invoices directory. Logs success with the PDF file path using framework_logger.info().",
+          "locators_used": [
+            "unsubscribed_download_past_invoices"
+          ],
+          "calls_to": [
+            "OverviewPage(page)",
+            "expect().to_be_visible()",
+            "os.makedirs()",
+            "page.context.expect_page()",
+            "overview_page.unsubscribed_download_past_invoices.click()",
+            "pdf_page.bring_to_front()",
+            "time.sleep()",
+            "os.path.join()",
+            "pdf_page.pdf()",
+            "pdf_page.close()",
+            "os.path.exists()",
+            "page.screenshot()",
+            "framework_logger.info()"
+          ],
+          "usage_example": "OverviewHelper.download_past_invoices_on_status_card(page, invoices_directory='/tmp/test_invoices')",
+          "belongs_to_class": "OverviewHelper",
+          "lines_of_code": 18
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This helper class provides 9 static methods focused on overview page validation and interaction. The verify_cartridge_installed_message method demonstrates dictionary-based selector mapping for different cartridge types. The verify_multiple_cartridge_types_installed_message method shows a fallback pattern for handling multiple valid configurations. The number_of_printers_in_section method implements complex logic for finding and validating printer groupings. The verify_plan_suggestion_banner method uses keyword matching to validate banner content for different scenarios. The unsubscribed status card methods (verify_unsubscribed_status_card, click_hp_shop_ink_and_verify_url, click_enroll_printer_again_and_verify_enrollment, download_past_invoices_on_status_card) provide comprehensive testing of the unsubscribed user experience including navigation verification, enrollment flow testing, and PDF download validation. The download_past_invoices_on_status_card method demonstrates file system operations with os module for directory creation and file existence verification. The class uses Playwright's expect() assertions extensively for robust verification. The class depends on OverviewPage, EnrollmentHelper, and ConfirmationPage for its operations."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+      "file_name": "print_history_helper.py",
+      "file_extension": ".py",
+      "file_size_bytes": 14193,
+      "language": "Python",
+      "file_category": "helper",
+      "file_purpose": "Comprehensive helper module for print history page operations including billing cycle selection, billing table data verification, currency value normalization and validation, billing section verification with multiple data points, FAQ validation with navigation testing, no-pens print history validation, invoice download functionality, notification verification, and plan information validation. Provides extensive utility methods for testing print and payment history features.",
+      "imports": [
+        {
+          "import_statement": "import re",
+          "module": "re",
+          "imported_names": [
+            "re"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import time",
+          "module": "time",
+          "imported_names": [
+            "time"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from pages.dashboard_side_menu_page import DashboardSideMenuPage",
+          "module": "pages.dashboard_side_menu_page",
+          "imported_names": [
+            "DashboardSideMenuPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.overview_page import OverviewPage",
+          "module": "pages.overview_page",
+          "imported_names": [
+            "OverviewPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.print_history_page import PrintHistoryPage",
+          "module": "pages.print_history_page",
+          "imported_names": [
+            "PrintHistoryPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from playwright.sync_api import expect",
+          "module": "playwright.sync_api",
+          "imported_names": [
+            "expect"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from core.settings import framework_logger",
+          "module": "core.settings",
+          "imported_names": [
+            "framework_logger"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "import test_flows_common.test_flows_common as common",
+          "module": "test_flows_common.test_flows_common",
+          "imported_names": [
+            "common"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.update_plan_page import UpdatePlanPage",
+          "module": "pages.update_plan_page",
+          "imported_names": [
+            "UpdatePlanPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "PrintHistoryHelper",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Provides comprehensive static utility methods for testing and validating the print history and payment history page. Contains methods for selecting billing cycle periods, verifying billing table data including pages printed and charges, normalizing and validating currency values across different formats and locales, verifying complete billing sections with multiple data points (pages, rollover, additional pages, prices, charges, tax, totals), validating all billing cycles with expected data sets, testing FAQ sections with link navigation and page verification, validating no-pens print history page state, downloading all invoices, verifying notifications in print history table, and validating plan information and current totals. All methods are static and designed for comprehensive print history testing scenarios.",
+          "how_to_import": "from helper.print_history_helper import PrintHistoryHelper",
+          "how_to_instantiate": "PrintHistoryHelper is used via static methods - no instantiation needed. Call PrintHistoryHelper.verify_billing_table_data(page, 50) directly.",
+          "total_methods": 13,
+          "total_locators": 0
+        }
+      ],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "verify_previous_billing_cycle_period",
+          "method_signature": "@staticmethod\ndef verify_previous_billing_cycle_period(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the print history page"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies that selecting a previous billing cycle period changes the display from 'Current' to a past period. Creates a PrintHistoryPage instance. Clicks the billing cycle dropdown using print_history_page.billing_cycle_option.click(). Clicks the first previous period option using print_history_page.select_1_option.click(). Uses Playwright's expect() with not_to_contain_text() to verify that the billing_cycle_period_title element no longer contains the text 'Current', confirming that a previous billing period is now displayed.",
+          "locators_used": [
+            "billing_cycle_option",
+            "select_1_option",
+            "billing_cycle_period_title"
+          ],
+          "calls_to": [
+            "PrintHistoryPage(page)",
+            "print_history_page.billing_cycle_option.click()",
+            "print_history_page.select_1_option.click()",
+            "expect().not_to_contain_text()"
+          ],
+          "usage_example": "PrintHistoryHelper.verify_previous_billing_cycle_period(page)",
+          "belongs_to_class": "PrintHistoryHelper",
+          "lines_of_code": 5
+        },
+        {
+          "method_name": "get_billing_cycle_option",
+          "method_signature": "@staticmethod\ndef get_billing_cycle_option(page, period_index: int)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the print history page"
+            },
+            {
+              "name": "period_index",
+              "type": "int",
+              "default_value": null,
+              "is_required": true,
+              "description": "Index of the billing period to select (1, 2, or 3)"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Selects a specific billing cycle period from the dropdown by index. Creates a PrintHistoryPage instance. Clicks the billing cycle dropdown to open it using print_history_page.billing_cycle_option.click(). Logs that the dropdown was opened using framework_logger.info(). Uses conditional logic to select the appropriate period option based on period_index: if period_index is 1, clicks select_1_option; if 2, clicks select_2_option; if 3, clicks select_3_option; otherwise raises a ValueError with a message indicating valid values are 1, 2, or 3. Logs which period option was selected. Uses expect() to verify the print_history_table_button is visible with a 10-second timeout, confirming the table has updated after the period selection. Logs that the billing table was updated.",
+          "locators_used": [
+            "billing_cycle_option",
+            "select_1_option",
+            "select_2_option",
+            "select_3_option",
+            "print_history_table_button"
+          ],
+          "calls_to": [
+            "PrintHistoryPage(page)",
+            "print_history_page.billing_cycle_option.click()",
+            "framework_logger.info()",
+            "print_history_page.select_1_option.click()",
+            "print_history_page.select_2_option.click()",
+            "print_history_page.select_3_option.click()",
+            "expect().to_be_visible()"
+          ],
+          "usage_example": "PrintHistoryHelper.get_billing_cycle_option(page, period_index=2)",
+          "belongs_to_class": "PrintHistoryHelper",
+          "lines_of_code": 18
+        },
+        {
+          "method_name": "verify_billing_table_data",
+          "method_signature": "@staticmethod\ndef verify_billing_table_data(page, total_pages_printed)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the print history page"
+            },
+            {
+              "name": "total_pages_printed",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Expected total number of pages printed to verify"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies that the billing table displays the correct total pages printed value. Logs that billing table data validation is starting using framework_logger.info(). Creates a PrintHistoryPage instance. Retrieves the inner text of the total_pages_printed element using print_history_page.total_pages_printed.inner_text(). Calls common.extract_numbers_from_text() to extract all numeric values from the text into a list. If the list is empty (no numbers found), raises a ValueError with a message showing the expected value and the actual text. Asserts that the first number in the list (index 0) equals the total_pages_printed parameter, with a descriptive error message showing expected vs actual values if they don't match.",
+          "locators_used": [
+            "total_pages_printed"
+          ],
+          "calls_to": [
+            "framework_logger.info()",
+            "PrintHistoryPage(page)",
+            "print_history_page.total_pages_printed.inner_text()",
+            "common.extract_numbers_from_text()"
+          ],
+          "usage_example": "PrintHistoryHelper.verify_billing_table_data(page, total_pages_printed=50)",
+          "belongs_to_class": "PrintHistoryHelper",
+          "lines_of_code": 12
+        },
+        {
+          "method_name": "get_text_from_selector",
+          "method_signature": "@staticmethod\ndef get_text_from_selector(page, selector)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            },
+            {
+              "name": "selector",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Either a Playwright locator object or a string CSS selector"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Helper method to get text from a page element",
+          "method_type": "utility",
+          "what_it_does": "Retrieves text content from a page element, handling both locator objects and string selectors. Uses hasattr() to check if the selector parameter has an 'inner_text' attribute. If it does (meaning it's already a Playwright locator object), calls selector.inner_text() directly and returns the result. If it doesn't (meaning it's a string selector), uses page.locator(selector) to create a locator, calls .first to get the first matching element, calls .inner_text() to get the text, and returns it. This utility method provides flexibility in how selectors are passed to other methods.",
+          "locators_used": [],
+          "calls_to": [
+            "hasattr()",
+            "selector.inner_text()",
+            "page.locator()",
+            "locator.first.inner_text()"
+          ],
+          "usage_example": "text = PrintHistoryHelper.get_text_from_selector(page, '#plan-price')",
+          "belongs_to_class": "PrintHistoryHelper",
+          "lines_of_code": 7
+        },
+        {
+          "method_name": "normalize_currency_value",
+          "method_signature": "@staticmethod\ndef normalize_currency_value(value)",
+          "parameters": [
+            {
+              "name": "value",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Currency value to normalize - can be string, number, or None"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Normalizes currency values to a consistent format for comparison. If the value is falsy (None, empty string, etc.), returns '0.00'. Converts the value to a string, strips whitespace, replaces commas with periods for decimal normalization, removes dollar signs, euro signs, and pound signs using replace(). Removes non-breaking spaces (\\xa0) and regular spaces. If the normalized value is a dash, em dash, 'N/A', or 'n/a', returns '0.00'. Uses a try-except block to attempt converting the normalized string to a float using float(). If successful, formats it as a string with 2 decimal places using f'{float_val:.2f}' and returns it. If conversion fails, returns the normalized string as-is. This method handles various currency formats and edge cases to enable reliable currency value comparisons.",
+          "locators_used": [],
+          "calls_to": [
+            "str()",
+            "replace()",
+            "float()"
+          ],
+          "usage_example": "normalized = PrintHistoryHelper.normalize_currency_value('$12.99')",
+          "belongs_to_class": "PrintHistoryHelper",
+          "lines_of_code": 12
+        },
+        {
+          "method_name": "validate_currency_field",
+          "method_signature": "@staticmethod\ndef validate_currency_field(page, selector, expected, partial_match=False)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            },
+            {
+              "name": "selector",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Locator object or string selector for the currency field"
+            },
+            {
+              "name": "expected",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Expected currency value - can be int (cents), float, or string"
+            },
+            {
+              "name": "partial_match",
+              "type": null,
+              "default_value": "False",
+              "is_required": false,
+              "description": "If True, checks if expected value is contained in actual text. If False, requires exact match. Defaults to False."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Validates that a currency field contains the expected value with flexible matching options. Calls PrintHistoryHelper.get_text_from_selector(page, selector) to retrieve the actual text from the element. Checks if the expected value is an integer using isinstance(). If it is, divides it by 100 to convert from cents to dollars (e.g., 1299 becomes 12.99). Calls PrintHistoryHelper.normalize_currency_value(expected) to normalize the expected value to a consistent format. If partial_match is True, replaces commas with periods in the actual text for normalization, then asserts that the normalized expected value is contained in the actual text using the 'in' operator, with a descriptive error message if not found. If partial_match is False, calls PrintHistoryHelper.normalize_currency_value(actual_text) to normalize the actual value, then asserts that the normalized actual value exactly equals the normalized expected value, with a descriptive error message showing both normalized and raw values if they don't match. This method handles various currency formats and provides flexible validation for exact or partial matches.",
+          "locators_used": [],
+          "calls_to": [
+            "PrintHistoryHelper.get_text_from_selector()",
+            "isinstance()",
+            "PrintHistoryHelper.normalize_currency_value()"
+          ],
+          "usage_example": "PrintHistoryHelper.validate_currency_field(page, '#plan-price', 1299, partial_match=True)",
+          "belongs_to_class": "PrintHistoryHelper",
+          "lines_of_code": 12
+        },
+        {
+          "method_name": "verify_correct_billing_section",
+          "method_signature": "@staticmethod\ndef verify_correct_billing_section(page, expected_values: dict)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the print history page"
+            },
+            {
+              "name": "expected_values",
+              "type": "dict",
+              "default_value": null,
+              "is_required": true,
+              "description": "Dictionary containing expected values for billing section fields. Keys can include: total_pages_printed, pages, rollover, additional, plan_price, overage_price, previous, charges, tax, total."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies multiple fields in the billing section against expected values provided in a dictionary. Creates a PrintHistoryPage instance. For each possible field in the expected_values dictionary, checks if the key exists and performs validation. For 'total_pages_printed', extracts numbers from the total_pages_printed element text using common.extract_numbers_from_text(), gets the first number, and asserts it equals the expected value. For 'pages', extracts numbers from the plan_pages_text element using get_text_from_selector() and common.extract_numbers_from_text(), gets the first number, and asserts equality. For 'rollover', checks if the expected value is not a dash, then extracts numbers from rollover_pages_text and asserts equality. For 'additional', checks if the expected value is not a dash, then extracts numbers from additional_pages_text and asserts equality. For 'plan_price', calls validate_currency_field() with plan_price_text selector and partial_match=True. For 'overage_price', calls validate_currency_field() with overage_description_text selector and partial_match=True. For 'previous', calls validate_currency_field() with previous_billing_text selector for exact match. For 'charges', calls validate_currency_field() with current_billing_text selector for exact match. For 'tax', checks if expected value is not a dash, then uses a try-except block to call validate_currency_field() with the tax-amount data-testid selector, logging a warning if the element is not found. For 'total', calls validate_currency_field() with current_total_text selector for exact match. This comprehensive method validates all billing section data points in a single call.",
+          "locators_used": [
+            "total_pages_printed",
+            "plan_pages_text",
+            "rollover_pages_text",
+            "additional_pages_text",
+            "plan_price_text",
+            "overage_description_text",
+            "previous_billing_text",
+            "current_billing_text",
+            "current_total_text"
+          ],
+          "calls_to": [
+            "PrintHistoryPage(page)",
+            "common.extract_numbers_from_text()",
+            "PrintHistoryHelper.get_text_from_selector()",
+            "PrintHistoryHelper.validate_currency_field()",
+            "framework_logger.warning()"
+          ],
+          "usage_example": "PrintHistoryHelper.verify_correct_billing_section(page, {'total_pages_printed': 50, 'pages': 100, 'plan_price': 1299, 'total': 1299})",
+          "belongs_to_class": "PrintHistoryHelper",
+          "lines_of_code": 60
+        },
+        {
+          "method_name": "verify_all_billing_cycles_data",
+          "method_signature": "@staticmethod\ndef verify_all_billing_cycles_data(page, expected_data: list)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the print history page"
+            },
+            {
+              "name": "expected_data",
+              "type": "list",
+              "default_value": null,
+              "is_required": true,
+              "description": "List of dictionaries, each containing 'billing_cycle' key (1-based index) and expected values for that cycle"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies billing data for multiple billing cycles by iterating through expected data and validating each cycle. Creates a PrintHistoryPage instance. Iterates through each row dictionary in the expected_data list. For each row, extracts the 'billing_cycle' value, converts it to an integer, and subtracts 1 to get a 0-based index. Logs which billing cycle is being validated using framework_logger.info(). Clicks the billing cycle dropdown to open it using print_history_page.billing_cycle_option.click(). Logs that the dropdown was opened. Locates all billing cycle options using page.locator(print_history_page.elements.billing_cycle_options). Clicks the option at the calculated index using billing_options.nth(billing_cycle_index).click(). Logs which option was selected. Waits 1 second using page.wait_for_timeout(1000) for the page to update. Calls PrintHistoryHelper.verify_correct_billing_section(page, row) to verify all the expected values for that billing cycle. This method enables data-driven testing of multiple billing cycles with a single method call.",
+          "locators_used": [
+            "billing_cycle_option",
+            "billing_cycle_options"
+          ],
+          "calls_to": [
+            "PrintHistoryPage(page)",
+            "framework_logger.info()",
+            "print_history_page.billing_cycle_option.click()",
+            "page.locator()",
+            "billing_options.nth().click()",
+            "page.wait_for_timeout()",
+            "PrintHistoryHelper.verify_correct_billing_section()"
+          ],
+          "usage_example": "PrintHistoryHelper.verify_all_billing_cycles_data(page, [{'billing_cycle': 1, 'total_pages_printed': 50, 'total': 1299}, {'billing_cycle': 2, 'total_pages_printed': 75, 'total': 1499}])",
+          "belongs_to_class": "PrintHistoryHelper",
+          "lines_of_code": 15
+        },
+        {
+          "method_name": "validate_faq_on_print_and_payment_history",
+          "method_signature": "@staticmethod\ndef validate_faq_on_print_and_payment_history(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the print history page"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Validates all FAQ questions and their embedded links on the print and payment history page. Creates instances of PrintHistoryPage, OverviewPage, UpdatePlanPage, and DashboardSideMenuPage. Clicks the first FAQ question using print_history_page.faq_question_1.click(). Uses expect() to verify the first FAQ answer is visible with a 30-second timeout. Uses page.expect_popup() to capture the new tab that opens when the Terms of Service link is clicked. Clicks the Terms of Service link in the first FAQ answer. Verifies the popup URL contains '/terms' using expect().to_have_url() with a regex pattern and 30-second timeout. Closes the popup. Clicks the second FAQ question. Verifies the second FAQ answer is visible. Clicks the Overview link in the second FAQ answer. Verifies the overview page status card title is visible with a 30-second timeout, confirming navigation to the overview page. Navigates back to print history using side_menu.print_history_menu_link.click(). Clicks the second FAQ question again. Verifies the answer is visible. Clicks the first Update Plan link in the second FAQ answer. Verifies the update plan page title is visible, confirming navigation to the update plan page. Navigates back to print history. Clicks the third FAQ question. Verifies the third FAQ answer is visible. Clicks the fourth FAQ question. Verifies the fourth FAQ answer is visible. Clicks the last Update Plan link in the fourth FAQ answer. Verifies the update plan page title is visible. Navigates back to print history. This comprehensive method tests all FAQ interactions including link navigation and page transitions.",
+          "locators_used": [
+            "faq_question_1",
+            "faq_answer_1",
+            "faq_terms_of_service_link",
+            "faq_question_2",
+            "faq_answer_2",
+            "faq_overview_link",
+            "status_card_title",
+            "print_history_menu_link",
+            "update_plan_link",
+            "page_title",
+            "faq_question_3",
+            "faq_answer_3",
+            "faq_question_4",
+            "faq_answer_4"
+          ],
+          "calls_to": [
+            "PrintHistoryPage(page)",
+            "OverviewPage(page)",
+            "UpdatePlanPage(page)",
+            "DashboardSideMenuPage(page)",
+            "print_history_page.faq_question_1.click()",
+            "expect().to_be_visible()",
+            "page.expect_popup()",
+            "print_history_page.faq_terms_of_service_link.click()",
+            "expect().to_have_url()",
+            "popup.close()",
+            "print_history_page.faq_question_2.click()",
+            "print_history_page.faq_overview_link.click()",
+            "side_menu.print_history_menu_link.click()",
+            "print_history_page.update_plan_link.first.click()",
+            "print_history_page.faq_question_3.click()",
+            "print_history_page.faq_question_4.click()",
+            "print_history_page.update_plan_link.last.click()"
+          ],
+          "usage_example": "PrintHistoryHelper.validate_faq_on_print_and_payment_history(page)",
+          "belongs_to_class": "PrintHistoryHelper",
+          "lines_of_code": 35
+        },
+        {
+          "method_name": "validate_no_pens_print_history_page",
+          "method_signature": "@staticmethod\ndef validate_no_pens_print_history_page(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the print history page"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Validates the print history page state when no pens (printers) are enrolled. Creates a PrintHistoryPage instance. Uses expect() to verify that the print_history_section element is visible with a 30-second timeout. Verifies that the page_title element is visible. Uses expect() with not_to_be_visible() to verify that several elements are NOT visible: print_history_card_title, how_is_calculated_link, total_printed_pages, plan_pages_bar, and plan_details_card. This validates that the page shows a minimal state without detailed print history information when no printers are enrolled.",
+          "locators_used": [
+            "print_history_section",
+            "page_title",
+            "print_history_card_title",
+            "how_is_calculated_link",
+            "total_printed_pages",
+            "plan_pages_bar",
+            "plan_details_card"
+          ],
+          "calls_to": [
+            "PrintHistoryPage(page)",
+            "expect().to_be_visible()",
+            "expect().not_to_be_visible()"
+          ],
+          "usage_example": "PrintHistoryHelper.validate_no_pens_print_history_page(page)",
+          "belongs_to_class": "PrintHistoryHelper",
+          "lines_of_code": 10
+        },
+        {
+          "method_name": "click_download_all_invoices",
+          "method_signature": "@staticmethod\ndef click_download_all_invoices(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the print history page"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Clicks the download all invoices button with retry logic and verifies the invoices page opens. Creates a PrintHistoryPage instance. Implements a retry loop with 60 attempts. In each attempt, uses a try-except block to click the print_history_table_button using print_history_page.print_history_table_button.click(). Uses expect() to verify the download_all_invoices_button is visible with a 5-second timeout. If successful, breaks out of the loop. If an exception occurs and it's not the last attempt (59), logs a retry message with the attempt number using framework_logger.info(), waits 60 seconds using time.sleep(60), reloads the page using page.reload(), and waits for the print_history_card_title to be visible with a 90-second timeout. If all 60 attempts fail, raises an Exception indicating the button is not visible after maximum retries. After the button is visible, uses page.context.expect_page() to capture the new tab that opens when the download all invoices button is clicked. Clicks the button. Gets the new tab page object. Asserts that the word 'invoices' is present in the new tab's URL, with a descriptive error message showing the actual URL if the assertion fails. This method handles the case where the download button may take time to appear after page load.",
+          "locators_used": [
+            "print_history_table_button",
+            "download_all_invoices_button",
+            "print_history_card_title"
+          ],
+          "calls_to": [
+            "PrintHistoryPage(page)",
+            "print_history_page.print_history_table_button.click()",
+            "expect().to_be_visible()",
+            "framework_logger.info()",
+            "time.sleep()",
+            "page.reload()",
+            "page.context.expect_page()",
+            "print_history_page.download_all_invoices_button.click()"
+          ],
+          "usage_example": "PrintHistoryHelper.click_download_all_invoices(page)",
+          "belongs_to_class": "PrintHistoryHelper",
+          "lines_of_code": 20
+        },
+        {
+          "method_name": "see_notification_on_print_history",
+          "method_signature": "@staticmethod\ndef see_notification_on_print_history(page, notifications_text: str)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the print history page"
+            },
+            {
+              "name": "notifications_text",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "Expected notification text to find in the print history table"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies that a specific notification text is present in the print history table. Creates a PrintHistoryPage instance. Checks if the print_history_table is hidden using print_history_page.print_history_table.is_hidden(). If it is hidden, clicks the print_history_table_button to expand the table. Uses expect() to verify the print_history_table is visible with a 30-second timeout. Waits 3 seconds using time.sleep(3) for the table content to fully load. Retrieves the inner text of the entire print history table using print_history_page.print_history_table.inner_text(). Asserts that the notifications_text parameter is present in the table content using the 'in' operator, with a descriptive error message showing the expected text and actual table content if the assertion fails.",
+          "locators_used": [
+            "print_history_table",
+            "print_history_table_button"
+          ],
+          "calls_to": [
+            "PrintHistoryPage(page)",
+            "print_history_page.print_history_table.is_hidden()",
+            "print_history_page.print_history_table_button.click()",
+            "expect().to_be_visible()",
+            "time.sleep()",
+            "print_history_page.print_history_table.inner_text()"
+          ],
+          "usage_example": "PrintHistoryHelper.see_notification_on_print_history(page, 'Plan upgraded to 100 pages')",
+          "belongs_to_class": "PrintHistoryHelper",
+          "lines_of_code": 8
+        },
+        {
+          "method_name": "verify_plan_info",
+          "method_signature": "@staticmethod\ndef verify_plan_info(page, plan_value: str, plan_pages: str)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the print history page"
+            },
+            {
+              "name": "plan_value",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "Expected plan price value as a string"
+            },
+            {
+              "name": "plan_pages",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "Expected plan pages value as a string"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies that the plan information displays the correct plan value and plan pages. Creates a PrintHistoryPage instance. Uses expect() to verify the print_history_card is visible with a 90-second timeout. Retrieves the text content of the plan_price_text element using print_history_page.plan_price_text.text_content(). Calls common.extract_numbers_from_text() to extract all numeric values from the plan info text into a list. Asserts that the first number in the list (index 0) equals the plan_value parameter, with a descriptive error message showing expected vs actual if they don't match. Asserts that the second number in the list (index 1) equals the plan_pages parameter, with a descriptive error message showing expected vs actual if they don't match.",
+          "locators_used": [
+            "print_history_card",
+            "plan_price_text"
+          ],
+          "calls_to": [
+            "PrintHistoryPage(page)",
+            "expect().to_be_visible()",
+            "print_history_page.plan_price_text.text_content()",
+            "common.extract_numbers_from_text()"
+          ],
+          "usage_example": "PrintHistoryHelper.verify_plan_info(page, plan_value='12', plan_pages='100')",
+          "belongs_to_class": "PrintHistoryHelper",
+          "lines_of_code": 7
+        },
+        {
+          "method_name": "verify_current_total",
+          "method_signature": "@staticmethod\ndef verify_current_total(page, total_value: str)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance for the print history page"
+            },
+            {
+              "name": "total_value",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "Expected current total value as a string"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies that the current total amount displayed on the print history page matches the expected value. Creates a PrintHistoryPage instance. Uses expect() to verify the print_history_card is visible with a 90-second timeout. Retrieves the text content of the first current_total_text element using print_history_page.current_total_text.first.text_content(). Calls common.extract_numbers_from_text() to extract all numeric values from the current total text into a list. Asserts that the first number in the list (index 0) equals the total_value parameter, with a descriptive error message showing expected vs actual if they don't match.",
+          "locators_used": [
+            "print_history_card",
+            "current_total_text"
+          ],
+          "calls_to": [
+            "PrintHistoryPage(page)",
+            "expect().to_be_visible()",
+            "print_history_page.current_total_text.first.text_content()",
+            "common.extract_numbers_from_text()"
+          ],
+          "usage_example": "PrintHistoryHelper.verify_current_total(page, total_value='12')",
+          "belongs_to_class": "PrintHistoryHelper",
+          "lines_of_code": 6
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This is the most comprehensive helper class in the batch with 13 static methods covering extensive print history testing scenarios. The class demonstrates sophisticated currency handling with normalize_currency_value and validate_currency_field methods that handle multiple currency formats, symbols, and locales. The verify_correct_billing_section method is particularly powerful, accepting a dictionary of expected values and validating multiple billing data points in a single call. The verify_all_billing_cycles_data method enables data-driven testing by iterating through multiple billing cycles. The validate_faq_on_print_and_payment_history method shows complex navigation testing with multiple page transitions and link verifications. The click_download_all_invoices method implements a robust retry mechanism with 60 attempts and 60-second intervals, demonstrating handling of slow-loading elements. The class uses extensive logging with framework_logger for debugging. The get_text_from_selector utility method provides flexibility in handling both locator objects and string selectors. The class depends on multiple page objects (PrintHistoryPage, DashboardSideMenuPage, OverviewPage, UpdatePlanPage) and uses the common module for text parsing utilities. This helper is designed for comprehensive billing and payment history validation in automated test suites."
+    }
+  ],
+  "batch_summary": {
+    "total_classes_found": 5,
+    "total_methods_found": 59,
+    "total_locators_found": 0,
+    "total_imports_found": 33,
+    "total_constants_found": 0,
+    "total_inner_classes_found": 0,
+    "page_objects_found": [],
+    "helper_classes_found": [
+      "HPIDHelper",
+      "LandingPageHelper",
+      "OssEmulatorHelper",
+      "OverviewHelper",
+      "PrintHistoryHelper"
+    ],
+    "core_classes_found": [],
+    "config_classes_found": [],
+    "key_reusable_methods": [
+      "HPIDHelper.complete_sign_in — Complete HP ID sign-in flow with country dismissal",
+      "HPIDHelper.complete_sign_up — Complete HP ID sign-up flow with email verification",
+      "HPIDHelper.confirm_account_code — Retrieve and enter email verification code",
+      "LandingPageHelper.consumer_landing_page_oobe — Test complete landing page flow for desktop",
+      "LandingPageHelper.consumer_landing_page_mobe — Test complete landing page flow for mobile",
+      "LandingPageHelper.hyperlinks_validation — Validate all footer hyperlinks for desktop",
+      "LandingPageHelper.validate_faq_links — Validate all FAQ links and embedded content",
+      "OssEmulatorHelper.setup_oss_emulator — Complete OSS emulator setup flow",
+      "OssEmulatorHelper.setup_oss_emulator_poobe_flow — Complete OSS emulator POOBE setup flow",
+      "OssEmulatorHelper.fill_oss_emulator — Fill printer configuration details",
+      "OverviewHelper.verify_cartridge_installed_message — Verify cartridge status display",
+      "OverviewHelper.verify_plan_suggestion_banner — Verify plan upgrade/downgrade banner",
+      "OverviewHelper.download_past_invoices_on_status_card — Download and verify invoice PDF",
+      "PrintHistoryHelper.verify_correct_billing_section — Verify complete billing section data",
+      "PrintHistoryHelper.verify_all_billing_cycles_data — Verify multiple billing cycles",
+      "PrintHistoryHelper.validate_faq_on_print_and_payment_history — Validate all FAQ interactions",
+      "PrintHistoryHelper.normalize_currency_value — Normalize currency for comparison",
+      "PrintHistoryHelper.validate_currency_field — Validate currency field values"
+    ],
+    "key_reusable_locators": []
+  }
+}
