@@ -1,0 +1,1985 @@
+{
+  "batch_metadata": {
+    "batch_id": 10,
+    "total_batches": 18,
+    "remaining_after_this": 8,
+    "analyzed_at": "2025-01-15T10:30:00Z",
+    "analyzer": "Senior Codebase Analyst Agent",
+    "files_in_batch": 5,
+    "files_succeeded": 5,
+    "files_failed": 0,
+    "failed_files": [],
+    "storage_repo": "AAVA-STORAGE",
+    "report_path": "codebase_batches/batch_10_report.json"
+  },
+  "analyzed_files": [
+    "AURA-main (1) 1/AURA-main/helper/ra_base_helper.py",
+    "AURA-main (1) 1/AURA-main/helper/shipment_tracking_helper.py",
+    "AURA-main (1) 1/AURA-main/helper/update_plan_helper.py",
+    "AURA-main (1) 1/AURA-main/pages/__init__.py",
+    "AURA-main (1) 1/AURA-main/pages/base_page_object.py"
+  ],
+  "file_analyses": [
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/helper/ra_base_helper.py",
+      "file_name": "ra_base_helper.py",
+      "file_extension": ".py",
+      "file_size_bytes": 6589,
+      "language": "Python",
+      "file_category": "helper",
+      "file_purpose": "Helper module providing utility functions for Resque job management, page navigation, and data validation operations. Contains the RABaseHelper class with static methods for accessing Resque admin interface, running scheduled jobs, waiting for job completion, navigating to pages and menus, extracting field data by title, accessing links, validating boolean values, and validating template data with date comparisons. Used throughout the test framework for backend job orchestration and page interaction utilities.",
+      "imports": [
+        {
+          "import_statement": "from datetime import timedelta",
+          "module": "datetime",
+          "imported_names": [
+            "timedelta"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import datetime",
+          "module": "datetime",
+          "imported_names": [
+            "datetime"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import json",
+          "module": "json",
+          "imported_names": [
+            "json"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import time",
+          "module": "time",
+          "imported_names": [
+            "time"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import test_flows_common.test_flows_common as common",
+          "module": "test_flows_common.test_flows_common",
+          "imported_names": [
+            "common"
+          ],
+          "is_external": false,
+          "is_internal": true
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "RABaseHelper",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Provides a comprehensive set of static utility methods for interacting with the Resque job scheduling system and performing common page navigation and data extraction operations. This helper class is designed to support test automation by providing reusable methods for accessing the Resque admin interface, queuing and monitoring background jobs, navigating to specific pages and menu items, extracting field values and links by title from card-based UI layouts, validating boolean field values, and validating template data with date/time comparisons. All methods are static so no instantiation is required.",
+          "how_to_import": "from helper.ra_base_helper import RABaseHelper",
+          "how_to_instantiate": "RABaseHelper is used via static methods - no instantiation needed. Call RABaseHelper.wait_page_to_load(page, 'PageTitle') directly.",
+          "total_methods": 15,
+          "total_locators": 0
+        }
+      ],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "wait_page_to_load",
+          "method_signature": "def wait_page_to_load(page, page_title, timeout=60000)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "page_title",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The title text that should appear in the h1 heading to confirm page load"
+            },
+            {
+              "name": "timeout",
+              "type": null,
+              "default_value": "60000",
+              "is_required": false,
+              "description": "Maximum wait time in milliseconds before throwing timeout error. Defaults to 60000ms (60 seconds)."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "waiter",
+          "what_it_does": "Waits for a specific page to fully load by checking for the presence of an h1 heading element containing the text 'Details for {page_title}'. Uses Playwright's wait_for_selector method with a dynamic selector constructed using an f-string that combines the page_title parameter into the selector pattern 'h1:has-text(\"Details for {page_title}\")'. The method will wait up to the specified timeout duration (default 60 seconds) for the element to appear. If the element does not appear within the timeout period, Playwright will raise a TimeoutError. This method is useful for ensuring that detail pages have fully loaded before proceeding with test actions.",
+          "locators_used": [],
+          "calls_to": [
+            "page.wait_for_selector()"
+          ],
+          "usage_example": "RABaseHelper.wait_page_to_load(page, 'Subscription', timeout=30000)",
+          "belongs_to_class": "RABaseHelper",
+          "lines_of_code": 2
+        },
+        {
+          "method_name": "access_resque",
+          "method_signature": "def access_resque(page, base_url)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "base_url",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The base URL of the application where Resque admin interface is hosted"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "navigation",
+          "what_it_does": "Navigates to the Resque schedule page by constructing the full URL from the provided base_url and appending '/resque/schedule' to it. Uses Playwright's page.goto() method to perform the navigation. Resque is a Redis-backed job queue system, and this method provides access to its web-based admin interface where scheduled jobs can be viewed and managed. This is typically used as a setup step before running or monitoring background jobs in the test automation framework.",
+          "locators_used": [],
+          "calls_to": [
+            "page.goto()"
+          ],
+          "usage_example": "RABaseHelper.access_resque(page, 'https://app.example.com')",
+          "belongs_to_class": "RABaseHelper",
+          "lines_of_code": 2
+        },
+        {
+          "method_name": "run_job",
+          "method_signature": "def run_job(page, base_url, job_name)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "base_url",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The base URL of the application where Resque admin interface is hosted"
+            },
+            {
+              "name": "job_name",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The exact name of the scheduled job to run"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Executes a scheduled Resque job by locating it in the schedule table and clicking its 'Queue now' button. First constructs a row selector using f-string to find the table row containing the exact job name using 'tr:has(td:text-is(\"{job_name}\"))'. Then constructs a button selector by combining the row selector with the input element selector 'input[value=\"Queue now\"]'. Waits for the button to be visible, then clicks it to queue the job immediately. After clicking, waits for the Queues page heading 'h1.wi:has-text(\"Queues\")' to appear confirming the action. Then navigates to the Resque working page at '/resque/working' to monitor job execution. Finally calls wait_for_job_to_disappear() to wait until the job completes and is no longer listed in the working jobs table. This method orchestrates the complete flow of triggering a scheduled job and waiting for its completion.",
+          "locators_used": [],
+          "calls_to": [
+            "page.wait_for_selector()",
+            "page.goto()",
+            "RABaseHelper.wait_for_job_to_disappear()"
+          ],
+          "usage_example": "RABaseHelper.run_job(page, 'https://app.example.com', 'ProcessSubscriptionJob')",
+          "belongs_to_class": "RABaseHelper",
+          "lines_of_code": 6
+        },
+        {
+          "method_name": "complete_jobs",
+          "method_signature": "def complete_jobs(page, base_url, jobs=[])",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "base_url",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The base URL of the application where Resque admin interface is hosted"
+            },
+            {
+              "name": "jobs",
+              "type": null,
+              "default_value": "[]",
+              "is_required": false,
+              "description": "List of job names to execute in sequence. Defaults to empty list."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Executes multiple Resque jobs in sequence by iterating through the provided jobs list. For each job in the list, it first calls access_resque() to navigate to the Resque schedule page, then calls run_job() to execute that specific job and wait for its completion. This method is useful for test scenarios that require multiple background jobs to be completed as preconditions, such as processing subscriptions, sending notifications, or updating data. The jobs are executed sequentially, with each job fully completing before the next one starts.",
+          "locators_used": [],
+          "calls_to": [
+            "RABaseHelper.access_resque()",
+            "RABaseHelper.run_job()"
+          ],
+          "usage_example": "RABaseHelper.complete_jobs(page, 'https://app.example.com', jobs=['ProcessSubscriptionJob', 'SendEmailJob', 'UpdateInventoryJob'])",
+          "belongs_to_class": "RABaseHelper",
+          "lines_of_code": 4
+        },
+        {
+          "method_name": "wait_for_job_to_disappear",
+          "method_signature": "def wait_for_job_to_disappear(page, job_name: str, timeout: int = 60)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "job_name",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "The name of the job to monitor for completion"
+            },
+            {
+              "name": "timeout",
+              "type": "int",
+              "default_value": "60",
+              "is_required": false,
+              "description": "Maximum wait time in seconds before raising timeout error. Defaults to 60 seconds."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "waiter",
+          "what_it_does": "Monitors the Resque working jobs table and waits for a specific job to complete and disappear from the list of active workers. Uses a polling loop that runs until the timeout is reached. In each iteration, it waits for the 'table.workers' element to appear with a 5-second timeout. Then locates all table rows except the header using 'table.workers tbody tr:not(:first-child)'. Iterates through each row to check if the queue cell (td.queues) contains the job_name in its text content. If the job is found, sets job_found flag to True and breaks the inner loop. If job_found is False (meaning the job is no longer in the table), the method returns successfully indicating the job has completed. If the job is still present, waits 2 seconds, reloads the page, and waits for network idle state before checking again. If any exception occurs during the check (such as table not found), the method returns assuming the job has completed. If the timeout is reached and the job is still present, raises a RuntimeError with a descriptive message. This method is critical for ensuring background jobs complete before proceeding with test assertions.",
+          "locators_used": [],
+          "calls_to": [
+            "time.time()",
+            "page.wait_for_selector()",
+            "page.locator()",
+            "table_rows.count()",
+            "table_rows.nth()",
+            "row.locator()",
+            "queue_cell.text_content()",
+            "page.wait_for_timeout()",
+            "page.reload()",
+            "page.wait_for_load_state()"
+          ],
+          "usage_example": "RABaseHelper.wait_for_job_to_disappear(page, 'ProcessSubscriptionJob', timeout=120)",
+          "belongs_to_class": "RABaseHelper",
+          "lines_of_code": 30
+        },
+        {
+          "method_name": "access_page",
+          "method_signature": "def access_page(page, page_name)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "page_name",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The exact text of the navigation link to click"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "navigation",
+          "what_it_does": "Navigates to a specific page by clicking on a navigation link with the specified page_name text. Uses an XPath selector to locate an anchor element with class 'nav-link' whose normalized text content exactly matches the provided page_name. The XPath expression '//a[@class=\"nav-link\" and normalize-space(text())=\"{page_name}\"]' ensures that only links with the exact text (after whitespace normalization) are matched. Once the link is located, clicks it to navigate to the target page. This method is useful for navigating through the application's main navigation menu.",
+          "locators_used": [],
+          "calls_to": [
+            "page.locator()",
+            "locator.click()"
+          ],
+          "usage_example": "RABaseHelper.access_page(page, 'Dashboard')",
+          "belongs_to_class": "RABaseHelper",
+          "lines_of_code": 2
+        },
+        {
+          "method_name": "access_menu_of_page",
+          "method_signature": "def access_menu_of_page(page, menu)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "menu",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The text of the menu item to click"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "navigation",
+          "what_it_does": "Clicks on a menu item by locating an element with a class attribute starting with 'nav-item' that contains the specified menu text. Uses the CSS selector '[class^=\"nav-item\"]:has-text(\"{menu}\")' to find the menu element. Waits for the element to be visible with a very long timeout of 120000ms (2 minutes) before clicking it. This extended timeout suggests that menu items may take significant time to load or become interactive in the application. The method is designed for navigating through secondary or dropdown menu items within a page.",
+          "locators_used": [],
+          "calls_to": [
+            "page.wait_for_selector()"
+          ],
+          "usage_example": "RABaseHelper.access_menu_of_page(page, 'Settings')",
+          "belongs_to_class": "RABaseHelper",
+          "lines_of_code": 2
+        },
+        {
+          "method_name": "get_item_by_title",
+          "method_signature": "def get_item_by_title(page, title)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "title",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The exact title text to search for in card headers"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "getter",
+          "what_it_does": "Locates and returns a card body element by searching for a card with a specific title in its header. Constructs a combined CSS selector that matches a div.card element containing either an h5.card-header with exact text matching the title, or an h5.card-header with an anchor child whose text exactly matches the title. The selector pattern is 'div.card:has(h5.card-header:text-is(\"{title}\"), h5.card-header a:text-is(\"{title}\"))'. First attempts to locate the card using page.locator(). If the card count is 0, waits up to 10 seconds for the card to appear. If still not found after waiting, raises a ValueError with a descriptive message indicating the field with that title was not found. If the card is found, returns a locator for the card body element using card.locator('div.card-body'). This method is fundamental for extracting data from card-based UI layouts where information is organized in titled sections.",
+          "locators_used": [],
+          "calls_to": [
+            "page.locator()",
+            "card.count()",
+            "page.wait_for_selector()",
+            "card.locator()"
+          ],
+          "usage_example": "card_body = RABaseHelper.get_item_by_title(page, 'Subscription Details')",
+          "belongs_to_class": "RABaseHelper",
+          "lines_of_code": 10
+        },
+        {
+          "method_name": "get_links_by_title",
+          "method_signature": "def get_links_by_title(page, title)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "title",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The exact title text of the card section containing links"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "getter",
+          "what_it_does": "Retrieves all link elements from a card section identified by its title. First calls get_item_by_title() to locate the card body element for the specified title. Then uses items.locator('a') to find all anchor elements within that card body. If no links are found (count is 0), raises a ValueError indicating that no links were found in the section with that title. If links are found, returns the links locator object which can be used to interact with or extract information from the links. This method is useful for extracting navigation links, related resource links, or action links from titled card sections.",
+          "locators_used": [],
+          "calls_to": [
+            "RABaseHelper.get_item_by_title()",
+            "items.locator()",
+            "links.count()"
+          ],
+          "usage_example": "links = RABaseHelper.get_links_by_title(page, 'Related Subscriptions')",
+          "belongs_to_class": "RABaseHelper",
+          "lines_of_code": 7
+        },
+        {
+          "method_name": "get_link_urls_by_title",
+          "method_signature": "def get_link_urls_by_title(page, title)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "title",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The exact title text of the card section containing links"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "getter",
+          "what_it_does": "Extracts and returns a list of all href URL values from links in a card section identified by its title. First calls get_links_by_title() to retrieve all link elements from the specified card section. Then uses a list comprehension to iterate through each link by index, calling links.nth(i).get_attribute('href') to extract the href attribute value from each link. Returns a Python list containing all the extracted URL strings. This method is useful for collecting URLs for validation, comparison, or further navigation in test scenarios.",
+          "locators_used": [],
+          "calls_to": [
+            "RABaseHelper.get_links_by_title()",
+            "links.nth()",
+            "link.get_attribute()"
+          ],
+          "usage_example": "urls = RABaseHelper.get_link_urls_by_title(page, 'Related Subscriptions')",
+          "belongs_to_class": "RABaseHelper",
+          "lines_of_code": 3
+        },
+        {
+          "method_name": "get_field_text_by_title",
+          "method_signature": "def get_field_text_by_title(page, title)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "title",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The exact title text of the card section containing the field"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "getter",
+          "what_it_does": "Retrieves the text content from a field within a card section identified by its title. First calls get_item_by_title() to locate the card body element for the specified title. Then calls field.inner_text() to extract all visible text content from within that card body, including text from nested elements. Finally strips leading and trailing whitespace using .strip() and returns the cleaned text string. This method is useful for extracting field values, descriptions, or any text content from titled card sections for validation or data extraction purposes.",
+          "locators_used": [],
+          "calls_to": [
+            "RABaseHelper.get_item_by_title()",
+            "field.inner_text()"
+          ],
+          "usage_example": "subscription_status = RABaseHelper.get_field_text_by_title(page, 'Status')",
+          "belongs_to_class": "RABaseHelper",
+          "lines_of_code": 3
+        },
+        {
+          "method_name": "access_link_by_title",
+          "method_signature": "def access_link_by_title(page, link_text, title)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "link_text",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The text content of the link to click (can be partial match)"
+            },
+            {
+              "name": "title",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The exact title text of the card section containing the link"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Clicks on a specific link within a card section by searching for a link whose text contains the specified link_text. First calls get_links_by_title() to retrieve all links from the card section with the specified title. Initializes a clicked flag to False. Then iterates through each link by index using range(links.count()). For each link, gets the link element using links.nth(i), extracts its text content using link.inner_text(), and strips whitespace. Checks if the provided link_text is contained within the link's text content using the 'in' operator. If a match is found, clicks the link using link.click(), sets clicked flag to True, and breaks out of the loop. After the loop, asserts that clicked is True, raising an AssertionError with a descriptive message if no matching link was found. Returns True if the link was successfully clicked. This method supports partial text matching, making it flexible for clicking links even when the exact full text is not known.",
+          "locators_used": [],
+          "calls_to": [
+            "RABaseHelper.get_links_by_title()",
+            "links.count()",
+            "links.nth()",
+            "link.inner_text()",
+            "link.click()"
+          ],
+          "usage_example": "RABaseHelper.access_link_by_title(page, 'View Details', 'Related Subscriptions')",
+          "belongs_to_class": "RABaseHelper",
+          "lines_of_code": 14
+        },
+        {
+          "method_name": "get_boolean_value_by_title",
+          "method_signature": "def get_boolean_value_by_title(page, title)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "title",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The exact title text of the card section containing the boolean field"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "getter",
+          "what_it_does": "Extracts a boolean value from a field by examining the Font Awesome icon class used to represent the boolean state. First calls get_item_by_title() to locate the card body for the specified title. Then locates the second span element within that field using field.locator('span').nth(1) and retrieves its class attribute using get_attribute('class'). Checks if the class string contains 'fa-check' (indicating a checkmark icon), and if so returns True. Checks if the class contains 'fa-times' (indicating an X or cross icon), and if so returns False. If neither icon class is found, returns None indicating an indeterminate or unknown state. This method is designed for UI patterns where boolean values are displayed using Font Awesome icons rather than text.",
+          "locators_used": [],
+          "calls_to": [
+            "RABaseHelper.get_item_by_title()",
+            "field.locator()",
+            "span.get_attribute()"
+          ],
+          "usage_example": "is_active = RABaseHelper.get_boolean_value_by_title(page, 'Auto-Renewal Enabled')",
+          "belongs_to_class": "RABaseHelper",
+          "lines_of_code": 7
+        },
+        {
+          "method_name": "get_links_with_text_by_title",
+          "method_signature": "def get_links_with_text_by_title(page, title, text_filter)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "title",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The exact title text of the card section containing links"
+            },
+            {
+              "name": "text_filter",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The text string to filter links by (partial match)"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "getter",
+          "what_it_does": "Filters and returns a list of link elements whose text content contains the specified text_filter string. First calls get_links_by_title() to retrieve all links from the card section with the specified title. Initializes an empty filtered_links list. Then iterates through each link by index using range(all_links.count()). For each link, gets the link element using all_links.nth(i) and extracts its text content using link.inner_text(). Checks if the text_filter string is contained within the link text using the 'in' operator. If the filter matches, appends the link element to the filtered_links list. After processing all links, returns the filtered_links list containing only the link elements that matched the filter criteria. This method is useful for finding specific links within a section when there are multiple links and you need to filter by text content.",
+          "locators_used": [],
+          "calls_to": [
+            "RABaseHelper.get_links_by_title()",
+            "all_links.count()",
+            "all_links.nth()",
+            "link.inner_text()"
+          ],
+          "usage_example": "subscription_links = RABaseHelper.get_links_with_text_by_title(page, 'Related Items', 'Subscription')",
+          "belongs_to_class": "RABaseHelper",
+          "lines_of_code": 9
+        },
+        {
+          "method_name": "validate_template_data",
+          "method_signature": "def validate_template_data(page, current_date, final_bill_date)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "current_date",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Expected current date for cancel initiate date validation. Can be string in 'MMM DD, YYYY' format or datetime object."
+            },
+            {
+              "name": "final_bill_date",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Expected final billing date for final charge date validation. Can be string in 'MMM DD, YYYY' format or datetime object."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Validates template data displayed on a page by extracting JSON data from a pre element and comparing date values against expected dates. First locates a pre element within the page content using '[class=\"page-content\"] pre' selector and extracts its text content. Parses the text as JSON using json.loads() to get a data dictionary. Creates a timezone offset of 3 hours using timedelta(hours=3). Extracts the 'cancel_initiate_date' epoch timestamp from the data, converts it to a datetime object using datetime.fromtimestamp(), and adds the timezone offset. Extracts the 'final_charge_date_start' epoch timestamp, converts it to datetime, and adds the timezone offset. Checks if current_date parameter is a string, and if so converts it to datetime using strptime with format '%b %d, %Y'. Does the same conversion for final_bill_date if it's a string. Asserts that the epoch_cancel_initiate_date formatted as 'MMM DD, YYYY' matches the current_date formatted the same way, raising an AssertionError with a descriptive message if they don't match. Asserts that the epoch_date_time_start formatted as 'MMM DD, YYYY' matches the final_bill_date formatted the same way, raising an AssertionError if they don't match. This method is critical for validating that cancellation and billing date calculations in template data are correct.",
+          "locators_used": [],
+          "calls_to": [
+            "page.locator()",
+            "locator.text_content()",
+            "json.loads()",
+            "datetime.datetime.fromtimestamp()",
+            "datetime.datetime.strptime()"
+          ],
+          "usage_example": "RABaseHelper.validate_template_data(page, 'Jan 15, 2025', 'Feb 15, 2025')",
+          "belongs_to_class": "RABaseHelper",
+          "lines_of_code": 20
+        },
+        {
+          "method_name": "access_link_by_title_with_retry",
+          "method_signature": "def access_link_by_title_with_retry(page, link_text, title, max_attempts=12, delay=10)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "link_text",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The text content of the link to click (can be partial match)"
+            },
+            {
+              "name": "title",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The exact title text of the card section containing the link"
+            },
+            {
+              "name": "max_attempts",
+              "type": null,
+              "default_value": "12",
+              "is_required": false,
+              "description": "Maximum number of retry attempts before giving up. Defaults to 12."
+            },
+            {
+              "name": "delay",
+              "type": null,
+              "default_value": "10",
+              "is_required": false,
+              "description": "Delay in seconds between retry attempts. Defaults to 10 seconds."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Attempts to click a link within a card section with automatic retry logic for handling timing issues or dynamic content loading. Uses the common.retry_operation() utility function to wrap the access_link_by_title() method call with retry behavior. Passes a lambda function that calls RABaseHelper.access_link_by_title(page, link_text, title) as the operation to retry. Provides the link_text as an identifier for logging. Configures max_attempts (default 12) and delay (default 10 seconds) for the retry behavior. Specifies page.reload as the on_retry callback, meaning the page will be reloaded before each retry attempt. This method is useful for scenarios where links may not be immediately available due to asynchronous data loading, background job completion, or other timing-dependent conditions. With default settings, it will retry for up to 2 minutes (12 attempts × 10 seconds) before failing.",
+          "locators_used": [],
+          "calls_to": [
+            "common.retry_operation()",
+            "RABaseHelper.access_link_by_title()",
+            "page.reload"
+          ],
+          "usage_example": "RABaseHelper.access_link_by_title_with_retry(page, 'View Details', 'Pending Shipments', max_attempts=20, delay=5)",
+          "belongs_to_class": "RABaseHelper",
+          "lines_of_code": 8
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This is a comprehensive helper module with 15 static utility methods organized around three main functional areas: (1) Resque job management for running and monitoring background jobs, (2) page navigation and menu access, and (3) data extraction from card-based UI layouts. The methods follow a consistent naming pattern and are all static, requiring no class instantiation. The get_item_by_title method is foundational, with several other methods building upon it to extract links, text, URLs, and boolean values. The validate_template_data method is particularly complex, handling JSON parsing, epoch timestamp conversion, timezone adjustments, and date format conversions. The retry mechanism in access_link_by_title_with_retry demonstrates robust error handling for timing-dependent scenarios. This helper is clearly designed for a specific application architecture that uses Resque for background jobs and card-based UI layouts with titled sections."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/helper/shipment_tracking_helper.py",
+      "file_name": "shipment_tracking_helper.py",
+      "file_extension": ".py",
+      "file_size_bytes": 4294,
+      "language": "Python",
+      "file_category": "helper",
+      "file_purpose": "Helper module providing utility functions for verifying shipment tracking information and cartridge installation messages. Contains the ShipmentTrackingHelper class with static methods for validating that specific cartridge types (K, C, M, Y, CMY) are displayed as installed, verifying multiple cartridge type scenarios, clicking view history links, and validating shipment history table data. Used in test scenarios related to printer cartridge shipments and tracking.",
+      "imports": [
+        {
+          "import_statement": "from pages.shipment_tracking_page import ShipmentTrackingPage",
+          "module": "pages.shipment_tracking_page",
+          "imported_names": [
+            "ShipmentTrackingPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "import test_flows_common.test_flows_common as common",
+          "module": "test_flows_common.test_flows_common",
+          "imported_names": [
+            "common"
+          ],
+          "is_external": false,
+          "is_internal": true
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "ShipmentTrackingHelper",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Provides static utility methods for verifying shipment tracking information and cartridge installation status in the application. Contains methods for validating that specific cartridge colors are displayed as installed, handling multiple cartridge type scenarios with fallback logic, clicking view history actions, and validating shipment history table contents including cartridge counts and welcome kit information. All methods are static and work in conjunction with the ShipmentTrackingPage page object to interact with shipment tracking UI elements.",
+          "how_to_import": "from helper.shipment_tracking_helper import ShipmentTrackingHelper",
+          "how_to_instantiate": "ShipmentTrackingHelper is used via static methods - no instantiation needed. Call ShipmentTrackingHelper.verify_cartridge_installed_message(page, 'k,c') directly.",
+          "total_methods": 5,
+          "total_locators": 0
+        }
+      ],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "verify_cartridge_installed_message",
+          "method_signature": "def verify_cartridge_installed_message(page, cartridge)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "cartridge",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Comma-separated string of cartridge types to verify (e.g., 'k,c,m,y' or 'cmy'). Valid values are k, c, m, y, cmy."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies that specific cartridge types are displayed as installed on the shipment tracking page. First creates a ShipmentTrackingPage instance. Splits the cartridge parameter string by comma to get a list of individual cartridge types. Creates a cartridge_locators dictionary mapping cartridge type codes ('k', 'c', 'm', 'y', 'cmy') to their corresponding selector strings retrieved from the page object using get_selector() method. Iterates through each cartridge type in the cartridges list. For each cartridge, strips whitespace and checks if it exists in the cartridge_locators dictionary. If an invalid cartridge type is provided, raises a RuntimeError with a descriptive message. For valid cartridge types, waits for the cartridge element to appear using page.wait_for_selector() with a 20-second timeout. Then asserts that the cartridge element is visible using is_visible(), raising an AssertionError with a descriptive message if the cartridge is not visible. This method ensures that the expected cartridge installation messages are displayed correctly on the UI.",
+          "locators_used": [],
+          "calls_to": [
+            "ShipmentTrackingPage()",
+            "shipment_tracking_page.get_selector()",
+            "page.wait_for_selector()",
+            "cartridge_element.is_visible()"
+          ],
+          "usage_example": "ShipmentTrackingHelper.verify_cartridge_installed_message(page, 'k,c,m,y')",
+          "belongs_to_class": "ShipmentTrackingHelper",
+          "lines_of_code": 17
+        },
+        {
+          "method_name": "verify_multiple_cartridge_types_installed_message",
+          "method_signature": "def verify_multiple_cartridge_types_installed_message(page, cartridge, cartridge2)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "cartridge",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Primary comma-separated string of cartridge types to verify"
+            },
+            {
+              "name": "cartridge2",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Fallback comma-separated string of cartridge types to verify if primary fails"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies cartridge installation messages with fallback logic for handling scenarios where different cartridge type configurations may be valid. First attempts to verify the primary cartridge configuration by calling verify_cartridge_installed_message(page, cartridge) within a try block. If a RuntimeError is raised (indicating the primary cartridge types were not found or invalid), catches the exception and attempts to verify the fallback cartridge2 configuration by calling verify_cartridge_installed_message(page, cartridge2). This method is useful for test scenarios where the application may display different cartridge configurations depending on printer model or subscription type, and either configuration is acceptable. For example, some printers may use individual K, C, M, Y cartridges while others use a combined CMY cartridge.",
+          "locators_used": [],
+          "calls_to": [
+            "ShipmentTrackingHelper.verify_cartridge_installed_message()"
+          ],
+          "usage_example": "ShipmentTrackingHelper.verify_multiple_cartridge_types_installed_message(page, 'k,c,m,y', 'k,cmy')",
+          "belongs_to_class": "ShipmentTrackingHelper",
+          "lines_of_code": 6
+        },
+        {
+          "method_name": "cartridge_installed_message",
+          "method_signature": "def cartridge_installed_message(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies that all cartridge types for the current printer configuration are displayed as installed. First creates a ShipmentTrackingPage instance. Creates a cartridge_locators dictionary mapping uppercase cartridge type codes ('K', 'C', 'M', 'Y', 'CMY') to their corresponding selector strings retrieved from the page object. Calls common.printer_colors() to get the list of cartridge colors applicable to the current printer being tested. Iterates through each cartridge type returned by printer_colors(). For each cartridge, strips whitespace and checks if it exists in the cartridge_locators dictionary. If an invalid cartridge type is encountered, raises a RuntimeError. For valid cartridge types, waits for the cartridge element to appear with a 20-second timeout, then asserts that it is visible. This method differs from verify_cartridge_installed_message in that it automatically determines which cartridges to verify based on the printer configuration rather than requiring explicit cartridge types to be passed as parameters.",
+          "locators_used": [],
+          "calls_to": [
+            "ShipmentTrackingPage()",
+            "shipment_tracking_page.get_selector()",
+            "common.printer_colors()",
+            "page.wait_for_selector()",
+            "cartridge_element.is_visible()"
+          ],
+          "usage_example": "ShipmentTrackingHelper.cartridge_installed_message(page)",
+          "belongs_to_class": "ShipmentTrackingHelper",
+          "lines_of_code": 16
+        },
+        {
+          "method_name": "click_view_entire_history",
+          "method_signature": "def click_view_entire_history(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Clicks the view entire history link or button on the shipment tracking page to expand or navigate to the full shipment history. First creates a ShipmentTrackingPage instance. Waits for the shipment_history_table element to be visible with a 30-second timeout using wait_for() with state='visible'. Then clicks the shipment_history_table element to trigger the view history action. This method is used to access the complete shipment history before performing validations on the history data.",
+          "locators_used": [],
+          "calls_to": [
+            "ShipmentTrackingPage()",
+            "shipment_tracking_page.shipment_history_table.wait_for()",
+            "shipment_tracking_page.shipment_history_table.click()"
+          ],
+          "usage_example": "ShipmentTrackingHelper.click_view_entire_history(page)",
+          "belongs_to_class": "ShipmentTrackingHelper",
+          "lines_of_code": 4
+        },
+        {
+          "method_name": "verify_shipment_tracking_table",
+          "method_signature": "def verify_shipment_tracking_table(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies the contents of the shipment tracking history table by validating cartridge counts and welcome kit information. First creates a ShipmentTrackingPage instance. Waits for the shipment_history_table to be visible with a 30-second timeout, then clicks it to expand or access the history. Calls common.printer_colors() to get the list of cartridge colors for the current printer configuration. Waits for the shipment_history_description element to be visible with a 10-second timeout. Extracts the text content of the first description row using shipment_history_description.first.text_content(). Calls common.extract_numbers_from_text() to parse numeric values from the text. Asserts that the number of extracted cartridge numbers matches the number of colors returned by printer_colors(). Asserts that the first cartridge number is '1'. Asserts that the second cartridge number is '1'. If there are 4 colors (indicating separate C, M, Y cartridges), also asserts that the third and fourth cartridge numbers are '1'. Then extracts the text content of the last description row using shipment_history_description.last.text_content() to get welcome kit information. Extracts numbers from the welcome kit text. Asserts that exactly 1 welcome kit number was found. Asserts that the welcome kit number is '1'. This comprehensive validation ensures that the shipment history correctly shows 1 cartridge of each type and 1 welcome kit.",
+          "locators_used": [],
+          "calls_to": [
+            "ShipmentTrackingPage()",
+            "shipment_tracking_page.shipment_history_table.wait_for()",
+            "shipment_tracking_page.shipment_history_table.click()",
+            "common.printer_colors()",
+            "page.wait_for_selector()",
+            "shipment_tracking_page.shipment_history_description.first.text_content()",
+            "common.extract_numbers_from_text()",
+            "shipment_tracking_page.shipment_history_description.last.text_content()"
+          ],
+          "usage_example": "ShipmentTrackingHelper.verify_shipment_tracking_table(page)",
+          "belongs_to_class": "ShipmentTrackingHelper",
+          "lines_of_code": 20
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This helper module is specifically designed for shipment tracking verification in a printer cartridge subscription system. It works closely with the ShipmentTrackingPage page object to access UI elements. The methods handle different cartridge configurations (individual K, C, M, Y cartridges vs. combined CMY cartridges) which suggests the application supports multiple printer models with different cartridge systems. The verify_multiple_cartridge_types_installed_message method demonstrates a fallback pattern for handling configuration variations. The verify_shipment_tracking_table method performs detailed validation of shipment history data including cartridge counts and welcome kit information. All methods are static and use the common test_flows_common module for shared utilities like printer_colors() and extract_numbers_from_text()."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/helper/update_plan_helper.py",
+      "file_name": "update_plan_helper.py",
+      "file_extension": ".py",
+      "file_size_bytes": 5841,
+      "language": "Python",
+      "file_category": "helper",
+      "file_purpose": "Helper module providing utility functions for plan update and subscription management operations. Contains the UpdatePlanHelper class with static methods for verifying free trial visibility, validating available plan options, verifying current plan selection, selecting plans by pages or position, canceling subscriptions, validating terms of service links, verifying plan change messages, undoing plan changes, and verifying plan information details. Used in test scenarios related to subscription plan upgrades, downgrades, and cancellations.",
+      "imports": [
+        {
+          "import_statement": "import time",
+          "module": "time",
+          "imported_names": [
+            "time"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from pages.cancellation_page import CancellationPage",
+          "module": "pages.cancellation_page",
+          "imported_names": [
+            "CancellationPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.update_plan_page import UpdatePlanPage",
+          "module": "pages.update_plan_page",
+          "imported_names": [
+            "UpdatePlanPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "import test_flows_common.test_flows_common as common",
+          "module": "test_flows_common.test_flows_common",
+          "imported_names": [
+            "common"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.overview_page import OverviewPage",
+          "module": "pages.overview_page",
+          "imported_names": [
+            "OverviewPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from playwright.sync_api import expect",
+          "module": "playwright.sync_api",
+          "imported_names": [
+            "expect"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import re",
+          "module": "re",
+          "imported_names": [
+            "re"
+          ],
+          "is_external": true,
+          "is_internal": false
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "UpdatePlanHelper",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Provides static utility methods for managing subscription plan updates, upgrades, downgrades, and cancellations. Contains methods for verifying the visibility of free trial information, validating that the correct set of plan options is displayed with expected page counts and pricing, verifying which plan is currently selected, selecting plans by page count or position, canceling subscriptions with confirmation handling, validating terms of service link navigation, verifying plan change pending messages, undoing plan changes, and verifying plan information details. All methods are static and work in conjunction with UpdatePlanPage, CancellationPage, and OverviewPage page objects.",
+          "how_to_import": "from helper.update_plan_helper import UpdatePlanHelper",
+          "how_to_instantiate": "UpdatePlanHelper is used via static methods - no instantiation needed. Call UpdatePlanHelper.select_plan(page, 100) directly.",
+          "total_methods": 10,
+          "total_locators": 0
+        }
+      ],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "doesnt_see_free_months",
+          "method_signature": "def doesnt_see_free_months(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies that free trial information is not displayed on the update plan page. First creates an UpdatePlanPage instance. Then uses Playwright's expect() assertion to verify that the free_trial_info_card element is not visible by calling expect(update_plan_page.free_trial_info_card).not_to_be_visible(). Also verifies that the free_trial_plan_details element is not visible using expect(update_plan_page.free_trial_plan_details).not_to_be_visible(). This method is used in test scenarios where the user should not see free trial offers, such as when they are already past the trial period or on a paid subscription.",
+          "locators_used": [],
+          "calls_to": [
+            "UpdatePlanPage()",
+            "expect().not_to_be_visible()"
+          ],
+          "usage_example": "UpdatePlanHelper.doesnt_see_free_months(page)",
+          "belongs_to_class": "UpdatePlanHelper",
+          "lines_of_code": 4
+        },
+        {
+          "method_name": "verify_available_plans",
+          "method_signature": "def verify_available_plans(page, expectedPlans = [10, 25, 50, 100, 300, 500, 700, 1500], plan_type: str = None)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "expectedPlans",
+              "type": null,
+              "default_value": "[10, 25, 50, 100, 300, 500, 700, 1500]",
+              "is_required": false,
+              "description": "List of expected plan page counts in the order they should appear. Defaults to [10, 25, 50, 100, 300, 500, 700, 1500]."
+            },
+            {
+              "name": "plan_type",
+              "type": "str",
+              "default_value": "None",
+              "is_required": false,
+              "description": "Type of plan to verify. If 'ink_and_paper', verifies that plans include ink and paper. If None, verifies that plans do not include ink and paper."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies that the correct set of subscription plans is displayed on the update plan page with expected page counts and plan types. First creates an UpdatePlanPage instance. Uses expect() to verify that the plan_card_container is visible with a 120-second timeout. Locates all plan card elements using the selector '[data-testid^=\"plans-selector-plan-card-container\"]' and gets all matching elements with .all(). Counts the number of plan elements and asserts that it matches the length of expectedPlans list. Iterates through each plan card by index. For each card, extracts the text content and uses regex re.findall(r'\\d+\\.\\d+|\\d+', card_text) to extract all numeric values (including decimals). Takes the first number as the actual plan page count and converts it to integer. Compares it against the expected plan value from expectedPlans[i] and asserts they match. If plan_type is 'ink_and_paper', asserts that the text 'Includes ink and paper' is present in the card text. If plan_type is None, asserts that 'Includes ink and paper' is NOT present in the card text. This comprehensive validation ensures that the correct plans are displayed in the correct order with the correct page counts and plan type indicators.",
+          "locators_used": [],
+          "calls_to": [
+            "UpdatePlanPage()",
+            "expect().to_be_visible()",
+            "update_plan_page.plan_card_container.locator()",
+            "locator.all()",
+            "update_plan_page.get_plan_by_position()",
+            "plan_card.text_content()",
+            "re.findall()"
+          ],
+          "usage_example": "UpdatePlanHelper.verify_available_plans(page, expectedPlans=[10, 50, 100, 300], plan_type='ink_and_paper')",
+          "belongs_to_class": "UpdatePlanHelper",
+          "lines_of_code": 16
+        },
+        {
+          "method_name": "verify_current_plan",
+          "method_signature": "def verify_current_plan(page, expectedPlan: int)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "expectedPlan",
+              "type": "int",
+              "default_value": null,
+              "is_required": true,
+              "description": "The page count of the plan that should be marked as current (e.g., 100 for 100-page plan)"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies that a specific plan is marked as the current active plan on the update plan page. First creates an UpdatePlanPage instance. Calls update_plan_page.get_plan_by_pages(expectedPlan) to locate the plan card element corresponding to the specified page count. Within that plan card, locates the plan tag container element using the selector '[data-testid$=\"plan-tag-container\"]'. Uses expect() to verify that this tag container element is visible, which indicates that the plan is marked as the current plan. The plan tag typically displays text like 'Current Plan' or a similar indicator. This method is used to verify that the correct plan is shown as active after plan selection or when viewing the current subscription state.",
+          "locators_used": [],
+          "calls_to": [
+            "UpdatePlanPage()",
+            "update_plan_page.get_plan_by_pages()",
+            "plan_card.locator()",
+            "expect().to_be_visible()"
+          ],
+          "usage_example": "UpdatePlanHelper.verify_current_plan(page, 100)",
+          "belongs_to_class": "UpdatePlanHelper",
+          "lines_of_code": 4
+        },
+        {
+          "method_name": "select_plan",
+          "method_signature": "def select_plan(page, plan_pages: int)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "plan_pages",
+              "type": "int",
+              "default_value": null,
+              "is_required": true,
+              "description": "The page count of the plan to select (e.g., 100 for 100-page plan)"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Selects a subscription plan by clicking the select button on the plan card with the specified page count. First creates an UpdatePlanPage instance. Calls update_plan_page.get_plan_by_pages(plan_pages) to locate the plan card element for the specified page count. Within that plan card, locates the button element using plan_card.locator('button'). Clicks the button to select the plan. This action typically initiates a plan change or upgrade/downgrade process. The method is straightforward and assumes the plan card has a single button that performs the selection action.",
+          "locators_used": [],
+          "calls_to": [
+            "UpdatePlanPage()",
+            "update_plan_page.get_plan_by_pages()",
+            "plan_card.locator()",
+            "plan_button.click()"
+          ],
+          "usage_example": "UpdatePlanHelper.select_plan(page, 100)",
+          "belongs_to_class": "UpdatePlanHelper",
+          "lines_of_code": 5
+        },
+        {
+          "method_name": "select_plan_button",
+          "method_signature": "def select_plan_button(page, plan_button: int)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "plan_button",
+              "type": "int",
+              "default_value": null,
+              "is_required": true,
+              "description": "The index or identifier of the plan button to select"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Selects a plan by clicking a specific plan button identified by an index or identifier, with explicit wait handling for the button lifecycle. First creates an UpdatePlanPage instance. Calls update_plan_page.get_select_plan_button(plan_button) to locate the specific plan button element. Waits for the button to be visible with a 90-second timeout using wait_for(state='visible'). Clicks the button to initiate the plan selection. Then waits for the button to be detached from the DOM with a 90-second timeout using wait_for(state='detached'), which indicates that the plan selection action has been processed and the UI has updated. This method provides more robust synchronization than select_plan by explicitly waiting for the button to disappear after clicking, ensuring the action has completed before proceeding.",
+          "locators_used": [],
+          "calls_to": [
+            "UpdatePlanPage()",
+            "update_plan_page.get_select_plan_button()",
+            "plan_button.wait_for()",
+            "plan_button.click()"
+          ],
+          "usage_example": "UpdatePlanHelper.select_plan_button(page, 3)",
+          "belongs_to_class": "UpdatePlanHelper",
+          "lines_of_code": 6
+        },
+        {
+          "method_name": "select_plan_by_position",
+          "method_signature": "def select_plan_by_position(page, position: int)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "position",
+              "type": "int",
+              "default_value": null,
+              "is_required": true,
+              "description": "The 1-based position of the plan card to select (e.g., 1 for first plan, 2 for second plan)"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Selects a plan by clicking the button on the plan card at a specific position in the list of displayed plans. First creates an UpdatePlanPage instance. Calls update_plan_page.get_plan_by_position(position-1) to locate the plan card at the specified position, subtracting 1 to convert from 1-based position to 0-based index. Within that plan card, locates the button element using plan_locator.locator('button'). Clicks the button to select the plan. This method is useful when the test needs to select a plan based on its display order rather than its page count, such as selecting the first plan, second plan, etc., regardless of what page counts those plans represent.",
+          "locators_used": [],
+          "calls_to": [
+            "UpdatePlanPage()",
+            "update_plan_page.get_plan_by_position()",
+            "plan_locator.locator()",
+            "button.click()"
+          ],
+          "usage_example": "UpdatePlanHelper.select_plan_by_position(page, 1)",
+          "belongs_to_class": "UpdatePlanHelper",
+          "lines_of_code": 5
+        },
+        {
+          "method_name": "cancellation_subscription",
+          "method_signature": "def cancellation_subscription(page,callback=None)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "callback",
+              "type": null,
+              "default_value": "None",
+              "is_required": false,
+              "description": "Optional callback function to execute when the cancellation confirmation page is displayed. Receives parameters (step_name, page, screenshot_only)."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Performs the complete subscription cancellation flow including clicking the cancel link, confirming cancellation, and handling the cancellation feedback page. First creates UpdatePlanPage and CancellationPage instances. Waits for the cancel_instant_ink link to be visible with a 90-second timeout, then clicks it to initiate cancellation. Waits for the confirm_cancellation_button to be visible with a 120-second timeout, then clicks it to confirm the cancellation. Uses a try-except block to handle the cancellation feedback page. Attempts to wait for the continue_button to be visible with a 90-second timeout. If the button appears, prints a message indicating the Cancellation Feedback Page is visible, waits 5 seconds using time.sleep(5), and if a callback function was provided, calls it with parameters ('Returned_Confirmation_Page', page, screenshot_only=True) to allow custom handling like taking screenshots. If the continue_button does not appear (exception is raised), clicks the confirm_cancellation_button again as a fallback. This method handles the variability in the cancellation flow where a feedback page may or may not appear.",
+          "locators_used": [],
+          "calls_to": [
+            "UpdatePlanPage()",
+            "CancellationPage()",
+            "dashboard_page.cancel_instant_ink.wait_for()",
+            "dashboard_page.cancel_instant_ink.click()",
+            "cancellation_page.confirm_cancellation_button.wait_for()",
+            "cancellation_page.confirm_cancellation_button.click()",
+            "cancellation_page.continue_button.wait_for()",
+            "time.sleep()",
+            "callback()"
+          ],
+          "usage_example": "UpdatePlanHelper.cancellation_subscription(page, callback=my_screenshot_function)",
+          "belongs_to_class": "UpdatePlanHelper",
+          "lines_of_code": 14
+        },
+        {
+          "method_name": "validate_terms_of_service_page",
+          "method_signature": "def validate_terms_of_service_page(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Validates that the Terms of Service link opens the correct page in a new popup window. First creates an UpdatePlanPage instance. Uses page.expect_popup() context manager with a 30-second timeout to capture the popup window that will be opened. Within the context, clicks the terms_and_service_link to trigger the popup. Captures the popup page object in the terms_page variable. Uses expect() to verify that the terms page URL matches the regex pattern r'/terms' with a 90-second timeout, ensuring the popup navigated to the terms of service page. Finally closes the popup window using terms_page.close(). This method validates that the terms link is functional and navigates to the correct destination.",
+          "locators_used": [],
+          "calls_to": [
+            "UpdatePlanPage()",
+            "page.expect_popup()",
+            "update_plan_page.terms_and_service_link.click()",
+            "expect().to_have_url()",
+            "terms_page.close()"
+          ],
+          "usage_example": "UpdatePlanHelper.validate_terms_of_service_page(page)",
+          "belongs_to_class": "UpdatePlanHelper",
+          "lines_of_code": 7
+        },
+        {
+          "method_name": "sees_plan_upgraded_or_downgraded_message_on_banner",
+          "method_signature": "def sees_plan_upgraded_or_downgraded_message_on_banner(page, plan: str)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "plan",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "The plan page count as a string that should appear in the pending change message (e.g., '100')"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies that a pending plan change message is displayed on a banner and contains the expected plan page count. First creates an UpdatePlanPage instance. Uses expect() to verify that the pending_change_plan element is visible with a 90-second timeout. Extracts the actual text content of the banner using update_plan_page.pending_change_plan.inner_text(). Uses regex re.findall(r'\\d+', actual_text) to extract all numeric values from the banner text. Asserts that the plan parameter (as a string) is present in the list of extracted numbers, raising an AssertionError with a descriptive message if the expected plan is not found. This method validates that the UI correctly displays a pending plan change notification with the correct plan details after a user initiates an upgrade or downgrade.",
+          "locators_used": [],
+          "calls_to": [
+            "UpdatePlanPage()",
+            "expect().to_be_visible()",
+            "update_plan_page.pending_change_plan.inner_text()",
+            "re.findall()"
+          ],
+          "usage_example": "UpdatePlanHelper.sees_plan_upgraded_or_downgraded_message_on_banner(page, '100')",
+          "belongs_to_class": "UpdatePlanHelper",
+          "lines_of_code": 6
+        },
+        {
+          "method_name": "click_button_on_undo_your_plan_modal",
+          "method_signature": "def click_button_on_undo_your_plan_modal(page, button: str)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "button",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "The button to click on the undo plan modal. Valid values are 'Cancel' or 'Undo Upgrade'."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Handles the undo plan change modal by clicking either the Cancel button to dismiss the modal or the Undo Upgrade button to confirm undoing the plan change. First creates an UpdatePlanPage instance. Clicks the cancel_change_plan_link to open the undo plan change modal. Then checks the button parameter value. If button is 'Cancel', clicks the undo_plan_change_cancel_button with a 90-second timeout, then uses expect() to verify that the cancel button is no longer visible, confirming the modal was dismissed. If button is 'Undo Upgrade', clicks the undo_plan_change_confirmation button with a 90-second timeout, then uses expect() to verify that the confirmation button is no longer visible, confirming the undo action was processed and the modal closed. This method provides a way to test both the cancel and confirm paths of the undo plan change flow.",
+          "locators_used": [],
+          "calls_to": [
+            "UpdatePlanPage()",
+            "update_plan_page.cancel_change_plan_link.click()",
+            "update_plan_page.undo_plan_change_cancel_button.click()",
+            "expect().not_to_be_visible()",
+            "update_plan_page.undo_plan_change_confirmation.click()"
+          ],
+          "usage_example": "UpdatePlanHelper.click_button_on_undo_your_plan_modal(page, 'Undo Upgrade')",
+          "belongs_to_class": "UpdatePlanHelper",
+          "lines_of_code": 10
+        },
+        {
+          "method_name": "verify_plan_info",
+          "method_signature": "def verify_plan_info(page, plan_value: str, plan_pages: str)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "plan_value",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "Expected plan price or value as a string (e.g., '9.99')"
+            },
+            {
+              "name": "plan_pages",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "Expected plan page count as a string (e.g., '100')"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies that the plan information card displays the correct plan value (price) and page count. First creates an UpdatePlanPage instance. Uses expect() to verify that the plan_details_card is visible with a 90-second timeout. Extracts the text content of the plan_information element using text_content(). Calls common.extract_numbers_from_text() to parse all numeric values from the plan information text. Asserts that the first extracted number (numbers[0]) matches the expected plan_value parameter, raising an AssertionError with a descriptive message if they don't match. Asserts that the second extracted number (numbers[1]) matches the expected plan_pages parameter, raising an AssertionError if they don't match. This method validates that the plan details are correctly displayed after plan selection or when viewing current plan information.",
+          "locators_used": [],
+          "calls_to": [
+            "UpdatePlanPage()",
+            "expect().to_be_visible()",
+            "update_plan_page.plan_information.text_content()",
+            "common.extract_numbers_from_text()"
+          ],
+          "usage_example": "UpdatePlanHelper.verify_plan_info(page, '9.99', '100')",
+          "belongs_to_class": "UpdatePlanHelper",
+          "lines_of_code": 7
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This helper module provides comprehensive support for subscription plan management operations including plan selection, verification, upgrades, downgrades, and cancellations. The methods work closely with UpdatePlanPage, CancellationPage, and OverviewPage page objects. The verify_available_plans method is particularly sophisticated, validating both the number of plans, their page counts, and whether they include ink and paper. The cancellation_subscription method demonstrates robust error handling with try-except logic and callback support for custom actions like screenshots. The module uses Playwright's expect() assertions extensively for synchronization and validation. All methods are static and designed to be called directly without class instantiation. The helper supports both page-count-based and position-based plan selection, providing flexibility for different test scenarios."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/pages/__init__.py",
+      "file_name": "__init__.py",
+      "file_extension": ".py",
+      "file_size_bytes": 0,
+      "language": "Python",
+      "file_category": "config",
+      "file_purpose": "Python package initialization file for the pages module. This empty __init__.py file marks the pages directory as a Python package, allowing page object modules within the directory to be imported using the pages package namespace. Standard Python convention for package structure.",
+      "imports": [],
+      "classes": [],
+      "locators": [],
+      "functions": [],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This is a standard Python package initialization file with no content. Its presence is required to make the pages directory a valid Python package that can be imported. While empty, it serves an important structural role in the framework's module organization."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/pages/base_page_object.py",
+      "file_name": "base_page_object.py",
+      "file_extension": ".py",
+      "file_size_bytes": 1157,
+      "language": "Python",
+      "file_category": "core_module",
+      "file_purpose": "Core base page object module providing the foundational architecture for all page objects in the framework. Defines the ElementLocators class for storing selector strings, the WaitProxy class for convenient wait operations on elements, and the BasePageObject class that all page objects inherit from. Implements a dynamic attribute access pattern where page objects can access locators as attributes and automatically convert them to Playwright locator objects. Provides the get_selector method for retrieving raw selector strings. This architecture enables a clean separation between selector definitions and page interaction logic.",
+      "imports": [
+        {
+          "import_statement": "from playwright.sync_api import Page",
+          "module": "playwright.sync_api",
+          "imported_names": [
+            "Page"
+          ],
+          "is_external": true,
+          "is_internal": false
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "ElementLocators",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Empty base class used as a container for element locator definitions. Page object classes define their own ElementLocators inner class that inherits from this base class and adds selector string attributes. This pattern provides a clean namespace for organizing all locators associated with a page. The class itself has no methods or attributes - it serves purely as a structural base for locator storage.",
+          "how_to_import": "from pages.base_page_object import ElementLocators",
+          "how_to_instantiate": "ElementLocators is typically not instantiated directly. Page objects create their own ElementLocators subclass and instantiate it in __init__.",
+          "total_methods": 0,
+          "total_locators": 0
+        },
+        {
+          "class_name": "WaitProxy",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Proxy class that provides convenient wait operations for page elements by dynamically creating wait methods based on element locator names. When a page object accesses self.wait.element_name, this class intercepts the attribute access, retrieves the corresponding selector string from the elements object, and returns a lambda function that calls page.wait_for_selector with that selector. This allows page objects to write clean wait code like self.wait.login_button(timeout=5000) instead of page.wait_for_selector(self.elements.login_button, timeout=5000). Implements the __getattr__ magic method to enable this dynamic behavior.",
+          "how_to_import": "from pages.base_page_object import WaitProxy",
+          "how_to_instantiate": "WaitProxy is instantiated automatically by BasePageObject. Not typically instantiated directly in test code.",
+          "total_methods": 2,
+          "total_locators": 0
+        },
+        {
+          "class_name": "BasePageObject",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Base class for all page objects in the framework, providing core functionality for element locator management and dynamic attribute access. Stores the Playwright Page instance, creates an ElementLocators instance for storing selectors, and creates a WaitProxy instance for wait operations. Implements __getattr__ magic method to enable dynamic attribute access where accessing an attribute name that matches a locator name automatically returns a Playwright locator object for that selector. Provides the get_selector method for retrieving raw selector strings when needed. All page object classes in the framework should inherit from this base class to gain these capabilities.",
+          "how_to_import": "from pages.base_page_object import BasePageObject",
+          "how_to_instantiate": "BasePageObject is typically not instantiated directly. Page object classes inherit from it and call super().__init__(page) in their constructor.",
+          "total_methods": 3,
+          "total_locators": 0
+        }
+      ],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "__init__",
+          "method_signature": "def __init__(self, page: Page, elements)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "page",
+              "type": "Page",
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            },
+            {
+              "name": "elements",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "ElementLocators instance containing selector definitions for the page"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": true,
+          "docstring": null,
+          "method_type": "constructor",
+          "what_it_does": "Initializes the WaitProxy instance by storing references to the Playwright page object and the elements locator container. Sets self.page to the provided page parameter so the proxy can call page.wait_for_selector. Sets self.elements to the provided elements parameter so the proxy can look up selector strings by name. These stored references are used by the __getattr__ method to dynamically create wait functions for element locators.",
+          "locators_used": [],
+          "calls_to": [],
+          "usage_example": "wait_proxy = WaitProxy(page, elements)",
+          "belongs_to_class": "WaitProxy",
+          "lines_of_code": 3
+        },
+        {
+          "method_name": "__getattr__",
+          "method_signature": "def __getattr__(self, name)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "name",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The attribute name being accessed (should match a locator name)"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": true,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Intercepts attribute access on the WaitProxy instance to dynamically create wait functions for element locators. When code accesses self.wait.element_name, this method is called with name='element_name'. First checks if the elements object has an attribute with that name using hasattr(self.elements, name). If the attribute exists, retrieves the selector string using getattr(self.elements, name). Returns a lambda function that accepts keyword arguments and calls self.page.wait_for_selector(selector, **kwargs), allowing the caller to pass timeout and other wait options. If the attribute does not exist on elements, raises an AttributeError with a descriptive message indicating no selector with that name was found for wait operations. This dynamic behavior enables clean wait syntax in page objects.",
+          "locators_used": [],
+          "calls_to": [
+            "hasattr()",
+            "getattr()",
+            "self.page.wait_for_selector()"
+          ],
+          "usage_example": "self.wait.login_button(timeout=5000, state='visible')",
+          "belongs_to_class": "WaitProxy",
+          "lines_of_code": 5
+        },
+        {
+          "method_name": "__init__",
+          "method_signature": "def __init__(self, page: Page)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "page",
+              "type": "Page",
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": true,
+          "docstring": null,
+          "method_type": "constructor",
+          "what_it_does": "Initializes the BasePageObject by storing the Playwright page instance and creating the elements and wait helper objects. Sets self.page to the provided page parameter so all page interaction methods can access the page. Creates self.elements as a new instance of ElementLocators() to serve as a container for selector definitions (subclasses will override this with their own ElementLocators subclass). Creates self.wait as a new WaitProxy instance, passing the page and elements objects, to enable convenient wait operations. This initialization establishes the core infrastructure that all page objects need for element interaction.",
+          "locators_used": [],
+          "calls_to": [
+            "ElementLocators()",
+            "WaitProxy()"
+          ],
+          "usage_example": "base_page = BasePageObject(page)",
+          "belongs_to_class": "BasePageObject",
+          "lines_of_code": 4
+        },
+        {
+          "method_name": "__getattr__",
+          "method_signature": "def __getattr__(self, name)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "name",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The attribute name being accessed (should match a locator name)"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": true,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Intercepts attribute access on the page object to dynamically convert locator names into Playwright locator objects. When code accesses self.login_button on a page object, this method is called with name='login_button'. First checks if the elements object has an attribute with that name using hasattr(self.elements, name). If the attribute exists, retrieves the selector string using getattr(self.elements, name) and stores it in locator_str. Then calls self.page.locator(locator_str) to create and return a Playwright locator object for that selector. If the attribute does not exist on elements, raises an AttributeError with a descriptive message including the class name. This dynamic behavior allows page objects to access elements using clean attribute syntax like self.login_button.click() instead of self.page.locator(self.elements.login_button).click().",
+          "locators_used": [],
+          "calls_to": [
+            "hasattr()",
+            "getattr()",
+            "self.page.locator()"
+          ],
+          "usage_example": "self.login_button.click()",
+          "belongs_to_class": "BasePageObject",
+          "lines_of_code": 5
+        },
+        {
+          "method_name": "get_selector",
+          "method_signature": "def get_selector(self, name)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "name",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The name of the selector to retrieve"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "getter",
+          "what_it_does": "Retrieves the raw selector string for a given locator name without creating a Playwright locator object. Checks if the elements object has an attribute with the specified name using hasattr(self.elements, name). If the attribute exists, returns the selector string using getattr(self.elements, name). If the attribute does not exist, raises an AttributeError with a descriptive message including the class name. This method is useful when code needs the actual selector string rather than a locator object, such as when passing selectors to wait_for_selector or when building composite selectors. While __getattr__ automatically converts locator names to locator objects, this method provides explicit access to the underlying selector strings.",
+          "locators_used": [],
+          "calls_to": [
+            "hasattr()",
+            "getattr()"
+          ],
+          "usage_example": "selector_string = self.get_selector('login_button')",
+          "belongs_to_class": "BasePageObject",
+          "lines_of_code": 4
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This is a sophisticated base page object implementation that uses Python's magic methods (__getattr__) to provide a clean and intuitive API for page object interactions. The architecture separates concerns effectively: ElementLocators stores selector strings, WaitProxy provides wait operations, and BasePageObject provides element access. The dynamic attribute access pattern means page objects can write self.login_button.click() and the framework automatically converts 'login_button' to the appropriate Playwright locator. This eliminates repetitive page.locator() calls and makes page object code more readable. The WaitProxy class provides a similar convenience for wait operations with self.wait.login_button(). The get_selector method provides an escape hatch for cases where the raw selector string is needed. This base class is fundamental to the framework's page object architecture and all page objects should inherit from it."
+    }
+  ],
+  "batch_summary": {
+    "total_classes_found": 6,
+    "total_methods_found": 30,
+    "total_locators_found": 0,
+    "total_imports_found": 12,
+    "total_constants_found": 0,
+    "total_inner_classes_found": 0,
+    "page_objects_found": [],
+    "helper_classes_found": [
+      "RABaseHelper",
+      "ShipmentTrackingHelper",
+      "UpdatePlanHelper"
+    ],
+    "core_classes_found": [
+      "ElementLocators",
+      "WaitProxy",
+      "BasePageObject"
+    ],
+    "config_classes_found": [],
+    "key_reusable_methods": [
+      "RABaseHelper.run_job — Execute Resque scheduled job and wait for completion",
+      "RABaseHelper.complete_jobs — Execute multiple Resque jobs in sequence",
+      "RABaseHelper.wait_for_job_to_disappear — Monitor job completion with polling",
+      "RABaseHelper.get_item_by_title — Locate card body by title for data extraction",
+      "RABaseHelper.get_field_text_by_title — Extract text content from titled card section",
+      "RABaseHelper.access_link_by_title — Click link within titled card section",
+      "RABaseHelper.get_boolean_value_by_title — Extract boolean value from Font Awesome icon",
+      "RABaseHelper.validate_template_data — Validate JSON template data with date comparisons",
+      "RABaseHelper.access_link_by_title_with_retry — Click link with automatic retry and page reload",
+      "ShipmentTrackingHelper.verify_cartridge_installed_message — Verify specific cartridge types are displayed",
+      "ShipmentTrackingHelper.verify_shipment_tracking_table — Validate shipment history table contents",
+      "UpdatePlanHelper.verify_available_plans — Validate plan options with page counts and types",
+      "UpdatePlanHelper.select_plan — Select subscription plan by page count",
+      "UpdatePlanHelper.cancellation_subscription — Complete subscription cancellation flow",
+      "UpdatePlanHelper.verify_plan_info — Verify plan details display correct value and pages",
+      "BasePageObject.__getattr__ — Dynamic locator to Playwright locator conversion",
+      "WaitProxy.__getattr__ — Dynamic wait method creation for locators"
+    ],
+    "key_reusable_locators": []
+  }
+}
