@@ -1,0 +1,2182 @@
+{
+  "batch_metadata": {
+    "batch_id": 6,
+    "total_batches": 18,
+    "remaining_after_this": 12,
+    "analyzed_at": "2025-01-16T10:30:00Z",
+    "analyzer": "Senior Codebase Analyst Agent",
+    "files_in_batch": 5,
+    "files_succeeded": 5,
+    "files_failed": 0,
+    "failed_files": [],
+    "storage_repo": "AAVA-STORAGE",
+    "report_path": "codebase_batches/batch_6_report.json"
+  },
+  "analyzed_files": [
+    "AURA-main (1) 1/AURA-main/core/__init__.py",
+    "AURA-main (1) 1/AURA-main/core/playwright_manager.py",
+    "AURA-main (1) 1/AURA-main/core/reports_manager.py",
+    "AURA-main (1) 1/AURA-main/core/scraper.py",
+    "AURA-main (1) 1/AURA-main/core/settings.py"
+  ],
+  "file_analyses": [
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/core/__init__.py",
+      "file_name": "__init__.py",
+      "file_extension": ".py",
+      "file_size_bytes": 0,
+      "language": "Python",
+      "file_category": "core_module",
+      "file_purpose": "Empty Python package initialization file for the core module. This file marks the core directory as a Python package, allowing other modules to import classes and functions from the core package. Contains no code or logic.",
+      "imports": [],
+      "classes": [],
+      "locators": [],
+      "functions": [],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This is an empty __init__.py file that serves only to mark the core directory as a Python package. It contains no imports, classes, functions, or any executable code. This is a standard Python pattern for package initialization."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/core/playwright_manager.py",
+      "file_name": "playwright_manager.py",
+      "file_extension": ".py",
+      "file_size_bytes": 5013,
+      "language": "Python",
+      "file_category": "core_module",
+      "file_purpose": "Core Playwright browser lifecycle manager that handles browser, context, and page setup and teardown. Manages browser type selection based on target platform (chromium, firefox, webkit), configures viewport dimensions, locale settings, proxy configuration, HAR logging, video recording, and provides context manager interface for clean resource management. This is a critical infrastructure component used by all test flows.",
+      "imports": [
+        {
+          "import_statement": "from playwright.sync_api import sync_playwright, Browser, BrowserContext, Page",
+          "module": "playwright.sync_api",
+          "imported_names": [
+            "sync_playwright",
+            "Browser",
+            "BrowserContext",
+            "Page"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from typing import Optional",
+          "module": "typing",
+          "imported_names": [
+            "Optional"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from core.settings import GlobalState, framework_logger",
+          "module": "core.settings",
+          "imported_names": [
+            "GlobalState",
+            "framework_logger"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "import test_flows_common.test_flows_common as common",
+          "module": "test_flows_common.test_flows_common",
+          "imported_names": [
+            "common"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "import os",
+          "module": "os",
+          "imported_names": [
+            "os"
+          ],
+          "is_external": true,
+          "is_internal": false
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "PlaywrightManager",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Manages the complete lifecycle of Playwright browser automation including browser launch, context creation, page initialization, and cleanup. Handles browser type selection (chromium/firefox/webkit) based on target platform configuration. Configures browser context with locale, viewport dimensions, device scale factor, HAR recording, video capture, and proxy settings. Provides context manager interface (__enter__/__exit__) for automatic resource cleanup. Collects and saves HAR logs and video recordings to the run directory when enabled.",
+          "how_to_import": "from core.playwright_manager import PlaywrightManager",
+          "how_to_instantiate": "playwright_manager = PlaywrightManager()",
+          "total_methods": 4,
+          "total_locators": 0
+        }
+      ],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "__init__",
+          "method_signature": "def __init__(self):",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": true,
+          "docstring": null,
+          "method_type": "constructor",
+          "what_it_does": "Initializes the PlaywrightManager instance by setting all instance attributes to None or their default values. Creates self.playwright set to None which will hold the Playwright instance. Creates self.browser typed as Optional[Browser] set to None which will hold the browser instance. Creates self.context typed as Optional[BrowserContext] set to None which will hold the browser context. Creates self.page typed as Optional[Page] set to None which will hold the page instance. Creates self.logs_path typed as Optional[str] set to None which will hold the path to the logs directory for HAR and video files. All these attributes are initialized to None and will be populated during the setup() method call.",
+          "locators_used": [],
+          "calls_to": [],
+          "usage_example": "manager = PlaywrightManager()",
+          "belongs_to_class": "PlaywrightManager",
+          "lines_of_code": 6
+        },
+        {
+          "method_name": "setup",
+          "method_signature": "def setup(self) -> Page:",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            }
+          ],
+          "return_type": "Page",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Setup playwright, browser, context and page",
+          "method_type": "setup",
+          "what_it_does": "Performs complete Playwright browser setup and returns a ready-to-use Page instance. First starts Playwright by calling sync_playwright().start() and stores it in self.playwright. Reads the target platform from GlobalState.target and determines the browser type: 'webkit' for web_safari/mac_app/ios_app, 'firefox' for web_firefox, otherwise 'chromium'. Constructs launch_args dictionary with headless mode from GlobalState.headless. Constructs context_args dictionary with locale from GlobalState.language_code, viewport width and height from GlobalState.target_width and target_height, and device_scale_factor set to 2.0. Checks if HAR logging is enabled (GlobalState.collect_logs is 'har' or 'both') and if so, creates logs directory in GlobalState.run_dir, constructs HAR file path with flow name and timestamp, adds record_har_path to context_args, and logs the HAR path. Checks if video capture is enabled (GlobalState.collect_logs is 'video' or 'both') and if so, adds record_video_dir and record_video_size to context_args and logs the video directory. Checks if proxy is configured in common.PROXY_URL and if so, adds proxy configuration to both launch_args and context_args and logs the proxy URL. Launches the appropriate browser (firefox, webkit, or chromium) with launch_args. Creates a new browser context with context_args. Creates a new page from the context. Returns the page instance.",
+          "locators_used": [],
+          "calls_to": [
+            "sync_playwright().start()",
+            "getattr()",
+            "self.playwright.firefox.launch()",
+            "self.playwright.webkit.launch()",
+            "self.playwright.chromium.launch()",
+            "self.browser.new_context()",
+            "self.context.new_page()",
+            "os.path.join()",
+            "os.makedirs()",
+            "framework_logger.info()"
+          ],
+          "usage_example": "manager = PlaywrightManager()\npage = manager.setup()",
+          "belongs_to_class": "PlaywrightManager",
+          "lines_of_code": 55
+        },
+        {
+          "method_name": "close",
+          "method_signature": "def close(self):",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "teardown",
+          "what_it_does": "Performs complete cleanup of all Playwright resources and verifies log file generation. First reads collect_logs configuration from GlobalState.collect_logs and determines if HAR or video collection is enabled. If self.page exists, attempts to close it with error handling that logs warnings if closure fails. If self.context exists, attempts to close it and then verifies that HAR and video files were successfully saved. For HAR files, lists all .har files in the logs directory and logs success if found or warning if not found. For video files, lists all .webm files in the logs directory and logs success if found or warning if not found. All context closure is wrapped in exception handling that logs warnings. If self.browser exists, attempts to close it with error handling. If self.playwright exists, attempts to stop it with error handling. This method ensures all resources are properly released even if individual cleanup steps fail.",
+          "locators_used": [],
+          "calls_to": [
+            "self.page.close()",
+            "self.context.close()",
+            "self.browser.close()",
+            "self.playwright.stop()",
+            "os.path.exists()",
+            "os.listdir()",
+            "framework_logger.info()",
+            "framework_logger.warning()"
+          ],
+          "usage_example": "manager.close()",
+          "belongs_to_class": "PlaywrightManager",
+          "lines_of_code": 35
+        },
+        {
+          "method_name": "__enter__",
+          "method_signature": "def __enter__(self):",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": true,
+          "docstring": "Context manager entry",
+          "method_type": "setup",
+          "what_it_does": "Context manager entry method that enables using PlaywrightManager with Python's 'with' statement. Calls self.setup() to initialize Playwright, browser, context, and page, then returns the result (the Page instance). This allows the pattern 'with PlaywrightManager() as page:' which automatically handles setup and cleanup.",
+          "locators_used": [],
+          "calls_to": [
+            "self.setup()"
+          ],
+          "usage_example": "with PlaywrightManager() as page:\n    page.goto('https://example.com')",
+          "belongs_to_class": "PlaywrightManager",
+          "lines_of_code": 2
+        },
+        {
+          "method_name": "__exit__",
+          "method_signature": "def __exit__(self, exc_type, exc_val, exc_tb):",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "exc_type",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Exception type if an exception occurred in the with block, None otherwise"
+            },
+            {
+              "name": "exc_val",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Exception value if an exception occurred in the with block, None otherwise"
+            },
+            {
+              "name": "exc_tb",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Exception traceback if an exception occurred in the with block, None otherwise"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": true,
+          "docstring": "Context manager exit",
+          "method_type": "teardown",
+          "what_it_does": "Context manager exit method that is automatically called when exiting a 'with' block using PlaywrightManager. Calls self.close() to perform complete cleanup of all Playwright resources including page, context, browser, and playwright instance, and to verify log file generation. This method is called regardless of whether an exception occurred in the with block, ensuring resources are always cleaned up. The exception parameters are received but not used - the method does not suppress exceptions.",
+          "locators_used": [],
+          "calls_to": [
+            "self.close()"
+          ],
+          "usage_example": "with PlaywrightManager() as page:\n    # page operations here\n    pass\n# __exit__ automatically called here",
+          "belongs_to_class": "PlaywrightManager",
+          "lines_of_code": 2
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This is a critical core infrastructure class that manages the entire Playwright browser lifecycle. It implements the context manager protocol (__enter__/__exit__) which is a best practice for resource management in Python. The setup() method is highly configurable, reading from GlobalState to determine browser type, viewport size, locale, proxy, and logging options. The close() method includes comprehensive error handling and verification of log file generation. The class supports HAR logging and video recording which are valuable for debugging test failures. The browser type selection logic supports cross-browser testing (chromium, firefox, webkit) and different platforms (web, mac app, ios app). This class would be instantiated once per test flow execution and used as a context manager to ensure proper cleanup."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/core/reports_manager.py",
+      "file_name": "reports_manager.py",
+      "file_extension": ".py",
+      "file_size_bytes": 23734,
+      "language": "Python",
+      "file_category": "core_module",
+      "file_purpose": "Comprehensive test execution reporting system that tracks test steps, captures console output, generates HTML and JSON reports with step-by-step execution details, timestamps, durations, and pass/fail status. Scans test flow source code to extract expected steps using AST parsing, matches logged messages to expected steps during execution, tracks step execution order and timing, handles dynamic step discovery, and produces detailed HTML reports with filterable step tables and console logs. This is the primary reporting engine for the AURA framework.",
+      "imports": [
+        {
+          "import_statement": "import os",
+          "module": "os",
+          "imported_names": [
+            "os"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import ast",
+          "module": "ast",
+          "imported_names": [
+            "ast"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import html",
+          "module": "html",
+          "imported_names": [
+            "html"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import datetime",
+          "module": "datetime",
+          "imported_names": [
+            "datetime"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import json",
+          "module": "json",
+          "imported_names": [
+            "json"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import logging",
+          "module": "logging",
+          "imported_names": [
+            "logging"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import sys",
+          "module": "sys",
+          "imported_names": [
+            "sys"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import io",
+          "module": "io",
+          "imported_names": [
+            "io"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from dataclasses import dataclass",
+          "module": "dataclasses",
+          "imported_names": [
+            "dataclass"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from typing import List, Optional, Dict, Any",
+          "module": "typing",
+          "imported_names": [
+            "List",
+            "Optional",
+            "Dict",
+            "Any"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from core.settings import framework_logger, Constants",
+          "module": "core.settings",
+          "imported_names": [
+            "framework_logger",
+            "Constants"
+          ],
+          "is_external": false,
+          "is_internal": true
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "ReportStep",
+          "parent_classes": [],
+          "decorators": [
+            "@dataclass"
+          ],
+          "docstring": null,
+          "class_purpose": "Data class representing a single test step in the execution report. Stores all metadata about a step including its source location (file and line number), the expected pattern extracted from source code, execution status (PENDING/PASS/FAIL/NOT_EXECUTED), the actual logged message when executed, timestamp, duration in milliseconds, execution order, number of occurrences, and first timestamp. Used to track both expected steps (discovered via AST scanning) and dynamic steps (discovered during execution).",
+          "how_to_import": "from core.reports_manager import ReportStep",
+          "how_to_instantiate": "step = ReportStep(id=1, file='test_flow.py', line=42, pattern='Login successful', status='PENDING')",
+          "total_methods": 1,
+          "total_locators": 0
+        },
+        {
+          "class_name": "_LogHandler",
+          "parent_classes": [
+            "logging.Handler"
+          ],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Custom logging handler that intercepts INFO-level log messages from framework_logger and forwards them to the ReportsManager for step execution tracking. Filters to only process INFO level messages and calls reporter.record_step_execution() with the log message and record. This is the bridge between the logging system and the report generation system.",
+          "how_to_import": "from core.reports_manager import _LogHandler",
+          "how_to_instantiate": "_LogHandler(reporter_instance)",
+          "total_methods": 2,
+          "total_locators": 0
+        },
+        {
+          "class_name": "ReportsManager",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Main reporting engine that orchestrates the entire test reporting lifecycle. Scans test flow source code using AST parsing to discover expected test steps. Intercepts log messages during test execution to match them against expected steps. Tracks step execution order, timing, and status. Captures stdout, stderr, and log output to a console buffer. Generates comprehensive HTML reports with color-coded step tables, execution statistics, and console logs. Generates companion JSON reports with structured data. Handles dynamic step discovery for steps not found in source code. Provides toggles to enable/disable HTML and JSON report generation.",
+          "how_to_import": "from core.reports_manager import ReportsManager",
+          "how_to_instantiate": "reports_manager = ReportsManager(flow_name='login_flow', run_id='run_123', output_dir='/path/to/output')",
+          "total_methods": 15,
+          "total_locators": 0
+        },
+        {
+          "class_name": "_Tee",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Inner utility class that implements a tee-like stream wrapper to duplicate output to both the original stream (stdout/stderr) and a StringIO buffer. Used to capture console output while still displaying it to the user. Implements write() and flush() methods to mirror the stream interface.",
+          "how_to_import": "Not intended for external import - inner class of ReportsManager",
+          "how_to_instantiate": "tee = ReportsManager._Tee(sys.stdout, buffer)",
+          "total_methods": 2,
+          "total_locators": 0
+        }
+      ],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "to_row",
+          "method_signature": "def to_row(self) -> Dict[str, Any]:",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            }
+          ],
+          "return_type": "Dict[str, Any]",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Converts the ReportStep dataclass instance to a dictionary suitable for JSON serialization and report generation. Uses the logged_message if available, otherwise falls back to the static pattern for the display message. Returns a dictionary with keys: id, file, line, pattern, status, message (the display message), timestamp, duration_ms, and first_timestamp (ISO format with Z suffix if first_timestamp_dt is set). This method is called when generating the JSON report to convert all steps to serializable dictionaries.",
+          "locators_used": [],
+          "calls_to": [
+            "self.first_timestamp_dt.isoformat()"
+          ],
+          "usage_example": "step_dict = report_step.to_row()",
+          "belongs_to_class": "ReportStep",
+          "lines_of_code": 13
+        },
+        {
+          "method_name": "__init__",
+          "method_signature": "def __init__(self, reporter: 'ReportsManager'):",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "reporter",
+              "type": "'ReportsManager'",
+              "default_value": null,
+              "is_required": true,
+              "description": "The ReportsManager instance that will receive log messages"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": true,
+          "docstring": null,
+          "method_type": "constructor",
+          "what_it_does": "Initializes the _LogHandler by calling the parent logging.Handler constructor with level set to logging.INFO. Stores the reporter reference in self.reporter so that the emit() method can forward log messages to the ReportsManager. This handler will only process INFO-level log messages.",
+          "locators_used": [],
+          "calls_to": [
+            "super().__init__()"
+          ],
+          "usage_example": "handler = _LogHandler(reports_manager)",
+          "belongs_to_class": "_LogHandler",
+          "lines_of_code": 3
+        },
+        {
+          "method_name": "emit",
+          "method_signature": "def emit(self, record: logging.LogRecord):",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "record",
+              "type": "logging.LogRecord",
+              "default_value": null,
+              "is_required": true,
+              "description": "The log record containing the log message and metadata"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "callback",
+          "what_it_does": "Overrides the logging.Handler emit method to intercept log records. Wrapped in a try-except block to prevent logging errors from breaking the test. Checks if the log record level is INFO (record.levelno != logging.INFO returns early if not INFO). Extracts the formatted message using record.getMessage(). Calls self.reporter.record_step_execution() passing the message and the record object. This is the callback that gets invoked whenever framework_logger logs an INFO message, allowing the ReportsManager to track step execution.",
+          "locators_used": [],
+          "calls_to": [
+            "record.getMessage()",
+            "self.reporter.record_step_execution()"
+          ],
+          "usage_example": "# Automatically called by logging system when framework_logger.info() is invoked",
+          "belongs_to_class": "_LogHandler",
+          "lines_of_code": 8
+        },
+        {
+          "method_name": "__init__",
+          "method_signature": "def __init__(self, flow_name: str, run_id: str, output_dir: Optional[str]):",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "flow_name",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "Name of the test flow being executed"
+            },
+            {
+              "name": "run_id",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "Unique identifier for this test run"
+            },
+            {
+              "name": "output_dir",
+              "type": "Optional[str]",
+              "default_value": null,
+              "is_required": true,
+              "description": "Directory where reports will be saved. Must not be None."
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": true,
+          "docstring": null,
+          "method_type": "constructor",
+          "what_it_does": "Initializes the ReportsManager with flow name, run ID, and output directory. Raises ValueError if output_dir is None since reports require an explicit output directory. Creates the output directory if it does not exist using os.makedirs with exist_ok=True. Initializes self.steps as an empty list to hold ReportStep instances. Initializes self._executed_step_ids as an empty list to track which steps have been executed. Sets self._handler to None (will be populated in start()). Initializes self._built_index as an empty dictionary for fast step lookup by pattern prefix. Records self._suite_start as the current UTC datetime. Sets self._last_step_end_monotonic to None for duration tracking. Initializes self._exact_pattern_index as an empty dictionary for exact pattern matching. Creates self.console_buffer as a StringIO instance to capture console output. Sets stdout/stderr tee attributes to None. Sets self._log_capture_handler to None. Constructs self._flow_dir as the path to the test flow directory. Initializes self._dynamic_added as an empty set. Initializes self._location_index as an empty dictionary for file/line lookup. Sets self._next_exec_order to 1 for tracking execution sequence.",
+          "locators_used": [],
+          "calls_to": [
+            "os.makedirs()",
+            "datetime.datetime.utcnow()",
+            "io.StringIO()",
+            "os.path.join()"
+          ],
+          "usage_example": "manager = ReportsManager('login_flow', 'run_20250116_103000', '/path/to/output')",
+          "belongs_to_class": "ReportsManager",
+          "lines_of_code": 23
+        },
+        {
+          "method_name": "start",
+          "method_signature": "def start(self):",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "setup",
+          "what_it_does": "Starts the reporting system by scanning source code for expected steps and setting up log capture. First calls self.scan_sources() to parse test flow Python files and extract all framework_logger.info() calls as expected steps. Creates a _LogHandler instance passing self and adds it to framework_logger to intercept INFO messages. Creates a logging.Handler instance for capturing all log levels, sets its level to DEBUG, creates a formatter with timestamp and level, and defines a custom emit function that writes formatted log records to self.console_buffer. Adds this handler to framework_logger. Attempts to tee stdout and stderr by saving originals to self._orig_stdout and self._orig_stderr, creating _Tee instances that write to both original streams and console_buffer, and replacing sys.stdout and sys.stderr with the tee instances. Wraps stdout/stderr tee setup in exception handling and logs debug message if it fails. Logs a debug message indicating initialization is complete with the number of potential steps found and the report path.",
+          "locators_used": [],
+          "calls_to": [
+            "self.scan_sources()",
+            "_LogHandler()",
+            "framework_logger.addHandler()",
+            "logging.Handler()",
+            "logging.Formatter()",
+            "framework_logger.debug()"
+          ],
+          "usage_example": "reports_manager.start()",
+          "belongs_to_class": "ReportsManager",
+          "lines_of_code": 30
+        },
+        {
+          "method_name": "finalize",
+          "method_signature": "def finalize(self, success: bool, exception: Optional[BaseException] = None):",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "success",
+              "type": "bool",
+              "default_value": null,
+              "is_required": true,
+              "description": "Whether the test flow completed successfully"
+            },
+            {
+              "name": "exception",
+              "type": "Optional[BaseException]",
+              "default_value": "None",
+              "is_required": false,
+              "description": "Exception that caused test failure, if any"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "teardown",
+          "what_it_does": "Finalizes the reporting system by marking incomplete steps, cleaning up handlers, restoring stdout/stderr, and generating reports. If success is False and there are executed steps, gets the last executed step and if its status is PASS or PENDING, changes it to FAIL. If an exception is provided, appends exception information to the step's logged_message (truncated to 500 characters). Iterates through all steps and changes any with status PENDING to NOT_EXECUTED. Removes the _LogHandler from framework_logger with exception handling. Removes the log capture handler from framework_logger with exception handling. Restores sys.stdout and sys.stderr to their original values with exception handling. Checks the ENABLE_HTML toggle and if True, calls self._generate_html() to create the HTML report. Checks the ENABLE_JSON toggle and if True, calls self._write_json() to create the JSON report. Logs an info message with the report path (or indicates HTML is disabled if ENABLE_HTML is False).",
+          "locators_used": [],
+          "calls_to": [
+            "self._get_step()",
+            "framework_logger.removeHandler()",
+            "self._generate_html()",
+            "self._write_json()",
+            "framework_logger.info()"
+          ],
+          "usage_example": "reports_manager.finalize(success=True)",
+          "belongs_to_class": "ReportsManager",
+          "lines_of_code": 28
+        },
+        {
+          "method_name": "record_step_execution",
+          "method_signature": "def record_step_execution(self, log_message: str, record: logging.LogRecord):",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "log_message",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "The log message text to match against expected steps"
+            },
+            {
+              "name": "record",
+              "type": "logging.LogRecord",
+              "default_value": null,
+              "is_required": true,
+              "description": "The logging record containing pathname and lineno metadata"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Core method that matches logged messages to expected steps and tracks execution. Normalizes the log message by stripping whitespace. Extracts absolute file path and line number from the logging record. Imports time module for monotonic timing. Checks if the message looks like a retry attempt (contains ' - attempt ' or ends with ' successful'). If it's an attempt-like message and exists in exact_pattern_index, increments the occurrence count and updates timestamp, then returns. If pathname and lineno are available and exist in location_index, iterates through step IDs at that location and checks if the pattern matches - if found, calls _mark_step_execution and returns. Iterates through all steps with PENDING status and checks if the pattern matches using _match() - for patterns starting with '{…}', verifies the prefix matches before the ' - attempt ' part. If a match is found, adds the location to location_index and calls _mark_step_execution, then returns. Iterates through all steps (any status) and checks for pattern match with prefix verification for retry patterns - if found, increments occurrence count and updates timestamp, then returns. If no match found and the log came from a file, attempts to extract the logger call pattern from the source file at that line using _extract_logger_call_pattern(). If a pattern is extracted, creates a new ReportStep with status PASS, adds it to self.steps, updates indexes, and returns. If still no match and it's an attempt-like message, creates a new dynamic ReportStep with the message as the pattern, adds it to steps and indexes, and returns. This method handles both expected steps (from source scanning) and dynamic steps (discovered during execution).",
+          "locators_used": [],
+          "calls_to": [
+            "time.monotonic()",
+            "self._get_step()",
+            "self._match()",
+            "self._mark_step_execution()",
+            "self._extract_logger_call_pattern()",
+            "os.path.relpath()",
+            "os.path.isfile()",
+            "datetime.datetime.utcnow()"
+          ],
+          "usage_example": "# Called automatically by _LogHandler.emit() when framework_logger.info() is invoked",
+          "belongs_to_class": "ReportsManager",
+          "lines_of_code": 95
+        },
+        {
+          "method_name": "_mark_step_execution",
+          "method_signature": "def _mark_step_execution(self, step: ReportStep, normalized_msg: str, time_module):",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "step",
+              "type": "ReportStep",
+              "default_value": null,
+              "is_required": true,
+              "description": "The ReportStep instance to mark as executed"
+            },
+            {
+              "name": "normalized_msg",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "The normalized log message text"
+            },
+            {
+              "name": "time_module",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The time module for monotonic timing"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Marks a step as executed by updating its status, timestamp, and execution metadata. Gets the current UTC datetime and formats it as ISO string with microseconds and Z suffix. Gets the current monotonic time for duration calculation. If there are previously executed steps, gets the last executed step and if it has a start monotonic time but no duration, calculates the duration as the difference between current monotonic time and the previous step's start time in milliseconds. If the step's execution_order is None (first time being executed), assigns it the next execution order number, increments _next_exec_order, adds the step ID to _executed_step_ids, records the current monotonic time as _start_monotonic, and sets first_timestamp_dt to current datetime if not already set. Sets the step status to PASS. If the step does not have a logged_message yet, sets it to the normalized_msg. Updates the step timestamp to the current ISO timestamp. Increments the step occurrences count (or sets to 1 if it was 0 or None). This method is called whenever a log message matches an expected step pattern.",
+          "locators_used": [],
+          "calls_to": [
+            "datetime.datetime.utcnow()",
+            "time_module.monotonic()",
+            "self._get_step()"
+          ],
+          "usage_example": "# Called internally by record_step_execution()",
+          "belongs_to_class": "ReportsManager",
+          "lines_of_code": 20
+        },
+        {
+          "method_name": "scan_sources",
+          "method_signature": "def scan_sources(self):",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Scans test flow source code files to discover expected test steps by parsing framework_logger.info() calls. Creates a search_paths list containing self._flow_dir (the test flow directory). Initializes step_id to 1. Iterates through each path in search_paths, skipping if the path is not a directory. Walks the directory tree using os.walk() to find all files. For each file, skips if it does not end with .py. For Python files, reads the file content and parses it using ast.parse() to get the abstract syntax tree. Wraps parsing in exception handling to skip files that cannot be parsed. Walks the AST using ast.walk() to find all nodes. For each node, checks if it is an ast.Call node. Checks if the function being called is an attribute access where the object is 'framework_logger' and the attribute is 'info'. If so, checks if there are arguments to the call. Extracts the pattern from the first argument using self._extract_pattern(). If a pattern is extracted, computes the relative file path from Constants.ROOT_DIR, creates a new ReportStep with the step_id, file path, line number, and pattern, appends it to self.steps, adds the step_id to _built_index using the first 10 characters of the pattern as the key, and increments step_id. This method populates self.steps with all expected steps before test execution begins.",
+          "locators_used": [],
+          "calls_to": [
+            "os.path.isdir()",
+            "os.walk()",
+            "open()",
+            "ast.parse()",
+            "ast.walk()",
+            "self._extract_pattern()",
+            "os.path.relpath()"
+          ],
+          "usage_example": "# Called automatically by start()",
+          "belongs_to_class": "ReportsManager",
+          "lines_of_code": 35
+        },
+        {
+          "method_name": "_get_step",
+          "method_signature": "def _get_step(self, step_id: int) -> ReportStep:",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "step_id",
+              "type": "int",
+              "default_value": null,
+              "is_required": true,
+              "description": "The 1-based step ID"
+            }
+          ],
+          "return_type": "ReportStep",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "getter",
+          "what_it_does": "Retrieves a ReportStep instance by its 1-based step ID. Since step IDs are 1-based but the list is 0-indexed, subtracts 1 from step_id to get the correct index. Returns self.steps[step_id - 1]. This is a simple accessor method used throughout the class to get step instances by ID.",
+          "locators_used": [],
+          "calls_to": [],
+          "usage_example": "step = reports_manager._get_step(5)",
+          "belongs_to_class": "ReportsManager",
+          "lines_of_code": 2
+        },
+        {
+          "method_name": "_extract_pattern",
+          "method_signature": "def _extract_pattern(node: ast.AST) -> Optional[str]:",
+          "parameters": [
+            {
+              "name": "node",
+              "type": "ast.AST",
+              "default_value": null,
+              "is_required": true,
+              "description": "The AST node representing the first argument to framework_logger.info()"
+            }
+          ],
+          "return_type": "Optional[str]",
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Extracts the log message pattern from an AST node representing the argument to framework_logger.info(). If the node is an ast.Constant with a string value, returns the string value directly (this handles simple string literals like 'Login successful'). If the node is an ast.JoinedStr (f-string), iterates through the values in the f-string. For each value, if it is a Constant string, appends the string to parts. Otherwise (for interpolated expressions), appends the placeholder '{…}' to parts. Joins all parts and returns the resulting pattern string. Returns None if the node is neither a Constant nor a JoinedStr. This method converts f-strings like f'Clicked {button_name} button' into patterns like 'Clicked {…} button' that can be matched against actual log messages.",
+          "locators_used": [],
+          "calls_to": [],
+          "usage_example": "pattern = ReportsManager._extract_pattern(ast_node)",
+          "belongs_to_class": "ReportsManager",
+          "lines_of_code": 12
+        },
+        {
+          "method_name": "_match",
+          "method_signature": "def _match(pattern: str, message: str) -> bool:",
+          "parameters": [
+            {
+              "name": "pattern",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "The expected pattern extracted from source code, may contain {…} placeholders"
+            },
+            {
+              "name": "message",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "The actual log message to match against the pattern"
+            }
+          ],
+          "return_type": "bool",
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Determines if a log message matches an expected pattern. First checks for exact equality - if pattern equals message, returns True. If both pattern and message contain ' - attempt ' (retry pattern), extracts the action part before ' - attempt ' from both, removes '{…}' placeholders from the pattern action, and checks if the pattern action (after stripping) is contained in the message action - returns True if so. Creates a simplified version of the pattern by removing all '{…}' placeholders and stripping whitespace. If the simplified pattern is non-empty and is contained in the message, returns True. Otherwise returns False. This method handles exact matches, f-string patterns with placeholders, and retry attempt patterns.",
+          "locators_used": [],
+          "calls_to": [],
+          "usage_example": "if ReportsManager._match('Clicked {…} button', 'Clicked login button'):\n    print('Match found')",
+          "belongs_to_class": "ReportsManager",
+          "lines_of_code": 13
+        },
+        {
+          "method_name": "_extract_logger_call_pattern",
+          "method_signature": "def _extract_logger_call_pattern(self, file_path: str, lineno: int) -> Optional[str]:",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "file_path",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "Absolute path to the Python source file"
+            },
+            {
+              "name": "lineno",
+              "type": "int",
+              "default_value": null,
+              "is_required": true,
+              "description": "Line number where the logger call occurred"
+            }
+          ],
+          "return_type": "Optional[str]",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Attempts to extract the logger call pattern from a specific line in a source file. Wraps the entire operation in a try-except block that returns None on any exception. Opens the file and reads its content. Parses the content using ast.parse() to get the AST. Walks the AST to find all nodes. For each node, checks if it is an ast.Call and if its lineno matches the provided lineno. If so, checks if the function is an attribute access with attr 'info'. Checks if the value is a Name node with id 'framework_logger'. If all conditions match, checks if there are arguments and calls self._extract_pattern() on the first argument, returning the result. Returns None if no matching logger call is found at that line or if any exception occurs. This method is used to dynamically discover step patterns for log messages that were not found during the initial source scan.",
+          "locators_used": [],
+          "calls_to": [
+            "open()",
+            "ast.parse()",
+            "ast.walk()",
+            "self._extract_pattern()"
+          ],
+          "usage_example": "pattern = reports_manager._extract_logger_call_pattern('/path/to/file.py', 42)",
+          "belongs_to_class": "ReportsManager",
+          "lines_of_code": 18
+        },
+        {
+          "method_name": "report_path",
+          "method_signature": "def report_path(self) -> str:",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            }
+          ],
+          "return_type": "str",
+          "decorators": [
+            "@property"
+          ],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": true,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "getter",
+          "what_it_does": "Property that returns the full path to the HTML report file. Constructs the path by joining self.output_dir with 'report.html' using os.path.join(). This property provides a consistent way to access the report file path throughout the class.",
+          "locators_used": [],
+          "calls_to": [
+            "os.path.join()"
+          ],
+          "usage_example": "report_file = reports_manager.report_path",
+          "belongs_to_class": "ReportsManager",
+          "lines_of_code": 2
+        },
+        {
+          "method_name": "_generate_html",
+          "method_signature": "def _generate_html(self):",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Generates the comprehensive HTML test report with step table, statistics, and console output. Calculates summary statistics: total steps, passed steps, failed steps, and not executed steps. Gets the current UTC timestamp. Retrieves console output and metadata using _get_console_output(). Defines an esc() helper function that calls html.escape() with quote=True for HTML escaping. Initializes an empty rows_html list. Defines a status_color dictionary mapping status values to background colors (green for PASS, red for FAIL, gray for NOT_EXECUTED, white for PENDING). Separates steps into executed_steps (those with execution_order not None) and pending_steps (those with execution_order None). For executed steps, if first_timestamp_dt is None but timestamp exists, attempts to parse the timestamp string and set first_timestamp_dt. Sorts executed_steps by first_timestamp_dt and execution_order to get chronological order. Iterates through executed_steps and calculates duration for each step based on the time difference to the next step's first_timestamp_dt if the current step's duration_ms is None. Concatenates executed_steps and pending_steps to get ordered_steps. Creates exec_display_index mapping step IDs to their execution sequence numbers (1-based). Iterates through ordered_steps and for each step, constructs an HTML table row with background color based on status, displaying execution number, status, message (logged_message or pattern), file location, timestamp, duration, and occurrences. Constructs the complete HTML document string with DOCTYPE, head section containing title and embedded CSS styles for table formatting and filtering, body section with heading, summary statistics with color-coded badges, filter input box with JavaScript filterTable() function, step table with sticky header, console output section in a collapsible details element, and JavaScript for client-side table filtering. Writes the HTML document to self.report_path with UTF-8 encoding. Wraps file writing in exception handling that logs errors.",
+          "locators_used": [],
+          "calls_to": [
+            "self._get_console_output()",
+            "html.escape()",
+            "open()",
+            "framework_logger.error()"
+          ],
+          "usage_example": "# Called automatically by finalize() if ENABLE_HTML is True",
+          "belongs_to_class": "ReportsManager",
+          "lines_of_code": 85
+        },
+        {
+          "method_name": "_write_json",
+          "method_signature": "def _write_json(self):",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Generates the companion JSON report with structured test execution data. Wraps the entire operation in a try-except block that logs warnings on failure. Constructs the JSON file path by joining self.output_dir with 'report.json'. Retrieves console output and metadata using _get_console_output(). Opens the JSON file for writing with UTF-8 encoding. Constructs a dictionary with keys: flow (flow name), run_id, generated_utc (current UTC timestamp in ISO format with Z suffix), steps (list of all steps converted to dictionaries using step.to_row()), and console (dictionary with truncated flag, byte count, line count, and content). Writes the dictionary to the JSON file using json.dump() with indent=2 for pretty formatting. Logs a warning if any exception occurs during JSON generation. This JSON report can be consumed by other tools for programmatic analysis of test results.",
+          "locators_used": [],
+          "calls_to": [
+            "os.path.join()",
+            "self._get_console_output()",
+            "open()",
+            "json.dump()",
+            "datetime.datetime.utcnow()",
+            "framework_logger.warning()"
+          ],
+          "usage_example": "# Called automatically by finalize() if ENABLE_JSON is True",
+          "belongs_to_class": "ReportsManager",
+          "lines_of_code": 20
+        },
+        {
+          "method_name": "_get_console_output",
+          "method_signature": "def _get_console_output(self):",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Retrieves and optionally truncates the captured console output. Gets the raw console output by calling self.console_buffer.getvalue(). Initializes truncated flag to False. Encodes the raw string to UTF-8 bytes. Checks if the byte length exceeds CONSOLE_MAX_BYTES (2MB). If so, calculates head as 70% of max bytes and tail as 25% of max bytes. Extracts the head bytes and tail bytes from the raw bytes. Decodes head and tail to strings with errors='ignore' to handle incomplete UTF-8 sequences. Constructs the truncated output by concatenating head, a truncation marker line, and tail. Sets truncated flag to True. Counts the number of lines in the output by counting newline characters and adding 1 if the output does not end with a newline. Returns a tuple of (output_string, metadata_dict) where metadata contains truncated flag, byte count, and line count. This method ensures console output does not exceed size limits in the report.",
+          "locators_used": [],
+          "calls_to": [
+            "self.console_buffer.getvalue()"
+          ],
+          "usage_example": "console_text, meta = reports_manager._get_console_output()",
+          "belongs_to_class": "ReportsManager",
+          "lines_of_code": 18
+        },
+        {
+          "method_name": "__init__",
+          "method_signature": "def __init__(self, original, buf: io.StringIO):",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "original",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The original stream (sys.stdout or sys.stderr)"
+            },
+            {
+              "name": "buf",
+              "type": "io.StringIO",
+              "default_value": null,
+              "is_required": true,
+              "description": "The StringIO buffer to capture output"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": true,
+          "docstring": null,
+          "method_type": "constructor",
+          "what_it_does": "Initializes the _Tee instance by storing references to the original stream and the buffer. Sets self.original to the original stream and self.buf to the StringIO buffer. This allows the write() method to duplicate output to both destinations.",
+          "locators_used": [],
+          "calls_to": [],
+          "usage_example": "tee = ReportsManager._Tee(sys.stdout, buffer)",
+          "belongs_to_class": "_Tee",
+          "lines_of_code": 3
+        },
+        {
+          "method_name": "write",
+          "method_signature": "def write(self, data):",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "data",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The data to write to both streams"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Writes data to both the original stream and the buffer. First attempts to write data to self.original.write() wrapped in exception handling that silently passes on errors. Then attempts to write data to self.buf.write() wrapped in exception handling that silently passes on errors. This ensures output is duplicated to both destinations even if one write fails.",
+          "locators_used": [],
+          "calls_to": [
+            "self.original.write()",
+            "self.buf.write()"
+          ],
+          "usage_example": "# Called automatically when print() or sys.stdout.write() is invoked",
+          "belongs_to_class": "_Tee",
+          "lines_of_code": 10
+        },
+        {
+          "method_name": "flush",
+          "method_signature": "def flush(self):",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Flushes the original stream to ensure buffered output is written. Attempts to call self.original.flush() wrapped in exception handling that silently passes on errors. This method is required to fully implement the stream interface.",
+          "locators_used": [],
+          "calls_to": [
+            "self.original.flush()"
+          ],
+          "usage_example": "# Called automatically by the stream system",
+          "belongs_to_class": "_Tee",
+          "lines_of_code": 5
+        }
+      ],
+      "inner_classes": [
+        {
+          "inner_class_name": "_Tee",
+          "inner_class_purpose": "Inner utility class that implements a tee-like stream wrapper to duplicate output to both the original stream and a StringIO buffer for console capture",
+          "parent_class": "ReportsManager",
+          "members": []
+        }
+      ],
+      "variables_and_constants": [
+        {
+          "constant_name": "ENABLE_HTML",
+          "constant_value": true,
+          "constant_type": "bool",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "ENABLE_JSON",
+          "constant_value": true,
+          "constant_type": "bool",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "CONSOLE_MAX_BYTES",
+          "constant_value": 2097152,
+          "constant_type": "int",
+          "scope": "class_level",
+          "defined_in_class": "ReportsManager"
+        }
+      ],
+      "analysis_notes": "This is an extremely sophisticated reporting system that combines static analysis (AST parsing) with runtime tracking to produce comprehensive test reports. The scan_sources() method uses Python's ast module to parse test flow source code and extract all framework_logger.info() calls, creating expected steps before execution begins. The record_step_execution() method is called for every INFO log message during test execution and uses multiple matching strategies (exact match, location-based match, pattern match with placeholders, dynamic discovery) to correlate log messages with expected steps. The system handles f-strings by converting them to patterns with {…} placeholders. It tracks step execution order, timing, and duration using monotonic time. It captures all console output (stdout, stderr, and logs) using stream tee and custom log handlers. The HTML report generation is comprehensive with color-coded status, filterable table, execution statistics, and collapsible console output. The system includes toggles (ENABLE_HTML, ENABLE_JSON) to control report generation. The _Tee inner class is a clever implementation of stream duplication. This reporting system is production-grade and handles edge cases like dynamic step discovery, retry patterns, and console output truncation."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/core/scraper.py",
+      "file_name": "scraper.py",
+      "file_extension": ".py",
+      "file_size_bytes": 9513,
+      "language": "Python",
+      "file_category": "core_module",
+      "file_purpose": "Web page scraping utility that extracts UI elements, text content, and visual assets from web pages for test baseline creation and validation. Captures full-page screenshots, element-level screenshots with metadata (tag, text, href, position, styling), and animated content (SVG animations, GIFs, visual animations). Writes scraped data to Excel workbooks with structured columns for later validation. Supports screenshot-only mode for quick baseline capture and full scraping mode with element-level detail.",
+      "imports": [
+        {
+          "import_statement": "import os",
+          "module": "os",
+          "imported_names": [
+            "os"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import io",
+          "module": "io",
+          "imported_names": [
+            "io"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import time",
+          "module": "time",
+          "imported_names": [
+            "time"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from datetime import datetime",
+          "module": "datetime",
+          "imported_names": [
+            "datetime"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from PIL import Image, ImageChops",
+          "module": "PIL",
+          "imported_names": [
+            "Image",
+            "ImageChops"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from core.settings import framework_logger, Constants",
+          "module": "core.settings",
+          "imported_names": [
+            "framework_logger",
+            "Constants"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from core.utils import (\n    save_full_page_screenshot,\n    take_element_handle_screenshot,\n    load_or_create_workbook,\n    write_excel_context,\n    hash_text,\n    ensure_dirs,\n    extract_animated_svgs,\n    extract_animated_gifs,\n    extract_animated_visuals\n)",
+          "module": "core.utils",
+          "imported_names": [
+            "save_full_page_screenshot",
+            "take_element_handle_screenshot",
+            "load_or_create_workbook",
+            "write_excel_context",
+            "hash_text",
+            "ensure_dirs",
+            "extract_animated_svgs",
+            "extract_animated_gifs",
+            "extract_animated_visuals"
+          ],
+          "is_external": false,
+          "is_internal": true
+        }
+      ],
+      "classes": [],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "get_semantic_type",
+          "method_signature": "def get_semantic_type(tag, href, onclick):",
+          "parameters": [
+            {
+              "name": "tag",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "HTML tag name of the element"
+            },
+            {
+              "name": "href",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "href attribute value of the element"
+            },
+            {
+              "name": "onclick",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "onclick attribute value of the element"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Determines the semantic type of an HTML element based on its tag name and attributes. Converts tag to uppercase. Checks if tag starts with 'H' and is 2 characters long with the second character being a digit (H1-H9) - returns 'Heading' if so. Checks if tag is 'A' and href is truthy - returns 'Link' if so. Checks if tag is 'BUTTON' or onclick is truthy - returns 'Button' if so. Checks if tag is 'INPUT', 'SELECT', or 'TEXTAREA' - returns 'FormControl' if so. Checks if tag is 'LABEL' - returns 'Label' if so. Checks if tag is 'IMG' - returns 'Image' if so. Otherwise returns the tag name in title case. This classification helps organize scraped elements by their functional role rather than just their HTML tag.",
+          "locators_used": [],
+          "calls_to": [],
+          "usage_example": "element_type = get_semantic_type('button', None, 'handleClick()')",
+          "belongs_to_class": null,
+          "lines_of_code": 14
+        },
+        {
+          "method_name": "scrape_context",
+          "method_signature": "def scrape_context(\n    flow_name,\n    context_name,\n    page,\n    excel_path,\n    output_dir,\n    screenshot_only=False,\n    sub_context=None,\n    lang_code=None,\n    animations=False,\n    target_dir=None\n):",
+          "parameters": [
+            {
+              "name": "flow_name",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Name of the test flow being scraped"
+            },
+            {
+              "name": "context_name",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Name of the page context being scraped (e.g., 'login_page', 'dashboard')"
+            },
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance of the page to scrape"
+            },
+            {
+              "name": "excel_path",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Path to the Excel workbook where scraped data will be written"
+            },
+            {
+              "name": "output_dir",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Directory where screenshots will be saved"
+            },
+            {
+              "name": "screenshot_only",
+              "type": null,
+              "default_value": "False",
+              "is_required": false,
+              "description": "If True, only captures full-page screenshot without element scraping"
+            },
+            {
+              "name": "sub_context",
+              "type": null,
+              "default_value": "None",
+              "is_required": false,
+              "description": "Optional sub-context name for organizing scraped data"
+            },
+            {
+              "name": "lang_code",
+              "type": null,
+              "default_value": "None",
+              "is_required": false,
+              "description": "Language code for naming screenshot files"
+            },
+            {
+              "name": "animations",
+              "type": null,
+              "default_value": "False",
+              "is_required": false,
+              "description": "If True, extracts and saves animated SVGs, GIFs, and visual animations"
+            },
+            {
+              "name": "target_dir",
+              "type": null,
+              "default_value": "None",
+              "is_required": false,
+              "description": "Optional target directory (currently unused in implementation)"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Main scraping function that extracts UI elements and visual content from a web page and writes to Excel. Gets current timestamp in 'YYYY-MM-DD HH:MM:SS' format. Creates screenshots directory inside output_dir using ensure_dirs(). Constructs subctx_suffix by appending underscore and sub_context if provided. Calls save_full_page_screenshot() to capture full-page screenshot with naming pattern '{context_name}{subctx_suffix}_full_page'. Initializes empty elements list and seen set for deduplication. Adds a FullPage row to elements with context name, sub-context, page URL, timestamp, type 'FullPage', and screenshot filename. If screenshot_only is True, loads or creates the Excel workbook, writes the single FullPage row, logs completion message, and returns early. Otherwise, queries all elements in the page body using page.query_selector_all('body *'). For each element handle, evaluates the tag name and skips if tag is None or in Constants.IGNORE_TAGS. Checks if element is visible using is_visible() and skips if not. Gets inner text and strips whitespace, skipping if empty. Gets bounding box and skips if None or has zero width/height. Gets href and onclick attributes. Calls get_semantic_type() to classify the element. Creates dedup_key tuple of (sub_context, text, tag, href) and skips if already in seen set, otherwise adds to seen. Constructs screenshot filename with pattern '{context_name}{subctx_suffix}_{lang_code}_{index:04d}_{semantic_type}_{hash}'. Calls take_element_handle_screenshot() to capture element screenshot. Appends element data dictionary to elements list with all metadata fields. Wraps element processing in exception handling that logs debug messages for failures (except for 'Node is not an HTMLElement' errors which are silently skipped). If animations is True, creates animations directory, calls extract_animated_svgs() to get SVG animations, and for each SVG saves the GIF bytes if available and optionally saves the SVG XML (controlled by SAVE_ONLY_GIF_FROM_SVG toggle), adding rows to elements for each saved file. Calls extract_animated_gifs() to get GIF animations and saves each GIF file, adding rows to elements. Calls extract_animated_visuals() with selector '.stepsImage' to capture visual animations and adds rows to elements. Finally, loads or creates the Excel workbook and calls write_excel_context() to write all elements to the workbook. Logs completion message with element count and Excel path.",
+          "locators_used": [],
+          "calls_to": [
+            "datetime.now()",
+            "os.path.join()",
+            "ensure_dirs()",
+            "save_full_page_screenshot()",
+            "load_or_create_workbook()",
+            "write_excel_context()",
+            "framework_logger.info()",
+            "page.query_selector_all()",
+            "handle.evaluate()",
+            "handle.is_visible()",
+            "handle.inner_text()",
+            "handle.bounding_box()",
+            "handle.get_attribute()",
+            "get_semantic_type()",
+            "hash_text()",
+            "take_element_handle_screenshot()",
+            "os.makedirs()",
+            "extract_animated_svgs()",
+            "extract_animated_gifs()",
+            "extract_animated_visuals()",
+            "open()",
+            "framework_logger.debug()"
+          ],
+          "usage_example": "scrape_context(\n    flow_name='login_flow',\n    context_name='login_page',\n    page=page,\n    excel_path='/path/to/baseline.xlsx',\n    output_dir='/path/to/output',\n    screenshot_only=False,\n    lang_code='en-US',\n    animations=True\n)",
+          "belongs_to_class": null,
+          "lines_of_code": 150
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [
+        {
+          "constant_name": "EXTRA_WAIT",
+          "constant_value": 3,
+          "constant_type": "int",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "SAVE_ONLY_GIF_FROM_SVG",
+          "constant_value": true,
+          "constant_type": "bool",
+          "scope": "module_level",
+          "defined_in_class": null
+        }
+      ],
+      "analysis_notes": "This scraper is a comprehensive web page data extraction utility designed for test baseline creation. The scrape_context() function is the main entry point and supports two modes: screenshot-only (fast baseline capture) and full scraping (detailed element extraction). The element scraping logic queries all body descendants, filters by visibility and text content, captures element-level screenshots, and records extensive metadata. The deduplication logic using (sub_context, text, tag, href) tuples prevents duplicate entries. The semantic type classification (get_semantic_type) provides meaningful categorization beyond HTML tags. The animation extraction feature is sophisticated, handling SVG animations (with optional GIF conversion), animated GIFs, and visual animations using a custom selector. The SAVE_ONLY_GIF_FROM_SVG toggle controls whether both SVG and GIF are saved or just GIF. The scraped data is written to Excel workbooks with structured columns defined in Constants.SCRAPE_HEADERS. The error handling is robust, catching and logging element processing failures without stopping the entire scrape. This utility is likely used in a baseline/validation workflow where scraped data from one run is compared against scraped data from another run to detect UI changes."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/core/settings.py",
+      "file_name": "settings.py",
+      "file_extension": ".py",
+      "file_size_bytes": 8786,
+      "language": "Python",
+      "file_category": "config",
+      "file_purpose": "Central configuration and settings module for the AURA framework. Defines framework-wide constants including directory paths, file paths, Excel headers, color schemes, timeouts, and ignored HTML tags. Provides GlobalState class for storing runtime configuration like locale, language, target platform, printer profile, and test flow metadata. Provides Config class for initializing GlobalState from command-line arguments and loading locale, address, and printer data from JSON files. Sets up framework logging with rotating file handler and console handler.",
+      "imports": [
+        {
+          "import_statement": "import os",
+          "module": "os",
+          "imported_names": [
+            "os"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import json",
+          "module": "json",
+          "imported_names": [
+            "json"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import logging",
+          "module": "logging",
+          "imported_names": [
+            "logging"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from logging.handlers import RotatingFileHandler",
+          "module": "logging.handlers",
+          "imported_names": [
+            "RotatingFileHandler"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from openpyxl.styles import PatternFill",
+          "module": "openpyxl.styles",
+          "imported_names": [
+            "PatternFill"
+          ],
+          "is_external": true,
+          "is_internal": false
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "Constants",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Container class for framework-wide constant values including directory paths, file paths, Excel column headers, color codes for Excel cell formatting, PatternFill objects for cell styling, HTML tags to ignore during scraping, default timeout values, and retry counts. All members are class-level attributes. This class is never instantiated - it serves as a namespace for constants.",
+          "how_to_import": "from core.settings import Constants",
+          "how_to_instantiate": "Not instantiated - use Constants.ROOT_DIR, Constants.LOG_DIR, etc.",
+          "total_methods": 0,
+          "total_locators": 0
+        },
+        {
+          "class_name": "GlobalState",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Global state container that holds runtime configuration values set from command-line arguments and loaded from configuration files. Stores values like stack, locale, language, printer_profile, easy_enroll, biz_model, target platform, region, country, country_code, language_code, address_payload, selected_printer_sku, tenant_email, flow_name, timestamp, mode, run_dir, headless flag, payment_method, simulator_platform, collect_logs flag, and requirements dictionary. Provides a reset() class method to clear all state. All members are class-level attributes accessed directly without instantiation.",
+          "how_to_import": "from core.settings import GlobalState",
+          "how_to_instantiate": "Not instantiated - use GlobalState.locale, GlobalState.headless, etc.",
+          "total_methods": 1,
+          "total_locators": 0
+        },
+        {
+          "class_name": "Config",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Configuration initialization class that provides the init() class method to populate GlobalState from command-line arguments and load supporting data from JSON files. The init() method resets GlobalState, sets all provided configuration values, loads locale information from locale_map.json, loads address data from address_data.json, resolves printer SKU from printer_profiles.json, and sets any additional keyword arguments as GlobalState attributes. This class orchestrates the complete framework configuration setup.",
+          "how_to_import": "from core.settings import Config",
+          "how_to_instantiate": "Not instantiated - use Config.init(stack='prod', locale='US', ...)",
+          "total_methods": 4,
+          "total_locators": 0
+        }
+      ],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "reset",
+          "method_signature": "def reset(cls):",
+          "parameters": [
+            {
+              "name": "cls",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Class reference"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@classmethod"
+          ],
+          "is_static": false,
+          "is_classmethod": true,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Resets all GlobalState class attributes to None or their default values. Sets stack, locale, language, printer_profile, easy_enroll, biz_model, region, country, country_code, language_code, address_payload, selected_printer_sku, tenant_email, flow_name, timestamp, mode, run_dir, target, payment_method, and simulator_platform to None. Sets headless to False. Sets collect_logs to False. Sets requirements to an empty dictionary. This method is called at the beginning of Config.init() to ensure a clean state before loading new configuration.",
+          "locators_used": [],
+          "calls_to": [],
+          "usage_example": "GlobalState.reset()",
+          "belongs_to_class": "GlobalState",
+          "lines_of_code": 24
+        },
+        {
+          "method_name": "set_framework_log_level",
+          "method_signature": "def set_framework_log_level(level):",
+          "parameters": [
+            {
+              "name": "level",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Logging level constant (e.g., logging.DEBUG, logging.INFO)"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Sets the logging level for the framework logger and all its handlers. Updates the global _LOG_LEVEL variable to the provided level. Calls framework_logger.setLevel(level) to set the logger's level. Iterates through all handlers attached to framework_logger and calls handler.setLevel(level) on each. This function allows dynamic adjustment of logging verbosity, typically called from the main entry point when --debug flag is provided.",
+          "locators_used": [],
+          "calls_to": [
+            "framework_logger.setLevel()",
+            "handler.setLevel()"
+          ],
+          "usage_example": "set_framework_log_level(logging.DEBUG)",
+          "belongs_to_class": null,
+          "lines_of_code": 6
+        },
+        {
+          "method_name": "_setup_framework_logger",
+          "method_signature": "def _setup_framework_logger(\n    name: str = \"AURA\",\n    log_file: str = \"framework.log\",\n    max_bytes: int = 5 * 1024 * 1024,\n    backup_count: int = 5,\n) -> logging.Logger:",
+          "parameters": [
+            {
+              "name": "name",
+              "type": "str",
+              "default_value": "\"AURA\"",
+              "is_required": false,
+              "description": "Name of the logger"
+            },
+            {
+              "name": "log_file",
+              "type": "str",
+              "default_value": "\"framework.log\"",
+              "is_required": false,
+              "description": "Filename for the log file"
+            },
+            {
+              "name": "max_bytes",
+              "type": "int",
+              "default_value": "5 * 1024 * 1024",
+              "is_required": false,
+              "description": "Maximum size of log file before rotation (5MB default)"
+            },
+            {
+              "name": "backup_count",
+              "type": "int",
+              "default_value": "5",
+              "is_required": false,
+              "description": "Number of backup log files to keep"
+            }
+          ],
+          "return_type": "logging.Logger",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "setup",
+          "what_it_does": "Creates and configures the framework logger with file and console handlers. Gets or creates a logger with the specified name using logging.getLogger(). Sets the logger level to _LOG_LEVEL (defaults to INFO). Sets propagate to False to prevent duplicate logging. Checks if the logger already has handlers and only adds handlers if none exist. Creates a formatter with pattern '[%(asctime)s] [%(levelname)s] %(message)s'. Constructs the log file path by joining Constants.LOG_DIR with log_file. Creates a RotatingFileHandler with the log file path, max_bytes size limit, backup_count for rotation, and UTF-8 encoding. Sets the file handler level to _LOG_LEVEL and applies the formatter. Adds the file handler to the logger. Creates a StreamHandler for console output, sets its level to _LOG_LEVEL, applies the formatter, and adds it to the logger. Returns the configured logger instance. This function is called once at module load time to create the framework_logger.",
+          "locators_used": [],
+          "calls_to": [
+            "logging.getLogger()",
+            "logging.Formatter()",
+            "os.path.join()",
+            "RotatingFileHandler()",
+            "logging.StreamHandler()"
+          ],
+          "usage_example": "logger = _setup_framework_logger(name='AURA', log_file='framework.log')",
+          "belongs_to_class": null,
+          "lines_of_code": 25
+        },
+        {
+          "method_name": "headless_on",
+          "method_signature": "headless_on = lambda: GlobalState.headless",
+          "parameters": [],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "getter",
+          "what_it_does": "Lambda function that returns the current value of GlobalState.headless. Provides a functional interface to check if headless mode is enabled. Returns True if headless mode is on, False otherwise.",
+          "locators_used": [],
+          "calls_to": [],
+          "usage_example": "if headless_on():\n    print('Running in headless mode')",
+          "belongs_to_class": null,
+          "lines_of_code": 1
+        },
+        {
+          "method_name": "init",
+          "method_signature": "def init(cls, **kwargs):",
+          "parameters": [
+            {
+              "name": "cls",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Class reference"
+            },
+            {
+              "name": "kwargs",
+              "type": null,
+              "default_value": null,
+              "is_required": false,
+              "description": "Keyword arguments containing configuration values from command-line"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@classmethod"
+          ],
+          "is_static": false,
+          "is_classmethod": true,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "setup",
+          "what_it_does": "Initializes the framework configuration by populating GlobalState from provided keyword arguments and loading supporting data files. First calls GlobalState.reset() to clear any existing state. Extracts configuration values from kwargs and sets them on GlobalState: stack, locale, language, printer_profile (from 'profile' key), easy_enroll, biz_model (defaults to 'Flex'), headless (defaults to False), mode, flow_name, timestamp, run_dir, target, payment_method (defaults to 'credit_card_master'), simulator_platform, and requirements (defaults to empty dict). Calls cls._load_locale_info() to load locale data from locale_map.json and populate country, country_code, region, language, and language_code on GlobalState. Calls cls._load_address_data() to load address data from address_data.json and populate address_payload on GlobalState. Calls cls._resolve_printer_sku() to load printer profiles from printer_profiles.json and populate selected_printer_sku on GlobalState. Finally iterates through all kwargs and sets any additional keys as attributes on GlobalState using setattr(). This method is the main entry point for framework configuration, typically called from the main CLI handler.",
+          "locators_used": [],
+          "calls_to": [
+            "GlobalState.reset()",
+            "cls._load_locale_info()",
+            "cls._load_address_data()",
+            "cls._resolve_printer_sku()",
+            "setattr()"
+          ],
+          "usage_example": "Config.init(stack='prod', locale='US', language='en', profile='OfficeJet', headless=True)",
+          "belongs_to_class": "Config",
+          "lines_of_code": 20
+        },
+        {
+          "method_name": "_load_locale_info",
+          "method_signature": "def _load_locale_info():",
+          "parameters": [],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Loads locale information from locale_map.json and populates GlobalState with country, region, and language data. Opens Constants.LOCALE_MAP_PATH with UTF-8 encoding and loads the JSON data. Checks if GlobalState.locale exists in the data dictionary - raises ValueError with descriptive message if not found. Retrieves the locale_data dictionary for the specified locale. Sets GlobalState.country to locale_data['country']. Sets GlobalState.country_code to locale_data['code']. Sets GlobalState.region to locale_data['region']. Gets the languages list from locale_data['languages']. Sets GlobalState.language to the provided language or defaults to the first language in the list if not provided. Constructs GlobalState.language_code by concatenating language, hyphen, and country_code (e.g., 'en-US'). This method translates a locale identifier like 'US' into detailed country and language information.",
+          "locators_used": [],
+          "calls_to": [
+            "open()",
+            "json.load()"
+          ],
+          "usage_example": "# Called automatically by Config.init()",
+          "belongs_to_class": "Config",
+          "lines_of_code": 12
+        },
+        {
+          "method_name": "_load_address_data",
+          "method_signature": "def _load_address_data():",
+          "parameters": [],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Loads address data from address_data.json and populates GlobalState.address_payload. Opens Constants.ADDRESS_DATA_PATH with UTF-8 encoding and loads the JSON data. Checks if GlobalState.country exists in the data dictionary - raises ValueError with descriptive message if not found. Sets GlobalState.address_payload to the address dictionary for the specified country. This address payload typically contains fields like street, city, state, postal_code, etc., and is used by test flows that need to fill address forms.",
+          "locators_used": [],
+          "calls_to": [
+            "open()",
+            "json.load()"
+          ],
+          "usage_example": "# Called automatically by Config.init()",
+          "belongs_to_class": "Config",
+          "lines_of_code": 7
+        },
+        {
+          "method_name": "_resolve_printer_sku",
+          "method_signature": "def _resolve_printer_sku():",
+          "parameters": [],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Resolves the printer SKU based on printer profile, region, and easy_enroll preference. Returns early if GlobalState.printer_profile is not set. Opens Constants.PRINTER_PROFILES_PATH with UTF-8 encoding and loads the JSON data. Gets the profile value from GlobalState.printer_profile. Checks if the profile exists in the printers dictionary - raises ValueError if not found. Gets the SKUs list for the specified region from printers[profile]['skus'][region] - raises ValueError if no SKUs found for the region. If GlobalState.easy_enroll is not None, converts it to lowercase string and checks if it equals 'yes' to get the desired boolean value. Filters the SKUs list to only include SKUs where the 'easy_enroll' field matches the desired value. Raises ValueError if no SKUs match the easy_enroll preference. Sets GlobalState.selected_printer_sku to the 'sku' field of the first matching SKU. This method selects an appropriate printer SKU based on the test configuration, which is used by test flows that need to select or verify printer models.",
+          "locators_used": [],
+          "calls_to": [
+            "open()",
+            "json.load()"
+          ],
+          "usage_example": "# Called automatically by Config.init()",
+          "belongs_to_class": "Config",
+          "lines_of_code": 18
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [
+        {
+          "constant_name": "ROOT_DIR",
+          "constant_value": "os.path.dirname(os.path.dirname(os.path.abspath(__file__)))",
+          "constant_type": "str",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "LOG_DIR",
+          "constant_value": "os.path.join(ROOT_DIR, 'logs')",
+          "constant_type": "str",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "TEST_FLOWS_PATH",
+          "constant_value": "os.path.join(ROOT_DIR, 'test_flows')",
+          "constant_type": "str",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "VALIDATE_OUTPUT_DIR",
+          "constant_value": "os.path.join(ROOT_DIR, 'test_flows_exec_results')",
+          "constant_type": "str",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "SCRAPE_OUTPUT_DIR",
+          "constant_value": "os.path.join(ROOT_DIR, 'z_scraped_data')",
+          "constant_type": "str",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "LOCALE_MAP_PATH",
+          "constant_value": "os.path.join(ROOT_DIR, 'test_flows_common', 'locale_map.json')",
+          "constant_type": "str",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "ADDRESS_DATA_PATH",
+          "constant_value": "os.path.join(ROOT_DIR, 'test_flows_common', 'address_data.json')",
+          "constant_type": "str",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "PRINTER_PROFILES_PATH",
+          "constant_value": "os.path.join(ROOT_DIR, 'test_flows_common', 'printer_profiles.json')",
+          "constant_type": "str",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "SCRAPE_HEADERS",
+          "constant_value": [
+            "Context",
+            "SubContext",
+            "PageURL",
+            "Timestamp",
+            "Type",
+            "Tag",
+            "Text",
+            "Href",
+            "Screenshot",
+            "ExcludeRegions"
+          ],
+          "constant_type": "list",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "VALIDATION_HEADERS",
+          "constant_value": [
+            "Context",
+            "SubContext",
+            "PageURL",
+            "Timestamp",
+            "Type",
+            "Tag",
+            "Text_Expected",
+            "Text_Actual",
+            "Href_Expected",
+            "Href_Actual",
+            "Text_Result",
+            "Screenshot_Baseline",
+            "Screenshot_Validation",
+            "Screenshot_Result",
+            "Diff_Image",
+            "ExcludeRegions",
+            "SuggestedExcludeRegions",
+            "Comments"
+          ],
+          "constant_type": "list",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "COLOR_HEADER",
+          "constant_value": "A67657",
+          "constant_type": "str",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "COLOR_FAIL",
+          "constant_value": "FF9999",
+          "constant_type": "str",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "COLOR_PASS",
+          "constant_value": "CCFFCC",
+          "constant_type": "str",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "COLOR_PASS_WITH_EXCLUDES",
+          "constant_value": "FF7518",
+          "constant_type": "str",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "COLOR_PASS_TEXT_ONLY",
+          "constant_value": "CCCCFF",
+          "constant_type": "str",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "CELL_FILL_FAIL",
+          "constant_value": "PatternFill(start_color=COLOR_FAIL, end_color=COLOR_FAIL, fill_type='solid')",
+          "constant_type": "PatternFill",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "CELL_FILL_PASS",
+          "constant_value": "PatternFill(start_color=COLOR_PASS, end_color=COLOR_PASS, fill_type='solid')",
+          "constant_type": "PatternFill",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "CELL_FILL_PASS_WITH_EXCLUDES",
+          "constant_value": "PatternFill(start_color=COLOR_PASS_WITH_EXCLUDES, end_color=COLOR_PASS_WITH_EXCLUDES, fill_type='solid')",
+          "constant_type": "PatternFill",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "CELL_FILL_PASS_TEXT_ONLY",
+          "constant_value": "PatternFill(start_color=COLOR_PASS_TEXT_ONLY, end_color=COLOR_PASS_TEXT_ONLY, fill_type='solid')",
+          "constant_type": "PatternFill",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "IGNORE_TAGS",
+          "constant_value": [
+            "script",
+            "style",
+            "noscript",
+            "template",
+            "meta",
+            "link",
+            "head",
+            "title",
+            "svg",
+            "defs",
+            "symbol",
+            "path",
+            "clippath"
+          ],
+          "constant_type": "set",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "DEFAULT_TIMEOUT",
+          "constant_value": 30000,
+          "constant_type": "int",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "MAX_RETRIES",
+          "constant_value": 2,
+          "constant_type": "int",
+          "scope": "class_level",
+          "defined_in_class": "Constants"
+        },
+        {
+          "constant_name": "_LOG_LEVEL",
+          "constant_value": "logging.INFO",
+          "constant_type": "int",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "framework_logger",
+          "constant_value": "_setup_framework_logger()",
+          "constant_type": "logging.Logger",
+          "scope": "module_level",
+          "defined_in_class": null
+        }
+      ],
+      "analysis_notes": "This is the central configuration hub for the entire AURA framework. The Constants class provides a single source of truth for all framework-wide constants including directory paths (computed relative to ROOT_DIR), file paths for configuration JSON files, Excel column headers for scraping and validation, color codes and PatternFill objects for Excel cell formatting, HTML tags to ignore during scraping, and timeout/retry values. The GlobalState class is a global singleton (class-level attributes) that holds runtime configuration set from command-line arguments and loaded from files. The Config.init() method orchestrates the complete configuration setup by resetting state, setting provided values, and loading locale, address, and printer data from JSON files. The locale loading translates a locale code like 'US' into country='United States', country_code='US', region='NA', and constructs language_code like 'en-US'. The address loading provides test data for address forms. The printer SKU resolution selects an appropriate printer model based on profile, region, and easy_enroll preference. The logging setup uses RotatingFileHandler for automatic log rotation and adds both file and console handlers. The set_framework_log_level() function allows dynamic log level adjustment. This module must be imported early in the framework initialization to ensure logging and configuration are available to all other modules."
+    }
+  ],
+  "batch_summary": {
+    "total_classes_found": 7,
+    "total_methods_found": 28,
+    "total_locators_found": 0,
+    "total_imports_found": 21,
+    "total_constants_found": 25,
+    "total_inner_classes_found": 1,
+    "page_objects_found": [],
+    "helper_classes_found": [],
+    "core_classes_found": [
+      "PlaywrightManager",
+      "ReportsManager",
+      "ReportStep",
+      "_LogHandler",
+      "_Tee",
+      "Constants",
+      "GlobalState",
+      "Config"
+    ],
+    "config_classes_found": [
+      "Constants",
+      "GlobalState",
+      "Config"
+    ],
+    "key_reusable_methods": [
+      "PlaywrightManager.setup — Complete Playwright browser setup with context and page",
+      "PlaywrightManager.close — Cleanup all Playwright resources and verify logs",
+      "PlaywrightManager.__enter__ — Context manager entry for with statement",
+      "PlaywrightManager.__exit__ — Context manager exit for automatic cleanup",
+      "ReportsManager.start — Initialize reporting system and scan source code",
+      "ReportsManager.finalize — Finalize reports and generate HTML/JSON output",
+      "ReportsManager.record_step_execution — Match log messages to expected steps",
+      "ReportsManager.scan_sources — Parse source code to extract expected steps",
+      "ReportsManager._generate_html — Generate comprehensive HTML test report",
+      "ReportsManager._write_json — Generate JSON test report",
+      "scrape_context — Main scraping function for UI elements and screenshots",
+      "get_semantic_type — Classify HTML elements by semantic type",
+      "Config.init — Initialize framework configuration from arguments",
+      "Config._load_locale_info — Load locale data from JSON",
+      "Config._load_address_data — Load address data from JSON",
+      "Config._resolve_printer_sku — Resolve printer SKU from profile",
+      "set_framework_log_level — Set logging level dynamically",
+      "_setup_framework_logger — Setup framework logger with file and console handlers"
+    ],
+    "key_reusable_locators": []
+  },
+  "comment": "Batch 6 contains core infrastructure modules: PlaywrightManager for browser lifecycle, ReportsManager for test reporting with AST-based step tracking, scraper for UI element extraction, and settings for framework configuration. No page objects or UI locators in this batch - all core utilities and configuration."
+}
