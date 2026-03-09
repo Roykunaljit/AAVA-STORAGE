@@ -1,0 +1,2594 @@
+{
+  "batch_metadata": {
+    "batch_id": 3,
+    "total_batches": 18,
+    "remaining_after_this": 15,
+    "analyzed_at": "2025-01-15T10:45:00Z",
+    "analyzer": "Senior Codebase Analyst Agent",
+    "files_in_batch": 5,
+    "files_succeeded": 5,
+    "files_failed": 0,
+    "failed_files": [],
+    "storage_repo": "AAVA-STORAGE",
+    "report_path": "codebase_batches/batch_3_report.json"
+  },
+  "analyzed_files": [
+    "AURA-main (1) 1/AURA-main/AI_YAML/scripts/multibrowsermanager.py",
+    "AURA-main (1) 1/AURA-main/AI_YAML/scripts/test_case_execute.py",
+    "AURA-main (1) 1/AURA-main/AI_YAML/scripts/testflow.yaml",
+    "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+    "AURA-main (1) 1/AURA-main/AI_YAML/test_cases/TC31165176_M_overview_status_card.yaml"
+  ],
+  "file_analyses": [
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/multibrowsermanager.py",
+      "file_name": "multibrowsermanager.py",
+      "file_extension": ".py",
+      "file_size_bytes": 25772,
+      "language": "Python",
+      "file_category": "helper",
+      "file_purpose": "Multi-browser management utility class that provides comprehensive functionality for creating, managing, and controlling multiple browser instances simultaneously. Supports remote debugging connections, incognito mode, normal browser mode, window management, tab switching, URL-based window finding, and cross-browser operations. Used for test scenarios requiring multiple browser contexts or parallel browser sessions.",
+      "imports": [
+        {
+          "import_statement": "import subprocess",
+          "module": "subprocess",
+          "imported_names": [
+            "subprocess"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import time",
+          "module": "time",
+          "imported_names": [
+            "time"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import platform",
+          "module": "platform",
+          "imported_names": [
+            "platform"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from selenium import webdriver",
+          "module": "selenium",
+          "imported_names": [
+            "webdriver"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from selenium.webdriver.chrome.options import Options",
+          "module": "selenium.webdriver.chrome.options",
+          "imported_names": [
+            "Options"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from selenium.webdriver.chrome.service import Service",
+          "module": "selenium.webdriver.chrome.service",
+          "imported_names": [
+            "Service"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from typing import Dict, Optional, Tuple, Set",
+          "module": "typing",
+          "imported_names": [
+            "Dict",
+            "Optional",
+            "Tuple",
+            "Set"
+          ],
+          "is_external": true,
+          "is_internal": false
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "MultiBrowserManager",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Manages multiple browser instances with different profiles and modes (remote debug, incognito, normal). Provides methods to create browsers, switch between them, bring windows to foreground, find windows by URL, wait for new windows, load URLs in specific browsers, and manage browser lifecycle. Maintains a registry of all active browsers with their metadata including driver instances, window handles, tabs, and browser types. Supports OS-specific window management operations for Windows, macOS, and Linux.",
+          "how_to_import": "from scripts.multibrowsermanager import MultiBrowserManager",
+          "how_to_instantiate": "manager = MultiBrowserManager()",
+          "total_methods": 19,
+          "total_locators": 0
+        }
+      ],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "__init__",
+          "method_signature": "def __init__(self)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": true,
+          "docstring": null,
+          "method_type": "constructor",
+          "what_it_does": "Initializes the MultiBrowserManager instance by creating an empty dictionary self.browsers to store all managed browser instances with their metadata. Sets self.current_browser to None indicating no browser is currently active. Detects the operating system using platform.system() and stores it in self.os_system for OS-specific window management operations later. This constructor prepares the manager to handle multiple browser instances but does not create any browsers yet.",
+          "locators_used": [],
+          "calls_to": [
+            "platform.system()"
+          ],
+          "usage_example": "manager = MultiBrowserManager()",
+          "belongs_to_class": "MultiBrowserManager",
+          "lines_of_code": 4
+        },
+        {
+          "method_name": "create_remote_browser",
+          "method_signature": "def create_remote_browser(self, profile_name: str = \"remote\", remote_port: int = 9222)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "profile_name",
+              "type": "str",
+              "default_value": "\"remote\"",
+              "is_required": false,
+              "description": "Name identifier for this browser profile in the manager's registry"
+            },
+            {
+              "name": "remote_port",
+              "type": "int",
+              "default_value": "9222",
+              "is_required": false,
+              "description": "Port number where Chrome is running with remote debugging enabled"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Create browser with debugger address (existing Chrome instance)",
+          "method_type": "factory",
+          "what_it_does": "Creates a Selenium WebDriver connection to an existing Chrome browser instance that is already running with remote debugging enabled on the specified port. Configures Chrome options with debugger_address pointing to localhost:remote_port. Adds multiple arguments to suppress logging and disable automation detection including --disable-logging, --log-level=3, --disable-dev-shm-usage, --no-sandbox, and experimental options to exclude enable-logging and disable useAutomationExtension. Creates a Chrome WebDriver with these options. Stores the driver in self.browsers dictionary with metadata including driver instance, type as 'debug', profile name, remote port, a copy of original window handles, and current tab index set to 0. Prints success message with the port number. Returns the driver instance if successful, or None if an exception occurs. This method is used to connect to manually opened Chrome instances for debugging or to control existing browser sessions.",
+          "locators_used": [],
+          "calls_to": [
+            "Options()",
+            "options.add_argument()",
+            "options.add_experimental_option()",
+            "webdriver.Chrome()",
+            "driver.window_handles.copy()",
+            "print()"
+          ],
+          "usage_example": "driver = manager.create_remote_browser(profile_name='debug_session', remote_port=9222)",
+          "belongs_to_class": "MultiBrowserManager",
+          "lines_of_code": 25
+        },
+        {
+          "method_name": "create_incognito_browser",
+          "method_signature": "def create_incognito_browser(self, profile_name: str, user_data_dir: str = None)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "profile_name",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "Name identifier for this incognito browser profile"
+            },
+            {
+              "name": "user_data_dir",
+              "type": "str",
+              "default_value": "None",
+              "is_required": false,
+              "description": "Optional path to Chrome user data directory for profile persistence"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Create new incognito browser instance",
+          "method_type": "factory",
+          "what_it_does": "Creates a new Chrome browser instance in incognito mode. Initializes Chrome Options and adds --incognito argument to enable private browsing mode. If user_data_dir is provided, adds --user-data-dir argument to specify a custom profile directory. Also adds --no-default-browser-check and --no-first-run arguments to suppress Chrome startup dialogs. Creates a Chrome WebDriver with these options. Stores the driver in self.browsers dictionary with metadata including driver instance, type as 'incognito', profile name, user data directory path, original window handles, and current tab index. Prints success message with checkmark emoji and profile name. Returns the driver instance if successful, or None if an exception occurs with an error message. This method is used to create isolated browser sessions that do not share cookies or cache with other sessions.",
+          "locators_used": [],
+          "calls_to": [
+            "Options()",
+            "options.add_argument()",
+            "webdriver.Chrome()",
+            "driver.window_handles.copy()",
+            "print()"
+          ],
+          "usage_example": "incognito_driver = manager.create_incognito_browser(profile_name='private_session', user_data_dir='/path/to/profile')",
+          "belongs_to_class": "MultiBrowserManager",
+          "lines_of_code": 28
+        },
+        {
+          "method_name": "create_normal_browser",
+          "method_signature": "def create_normal_browser(self, profile_name: str, user_data_dir: str = None)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "profile_name",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "Name identifier for this normal browser profile"
+            },
+            {
+              "name": "user_data_dir",
+              "type": "str",
+              "default_value": "None",
+              "is_required": false,
+              "description": "Optional path to Chrome user data directory"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Create new incognito browser instance",
+          "method_type": "factory",
+          "what_it_does": "Creates a new Chrome browser instance in normal mode with extensive automation detection suppression. Initializes Chrome Options and adds user-data-dir if provided. Adds multiple arguments to hide automation indicators including --no-default-browser-check, --no-first-run, --disable-blink-features=AutomationControlled, --no-service-autorun, --password-store=basic, --disable-infobars, and --disable-notifications. Adds experimental options to exclude enable-automation switch and disable useAutomationExtension. Configures preferences to disable Chrome credential service, password manager, and notifications. Creates Chrome WebDriver with these options. Stores driver in self.browsers with metadata including type as 'incognito' (note: docstring says incognito but this is actually normal mode), profile name, user data dir, original window handles, and current tab index. Prints success message. Returns driver or None on error. This method creates browsers that appear less automated and more like regular user browsing.",
+          "locators_used": [],
+          "calls_to": [
+            "Options()",
+            "options.add_argument()",
+            "options.add_experimental_option()",
+            "webdriver.Chrome()",
+            "driver.window_handles.copy()",
+            "print()"
+          ],
+          "usage_example": "normal_driver = manager.create_normal_browser(profile_name='main_session', user_data_dir='/path/to/profile')",
+          "belongs_to_class": "MultiBrowserManager",
+          "lines_of_code": 38
+        },
+        {
+          "method_name": "bring_to_foreground",
+          "method_signature": "def bring_to_foreground(self, browser_name: str, force_restore: bool = True)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "browser_name",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "Name of the browser profile to bring to foreground"
+            },
+            {
+              "name": "force_restore",
+              "type": "bool",
+              "default_value": "True",
+              "is_required": false,
+              "description": "Whether to force window restoration from minimized state"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Bring specific browser window to foreground",
+          "method_type": "action",
+          "what_it_does": "Brings the specified browser window to the foreground using multiple strategies. First checks if browser exists in registry, returns False if not found. If force_restore is True, checks current window size to detect if minimized (width or height <= 10 pixels). If minimized, attempts to restore by maximizing the window with a 0.5 second delay. If already visible, just ensures it is maximized with a 0.3 second delay. Then uses OS-specific commands: on Windows runs PowerShell script with AppActivate to bring Chrome to front, on macOS uses osascript to activate Google Chrome, on Linux uses wmctrl command. After OS commands, performs additional Selenium checks: gets window size to verify not minimized (size 0x0), if minimized sets window size to 1920x1080 and position to 0,0. Executes JavaScript window.focus() to ensure page is active. Finally maximizes window again. Adds 1 second delay for minimized windows. Sets self.current_browser to this browser name. Prints success message with fire emoji. Returns True if successful, False if any exception occurs. This comprehensive approach handles various window states and OS differences.",
+          "locators_used": [],
+          "calls_to": [
+            "self.browsers[browser_name]['driver'].get_window_size()",
+            "self.browsers[browser_name]['driver'].maximize_window()",
+            "time.sleep()",
+            "subprocess.run()",
+            "driver.set_window_size()",
+            "driver.set_window_position()",
+            "driver.execute_script()",
+            "print()"
+          ],
+          "usage_example": "success = manager.bring_to_foreground('main_session', force_restore=True)",
+          "belongs_to_class": "MultiBrowserManager",
+          "lines_of_code": 65
+        },
+        {
+          "method_name": "check_window_state",
+          "method_signature": "def check_window_state(self, browser_name: str)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "browser_name",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "Name of the browser to check"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Check if browser window is minimized or hidden",
+          "method_type": "verification",
+          "what_it_does": "Checks the current state of a browser window and returns a string indicating its visibility status. Returns 'not_found' if browser_name is not in the browsers registry. Gets the driver for the browser and retrieves window size and position using get_window_size() and get_window_position(). Checks if window appears minimized by testing if width or height is 10 pixels or less, returns 'minimized' if true. Checks if window is off-screen by testing if x or y position is less than -1000, returns 'off_screen' if true. Attempts to execute JavaScript to get document.visibilityState, returns 'hidden' if the visibility state is 'hidden'. If none of these conditions match, returns 'visible' indicating the window is in a normal visible state. If any exception occurs during checks, prints warning message and returns 'unknown'. This method helps determine if a window needs restoration before bringing it to foreground.",
+          "locators_used": [],
+          "calls_to": [
+            "driver.get_window_size()",
+            "driver.get_window_position()",
+            "driver.execute_script()",
+            "print()"
+          ],
+          "usage_example": "state = manager.check_window_state('main_session')",
+          "belongs_to_class": "MultiBrowserManager",
+          "lines_of_code": 28
+        },
+        {
+          "method_name": "ensure_window_visible",
+          "method_signature": "def ensure_window_visible(self, browser_name: str)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "browser_name",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "Name of the browser to ensure visibility"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Ensure window is visible before bringing to foreground",
+          "method_type": "action",
+          "what_it_does": "Ensures a browser window is visible by first checking its state and then bringing it to foreground with appropriate restoration settings. Calls self.check_window_state(browser_name) to get the current window state. Prints the detected state. If state is 'minimized', 'hidden', or 'off_screen', prints a restoration message with wrench emoji and calls self.bring_to_foreground(browser_name, force_restore=True) to force window restoration. If state is 'visible', calls self.bring_to_foreground(browser_name, force_restore=False) without forcing restoration since window is already visible. For any other state including 'unknown', calls bring_to_foreground with force_restore=True as a safe fallback. Returns the result of the bring_to_foreground call. This method provides intelligent window management by adapting the restoration strategy based on the current window state.",
+          "locators_used": [],
+          "calls_to": [
+            "self.check_window_state()",
+            "self.bring_to_foreground()",
+            "print()"
+          ],
+          "usage_example": "success = manager.ensure_window_visible('main_session')",
+          "belongs_to_class": "MultiBrowserManager",
+          "lines_of_code": 12
+        },
+        {
+          "method_name": "switch_to_browser",
+          "method_signature": "def switch_to_browser(self, browser_name: str, bring_to_focus: bool = True)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "browser_name",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "Name of the browser to switch to"
+            },
+            {
+              "name": "bring_to_focus",
+              "type": "bool",
+              "default_value": "True",
+              "is_required": false,
+              "description": "Whether to bring the browser window to foreground"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Switch context to specific browser",
+          "method_type": "action",
+          "what_it_does": "Switches the manager's context to a specific browser and optionally brings it to foreground. Checks if browser_name exists in self.browsers registry, prints error message with X emoji and returns None if not found. If bring_to_focus parameter is True, calls self.bring_to_foreground(browser_name) to make the browser window visible and active. Sets self.current_browser to browser_name to track which browser is currently active. Returns the driver instance from self.browsers[browser_name]['driver'] so the caller can perform operations on this browser. This method is the primary way to switch between multiple managed browsers during test execution.",
+          "locators_used": [],
+          "calls_to": [
+            "self.bring_to_foreground()",
+            "print()"
+          ],
+          "usage_example": "driver = manager.switch_to_browser('main_session', bring_to_focus=True)",
+          "belongs_to_class": "MultiBrowserManager",
+          "lines_of_code": 9
+        },
+        {
+          "method_name": "load_url_in_browser",
+          "method_signature": "def load_url_in_browser(self, browser_name: str, url: str, new_tab: bool = False)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "browser_name",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "Name of the browser to load URL in"
+            },
+            {
+              "name": "url",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "URL to load"
+            },
+            {
+              "name": "new_tab",
+              "type": "bool",
+              "default_value": "False",
+              "is_required": false,
+              "description": "Whether to open URL in a new tab or current tab"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Load URL in specific browser",
+          "method_type": "action",
+          "what_it_does": "Loads a URL in the specified browser either in the current tab or a new tab. Checks if browser_name exists in registry, prints error and returns False if not found. Gets the driver for the browser. If new_tab is True, executes JavaScript window.open(url, '_blank') to open URL in a new tab, then switches to the new tab using driver.switch_to.window(driver.window_handles[-1]) which selects the last window handle (the newly opened tab), and updates the browser's current_tab_index in metadata to the index of the new tab. If new_tab is False, loads the URL in the current tab using driver.get(url). After loading, maximizes the window and refreshes the page. Prints success message with checkmark emoji showing the URL and browser name. Returns True if successful. If any exception occurs, prints error message with X emoji and returns False. This method enables loading different URLs in different browsers or multiple tabs within a browser.",
+          "locators_used": [],
+          "calls_to": [
+            "driver.execute_script()",
+            "driver.switch_to.window()",
+            "driver.get()",
+            "driver.maximize_window()",
+            "driver.refresh()",
+            "print()"
+          ],
+          "usage_example": "success = manager.load_url_in_browser('main_session', 'https://example.com', new_tab=True)",
+          "belongs_to_class": "MultiBrowserManager",
+          "lines_of_code": 24
+        },
+        {
+          "method_name": "get_current_driver",
+          "method_signature": "def get_current_driver(self)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Get currently active browser driver",
+          "method_type": "getter",
+          "what_it_does": "Returns the WebDriver instance of the currently active browser. Checks if self.current_browser is set (not None). If a current browser is set, returns the driver instance from self.browsers[self.current_browser]['driver']. If no current browser is set, returns None. This method provides quick access to the active browser's driver without needing to know the browser name.",
+          "locators_used": [],
+          "calls_to": [],
+          "usage_example": "current_driver = manager.get_current_driver()",
+          "belongs_to_class": "MultiBrowserManager",
+          "lines_of_code": 4
+        },
+        {
+          "method_name": "list_browsers",
+          "method_signature": "def list_browsers(self)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "List all managed browsers",
+          "method_type": "utility",
+          "what_it_does": "Prints a formatted list of all managed browsers with their current status and details. Prints a header '=== Managed Browsers ==='. Iterates through all browsers in self.browsers dictionary. For each browser, gets the driver instance, retrieves current_url from the driver, counts the number of tabs using len(driver.window_handles). Determines status as 'ACTIVE' with fire emoji if the browser name matches self.current_browser, otherwise 'INACTIVE' with sleeping emoji. Prints the status, browser name, and browser type on one line. Prints the current URL indented on the next line. Prints the tab count indented on the third line. This method provides a quick overview of all active browser sessions for debugging and monitoring purposes.",
+          "locators_used": [],
+          "calls_to": [
+            "driver.current_url",
+            "driver.window_handles",
+            "print()"
+          ],
+          "usage_example": "manager.list_browsers()",
+          "belongs_to_class": "MultiBrowserManager",
+          "lines_of_code": 12
+        },
+        {
+          "method_name": "get_top_windows_with_urls",
+          "method_signature": "def get_top_windows_with_urls(self, count: int = 2)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "count",
+              "type": "int",
+              "default_value": "2",
+              "is_required": false,
+              "description": "Number of top windows to return"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Get top N windows across all browsers with their URLs",
+          "method_type": "getter",
+          "what_it_does": "Collects information about all windows across all managed browsers and returns the top N windows. Initializes empty list all_windows. Iterates through all browsers in self.browsers. For each browser, gets the current window handle and all window handles. For each window handle, switches to that window using driver.switch_to.window(window_handle), retrieves the URL and title, creates a window_info dictionary containing browser_name, browser_type, window_handle, window_index, url, title, and is_active flag (True if this is the current window). Appends window_info to all_windows list. If any error occurs accessing a window, prints warning and continues. After processing all windows, restores the original window for each browser. Sorts all_windows by browser_name and window_index so top windows appear first. Slices the list to get top N windows using all_windows[:count]. Prints formatted output showing the top N windows with their status (ACTIVE or INACTIVE), browser name, type, tab index, URL, and truncated title. Returns the list of top window info dictionaries. This method is useful for getting an overview of the most important windows across all browsers.",
+          "locators_used": [],
+          "calls_to": [
+            "driver.current_window_handle",
+            "driver.window_handles",
+            "driver.switch_to.window()",
+            "driver.current_url",
+            "driver.title",
+            "print()"
+          ],
+          "usage_example": "top_windows = manager.get_top_windows_with_urls(count=3)",
+          "belongs_to_class": "MultiBrowserManager",
+          "lines_of_code": 45
+        },
+        {
+          "method_name": "get_all_urls_by_browser",
+          "method_signature": "def get_all_urls_by_browser(self)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Get all URLs organized by browser",
+          "method_type": "getter",
+          "what_it_does": "Collects all URLs from all windows across all browsers and returns them organized by browser name. Initializes empty dictionary browser_urls. Iterates through all browsers in self.browsers. For each browser, gets current window handle and initializes a dictionary entry with browser type and empty windows list. Gets all window handles for the browser. For each window handle, switches to it, retrieves URL and title, creates a window info dictionary with index, handle, url, title, and is_current flag. Appends this to the browser's windows list. If any error occurs accessing a window, appends an error entry with ERROR message in the url field. After processing all windows, restores the original window. Returns the browser_urls dictionary structured as {browser_name: {type: str, windows: [list of window info dicts]}}. This method provides a complete snapshot of all URLs across all browsers organized by browser for analysis or reporting.",
+          "locators_used": [],
+          "calls_to": [
+            "driver.current_window_handle",
+            "driver.window_handles",
+            "driver.switch_to.window()",
+            "driver.current_url",
+            "driver.title",
+            "print()"
+          ],
+          "usage_example": "all_urls = manager.get_all_urls_by_browser()",
+          "belongs_to_class": "MultiBrowserManager",
+          "lines_of_code": 38
+        },
+        {
+          "method_name": "switch_to_window_by_url",
+          "method_signature": "def switch_to_window_by_url(self, url_part: str, exact_match: bool = False)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "url_part",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "URL or URL substring to search for"
+            },
+            {
+              "name": "exact_match",
+              "type": "bool",
+              "default_value": "False",
+              "is_required": false,
+              "description": "Whether to match URL exactly or allow partial matches"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Switch to first window containing specific URL",
+          "method_type": "action",
+          "what_it_does": "Searches for and switches to the first window that contains or matches the specified URL across all browsers. Iterates through all browsers in self.browsers. For each browser, saves the current window handle and iterates through all window handles. For each window, switches to it and gets the current_url. Determines if there is a match: if exact_match is True, checks if current_url exactly equals url_part; if exact_match is False, checks if url_part (case-insensitive) is contained in current_url (case-insensitive). If a match is found, prints success message with checkmark emoji showing the browser name and URL, sets self.current_browser to this browser, and returns a dictionary containing browser_name, window_handle, url, and driver. If no match is found in a browser, restores the original window before checking the next browser. If no match is found in any browser, prints error message with X emoji and returns None. This method is essential for finding and switching to windows based on their content rather than window handles.",
+          "locators_used": [],
+          "calls_to": [
+            "driver.current_window_handle",
+            "driver.window_handles",
+            "driver.switch_to.window()",
+            "driver.current_url",
+            "print()"
+          ],
+          "usage_example": "result = manager.switch_to_window_by_url('example.com', exact_match=False)",
+          "belongs_to_class": "MultiBrowserManager",
+          "lines_of_code": 32
+        },
+        {
+          "method_name": "wait_for_new_window",
+          "method_signature": "def wait_for_new_window(self, timeout: int = 10, check_interval: float = 0.5) -> Tuple[Optional[str], Optional[webdriver.Chrome], Optional[str]]",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "timeout",
+              "type": "int",
+              "default_value": "10",
+              "is_required": false,
+              "description": "Maximum time to wait in seconds"
+            },
+            {
+              "name": "check_interval",
+              "type": "float",
+              "default_value": "0.5",
+              "is_required": false,
+              "description": "How often to check for new windows in seconds"
+            }
+          ],
+          "return_type": "Tuple[Optional[str], Optional[webdriver.Chrome], Optional[str]]",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Wait for and return details of any new window that appears across all browsers\n        \n        Args:\n            timeout: Maximum time to wait in seconds\n            check_interval: How often to check for new windows in seconds\n            \n        Returns:\n            Tuple of (profile_name, driver, window_handle) or (None, None, None) if timeout",
+          "method_type": "waiter",
+          "what_it_does": "Waits for a new window to appear in any of the managed browsers and returns details about it. Prints waiting message with magnifying glass emoji showing the timeout. Captures initial window state by iterating through all browsers and storing the set of window handles for each in initial_windows dictionary, printing the count of initial windows for each browser. Records start time. Enters a loop that continues until timeout is reached. In each iteration, checks each browser for new windows by getting current window handles and computing the difference from initial_windows to find new_windows. If new windows are found, gets the first new window handle, switches to it, attempts to get its URL and title, prints celebration emoji with browser name, URL, and title. Sets self.current_browser to this browser and returns a tuple of (profile_name, driver, new_handle). If any error occurs during checks, prints warning and continues. Sleeps for check_interval between iterations. If timeout is reached without finding a new window, prints timeout message with hourglass emoji and returns (None, None, None). This method is crucial for handling popup windows, OAuth flows, or any scenario where a new window is expected to open.",
+          "locators_used": [],
+          "calls_to": [
+            "driver.window_handles",
+            "driver.current_window_handle",
+            "driver.switch_to.window()",
+            "driver.current_url",
+            "driver.title",
+            "time.time()",
+            "time.sleep()",
+            "print()"
+          ],
+          "usage_example": "profile, driver, handle = manager.wait_for_new_window(timeout=15, check_interval=0.5)",
+          "belongs_to_class": "MultiBrowserManager",
+          "lines_of_code": 48
+        },
+        {
+          "method_name": "find_window_by_url",
+          "method_signature": "def find_window_by_url(self, target_url: str, partial_match: bool = True) -> Tuple[Optional[str], Optional[webdriver.Chrome], Optional[str]]",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "target_url",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "URL or URL part to search for"
+            },
+            {
+              "name": "partial_match",
+              "type": "bool",
+              "default_value": "True",
+              "is_required": false,
+              "description": "If True, match partial URLs; if False, exact match only"
+            }
+          ],
+          "return_type": "Tuple[Optional[str], Optional[webdriver.Chrome], Optional[str]]",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Find window containing specific URL across all browsers\n        \n        Args:\n            target_url: URL or URL part to search for\n            partial_match: If True, match partial URLs; if False, exact match only\n            \n        Returns:\n            Tuple of (profile_name, driver, window_handle) or (None, None, None) if not found",
+          "method_type": "getter",
+          "what_it_does": "Searches for a window with a specific URL across all browsers and returns its details. Prints search message with magnifying glass emoji indicating whether partial or exact matching is used. Iterates through all browsers, saving the original window handle for each. For each browser, iterates through all window handles, switches to each window, and gets its current_url. Determines if there is a match: if partial_match is True, checks if target_url (case-insensitive) is contained in current_url (case-insensitive); if partial_match is False, checks if target_url equals current_url (both case-insensitive). If a match is found, prints success message with checkmark emoji showing browser name and URL, sets self.current_browser to this browser, and returns tuple of (profile_name, driver, window_handle). If no match in a browser, restores the original window before checking next browser. If any error occurs, prints warning, attempts to restore original window, and continues. If no match is found in any browser, prints error message with X emoji and returns (None, None, None). This method provides immediate URL-based window finding without waiting.",
+          "locators_used": [],
+          "calls_to": [
+            "driver.current_window_handle",
+            "driver.window_handles",
+            "driver.switch_to.window()",
+            "driver.current_url",
+            "print()"
+          ],
+          "usage_example": "profile, driver, handle = manager.find_window_by_url('example.com', partial_match=True)",
+          "belongs_to_class": "MultiBrowserManager",
+          "lines_of_code": 35
+        },
+        {
+          "method_name": "wait_for_window_with_url",
+          "method_signature": "def wait_for_window_with_url(self, target_url: str, timeout: int = 10, partial_match: bool = True, check_interval: float = 0.5) -> Tuple[Optional[str], Optional[webdriver.Chrome], Optional[str]]",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "target_url",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "URL or URL part to wait for"
+            },
+            {
+              "name": "timeout",
+              "type": "int",
+              "default_value": "10",
+              "is_required": false,
+              "description": "Maximum time to wait in seconds"
+            },
+            {
+              "name": "partial_match",
+              "type": "bool",
+              "default_value": "True",
+              "is_required": false,
+              "description": "If True, match partial URLs; if False, exact match only"
+            },
+            {
+              "name": "check_interval",
+              "type": "float",
+              "default_value": "0.5",
+              "is_required": false,
+              "description": "How often to check in seconds"
+            }
+          ],
+          "return_type": "Tuple[Optional[str], Optional[webdriver.Chrome], Optional[str]]",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Wait for a window with specific URL to appear\n        \n        Args:\n            target_url: URL or URL part to wait for\n            timeout: Maximum time to wait in seconds\n            partial_match: If True, match partial URLs; if False, exact match only\n            check_interval: How often to check in seconds\n            \n        Returns:\n            Tuple of (profile_name, driver, window_handle) or (None, None, None) if timeout",
+          "method_type": "waiter",
+          "what_it_does": "Waits for a window with a specific URL to appear across all browsers within a timeout period. Prints waiting message with magnifying glass emoji showing the target URL and match type. Records start time using time.time(). Enters a loop that continues while elapsed time is less than timeout. In each iteration, calls self.find_window_by_url(target_url, partial_match) to search for the window. If result[0] is not None (meaning a match was found), immediately returns the result tuple containing (profile_name, driver, window_handle). If no match found, sleeps for check_interval seconds before next check. If timeout is reached without finding a match, prints timeout message with hourglass emoji showing the target URL and match type, and returns (None, None, None). This method combines the find functionality with polling and timeout logic, useful for waiting for redirects, page loads, or dynamically opened windows.",
+          "locators_used": [],
+          "calls_to": [
+            "self.find_window_by_url()",
+            "time.time()",
+            "time.sleep()",
+            "print()"
+          ],
+          "usage_example": "profile, driver, handle = manager.wait_for_window_with_url('dashboard', timeout=20, partial_match=True)",
+          "belongs_to_class": "MultiBrowserManager",
+          "lines_of_code": 18
+        },
+        {
+          "method_name": "close_browser",
+          "method_signature": "def close_browser(self, browser_name: str)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "browser_name",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "Name of the browser to close"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Close specific browser",
+          "method_type": "teardown",
+          "what_it_does": "Closes a specific browser and removes it from the manager's registry. Checks if browser_name exists in self.browsers. If it exists, calls quit() on the browser's driver to close all windows and end the WebDriver session. Deletes the browser entry from self.browsers dictionary. If the closed browser was the current browser (self.current_browser == browser_name), sets self.current_browser to None. Prints success message with checkmark emoji showing the browser name. If any exception occurs during closing, prints error message with X emoji showing the browser name and error details. This method provides clean shutdown of individual browsers.",
+          "locators_used": [],
+          "calls_to": [
+            "self.browsers[browser_name]['driver'].quit()",
+            "print()"
+          ],
+          "usage_example": "manager.close_browser('main_session')",
+          "belongs_to_class": "MultiBrowserManager",
+          "lines_of_code": 10
+        },
+        {
+          "method_name": "close_all",
+          "method_signature": "def close_all(self)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Close all browsers",
+          "method_type": "teardown",
+          "what_it_does": "Closes all managed browsers by iterating through the browsers dictionary and calling close_browser for each. Creates a list of all browser names using list(self.browsers.keys()) to avoid dictionary size change during iteration. For each browser name in the list, calls self.close_browser(browser_name) which handles the actual closing and cleanup. This method provides a convenient way to shut down all browsers at once, typically used in test teardown or cleanup phases.",
+          "locators_used": [],
+          "calls_to": [
+            "self.close_browser()"
+          ],
+          "usage_example": "manager.close_all()",
+          "belongs_to_class": "MultiBrowserManager",
+          "lines_of_code": 3
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This is a sophisticated multi-browser management utility that provides enterprise-grade browser orchestration capabilities. It supports three browser creation modes: remote debugging (connecting to existing Chrome instances), incognito mode (private browsing), and normal mode (with extensive automation detection suppression). The class maintains a registry of all browsers with rich metadata including driver instances, window handles, tab indices, and browser types. Key features include OS-specific window management (Windows/macOS/Linux), intelligent window state detection (minimized/hidden/off-screen/visible), URL-based window finding with partial or exact matching, waiting for new windows or specific URLs with configurable timeouts, and comprehensive browser lifecycle management. The bring_to_foreground method uses multiple strategies including Selenium window operations, OS-specific commands (PowerShell/osascript/wmctrl), and JavaScript focus to ensure reliable window activation. This class is essential for complex test scenarios requiring multiple browser contexts, parallel execution, or cross-browser workflows. All methods include extensive error handling and informative console output with emoji indicators for easy debugging."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/test_case_execute.py",
+      "file_name": "test_case_execute.py",
+      "file_extension": ".py",
+      "file_size_bytes": 2961,
+      "language": "Python",
+      "file_category": "test_script",
+      "file_purpose": "Pytest test execution script that serves as the main entry point for running YAML-defined test cases. Configures test environment, initializes browser and test executor, sets up global variables, loads YAML test flow, and executes the test flow with result tracking. Integrates with MultiBrowserManager for browser management and YamlStepExecutor for test step execution.",
+      "imports": [
+        {
+          "import_statement": "import logging",
+          "module": "logging",
+          "imported_names": [
+            "logging"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import os",
+          "module": "os",
+          "imported_names": [
+            "os"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import pytest",
+          "module": "pytest",
+          "imported_names": [
+            "pytest"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import sys",
+          "module": "sys",
+          "imported_names": [
+            "sys"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import yaml",
+          "module": "yaml",
+          "imported_names": [
+            "yaml"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from datetime import datetime",
+          "module": "datetime",
+          "imported_names": [
+            "datetime"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from selenium import webdriver",
+          "module": "selenium",
+          "imported_names": [
+            "webdriver"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from selenium.webdriver.chrome.options import Options",
+          "module": "selenium.webdriver.chrome.options",
+          "imported_names": [
+            "Options"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from config_loader import load_config, get_printers_by_description",
+          "module": "config_loader",
+          "imported_names": [
+            "load_config",
+            "get_printers_by_description"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from teststep_processor import YamlStepExecutor",
+          "module": "teststep_processor",
+          "imported_names": [
+            "YamlStepExecutor"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from multibrowsermanager import MultiBrowserManager",
+          "module": "multibrowsermanager",
+          "imported_names": [
+            "MultiBrowserManager"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from conftest import yaml_data",
+          "module": "conftest",
+          "imported_names": [
+            "yaml_data"
+          ],
+          "is_external": false,
+          "is_internal": true
+        }
+      ],
+      "classes": [],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "driver",
+          "method_signature": "@pytest.fixture(scope=\"module\")\ndef driver()",
+          "parameters": [],
+          "return_type": null,
+          "decorators": [
+            "@pytest.fixture(scope=\"module\")"
+          ],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "fixture",
+          "what_it_does": "Pytest fixture with module scope that creates and manages a browser instance for the entire test module. Creates a MultiBrowserManager instance stored in the global manager variable. Calls manager.create_normal_browser with profile name 'instantink' and no user_data_dir to create a normal Chrome browser instance. If browser creation fails (driver is None), logs an error message about checking Chrome profile folder and returns without yielding. If successful, yields the driver instance to the test function. After the test completes, the fixture cleanup phase calls driver.quit() to close the browser and clean up resources. This fixture ensures a single browser instance is shared across all tests in the module and is properly cleaned up after all tests complete.",
+          "locators_used": [],
+          "calls_to": [
+            "MultiBrowserManager()",
+            "manager.create_normal_browser()",
+            "logging.error()",
+            "driver.quit()"
+          ],
+          "usage_example": "def test_something(driver):\n    driver.get('https://example.com')",
+          "belongs_to_class": null,
+          "lines_of_code": 10
+        },
+        {
+          "method_name": "test_case_execute",
+          "method_signature": "def test_case_execute(yaml_data, yaml_file_path, driver)",
+          "parameters": [
+            {
+              "name": "yaml_data",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "YAML test case data loaded from conftest fixture"
+            },
+            {
+              "name": "yaml_file_path",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Path to the YAML test case file"
+            },
+            {
+              "name": "driver",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Browser driver instance from the driver fixture"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Test the execution of the flow using the FlowController class.",
+          "method_type": "test_script",
+          "what_it_does": "Main test function that executes a YAML-defined test case flow. Logs the application name 'hp-ai-instant-services'. Sets printer_description to 'out_of_trial_period' and retrieves the first matching printer's serial number using get_printers_by_description from config. Logs the demo printer information. Logs test execution start message. Creates a YamlStepExecutor instance passing the global manager, driver, METADATA_FILEPATH from config, and initial page 'instantink/Home'. Creates a trace folder path by combining the log file directory with the YAML filename (without extension) and current timestamp in format dd_mm_yyyy_HH_MM_SS. Creates the trace folder using os.makedirs with exist_ok=True. Calls executor.set_variables to set global variables including URL, COUNTRY, LANGUAGE, USERNAME, PASSWORD from config, REFERENCE_IMAGE_PATH, SELECTED_PRINTER from executor.get_selected_printer, TMP_FOLDER, TRACE_FOLDER, CURRENT_TIME as datetime.now(), and LARGE_WAIT converted to seconds. In a try block, logs test execution begin, assigns yaml_data to flow variable, prints the YAML contents using yaml.dump with indent 2, constructs flow_result path as trace_folder + YAML filename with .csv extension, and calls executor.execute_flow(flow, flow_result) to run the test. If any exception occurs, logs error message with exception details. This function orchestrates the complete test execution lifecycle from setup through execution to result capture.",
+          "locators_used": [],
+          "calls_to": [
+            "logging.info()",
+            "get_printers_by_description()",
+            "YamlStepExecutor()",
+            "os.path.join()",
+            "os.path.dirname()",
+            "os.path.splitext()",
+            "os.path.basename()",
+            "datetime.now()",
+            "os.makedirs()",
+            "executor.set_variables()",
+            "executor.get_selected_printer()",
+            "yaml.dump()",
+            "executor.execute_flow()",
+            "logging.error()"
+          ],
+          "usage_example": "pytest test_case_execute.py --yaml-file=test_case.yaml",
+          "belongs_to_class": null,
+          "lines_of_code": 38
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [
+        {
+          "constant_name": "config",
+          "constant_value": "load_config(r\"config.yaml\")",
+          "constant_type": "dict",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "METADATA_FILEPATH",
+          "constant_value": "config[\"metadata\"][\"controls\"]",
+          "constant_type": "str",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "REFERENCE_IMAGES",
+          "constant_value": "config[\"metadata\"][\"reference_images\"]",
+          "constant_type": "str",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "URL",
+          "constant_value": "config[\"login\"][\"url\"]",
+          "constant_type": "str",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "USERNAME",
+          "constant_value": "config[\"login\"][\"username\"]",
+          "constant_type": "str",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "PASSWORD",
+          "constant_value": "config[\"login\"][\"password\"]",
+          "constant_type": "str",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "COUNTRY",
+          "constant_value": "config[\"locale\"][\"country\"]",
+          "constant_type": "str",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "LANGUAGE",
+          "constant_value": "config[\"locale\"][\"language\"]",
+          "constant_type": "str",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "LARGE_WAIT",
+          "constant_value": "int(config[\"large_wait\"]) * 60",
+          "constant_type": "int",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "manager",
+          "constant_value": "MultiBrowserManager()",
+          "constant_type": "MultiBrowserManager",
+          "scope": "module_level",
+          "defined_in_class": null
+        }
+      ],
+      "analysis_notes": "This is a pytest test script that serves as the main execution entry point for YAML-based test cases. It follows the pytest fixture pattern with a module-scoped driver fixture that creates a single browser instance shared across all tests. The test_case_execute function is the actual test that receives yaml_data and yaml_file_path from conftest fixtures and the driver from the local fixture. The script loads configuration from config.yaml at module level and extracts commonly used values as module-level constants. It creates a global MultiBrowserManager instance that is used by the driver fixture. The test function creates a timestamped trace folder for each test execution to store screenshots and results. It uses YamlStepExecutor to process and execute YAML test steps. The executor is initialized with metadata filepath and starting page. Global variables are set on the executor including credentials, URLs, paths, and runtime values like current time. The test flow is executed and results are saved to a CSV file in the trace folder. Error handling logs exceptions but does not re-raise them, allowing test execution to continue. This architecture separates test definition (YAML) from test execution (Python), enabling non-programmers to write tests in YAML while leveraging robust Python execution infrastructure."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/testflow.yaml",
+      "file_name": "testflow.yaml",
+      "file_extension": ".yaml",
+      "file_size_bytes": 666,
+      "language": "YAML",
+      "file_category": "test_suite",
+      "file_purpose": "Test suite configuration file that defines batches of regression test cases to be executed. Organizes test cases into logical groups with execution order control. Used by the test orchestration system to determine which test case files to run and in what sequence.",
+      "imports": [],
+      "classes": [],
+      "locators": [],
+      "functions": [],
+      "inner_classes": [],
+      "variables_and_constants": [
+        {
+          "constant_name": "spec_version",
+          "constant_value": "1.0",
+          "constant_type": "str",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "test_case",
+          "constant_value": "Regression Tests",
+          "constant_type": "str",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "version",
+          "constant_value": "1.0",
+          "constant_type": "str",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "description",
+          "constant_value": "Test cases related to Regression tests",
+          "constant_type": "str",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "batches",
+          "constant_value": "[{name: regression_01_status_card, execution: sequential, files: [test_cases/overview_status_card.yaml, test_cases/overview_printer_details_modal.yaml, test_cases/overview_status_card_monthly_summary.yaml, test_cases/overview_status_card_view_printer_history.yaml]}, {name: regression_01_plan_details_card, execution: sequential, files: [test_cases/overview_plan_details_card_enroll_with_billing_change_link.yaml, test_cases/contact_expert_support.yaml]}]",
+          "constant_type": "list",
+          "scope": "module_level",
+          "defined_in_class": null
+        }
+      ],
+      "analysis_notes": "This YAML file defines a test suite structure for regression testing. It uses YAML 1.2 specification. The file contains metadata (spec_version, test_case name, version, description) and a batches array that organizes test cases into execution groups. Each batch has a name, execution mode (sequential), and a list of test case file paths. The first batch 'regression_01_status_card' contains 4 test case files related to overview status card functionality. The second batch 'regression_01_plan_details_card' contains 2 test case files related to plan details and support. The 'execution: sequential' setting indicates tests within each batch should run one after another rather than in parallel. This file would be parsed by a test orchestrator that reads the batch definitions and executes the referenced test case YAML files in the specified order. The file paths are relative paths pointing to test_cases directory. This structure allows for organizing large test suites into manageable batches and controlling execution flow."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+      "file_name": "teststep_processor.py",
+      "file_extension": ".py",
+      "file_size_bytes": 54130,
+      "language": "Python",
+      "file_category": "core_module",
+      "file_purpose": "Core test step processor and executor that interprets and executes YAML-defined test steps. Provides a comprehensive framework for loading YAML test definitions, managing UI element metadata, executing various action types (click, set, verify, navigate, scroll, etc.), handling variable substitution, integrating with AI vision models for visual verification, and tracking test execution results. Serves as the main execution engine for the YAML-based test automation framework.",
+      "imports": [
+        {
+          "import_statement": "import base64",
+          "module": "base64",
+          "imported_names": [
+            "base64"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import json",
+          "module": "json",
+          "imported_names": [
+            "json"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import logging",
+          "module": "logging",
+          "imported_names": [
+            "logging"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import os",
+          "module": "os",
+          "imported_names": [
+            "os"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import pandas as pd",
+          "module": "pandas",
+          "imported_names": [
+            "pd"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import re",
+          "module": "re",
+          "imported_names": [
+            "re"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import shutil",
+          "module": "shutil",
+          "imported_names": [
+            "shutil"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import time as time_module",
+          "module": "time",
+          "imported_names": [
+            "time_module"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import yaml",
+          "module": "yaml",
+          "imported_names": [
+            "yaml"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from pathlib import Path",
+          "module": "pathlib",
+          "imported_names": [
+            "Path"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from typing import Dict, List, Any",
+          "module": "typing",
+          "imported_names": [
+            "Dict",
+            "List",
+            "Any"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from datetime import datetime",
+          "module": "datetime",
+          "imported_names": [
+            "datetime"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from selenium import webdriver",
+          "module": "selenium",
+          "imported_names": [
+            "webdriver"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from selenium.webdriver.common.by import By",
+          "module": "selenium.webdriver.common.by",
+          "imported_names": [
+            "By"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from selenium.webdriver.support.ui import WebDriverWait, Select",
+          "module": "selenium.webdriver.support.ui",
+          "imported_names": [
+            "WebDriverWait",
+            "Select"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from selenium.webdriver.support import expected_conditions as EC",
+          "module": "selenium.webdriver.support",
+          "imported_names": [
+            "EC"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from selenium.webdriver.common.action_chains import ActionChains",
+          "module": "selenium.webdriver.common.action_chains",
+          "imported_names": [
+            "ActionChains"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException, TimeoutException, StaleElementReferenceException",
+          "module": "selenium.common.exceptions",
+          "imported_names": [
+            "NoSuchElementException",
+            "ElementClickInterceptedException",
+            "TimeoutException",
+            "StaleElementReferenceException"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from selenium.webdriver.common.keys import Keys",
+          "module": "selenium.webdriver.common.keys",
+          "imported_names": [
+            "Keys"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from openai import AzureOpenAI",
+          "module": "openai",
+          "imported_names": [
+            "AzureOpenAI"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from config_loader import load_config",
+          "module": "config_loader",
+          "imported_names": [
+            "load_config"
+          ],
+          "is_external": false,
+          "is_internal": true
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "YamlStepExecutor",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": "A flexible test step executor that can handle various action types\n    and dynamic step configurations from YAML files.",
+          "class_purpose": "Core test execution engine that processes YAML test definitions and executes test steps. Manages UI element metadata loaded from JSON files, handles variable substitution in test data, executes various action types including click, set, verify, navigate, scroll, select, and custom actions. Integrates with MultiBrowserManager for multi-browser support, Selenium WebDriver for browser automation, and Azure OpenAI for AI-powered visual verification. Maintains execution logs, handles iframe switching, supports multiple element locator strategies with fallback, and generates CSV reports of test execution results. Provides methods for loading YAML from files or strings, managing control metadata, performing element interactions with retry logic, and tracking test flow execution.",
+          "how_to_import": "from teststep_processor import YamlStepExecutor",
+          "how_to_instantiate": "executor = YamlStepExecutor(manager, driver, metadata_filepath='path/to/metadata', page='instantink/Home')",
+          "total_methods": 35,
+          "total_locators": 0
+        }
+      ],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "__init__",
+          "method_signature": "def __init__(self, manager, driver, metadata_filepath=None, page='instantink/Auth_controls')",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "manager",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "MultiBrowserManager instance for managing multiple browsers"
+            },
+            {
+              "name": "driver",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Selenium WebDriver instance for browser automation"
+            },
+            {
+              "name": "metadata_filepath",
+              "type": null,
+              "default_value": "None",
+              "is_required": false,
+              "description": "Path to directory containing JSON metadata files with UI element definitions"
+            },
+            {
+              "name": "page",
+              "type": null,
+              "default_value": "'instantink/Auth_controls'",
+              "is_required": false,
+              "description": "Initial page identifier in format 'module/page_name' to load metadata for"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": true,
+          "docstring": null,
+          "method_type": "constructor",
+          "what_it_does": "Initializes the YamlStepExecutor with browser manager, driver, and metadata configuration. Sets self.current_page to None, initializes empty execution_log list, stores the manager and driver references. Creates empty control_map dictionary to store UI element metadata, stores metadatapath, and initializes empty variables and metadata dictionaries. Populates self.metadata dictionary with module name mappings: 'auth_controls' maps to 'auth_controls', 'hpsmart' to 'hpsmart', 'instantink' to 'instantink', 'oss' to 'oss_emulator', 'emulate' to 'oss_emulator'. Creates iframe_modules list containing 'billing' to track which modules use iframes. If metadata_filepath is provided, calls self.load_json_metadata(page) to load the initial page's UI element metadata from JSON. This constructor prepares the executor to process YAML test steps with access to browser control, element metadata, and variable management.",
+          "locators_used": [],
+          "calls_to": [
+            "self.load_json_metadata()"
+          ],
+          "usage_example": "executor = YamlStepExecutor(manager, driver, metadata_filepath='/path/to/metadata', page='instantink/Home')",
+          "belongs_to_class": "YamlStepExecutor",
+          "lines_of_code": 18
+        },
+        {
+          "method_name": "load_yaml_file",
+          "method_signature": "def load_yaml_file(self, file_path: str) -> Dict[str, Any]",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "file_path",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "Path to YAML file to load"
+            }
+          ],
+          "return_type": "Dict[str, Any]",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Load and parse YAML file.",
+          "method_type": "utility",
+          "what_it_does": "Loads and parses a YAML file from the filesystem. Opens the file at file_path with UTF-8 encoding in read mode. Uses yaml.safe_load to parse the file content into a Python dictionary. Returns the parsed dictionary, or an empty dictionary if the file is empty or contains only whitespace. If the file is not found, raises FileNotFoundError with a descriptive message including the file path. If YAML parsing fails due to syntax errors, raises ValueError with the YAML error details. This method is used to load test case definitions, test flow configurations, and other YAML-based test data.",
+          "locators_used": [],
+          "calls_to": [
+            "open()",
+            "yaml.safe_load()"
+          ],
+          "usage_example": "yaml_data = executor.load_yaml_file('test_cases/login_test.yaml')",
+          "belongs_to_class": "YamlStepExecutor",
+          "lines_of_code": 8
+        },
+        {
+          "method_name": "load_yaml_string",
+          "method_signature": "def load_yaml_string(self, yaml_string: str) -> Dict[str, Any]",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "yaml_string",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "YAML content as a string"
+            }
+          ],
+          "return_type": "Dict[str, Any]",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Load and parse YAML from string.",
+          "method_type": "utility",
+          "what_it_does": "Loads and parses YAML content from a string. Uses yaml.safe_load to parse the yaml_string into a Python dictionary. Calls self.validate_yaml_structure(data) to validate the parsed data structure (note: validate_yaml_structure method is called but not defined in this file, suggesting it may be inherited or this is a bug). Returns the parsed and validated dictionary. If YAML parsing fails due to syntax errors, raises ValueError with the YAML error details. This method is useful for loading YAML content that is generated dynamically or received from external sources rather than files.",
+          "locators_used": [],
+          "calls_to": [
+            "yaml.safe_load()",
+            "self.validate_yaml_structure()"
+          ],
+          "usage_example": "yaml_data = executor.load_yaml_string('flow:\\n  steps:\\n    - action: click')",
+          "belongs_to_class": "YamlStepExecutor",
+          "lines_of_code": 7
+        },
+        {
+          "method_name": "load_json_metadata",
+          "method_signature": "def load_json_metadata(self, page)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Page identifier in format 'module/page_name' (e.g., 'instantink/Home')"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Load the JSON metadata file into the control map.\n        :param json_file: Path to the JSON file.",
+          "method_type": "utility",
+          "what_it_does": "Loads UI element metadata from a JSON file into the control_map dictionary. Returns immediately if page is None or empty. Splits the page parameter by '/' to extract base module name and file name. Looks up the folder name in self.metadata dictionary using the base module name. Constructs the full JSON file path by joining metadatapath, folder name, and file name with '.json' extension. Opens and reads the JSON file, parsing it with json.load into self.control_map dictionary. Logs success message with the JSON file path. If the file is not found, logs error message. If JSON parsing fails, logs error message. This method dynamically loads element metadata for different pages as tests navigate through the application, allowing the executor to find and interact with elements on each page.",
+          "locators_used": [],
+          "calls_to": [
+            "os.path.join()",
+            "open()",
+            "json.load()",
+            "logger.info()",
+            "logger.error()"
+          ],
+          "usage_example": "executor.load_json_metadata('instantink/Dashboard')",
+          "belongs_to_class": "YamlStepExecutor",
+          "lines_of_code": 17
+        },
+        {
+          "method_name": "get_control",
+          "method_signature": "def get_control(self, name)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "name",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Text or label of the UI control to find"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Get the control ID for the given name from the loaded JSON metadata.\n        :param name: The name or text of the control.\n        :return: Control ID if found, None otherwise.",
+          "method_type": "getter",
+          "what_it_does": "Searches for a UI control in the loaded metadata by matching its text or label_text. Iterates through all controls in self.control_map['interactive_elements'] array. For each control, checks if the control's 'text' field equals the provided name, or if the control's 'label_text' field equals the provided name. Returns the entire control dictionary if a match is found. Returns None if no matching control is found. This method is the primary way to look up element metadata by visible text or label, enabling test steps to reference elements by their user-visible names rather than technical selectors.",
+          "locators_used": [],
+          "calls_to": [],
+          "usage_example": "control = executor.get_control('Login Button')",
+          "belongs_to_class": "YamlStepExecutor",
+          "lines_of_code": 5
+        },
+        {
+          "method_name": "click_control",
+          "method_signature": "def click_control(self, control, multiple, timeout: int = 10)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "control",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Dictionary with element metadata including id, name, css_selectors, xpath_selectors, aria_label, data_testid, classes, text, tag_name"
+            },
+            {
+              "name": "multiple",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Whether to click multiple matching elements or just the first"
+            },
+            {
+              "name": "timeout",
+              "type": "int",
+              "default_value": "10",
+              "is_required": false,
+              "description": "Maximum time to wait for elements in seconds"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Attempts to click a button based on metadata.\n        Supports id, css, xpath, text, aria-label, name, etc.\n        Falls back progressively until click succeeds.\n          \n        :param control: Dictionary with element metadata (e.g., id, name, css selectors, etc.).  \n        :param multiple: Whether to click multiple matching elements or just the first.  \n        :param timeout: Maximum time to wait for elements (default: 10 seconds).  \n        :return: True if an element was clicked, False otherwise.",
+          "method_type": "action",
+          "what_it_does": "Attempts to click UI elements using multiple locator strategies with progressive fallback. Validates that control is a non-empty dictionary, logs error and returns False if invalid. Builds a strategies list prioritizing XPath selectors first (dynamically added from control['xpath_selectors'] array), then CSS selectors (from control['css_selectors'] array), then other strategies including id, name, aria_label, data_testid, class_name, and partial_link_text. Each strategy is a dictionary with 'name' and 'locator' tuple (By type, selector value). Iterates through strategies, skipping any with None or invalid locators. For each valid strategy, logs the attempt and calls self.do_clicks(strategy['locator'], multiple, timeout) to perform the click. If do_clicks returns True indicating successful click, logs success message and returns True immediately. If all strategies fail, logs warning and returns False. This comprehensive fallback approach maximizes the chance of successfully clicking elements even when some selectors are outdated or page structure changes.",
+          "locators_used": [],
+          "calls_to": [
+            "logger.error()",
+            "logger.warning()",
+            "logger.info()",
+            "self.do_clicks()"
+          ],
+          "usage_example": "success = executor.click_control(control_dict, multiple=False, timeout=10)",
+          "belongs_to_class": "YamlStepExecutor",
+          "lines_of_code": 45
+        },
+        {
+          "method_name": "do_clicks",
+          "method_signature": "def do_clicks(self, strategy, multiple, timeout, delay=0.10)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "strategy",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Locator strategy tuple (By type, selector value)"
+            },
+            {
+              "name": "multiple",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Whether to click multiple elements or just the first"
+            },
+            {
+              "name": "timeout",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Maximum wait time for elements"
+            },
+            {
+              "name": "delay",
+              "type": null,
+              "default_value": "0.10",
+              "is_required": false,
+              "description": "Delay in seconds between multiple clicks"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Attempts to click one or more elements located by the given strategy.  \n            \n            :param strategy: Locator strategy (e.g., By.ID, By.CLASS_NAME, etc.)  \n            :param multiple: Whether multiple elements should be clicked  \n            :param timeout: Maximum time to wait for elements to become clickable  \n            :return: True if at least one element was clicked, False otherwise",
+          "method_type": "action",
+          "what_it_does": "Performs the actual clicking of elements located by a specific strategy. Initializes result to True, clicked_any to False, and clicked_count to 0. Uses WebDriverWait with the specified timeout to wait for presence_of_all_elements_located matching the strategy. If no elements are found, logs debug message and returns False. Logs the count of found elements. Iterates through each element, logging its display and enabled state. For each element, calls self._try_click_element(element, strategy) which attempts the click and handles exceptions. If click fails, logs warning and continues to next element. If click succeeds, increments clicked_count, sets clicked_any to True, logs success. If multiple is False, breaks the loop after first successful click. If multiple is True, calls self.do_sleep(delay) to wait before clicking next element. After all elements processed, logs total clicked count. Returns True if at least one element was clicked (clicked_any and result both True), False otherwise. Handles TimeoutException by logging warning and returning False. Handles other exceptions by logging error and returning False. This method provides robust element clicking with detailed logging and error handling.",
+          "locators_used": [],
+          "calls_to": [
+            "WebDriverWait()",
+            "EC.presence_of_all_elements_located()",
+            "self._try_click_element()",
+            "self.do_sleep()",
+            "logger.debug()",
+            "logger.info()",
+            "logger.warning()",
+            "logger.error()"
+          ],
+          "usage_example": "success = executor.do_clicks((By.ID, 'submit-btn'), multiple=False, timeout=10)",
+          "belongs_to_class": "YamlStepExecutor",
+          "lines_of_code": 48
+        },
+        {
+          "method_name": "_try_click_element",
+          "method_signature": "def _try_click_element(self, element, strategy)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "element",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "WebElement to click"
+            },
+            {
+              "name": "strategy",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Locator strategy used to find the element (for logging)"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Attempts to click a single element and handles exceptions.  \n    \n        :param element: The WebElement to click  \n        :param strategy: The strategy used to locate the element (for logging purposes)  \n        :return: True if the click was successful, False otherwise",
+          "method_type": "action",
+          "what_it_does": "Attempts to click a single WebElement with exception handling. Checks if element is displayed and enabled using element.is_displayed() and element.is_enabled(). If both conditions are true, calls element.click() and returns True. If StaleElementReferenceException occurs (element no longer attached to DOM), logs warning with strategy name and returns False. If any other exception occurs, logs error with strategy name and exception details, returns False. This helper method isolates click attempts with proper exception handling to prevent single element failures from stopping the entire click operation.",
+          "locators_used": [],
+          "calls_to": [
+            "element.is_displayed()",
+            "element.is_enabled()",
+            "element.click()",
+            "logger.warning()",
+            "logger.error()"
+          ],
+          "usage_example": "success = executor._try_click_element(web_element, (By.ID, 'button'))",
+          "belongs_to_class": "YamlStepExecutor",
+          "lines_of_code": 10
+        },
+        {
+          "method_name": "set_control_value",
+          "method_signature": "def set_control_value(self, control, value, timeout=10)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "control",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Dictionary with element metadata"
+            },
+            {
+              "name": "value",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Value to set in the control"
+            },
+            {
+              "name": "timeout",
+              "type": null,
+              "default_value": "10",
+              "is_required": false,
+              "description": "Maximum wait time for locating the control"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Attempts to set a value in a control based on metadata.  \n        Supports id, css, xpath, text, aria-label, name, etc.  \n        Falls back progressively until setting value succeeds.  \n        :param control: The metadata dictionary for the control.  \n        :param value: The value to set in the control.  \n        :param timeout: Maximum wait time for locating the control.",
+          "method_type": "action",
+          "what_it_does": "Sets a value in a UI control (input field or dropdown) using multiple locator strategies with fallback. Validates control is a non-empty dictionary, logs info and returns False if invalid. Initializes empty strategies list. Creates basic_strategies list with id, name, aria_label, data_testid, class_name, and partial_link_text locators. Dynamically adds all CSS selectors from control['css_selectors'] array to basic_strategies. Dynamically adds all XPath selectors from control['xpath_selectors'] array to basic_strategies. Filters out strategies with None locators and adds to strategies list. Additionally adds all XPath selectors again (appears to be duplicate logic). Iterates through strategies, skipping those with null locators. For each strategy, uses WebDriverWait to wait for presence_of_element_located. If element is found and its tag_name is 'select', creates a Select object and attempts to select by visible text first, falling back to select by value if that fails, logs success and returns True. If element is not a select, calls element.clear() to clear existing content, then element.send_keys(str(value)) to enter the new value, returns True. If NoSuchElementException, ElementClickInterceptedException, or TimeoutException occurs, logs error and continues to next strategy. If any other exception occurs, logs error and continues. If all strategies fail, logs error and returns False. This method handles both text inputs and dropdown selects with comprehensive fallback logic.",
+          "locators_used": [],
+          "calls_to": [
+            "logger.debug()",
+            "logger.info()",
+            "logger.error()",
+            "WebDriverWait()",
+            "EC.presence_of_element_located()",
+            "Select()",
+            "select.select_by_visible_text()",
+            "select.select_by_value()",
+            "element.clear()",
+            "element.send_keys()"
+          ],
+          "usage_example": "success = executor.set_control_value(control_dict, 'test@example.com', timeout=10)",
+          "belongs_to_class": "YamlStepExecutor",
+          "lines_of_code": 55
+        },
+        {
+          "method_name": "set_variables",
+          "method_signature": "def set_variables(self, **kwargs)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "kwargs",
+              "type": null,
+              "default_value": null,
+              "is_required": false,
+              "description": "Variable name-value pairs to set"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Sets multiple variables in the executor's variables dictionary for use in test steps. Iterates through all keyword arguments, logging each key-value pair. Updates self.variables dictionary with all provided kwargs using dict.update(). Returns True. This method is used to set global variables like URLs, credentials, paths, and runtime values that can be referenced in YAML test steps using ${variable_name} syntax.",
+          "locators_used": [],
+          "calls_to": [
+            "logger.info()",
+            "self.variables.update()"
+          ],
+          "usage_example": "executor.set_variables(URL='https://example.com', USERNAME='testuser', PASSWORD='pass123')",
+          "belongs_to_class": "YamlStepExecutor",
+          "lines_of_code": 6
+        },
+        {
+          "method_name": "substitute_variables",
+          "method_signature": "def substitute_variables(self, text)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "text",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Text containing variable placeholders in ${variable_name} format"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Replace ${variable} with actual values",
+          "method_type": "utility",
+          "what_it_does": "Replaces variable placeholders in text with their actual values from the variables dictionary. Returns text unchanged if it is not a string. Logs the current variables dictionary. Defines inner function replace_var that takes a regex match object. If the variable name contains a dot (e.g., temp_id.status), splits on the dot to get variable name and key, retrieves the variable value, and if it is a dictionary returns the value of the specified key, otherwise returns the original match. If no dot, retrieves the variable value from self.variables and returns it as a string, or returns the original match if variable not found. Uses re.sub with pattern r'\\$\\{([^}]+)\\}' to find all ${...} placeholders and replace them using the replace_var function. Returns the text with all variables substituted. This method enables dynamic test data by allowing YAML steps to reference variables set at runtime.",
+          "locators_used": [],
+          "calls_to": [
+            "logger.info()",
+            "logger.debug()",
+            "re.sub()",
+            "self.variables.get()"
+          ],
+          "usage_example": "url = executor.substitute_variables('${BASE_URL}/login')",
+          "belongs_to_class": "YamlStepExecutor",
+          "lines_of_code": 22
+        },
+        {
+          "method_name": "take_screenshot",
+          "method_signature": "def take_screenshot(self, filename: str = \"page.png\")",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "filename",
+              "type": "str",
+              "default_value": "\"page.png\"",
+              "is_required": false,
+              "description": "Path where screenshot should be saved"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Captures a screenshot of the current browser page and saves it to a file. Calls self.driver.save_screenshot(filename) to save the screenshot. Returns the filename. This method is used for visual verification, debugging, and creating evidence of test execution.",
+          "locators_used": [],
+          "calls_to": [
+            "self.driver.save_screenshot()"
+          ],
+          "usage_example": "screenshot_path = executor.take_screenshot(filename='/tmp/login_page.png')",
+          "belongs_to_class": "YamlStepExecutor",
+          "lines_of_code": 2
+        },
+        {
+          "method_name": "run_ai_task",
+          "method_signature": "def run_ai_task(self, reference, test, prompt)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "reference",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Path to reference image file or None"
+            },
+            {
+              "name": "test",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Path to test image file"
+            },
+            {
+              "name": "prompt",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Text prompt describing the verification task"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "api_call",
+          "what_it_does": "Performs AI-powered visual verification using Azure OpenAI vision model. Retrieves Azure endpoint, deployment name, API key, and API version from config. Initializes result to None. Creates AzureOpenAI client with the configuration. If reference image path is provided, opens and reads the file, encodes it to base64 string. If test image path is provided, opens and reads the file, encodes it to base64 string. Logs the prompt being used. Constructs messages array for the API call: if no reference image, creates a single user message with the prompt text and test image; if reference image exists, creates a user message with prompt text, reference image, and test image. Calls client.chat.completions.create with the deployment model, messages array, max_tokens=6000, temperature=0, top_p=1, frequency_penalty=0, presence_penalty=0, and seed=12345 for reproducibility. Checks if response is streaming or non-streaming. If streaming, calls self.handle_streaming_response(response) to collect the result. If non-streaming, extracts result from response.choices[0].message.content. Cleans the result by stripping backticks, 'json', and whitespace. Parses the cleaned result as JSON using json.loads. Logs the parsed data. Returns the data dictionary. This method enables AI-powered visual verification where the model analyzes screenshots and returns structured validation results.",
+          "locators_used": [],
+          "calls_to": [
+            "config['llm']",
+            "AzureOpenAI()",
+            "open()",
+            "base64.b64encode()",
+            "logger.info()",
+            "client.chat.completions.create()",
+            "self.handle_streaming_response()",
+            "json.loads()"
+          ],
+          "usage_example": "result = executor.run_ai_task(reference='/path/to/reference.png', test='/path/to/test.png', prompt='Verify login button is visible')",
+          "belongs_to_class": "YamlStepExecutor",
+          "lines_of_code": 65
+        },
+        {
+          "method_name": "execute_click_action",
+          "method_signature": "def execute_click_action(self, step: Dict[str, Any]) -> None",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "step",
+              "type": "Dict[str, Any]",
+              "default_value": null,
+              "is_required": true,
+              "description": "Step dictionary containing action parameters"
+            }
+          ],
+          "return_type": "None",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Executes a click action on a UI element based on the step definition. Extracts element_id, label, page, text, expand, parent, and multiple parameters from the step dictionary with defaults. Initializes result to True. If page is specified, calls self.load_json_metadata(page) to load element metadata for that page. Converts multiple and expand string values to boolean. Initializes to_click to True. If expand is True, calls self.navigation_element_expanded(text) to check if the navigation element is already expanded, sets to_click to the opposite (click only if not expanded). Logs the decision. If to_click is True, calls self.get_control(text) to find the control by text. If control is found, checks if it has an iframe property, and if so finds the iframe element and switches to it using driver.switch_to.frame(). Calls self.click_control(control, multiple) to perform the click. If control not found by text, tries self.get_control(label) to find by label. If found, handles iframe switching if needed and calls click_control. If neither text nor label finds the control, logs error and sets result to False. If to_click is False (element already expanded), logs that element is already expanded. Logs the click action details. Calls self.log_action('click', step) to record the action. Returns result. This method handles clicking with support for navigation element expansion detection, iframe switching, and multiple element clicking.",
+          "locators_used": [],
+          "calls_to": [
+            "self.load_json_metadata()",
+            "self.navigation_element_expanded()",
+            "self.get_control()",
+            "self.driver.find_element()",
+            "self.driver.switch_to.frame()",
+            "self.click_control()",
+            "logger.debug()",
+            "logger.info()",
+            "logger.error()",
+            "self.log_action()"
+          ],
+          "usage_example": "result = executor.execute_click_action({'action': 'click', 'page': 'instantink/Home', 'text': 'Login Button', 'multiple': 'False'})",
+          "belongs_to_class": "YamlStepExecutor",
+          "lines_of_code": 45
+        },
+        {
+          "method_name": "execute_set_action",
+          "method_signature": "def execute_set_action(self, step: Dict[str, Any]) -> None",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "step",
+              "type": "Dict[str, Any]",
+              "default_value": null,
+              "is_required": true,
+              "description": "Step dictionary containing action parameters"
+            }
+          ],
+          "return_type": "None",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Execute set/input action.",
+          "method_type": "action",
+          "what_it_does": "Executes a set/input action to enter text into a UI control. Extracts element_id, text, value, and page from step dictionary. Initializes result to True. If page is specified, calls self.load_json_metadata(page) to load metadata. If page contains 'emulate', logs context switch message and calls self.manager.switch_to_window_by_url to switch to the emulator window. Calls self.substitute_variables(value) to replace any variable placeholders in the value. Calls self.get_control(text) to find the control by text. If control is found, calls self.set_control_value(control, value) to set the value. If control not found, logs error and sets result to False. Logs the set action details including page, element_id, text, and value. Calls self.log_action('set', step) to record the action. Returns result. This method handles text input with variable substitution and window switching for emulator contexts.",
+          "locators_used": [],
+          "calls_to": [
+            "self.load_json_metadata()",
+            "logger.info()",
+            "self.manager.switch_to_window_by_url()",
+            "self.substitute_variables()",
+            "self.get_control()",
+            "self.set_control_value()",
+            "logger.error()",
+            "self.log_action()"
+          ],
+          "usage_example": "result = executor.execute_set_action({'action': 'set', 'page': 'instantink/Login', 'text': 'Username', 'value': '${USERNAME}'})",
+          "belongs_to_class": "YamlStepExecutor",
+          "lines_of_code": 20
+        },
+        {
+          "method_name": "execute_verify_action",
+          "method_signature": "def execute_verify_action(self, step: Dict[str, Any]) -> None",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "step",
+              "type": "Dict[str, Any]",
+              "default_value": null,
+              "is_required": true,
+              "description": "Step dictionary containing verification parameters"
+            }
+          ],
+          "return_type": "None",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Execute verification action.",
+          "method_type": "verification",
+          "what_it_does": "Executes a visual verification action using AI model. Extracts element_id, prompt, text, screenshot, and reference_image from step dictionary. Initializes result to True. Converts reference_image to None if it is None, 'None', or empty string, otherwise constructs full path by joining REFERENCE_IMAGE_PATH variable with the reference_image filename. Logs the reference image path. If screenshot is True, constructs tmp filename path, calls self.take_screenshot(filename) to capture the page, constructs destination filename in TRACE_FOLDER with element_id as name, copies the screenshot to trace folder using shutil.copy. Logs the screenshot paths. Formats the prompt string by substituting CURRENT_TIME variable formatted as HH:MM. Calls self.run_ai_task(reference_image, test_image, prompt) to perform AI verification and stores result. Logs the verify action details including element_id, text, and result. Calls self.log_action('verify', step) to record the action. Returns result. This method enables AI-powered visual verification with optional reference image comparison and automatic screenshot capture and archival.",
+          "locators_used": [],
+          "calls_to": [
+            "os.path.join()",
+            "logger.info()",
+            "self.take_screenshot()",
+            "shutil.copy()",
+            "self.variables['CURRENT_TIME'].strftime()",
+            "self.run_ai_task()",
+            "self.log_action()"
+          ],
+          "usage_example": "result = executor.execute_verify_action({'action': 'verify', 'id': 'verify_dashboard', 'screenshot': True, 'prompt': 'Verify dashboard is displayed', 'reference_image': 'dashboard_ref.png'})",
+          "belongs_to_class": "YamlStepExecutor",
+          "lines_of_code": 22
+        },
+        {
+          "method_name": "execute_step",
+          "method_signature": "def execute_step(self, step: Dict[str, Any]) -> None",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "step",
+              "type": "Dict[str, Any]",
+              "default_value": null,
+              "is_required": true,
+              "description": "Step dictionary containing action type and parameters"
+            }
+          ],
+          "return_type": "None",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Execute a single test step based on its action type.",
+          "method_type": "action",
+          "what_it_does": "Executes a single test step by dispatching to the appropriate action handler based on action type. Validates step is a dictionary, raises ValueError if not. Initializes result to True. Extracts action (converted to lowercase) and page from step. If page is specified, updates self.current_page. Logs execution start with action and current page. Dispatches to action-specific methods: 'click' calls execute_click_action, 'set' or 'input' calls execute_set_action, 'load_url' calls execute_load_url_action, 'select_printer' calls execute_select_printer_action, 'vscroll' calls execute_vscroll_action, 'escape' calls execute_escape_action, 'verify' calls execute_verify_action, 'refresh' calls execute_refresh_action, 'store' calls execute_store_action, 'locale' calls execute_locale_action, 'select' calls execute_select_action, any other action calls execute_custom_action. Stores the result from the action handler. Extracts sleep_time from step with default 0, substitutes variables in sleep_time, converts to int. Logs the sleep time. If sleep_time is a positive integer, calls self.do_sleep(sleep_time) to wait. Returns result. This method is the central dispatcher that routes each step to its appropriate handler and manages inter-step delays.",
+          "locators_used": [],
+          "calls_to": [
+            "logger.info()",
+            "logger.debug()",
+            "self.execute_click_action()",
+            "self.execute_set_action()",
+            "self.execute_load_url_action()",
+            "self.execute_select_printer_action()",
+            "self.execute_vscroll_action()",
+            "self.execute_escape_action()",
+            "self.execute_verify_action()",
+            "self.execute_refresh_action()",
+            "self.execute_store_action()",
+            "self.execute_locale_action()",
+            "self.execute_select_action()",
+            "self.execute_custom_action()",
+            "self.substitute_variables()",
+            "self.do_sleep()"
+          ],
+          "usage_example": "result = executor.execute_step({'action': 'click', 'page': 'instantink/Home', 'text': 'Login', 'sleep': 2})",
+          "belongs_to_class": "YamlStepExecutor",
+          "lines_of_code": 45
+        },
+        {
+          "method_name": "execute_flow",
+          "method_signature": "def execute_flow(self, yaml_data: Dict[str, Any], flow_result = None) -> None",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference"
+            },
+            {
+              "name": "yaml_data",
+              "type": "Dict[str, Any]",
+              "default_value": null,
+              "is_required": true,
+              "description": "YAML data dictionary containing the flow definition"
+            },
+            {
+              "name": "flow_result",
+              "type": null,
+              "default_value": "None",
+              "is_required": false,
+              "description": "Path to CSV file where execution results should be saved"
+            }
+          ],
+          "return_type": "None",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Execute the complete test flow.",
+          "method_type": "action",
+          "what_it_does": "Executes a complete test flow defined in YAML data. Validates that yaml_data contains 'flow' key, raises ValueError if not. Initializes empty workflow_results list. Extracts flow dictionary and steps array from yaml_data. If steps array is empty, logs message and returns. Logs flow execution start with total step count. Initializes result to True. Iterates through steps with enumeration starting at 1. For each step, wraps execution in try-except block. Logs separator line and step number. Records start_time using time_module.time(). Calls self.execute_step(step) and stores result. If exception occurs, logs error with step number and exception, calls self.log_error to record the error, and continues to next step. Records end_time and calculates duration. Appends a dictionary to workflow_results containing step_name (from step['id']), start_time formatted as string, duration_seconds rounded to 4 decimals, and status (result). After all steps, if flow_result path is provided and workflow_results is not empty, creates pandas DataFrame from workflow_results and saves to CSV using to_csv with index=False. Logs save location. Logs flow completion. Calls self.print_execution_summary() to display summary. This method orchestrates the complete test execution with timing, error handling, and result reporting.",
+          "locators_used": [],
+          "calls_to": [
+            "logger.info()",
+            "time_module.time()",
+            "self.execute_step()",
+            "logger.error()",
+            "self.log_error()",
+            "pd.DataFrame()",
+            "results_df.to_csv()",
+            "logging.info()",
+            "self.print_execution_summary()"
+          ],
+          "usage_example": "executor.execute_flow(yaml_data, flow_result='/path/to/results.csv')",
+          "belongs_to_class": "YamlStepExecutor",
+          "lines_of_code": 45
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [
+        {
+          "constant_name": "config",
+          "constant_value": "load_config(r\"config.yaml\")",
+          "constant_type": "dict",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "logger",
+          "constant_value": "logging.getLogger(__name__)",
+          "constant_type": "Logger",
+          "scope": "module_level",
+          "defined_in_class": null
+        }
+      ],
+      "analysis_notes": "This is the core execution engine of the YAML-based test automation framework. It provides a comprehensive and flexible system for executing test steps defined in YAML files. The class integrates multiple technologies: Selenium WebDriver for browser automation, Azure OpenAI for AI-powered visual verification, pandas for result reporting, and custom MultiBrowserManager for multi-browser orchestration. Key architectural features include: (1) Metadata-driven element location using JSON files that map element names to multiple locator strategies, (2) Progressive fallback through multiple locator strategies (XPath, CSS, ID, name, aria-label, data-testid, class, partial link text) to maximize element finding success, (3) Variable substitution system allowing dynamic test data with ${variable_name} syntax supporting dot notation for nested values, (4) Comprehensive action type support including click, set, verify, navigate, scroll, select, load_url, select_printer, refresh, escape, store, and locale, (5) AI-powered visual verification using Azure OpenAI vision models with reference image comparison, (6) Iframe handling for elements within iframes, (7) Multi-browser support with window switching by URL, (8) Detailed execution logging with timestamps and status tracking, (9) CSV result reporting with step-level timing and status, (10) Robust error handling that logs errors but continues execution. The click_control and set_control_value methods demonstrate sophisticated fallback logic that tries multiple locator strategies until one succeeds. The execute_step method acts as a central dispatcher routing each action to its specialized handler. The execute_flow method orchestrates complete test execution with timing and result capture. The run_ai_task method enables cutting-edge AI-powered verification where screenshots are analyzed by vision models. This class is production-ready with extensive error handling, logging, and flexibility to handle various test scenarios."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/AI_YAML/test_cases/TC31165176_M_overview_status_card.yaml",
+      "file_name": "TC31165176_M_overview_status_card.yaml",
+      "file_extension": ".yaml",
+      "file_size_bytes": 7326,
+      "language": "YAML",
+      "file_category": "test_case",
+      "file_purpose": "YAML test case definition for verifying the Overview status card functionality in the Instant Services application. Defines a complete test flow including setup (login), main test steps (status card verification, printer details modal verification, navigation), and cleanup (logout). Uses AI-powered visual verification to validate UI structure and content. Test case IDs: C31165176, C31266421.",
+      "imports": [],
+      "classes": [],
+      "locators": [],
+      "functions": [],
+      "inner_classes": [],
+      "variables_and_constants": [
+        {
+          "constant_name": "spec_version",
+          "constant_value": "1.1",
+          "constant_type": "str",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "test_case",
+          "constant_value": "overview_status_card",
+          "constant_type": "str",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "test_case_id",
+          "constant_value": "C31165176, C31266421",
+          "constant_type": "str",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "version",
+          "constant_value": "1.0",
+          "constant_type": "str",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "description",
+          "constant_value": "Test Instant Services Overview status card",
+          "constant_type": "str",
+          "scope": "module_level",
+          "defined_in_class": null
+        }
+      ],
+      "analysis_notes": "This YAML file defines a comprehensive test case for the Overview status card feature. It uses YAML 1.2 specification version 1.1. The test is structured with three phases: setup (references instantservices_login.yaml file), steps (main test actions), and cleanup (references instantservices_logout.yaml file). The steps phase contains 13 test steps that verify various aspects of the status card UI. Each step has an id, page context, action type, and action-specific parameters. The test makes extensive use of AI-powered visual verification through the 'verify' action with screenshot capture and detailed prompts. The prompts use STRICT VALIDATION MODE instructing the AI to return {status: false} immediately if any condition fails. Verification steps check for: (1) Overview and Status text positioning, (2) HP printer model name display, (3) Printer readiness information, (4) Sync status and time, (5) Printer Details modal structure with printer icon, email, serial number, enrollment date, HP Connected Account link, and enrollment status. The test includes navigation steps (clicking Printer Details, HP Connected Account, Overview menu), interaction steps (clicking Dismiss for emergency banner, escape key for promotion close), and utility steps (storing system time for later comparison). The test uses variable substitution with ${CURRENT_TIME} to validate sync time matches current time. Sleep delays are specified after most steps to allow UI rendering. The prompts are formatted as f-strings with triple quotes allowing multi-line content and variable interpolation. This test case demonstrates advanced test automation combining traditional UI interaction with AI-powered visual validation, enabling verification of complex UI layouts and content that would be difficult with traditional element-based assertions. The reference to external YAML files for setup and cleanup promotes reusability of common test sequences."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/multibrowsermanager.py",
+      "file_name": "multibrowsermanager.py",
+      "file_extension": ".py",
+      "file_size_bytes": 25772,
+      "language": "Python",
+      "file_category": "helper",
+      "file_purpose": "Multi-browser management utility class that provides comprehensive functionality for creating, managing, and controlling multiple browser instances simultaneously. Supports remote debugging connections, incognito mode, normal browser mode, window management, tab switching, URL-based window finding, and cross-browser operations. Used for test scenarios requiring multiple browser contexts or parallel browser sessions.",
+      "imports": [
+        {
+          "import_statement": "import subprocess",
+          "module": "subprocess",
+          "imported_names": [
+            "subprocess"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import time",
+          "module": "time",
+          "imported_names": [
+            "time"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import platform",
+          "module": "platform",
+          "imported_names": [
+            "platform"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from selenium import webdriver",
+          "module": "selenium",
+          "imported_names": [
+            "webdriver"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from selenium.webdriver.chrome.options import Options",
+          "module": "selenium.webdriver.chrome.options",
+          "imported_names": [
+            "Options"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from selenium.webdriver.chrome.service import Service",
+          "module": "selenium.webdriver.chrome.service",
+          "imported_names": [
+            "Service"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from typing import Dict, Optional, Tuple, Set",
+          "module": "typing",
+          "imported_names": [
+            "Dict",
+            "Optional",
+            "Tuple",
+            "Set"
+          ],
+          "is_external": true,
+          "is_internal": false
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "MultiBrowserManager",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Manages multiple browser instances with different profiles and modes (remote debug, incognito, normal). Provides methods to create browsers, switch between them, bring windows to foreground, find windows by URL, wait for new windows, load URLs in specific browsers, and manage browser lifecycle. Maintains a registry of all active browsers with their metadata including driver instances, window handles, tabs, and browser types. Supports OS-specific window management operations for Windows, macOS, and Linux.",
+          "how_to_import": "from scripts.multibrowsermanager import MultiBrowserManager",
+          "how_to_instantiate": "manager = MultiBrowserManager()",
+          "total_methods": 19,
+          "total_locators": 0
+        }
+      ],
+      "locators": [],
+      "functions": [],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This is a sophisticated multi-browser management utility that provides enterprise-grade browser orchestration capabilities. It supports three browser creation modes: remote debugging (connecting to existing Chrome instances), incognito mode (private browsing), and normal mode (with extensive automation detection suppression). The class maintains a registry of all browsers with rich metadata including driver instances, window handles, tab indices, and browser types. Key features include OS-specific window management (Windows/macOS/Linux), intelligent window state detection (minimized/hidden/off-screen/visible), URL-based window finding with partial or exact matching, waiting for new windows or specific URLs with configurable timeouts, and comprehensive browser lifecycle management. The bring_to_foreground method uses multiple strategies including Selenium window operations, OS-specific commands (PowerShell/osascript/wmctrl), and JavaScript focus to ensure reliable window activation. This class is essential for complex test scenarios requiring multiple browser contexts, parallel execution, or cross-browser workflows. All methods include extensive error handling and informative console output with emoji indicators for easy debugging."
+    }
+  ],
+  "batch_summary": {
+    "total_classes_found": 2,
+    "total_methods_found": 57,
+    "total_locators_found": 0,
+    "total_imports_found": 28,
+    "total_constants_found": 11,
+    "total_inner_classes_found": 0,
+    "page_objects_found": [],
+    "helper_classes_found": [
+      "MultiBrowserManager"
+    ],
+    "core_classes_found": [
+      "YamlStepExecutor"
+    ],
+    "config_classes_found": [],
+    "key_reusable_methods": [
+      "MultiBrowserManager.create_remote_browser — Create browser with remote debugging connection",
+      "MultiBrowserManager.create_incognito_browser — Create incognito browser instance",
+      "MultiBrowserManager.create_normal_browser — Create normal browser with automation suppression",
+      "MultiBrowserManager.bring_to_foreground — Bring browser window to foreground with OS-specific commands",
+      "MultiBrowserManager.switch_to_browser — Switch context to specific browser",
+      "MultiBrowserManager.load_url_in_browser — Load URL in specific browser with new tab option",
+      "MultiBrowserManager.wait_for_new_window — Wait for new window to appear across all browsers",
+      "MultiBrowserManager.find_window_by_url — Find window by URL with partial or exact matching",
+      "MultiBrowserManager.wait_for_window_with_url — Wait for window with specific URL to appear",
+      "MultiBrowserManager.switch_to_window_by_url — Switch to window containing specific URL",
+      "MultiBrowserManager.get_all_urls_by_browser — Get all URLs organized by browser",
+      "MultiBrowserManager.close_browser — Close specific browser instance",
+      "MultiBrowserManager.close_all — Close all managed browsers",
+      "YamlStepExecutor.load_yaml_file — Load and parse YAML test definition from file",
+      "YamlStepExecutor.load_json_metadata — Load UI element metadata from JSON file",
+      "YamlStepExecutor.get_control — Get control metadata by text or label",
+      "YamlStepExecutor.click_control — Click element using multiple locator strategies with fallback",
+      "YamlStepExecutor.set_control_value — Set value in input or dropdown with fallback strategies",
+      "YamlStepExecutor.set_variables — Set global variables for test execution",
+      "YamlStepExecutor.substitute_variables — Replace variable placeholders with actual values",
+      "YamlStepExecutor.run_ai_task — Perform AI-powered visual verification using Azure OpenAI",
+      "YamlStepExecutor.execute_click_action — Execute click action with iframe and expansion support",
+      "YamlStepExecutor.execute_set_action — Execute set/input action with variable substitution",
+      "YamlStepExecutor.execute_verify_action — Execute AI-powered visual verification",
+      "YamlStepExecutor.execute_step — Execute single test step by dispatching to action handler",
+      "YamlStepExecutor.execute_flow — Execute complete test flow with timing and result reporting",
+      "test_case_execute.driver — Pytest fixture creating browser instance for test module",
+      "test_case_execute.test_case_execute — Main test function executing YAML-defined test case"
+    ],
+    "key_reusable_locators": []
+  }
+}
