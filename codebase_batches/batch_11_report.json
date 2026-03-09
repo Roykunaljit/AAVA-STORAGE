@@ -1,0 +1,2697 @@
+{
+  "batch_metadata": {
+    "batch_id": 11,
+    "total_batches": 18,
+    "remaining_after_this": 7,
+    "analyzed_at": "2025-01-21T08:45:00Z",
+    "analyzer": "Senior Codebase Analyst Agent",
+    "files_in_batch": 5,
+    "files_succeeded": 5,
+    "files_failed": 0,
+    "failed_files": [],
+    "storage_repo": "AAVA-STORAGE",
+    "report_path": "codebase_batches/batch_11_report.json"
+  },
+  "analyzed_files": [
+    "AURA-main (1) 1/AURA-main/pages/cancellation_banner_page.py",
+    "AURA-main (1) 1/AURA-main/pages/cancellation_page.py",
+    "AURA-main (1) 1/AURA-main/pages/cancellation_timeline_page.py",
+    "AURA-main (1) 1/AURA-main/pages/change_plan_cancellation_page.py",
+    "AURA-main (1) 1/AURA-main/pages/confirmation_page.py"
+  ],
+  "file_analyses": [
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/pages/cancellation_banner_page.py",
+      "file_name": "cancellation_banner_page.py",
+      "file_extension": ".py",
+      "file_size_bytes": 835,
+      "language": "Python",
+      "file_category": "page_object",
+      "file_purpose": "Page object for the Cancellation Banner component that appears when a subscription is scheduled for cancellation. Contains locators for the cancellation banner UI elements including the timeline link, keep subscription button, resume modal elements, and resume confirmation banner. Used to interact with and verify the cancellation banner display and subscription resume functionality.",
+      "imports": [
+        {
+          "import_statement": "from playwright.sync_api import Page",
+          "module": "playwright.sync_api",
+          "imported_names": [
+            "Page"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from pages.base_page_object import BasePageObject",
+          "module": "pages.base_page_object",
+          "imported_names": [
+            "BasePageObject"
+          ],
+          "is_external": false,
+          "is_internal": true
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "CancellationBannerPage",
+          "parent_classes": [
+            "BasePageObject"
+          ],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Page object representing the cancellation banner component that displays when a user has scheduled their subscription for cancellation. Provides locators for all interactive elements within the cancellation banner including the link to see the cancellation timeline, the button to keep the subscription, the subscription resume modal with its confirm and back buttons, and the resume confirmation banner that appears after successfully resuming a subscription. This page object is used in test scenarios that verify cancellation banner visibility, subscription resume flows, and cancellation timeline access.",
+          "how_to_import": "from pages.cancellation_banner_page import CancellationBannerPage",
+          "how_to_instantiate": "cancellation_banner_page = CancellationBannerPage(page)",
+          "total_methods": 1,
+          "total_locators": 6
+        }
+      ],
+      "locators": [
+        {
+          "locator_name": "see_cancellation_timeline",
+          "locator_value": "[data-testid='see-cancellation-timeline']",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.see_cancellation_timeline",
+          "ui_element_description": "Link or button within the cancellation banner that opens the cancellation timeline modal showing the schedule of events after cancellation",
+          "defined_in_class": "CancellationBannerPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "keep_subscription_button",
+          "locator_value": "[data-testid='cancellation-banner'] button",
+          "locator_type": "composite",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.keep_subscription_button",
+          "ui_element_description": "Button within the cancellation banner that allows the user to keep their subscription and cancel the scheduled cancellation",
+          "defined_in_class": "CancellationBannerPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "cancellation_banner",
+          "locator_value": "[data-testid='cancellation-banner']",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.cancellation_banner",
+          "ui_element_description": "The main cancellation banner container element that displays when a subscription is scheduled for cancellation",
+          "defined_in_class": "CancellationBannerPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "resume_button",
+          "locator_value": "[data-testid='confirm-subscription-resume-modal-content-resume-button']",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.resume_button",
+          "ui_element_description": "Resume button within the subscription resume confirmation modal that confirms the user wants to resume their subscription",
+          "defined_in_class": "CancellationBannerPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "back_button",
+          "locator_value": "[data-testid='confirm-subscription-resume-modal-content-back-button']",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.back_button",
+          "ui_element_description": "Back button within the subscription resume confirmation modal that closes the modal without resuming the subscription",
+          "defined_in_class": "CancellationBannerPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "resume_banner",
+          "locator_value": "[data-testid='subscription-resumed-banner']",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.resume_banner",
+          "ui_element_description": "Confirmation banner that appears after successfully resuming a subscription, confirming the subscription is no longer scheduled for cancellation",
+          "defined_in_class": "CancellationBannerPage",
+          "defined_in_method": "__init__"
+        }
+      ],
+      "functions": [
+        {
+          "method_name": "__init__",
+          "method_signature": "def __init__(self, page: Page)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference to the CancellationBannerPage object"
+            },
+            {
+              "name": "page",
+              "type": "Page",
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page where the cancellation banner is displayed"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": true,
+          "docstring": null,
+          "method_type": "constructor",
+          "what_it_does": "Initializes the CancellationBannerPage object by first calling the parent BasePageObject constructor with super().__init__(page) to set up the base page functionality. Then defines six locator attributes on the self.elements object for all interactive elements within the cancellation banner component. Sets up see_cancellation_timeline locator using data-testid selector, keep_subscription_button using a composite selector targeting a button within the cancellation banner, cancellation_banner for the main container, resume_button and back_button for the subscription resume modal controls, and resume_banner for the confirmation message. All locators are stored as string selectors on the elements object which is inherited from BasePageObject.",
+          "locators_used": [],
+          "calls_to": [
+            "super().__init__(page)"
+          ],
+          "usage_example": "cancellation_banner_page = CancellationBannerPage(page)",
+          "belongs_to_class": "CancellationBannerPage",
+          "lines_of_code": 8
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This is a focused page object specifically for the cancellation banner component. It follows the Page Object Model pattern and extends BasePageObject. All locators are defined as string selectors on the self.elements object, which is a pattern used throughout the AURA framework. The page object contains only the constructor with no additional action or verification methods, suggesting that interaction methods are either inherited from BasePageObject or implemented in test files directly. The locators use primarily data-testid attributes which are the most reliable selector strategy. This page object is used in cancellation flow tests to verify banner display and handle subscription resume scenarios."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/pages/cancellation_page.py",
+      "file_name": "cancellation_page.py",
+      "file_extension": ".py",
+      "file_size_bytes": 8256,
+      "language": "Python",
+      "file_category": "page_object",
+      "file_purpose": "Comprehensive page object for the subscription cancellation flow pages including the cancellation summary, cancellation feedback survey, change plan modal, pause plan options, and paper subscription cancellation. Contains extensive locators for all UI elements across multiple cancellation-related screens and modals including printer information display, cancellation confirmation buttons, retention alternatives, feedback radio buttons, timeline elements, and paper-specific cancellation options. Provides a utility method to dynamically select plan buttons based on page count.",
+      "imports": [
+        {
+          "import_statement": "from playwright.sync_api import Page",
+          "module": "playwright.sync_api",
+          "imported_names": [
+            "Page"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from pages.base_page_object import BasePageObject",
+          "module": "pages.base_page_object",
+          "imported_names": [
+            "BasePageObject"
+          ],
+          "is_external": false,
+          "is_internal": true
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "CancellationPage",
+          "parent_classes": [
+            "BasePageObject"
+          ],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Comprehensive page object that encapsulates all UI elements and interactions across the entire subscription cancellation flow. Covers multiple screens including the cancellation summary page showing subscription details and printer information, the cancellation feedback survey with various reason radio buttons, the change plan modal with all available plan options, pause plan functionality, transfer subscription options, contact support links, cancellation timeline elements, and complete paper subscription cancellation flow with paper-specific feedback options. Provides locators for over 70 distinct UI elements organized by functional area including printer info, cancellation summary, retention alternatives, change plan modal, feedback survey, timeline sections, and paper cancellation elements. Contains a utility method get_plan_button() to dynamically retrieve plan selection buttons based on page count.",
+          "how_to_import": "from pages.cancellation_page import CancellationPage",
+          "how_to_instantiate": "cancellation_page = CancellationPage(page)",
+          "total_methods": 2,
+          "total_locators": 78
+        }
+      ],
+      "locators": [
+        {
+          "locator_name": "printer_img",
+          "locator_value": "xpath=(//*[@data-testid=\"printer-img\"])[2]",
+          "locator_type": "xpath",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.printer_img",
+          "ui_element_description": "Printer image displayed in the cancellation summary showing the enrolled printer, using xpath to select the second occurrence",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "printer_info_name",
+          "locator_value": "xpath=(//*[@data-testid=\"printer-info-name\"])[2]",
+          "locator_type": "xpath",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.printer_info_name",
+          "ui_element_description": "Printer name text displayed in the cancellation summary, using xpath to select the second occurrence",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "printer_info_serial",
+          "locator_value": "[data-testid=\"printer-info-serial\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.printer_info_serial",
+          "ui_element_description": "Printer serial number text displayed in the cancellation summary",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "cancellation_summary_image",
+          "locator_value": "[class^=\"cancellationSummaryCard__animation-container___2zlva\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.cancellation_summary_image",
+          "ui_element_description": "Animation container image displayed in the cancellation summary card",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "subscribed_info",
+          "locator_value": "[data-testid=\"cancellation-summary-information\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.subscribed_info",
+          "ui_element_description": "Subscription information text displayed in the cancellation summary showing plan details",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "confirm_cancellation_button",
+          "locator_value": "[data-testid='confirm-cancellation'],[data-testid='confirm-cancellation-button']",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.confirm_cancellation_button",
+          "ui_element_description": "Primary button to confirm and proceed with subscription cancellation, with multiple possible data-testid values",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "keep_enrollment_button",
+          "locator_value": "[data-testid='keep-subscription-button']",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.keep_enrollment_button",
+          "ui_element_description": "Button to keep the subscription and cancel the cancellation process",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "bottom_section_title",
+          "locator_value": "[data-testid=\"cancellation-retention-new-layout-title\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.bottom_section_title",
+          "ui_element_description": "Title text for the retention alternatives section at the bottom of the cancellation page",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "change_plan_link",
+          "locator_value": "xpath=//*[text()=\"Change your plan\"]",
+          "locator_type": "xpath",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.change_plan_link",
+          "ui_element_description": "Link to open the change plan modal as a retention alternative to cancellation",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "pause_plan_link",
+          "locator_value": "[data-testid=\"pause-your-plan\"], [data-testid=\"cancellation-alternative-pause-your-plan\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.pause_plan_link",
+          "ui_element_description": "Link to pause the subscription plan as a retention alternative, with multiple possible data-testid values",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "transfer_subscription_link",
+          "locator_value": "xpath=//*[text()=\"Transfer your subscription\"]",
+          "locator_type": "xpath",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.transfer_subscription_link",
+          "ui_element_description": "Link to transfer the subscription to another printer as a retention alternative",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "contact_hp_support_link",
+          "locator_value": "[data-testid=\"contact-hp-support\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.contact_hp_support_link",
+          "ui_element_description": "Link to contact HP support for assistance before cancelling",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "only_pay_when_you_need_to_print_link",
+          "locator_value": "[data-testid=\"switch-to-pay-as-you-print-open\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.only_pay_when_you_need_to_print_link",
+          "ui_element_description": "Link to switch to pay-as-you-print plan as a retention alternative",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "pause_plan_modal",
+          "locator_value": "[data-testid=\"pause-plan-modal\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.pause_plan_modal",
+          "ui_element_description": "Modal dialog that appears when user selects to pause their plan",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "change_plan_modal",
+          "locator_value": "[class^=\"changePlanModalContent__change-plan-container\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.change_plan_modal",
+          "ui_element_description": "Modal dialog container for the change plan interface",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "plan_10_button",
+          "locator_value": "[data-testid=\"change-plan-10-pages\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.plan_10_button",
+          "ui_element_description": "Button to select the 10 pages per month plan in the change plan modal",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "plan_25_button",
+          "locator_value": "[data-testid=\"change-plan-25-pages\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.plan_25_button",
+          "ui_element_description": "Button to select the 25 pages per month plan in the change plan modal",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "plan_50_button",
+          "locator_value": "[data-testid=\"change-plan-50-pages\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.plan_50_button",
+          "ui_element_description": "Button to select the 50 pages per month plan in the change plan modal",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "plan_100_button",
+          "locator_value": "[data-testid=\"change-plan-100-pages\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.plan_100_button",
+          "ui_element_description": "Button to select the 100 pages per month plan in the change plan modal",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "plan_300_button",
+          "locator_value": "[data-testid=\"change-plan-300-pages\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.plan_300_button",
+          "ui_element_description": "Button to select the 300 pages per month plan in the change plan modal",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "plan_500_button",
+          "locator_value": "[data-testid=\"change-plan-500-pages\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.plan_500_button",
+          "ui_element_description": "Button to select the 500 pages per month plan in the change plan modal",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "plan_700_button",
+          "locator_value": "[data-testid=\"change-plan-700-pages\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.plan_700_button",
+          "ui_element_description": "Button to select the 700 pages per month plan in the change plan modal",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "plan_1500_button",
+          "locator_value": "[data-testid=\"change-plan-1500-pages\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.plan_1500_button",
+          "ui_element_description": "Button to select the 1500 pages per month plan in the change plan modal",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "additional_pages_tooltip",
+          "locator_value": "[class^=\"changePlanModalContent__tooltip-container__\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.additional_pages_tooltip",
+          "ui_element_description": "Tooltip container for additional pages information in the change plan modal",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "additional_pages_tooltip_content",
+          "locator_value": "[data-testid=\"tooltip-content\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.additional_pages_tooltip_content",
+          "ui_element_description": "Content text within the additional pages tooltip",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "continue_button",
+          "locator_value": "[data-testid=\"continue-to-cit-survey\"], [data-testid=\"continue-to-paper-cit-survey\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.continue_button",
+          "ui_element_description": "Button to continue to the cancellation feedback survey, with separate data-testids for ink and paper surveys",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "return_to_account_button",
+          "locator_value": "[data-testid=\"return-to-account-button\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.return_to_account_button",
+          "ui_element_description": "Button to return to the account page after completing cancellation",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "submit_feedback_button",
+          "locator_value": "[data-testid=\"submit-feedback-button\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.submit_feedback_button",
+          "ui_element_description": "Button to submit the cancellation feedback survey",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "do_not_print_enough_radio",
+          "locator_value": "[data-testid=\"i-do-not-print-enough-to-make-it-worthwhile\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.do_not_print_enough_radio",
+          "ui_element_description": "Radio button for cancellation reason: I do not print enough to make it worthwhile",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "service_is_too_expensive_radio",
+          "locator_value": "[data-testid=\"the-service-is-too-expensive\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.service_is_too_expensive_radio",
+          "ui_element_description": "Radio button for cancellation reason: The service is too expensive",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "did_not_received_my_shipment_radio",
+          "locator_value": "[data-testid=\"did-not-receive-shipment-or-problem-cartridge\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.did_not_received_my_shipment_radio",
+          "ui_element_description": "Radio button for cancellation reason: Did not receive shipment or problem with cartridge",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "have_replaced_my_printer_radio",
+          "locator_value": "[data-testid=\"replaced-or-plan-to-replace-printer\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.have_replaced_my_printer_radio",
+          "ui_element_description": "Radio button for cancellation reason: Replaced or plan to replace printer",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "wifi_issues_with_my_printer_radio",
+          "locator_value": "[data-testid=\"technical-or-wifi-issue-w-printer\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.wifi_issues_with_my_printer_radio",
+          "ui_element_description": "Radio button for cancellation reason: Technical or WiFi issue with printer",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "other_option_radio",
+          "locator_value": "[data-testid=\"other\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.other_option_radio",
+          "ui_element_description": "Radio button for cancellation reason: Other",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "feedback_text_box",
+          "locator_value": "[id=\"feedback-reason\"]",
+          "locator_type": "id",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.feedback_text_box",
+          "ui_element_description": "Text area input for providing additional feedback details about cancellation reason",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "cancellation_in_progress",
+          "locator_value": "[class^=\"warnings__warning-text\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.cancellation_in_progress",
+          "ui_element_description": "Warning text indicating cancellation is in progress",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "keep_subscription_button",
+          "locator_value": "[data-testid=\"keep-subscription-button\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.keep_subscription_button",
+          "ui_element_description": "Button to keep the subscription and cancel the cancellation process",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "restore_subscription_button",
+          "locator_value": "[data-testid=\"restore_subscription\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.restore_subscription_button",
+          "ui_element_description": "Button to restore a subscription that has been cancelled",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "whats_happens_next",
+          "locator_value": "[data-testid=\"timeline-header-info\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.whats_happens_next",
+          "ui_element_description": "Header text for the timeline section explaining what happens next after cancellation",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "close_modal_button",
+          "locator_value": "[class^='vn-modal__close']",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.close_modal_button",
+          "ui_element_description": "Close button for modal dialogs",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "cancellation_card",
+          "locator_value": "[data-testid=\"optimized-cancellation-summary-card\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.cancellation_card",
+          "ui_element_description": "Card container displaying the optimized cancellation summary",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "cancellation_animation",
+          "locator_value": "[class^=\"cancellationLoading__cancellation-loading-animation-container_\"],div[class*=\"cancellationSummaryCard__animation-container\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.cancellation_animation",
+          "ui_element_description": "Animation container displayed during cancellation processing",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "cancellation_feedback_title",
+          "locator_value": "[data-testid=\"cancellation-feedback-title\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.cancellation_feedback_title",
+          "ui_element_description": "Title text on the cancellation feedback page",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "cancellation_feedback_subtitle",
+          "locator_value": "[data-testid=\"cancellation-feedback-subtitle\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.cancellation_feedback_subtitle",
+          "ui_element_description": "Subtitle text on the cancellation feedback page",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "feedback_img",
+          "locator_value": "[class^=\"cancellationFeedback__feedback-header-animation-container\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.feedback_img",
+          "ui_element_description": "Header animation image on the cancellation feedback page",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "cancellation_title",
+          "locator_value": "xpath=//*[text()=\"Cancel Plan\"]",
+          "locator_type": "xpath",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.cancellation_title",
+          "ui_element_description": "Cancel Plan title text",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "below_subscription_info",
+          "locator_value": "[class=\"cancellationSummaryContent__description-body___1A-tG\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.below_subscription_info",
+          "ui_element_description": "Description text below the subscription information in cancellation summary",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "last_day_billing_cycle_text",
+          "locator_value": "xpath=(.//*[contains(@class, \"cancellationSummaryContent\")]//p)[3]",
+          "locator_type": "xpath",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.last_day_billing_cycle_text",
+          "ui_element_description": "Text showing the last day of the billing cycle, third paragraph in cancellation summary content",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "printer_replacement_title",
+          "locator_value": "xpath=//*[text()=\"Which printer are you enrolling as your replacement?\"]",
+          "locator_type": "xpath",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.printer_replacement_title",
+          "ui_element_description": "Title text for printer replacement selection",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "contact_support_link",
+          "locator_value": "xpath=//*[text()=\"Contact our expert support\"]",
+          "locator_type": "xpath",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.contact_support_link",
+          "ui_element_description": "Link to contact expert support",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "contact_us_tab",
+          "locator_value": "xpath=//*[text()=\" Contact Us \"]",
+          "locator_type": "xpath",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.contact_us_tab",
+          "ui_element_description": "Contact Us tab navigation element",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "support_page_header",
+          "locator_value": "xpath=//*[text()=\"How would you like to connect with us?\"]",
+          "locator_type": "xpath",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.support_page_header",
+          "ui_element_description": "Header text on the support page",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "close_popup",
+          "locator_value": "[aria-label=\"close\"]",
+          "locator_type": "css",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.close_popup",
+          "ui_element_description": "Close button for popup dialogs using aria-label",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "popup_frame",
+          "locator_value": "[class=\"modal-content\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.popup_frame",
+          "ui_element_description": "Modal content frame container",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "section1_timeline",
+          "locator_value": "[class=\"cancellationTimelineContent__timeline-content-header-wrapper___13VFp\"],[class=\"cancellationSuccessTimeline__trade-price-card___1B_bi\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.section1_timeline",
+          "ui_element_description": "First section of the cancellation timeline showing header or trade price card",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "section2_timeline",
+          "locator_value": "[class=\"timelineStepper__timeline-stepper-container___35SjP\"],[class=\"timelineStepper__timeline-stepper-container___1LTza\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.section2_timeline",
+          "ui_element_description": "Second section of the cancellation timeline showing the stepper component",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "section3_timeline",
+          "locator_value": "[class=\"cancellationRetention__cancellation-retention-container___ewj0f\"],[class=\"optimizedCancellationRetention__optimized-cancellation-retention-container___3ut82\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.section3_timeline",
+          "ui_element_description": "Third section of the cancellation timeline showing retention alternatives",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "confirm_subscription_resume_modal",
+          "locator_value": "[data-testid=\"confirm-subscription-resume-title\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.confirm_subscription_resume_modal",
+          "ui_element_description": "Title element of the confirm subscription resume modal",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "radio_button",
+          "locator_value": "[class=\"vn-radio-button__icon css-1qduhqr\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.radio_button",
+          "ui_element_description": "Generic radio button icon element",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "cancellation_loading_page_title",
+          "locator_value": "xpath=//*[text()=\"Just a second, your cancellation is being processed...\"]",
+          "locator_type": "xpath",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.cancellation_loading_page_title",
+          "ui_element_description": "Title text displayed during cancellation processing",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "summary_page_back_button",
+          "locator_value": "xpath=//*[text()=\"Back\"]",
+          "locator_type": "xpath",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.summary_page_back_button",
+          "ui_element_description": "Back button on the summary page",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "confirm_paper_cancellation_button",
+          "locator_value": "[data-testid=\"confirm-paper-cancellation\"], [data-testid=\"confirm-cancellation-button\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.confirm_paper_cancellation_button",
+          "ui_element_description": "Button to confirm paper subscription cancellation",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "keep_paper_button",
+          "locator_value": "[data-testid=\"keep-paper-subscription\"], [data-testid=\"keep-subscription-button\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.keep_paper_button",
+          "ui_element_description": "Button to keep paper subscription and cancel the cancellation",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "replenishment_anxiety_radio",
+          "locator_value": "[data-testid=\"replenishment-anxiety\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.replenishment_anxiety_radio",
+          "ui_element_description": "Radio button for paper cancellation reason: Replenishment anxiety",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "leakage_radio",
+          "locator_value": "[data-testid=\"leakage\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.leakage_radio",
+          "ui_element_description": "Radio button for paper cancellation reason: Leakage",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "did_not_print_enough_radio",
+          "locator_value": "[data-testid=\"did-not-print-enough\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.did_not_print_enough_radio",
+          "ui_element_description": "Radio button for paper cancellation reason: Did not print enough",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "ran_out_of_paper_radio",
+          "locator_value": "[data-testid=\"ran-out-of-paper\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.ran_out_of_paper_radio",
+          "ui_element_description": "Radio button for paper cancellation reason: Ran out of paper",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "paper_overages_radio",
+          "locator_value": "[data-testid=\"paper-overages\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.paper_overages_radio",
+          "ui_element_description": "Radio button for paper cancellation reason: Paper overages",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "temporary_cancellation_radio",
+          "locator_value": "[data-testid=\"temporary-cancellation\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.temporary_cancellation_radio",
+          "ui_element_description": "Radio button for paper cancellation reason: Temporary cancellation",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "stockpiling_radio",
+          "locator_value": "[data-testid=\"stockpiling\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.stockpiling_radio",
+          "ui_element_description": "Radio button for paper cancellation reason: Stockpiling",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "too_expensive_radio",
+          "locator_value": "[data-testid=\"too-expensive\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.too_expensive_radio",
+          "ui_element_description": "Radio button for paper cancellation reason: Too expensive",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "damaged_paper_radio",
+          "locator_value": "[data-testid=\"damaged-paper\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.damaged_paper_radio",
+          "ui_element_description": "Radio button for paper cancellation reason: Damaged paper",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "i_did_not_receive_shipment_radio",
+          "locator_value": "[data-testid=\"i-did-not-receive-shipment\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.i_did_not_receive_shipment_radio",
+          "ui_element_description": "Radio button for paper cancellation reason: I did not receive shipment",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "moved_to_non_paper_service_area_radio",
+          "locator_value": "[data-testid=\"moved-to-non-paper-service-area\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.moved_to_non_paper_service_area_radio",
+          "ui_element_description": "Radio button for paper cancellation reason: Moved to non-paper service area",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "paper_quality_radio",
+          "locator_value": "[data-testid=\"paper-quality\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.paper_quality_radio",
+          "ui_element_description": "Radio button for paper cancellation reason: Paper quality issues",
+          "defined_in_class": "CancellationPage",
+          "defined_in_method": "__init__"
+        }
+      ],
+      "functions": [
+        {
+          "method_name": "__init__",
+          "method_signature": "def __init__(self, page: Page)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference to the CancellationPage object"
+            },
+            {
+              "name": "page",
+              "type": "Page",
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page containing cancellation flow screens"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": true,
+          "docstring": null,
+          "method_type": "constructor",
+          "what_it_does": "Initializes the CancellationPage object by first calling the parent BasePageObject constructor with super().__init__(page) to set up base page functionality. Then systematically defines 78 locator attributes on the self.elements object, organized into logical groups: printer information locators (printer_img, printer_info_name, printer_info_serial), cancellation summary elements (cancellation_summary_image, subscribed_info, confirm_cancellation_button, keep_enrollment_button), retention alternative links (change_plan_link, pause_plan_link, transfer_subscription_link, contact_hp_support_link), change plan modal elements including all plan buttons from 10 to 1500 pages, cancellation feedback survey elements with radio buttons for various cancellation reasons, timeline section locators, paper subscription cancellation elements with paper-specific feedback radio buttons, and various modal and navigation elements. All locators use a mix of data-testid attributes (most reliable), CSS class selectors, and XPath expressions for text-based matching. This comprehensive locator collection supports the entire multi-screen cancellation flow including summary, feedback, retention, and confirmation screens.",
+          "locators_used": [],
+          "calls_to": [
+            "super().__init__(page)"
+          ],
+          "usage_example": "cancellation_page = CancellationPage(page)",
+          "belongs_to_class": "CancellationPage",
+          "lines_of_code": 80
+        },
+        {
+          "method_name": "get_plan_button",
+          "method_signature": "def get_plan_button(self, plan_pages: str)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference to the CancellationPage object"
+            },
+            {
+              "name": "plan_pages",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "The page count for the plan button to retrieve (e.g., '10', '25', '50', '100', '300', '500', '700', '1500')"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Dynamically retrieves the Playwright locator for a specific plan button based on the provided page count. Constructs the attribute name by formatting plan_attr as 'plan_{plan_pages}_button' (e.g., 'plan_50_button' for plan_pages='50'). Uses hasattr() to check if the self.elements object has an attribute with that name. If the attribute exists, retrieves the selector string using getattr(self.elements, plan_attr), creates a Playwright locator from that selector using self.page.locator(selector), and returns the locator object ready for interaction. If the attribute does not exist (invalid plan_pages value), raises a ValueError with a descriptive message indicating the plan button was not found. This method provides a flexible way to select plan buttons without hardcoding the plan value in test code.",
+          "locators_used": [
+            "plan_10_button",
+            "plan_25_button",
+            "plan_50_button",
+            "plan_100_button",
+            "plan_300_button",
+            "plan_500_button",
+            "plan_700_button",
+            "plan_1500_button"
+          ],
+          "calls_to": [
+            "hasattr()",
+            "getattr()",
+            "self.page.locator()",
+            "ValueError()"
+          ],
+          "usage_example": "plan_button = cancellation_page.get_plan_button('100')\nplan_button.click()",
+          "belongs_to_class": "CancellationPage",
+          "lines_of_code": 7
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This is the most comprehensive page object in the batch with 78 locators covering the entire cancellation flow. It demonstrates excellent organization with logical grouping of related elements using comments. The page object uses a mix of selector strategies with preference for data-testid attributes but falls back to XPath for text-based matching and CSS classes where needed. The get_plan_button() utility method is a good example of dynamic locator selection using Python's hasattr/getattr pattern, making the page object more maintainable by avoiding code duplication for similar elements. The extensive paper cancellation feedback radio buttons show this page object supports both ink and paper subscription cancellation flows. All locators are stored as string selectors on self.elements following the AURA framework pattern."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/pages/cancellation_timeline_page.py",
+      "file_name": "cancellation_timeline_page.py",
+      "file_extension": ".py",
+      "file_size_bytes": 5864,
+      "language": "Python",
+      "file_category": "page_object",
+      "file_purpose": "Page object for the Cancellation Timeline modal that displays the schedule of events after a subscription cancellation is confirmed. Contains locators for timeline modal elements including close button, stepper items showing cancellation stages, header elements, restore subscription button, and retention alternative links. Provides utility methods to access timeline steps and icons by index for verification of timeline progression.",
+      "imports": [
+        {
+          "import_statement": "from playwright.sync_api import Page",
+          "module": "playwright.sync_api",
+          "imported_names": [
+            "Page"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from pages.base_page_object import BasePageObject",
+          "module": "pages.base_page_object",
+          "imported_names": [
+            "BasePageObject"
+          ],
+          "is_external": false,
+          "is_internal": true
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "CancellationTimelinePage",
+          "parent_classes": [
+            "BasePageObject"
+          ],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Page object representing the cancellation timeline modal that appears after subscription cancellation is confirmed. Encapsulates all UI elements within the timeline modal including the modal container, close button, timeline stepper showing cancellation stages, header icon and text, restore subscription button, retention alternative links (keep subscription, transfer subscription, shop HP), action buttons (preview bill, request recycling), and step icons for visual timeline progression. Provides five utility methods to access timeline elements by index: timeline_stepper_header() for stepper titles, cancellation_step() for step containers with wait logic, cancellation_step_title() for step titles, and third/fourth/fifth_step_icon() for accessing specific step icons. Used in tests to verify timeline display, step progression, and restoration functionality.",
+          "how_to_import": "from pages.cancellation_timeline_page import CancellationTimelinePage",
+          "how_to_instantiate": "cancellation_timeline_page = CancellationTimelinePage(page)",
+          "total_methods": 6,
+          "total_locators": 31
+        }
+      ],
+      "locators": [
+        {
+          "locator_name": "close_button",
+          "locator_value": "[data-testid='close-timeline-modal']",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.close_button",
+          "ui_element_description": "Close button to dismiss the cancellation timeline modal",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "timeline_modal",
+          "locator_value": "[data-testid='cancellation-timeline-modal']",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.timeline_modal",
+          "ui_element_description": "Main container element for the cancellation timeline modal",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "stepper",
+          "locator_value": "[class^='timelineStepperItem__step-item-info-title_']",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.stepper",
+          "ui_element_description": "Timeline stepper item title elements showing each stage of the cancellation timeline",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "header_icon",
+          "locator_value": "[class^=\"optimizedCancelPlanBanner__cancel-plan-banner-icon-container___1rKfT\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.header_icon",
+          "ui_element_description": "Icon displayed in the timeline modal header",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "header_title",
+          "locator_value": "[class^=\"optimizedCancellationInterventionPage__header-title___3lIm-\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.header_title",
+          "ui_element_description": "Title text in the timeline modal header",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "header_subtitle",
+          "locator_value": "[class^=\"optimizedCancelPlanBanner__cancel-plan-banner-goodbye-message___1hrh2\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.header_subtitle",
+          "ui_element_description": "Subtitle or goodbye message text in the timeline modal header",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "restore_subscription",
+          "locator_value": "[data-testid=\"restore-your-subscription\"],[data-testid=\"restore_subscription\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.restore_subscription",
+          "ui_element_description": "Button or link to restore the cancelled subscription, with multiple possible data-testid values",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "timeline_img",
+          "locator_value": "[data-testid=\"timeline-header-img\"],[class=\"tradePriceCard__image-content___1HPxH\"]",
+          "locator_type": "composite",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.timeline_img",
+          "ui_element_description": "Image displayed in the timeline header",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "whats_happens_next",
+          "locator_value": "[data-testid=\"timeline-header-info\"],[class=\"cancellationSuccessTimeline__text-title___2nx-T\"]",
+          "locator_type": "composite",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.whats_happens_next",
+          "ui_element_description": "Header text explaining what happens next in the cancellation timeline",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "cancellation_step",
+          "locator_value": "[class^=\"timelineStepperItem__step-item-info-container\"],[class=\"timelineStepper__timeline-step-container___taxeh\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.cancellation_step",
+          "ui_element_description": "Container elements for each step in the cancellation timeline stepper",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "cancellation_step_title",
+          "locator_value": "[class^=\"timelineStepperItem__step-item-info-title\"],[data-testid=\"undefined-title\"]",
+          "locator_type": "composite",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.cancellation_step_title",
+          "ui_element_description": "Title text for each cancellation timeline step",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "first_step_icon",
+          "locator_value": "div[class*=\"timelineStepperItem__complete-step\"],div[class*=\"timelineStepper__complete-step\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.first_step_icon",
+          "ui_element_description": "Icon indicating the first completed step in the timeline",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "second_step_icon",
+          "locator_value": "div[class*=\"timelineStepperItem__current-step\"],div[class*=\"timelineStepper__current-step\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.second_step_icon",
+          "ui_element_description": "Icon indicating the current active step in the timeline",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "third_step_icon",
+          "locator_value": "[class^=\"timelineStepperItem__checkmark-container\"],[class*=\"timelineStepper__checkmark-line-container\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.third_step_icon",
+          "ui_element_description": "Icon for the third step in the timeline showing checkmark container",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "fourth_step_icon",
+          "locator_value": "[class^=\"timelineStepperItem__checkmark-container\"],[class*=\"timelineStepper__checkmark-line-container\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.fourth_step_icon",
+          "ui_element_description": "Icon for the fourth step in the timeline showing checkmark container",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "fifth_step_icon",
+          "locator_value": "[class*=\"timelineStepper__checkmark-line-container\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.fifth_step_icon",
+          "ui_element_description": "Icon for the fifth step in the timeline showing checkmark container",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "change_your_mind",
+          "locator_value": "[data-testid=\"cancellation-retention-title\"],[class=\"optimizedCancelPlanBanner__cancel-plan-banner-restore-message___2O6Wu\"]",
+          "locator_type": "composite",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.change_your_mind",
+          "ui_element_description": "Text message asking if user changed their mind about cancellation",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "keep_subscription_as_it_was",
+          "locator_value": "[data-testid=\"cancellation-alternative-keep-subscription-as-it-was\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.keep_subscription_as_it_was",
+          "ui_element_description": "Link to keep the subscription as it was before cancellation",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "transfer_subscription_link",
+          "locator_value": "[data-testid=\"transfer-subscription-to-another-printer\"],[data-testid=\"cancellation-alternative-transfer-subscription-to-another-printer\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.transfer_subscription_link",
+          "ui_element_description": "Link to transfer the subscription to another printer",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "shop_hp_button",
+          "locator_value": "[data-testid=\"purchase-ink-at-hp-store\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.shop_hp_button",
+          "ui_element_description": "Button to shop for ink at the HP store",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "preview_upcoming_button",
+          "locator_value": "[data-testid=\"preview-upcoming-bill\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.preview_upcoming_button",
+          "ui_element_description": "Button to preview the upcoming bill",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "request_recycling_button",
+          "locator_value": "[data-testid=\"request-recycling-materials\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.request_recycling_button",
+          "ui_element_description": "Button to request recycling materials for cartridge return",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "cancellation_timeline_close_button",
+          "locator_value": "[data-testid=\"close-timeline-modal\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.cancellation_timeline_close_button",
+          "ui_element_description": "Close button for the cancellation timeline modal",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "back_to_cancel_confirmation",
+          "locator_value": "[data-testid=\"back-to-cancel-confirmation\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.back_to_cancel_confirmation",
+          "ui_element_description": "Button to go back to the cancellation confirmation page",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "resume_instant_ink_subscription",
+          "locator_value": "[data-testid=\"resume-instant-ink-subscription\"],[data-testid=\"confirm-subscription-resume\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.resume_instant_ink_subscription",
+          "ui_element_description": "Button to resume the Instant Ink subscription",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "see_cancellation_timeline",
+          "locator_value": "[data-testid=\"see-cancellation-timeline\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.see_cancellation_timeline",
+          "ui_element_description": "Link to open and view the cancellation timeline",
+          "defined_in_class": "CancellationTimelinePage",
+          "defined_in_method": "__init__"
+        }
+      ],
+      "functions": [
+        {
+          "method_name": "__init__",
+          "method_signature": "def __init__(self, page: Page)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference to the CancellationTimelinePage object"
+            },
+            {
+              "name": "page",
+              "type": "Page",
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page containing the timeline modal"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": true,
+          "docstring": null,
+          "method_type": "constructor",
+          "what_it_does": "Initializes the CancellationTimelinePage object by calling the parent BasePageObject constructor with super().__init__(page). Then defines 31 locator attributes on the self.elements object for all interactive and informational elements within the cancellation timeline modal. Sets up locators for modal controls (close_button, timeline_modal), stepper elements (stepper, cancellation_step, cancellation_step_title), header elements (header_icon, header_title, header_subtitle, timeline_img, whats_happens_next), step icons for visual progression (first_step_icon through fifth_step_icon), retention alternatives (restore_subscription, keep_subscription_as_it_was, transfer_subscription_link), action buttons (shop_hp_button, preview_upcoming_button, request_recycling_button), and navigation elements (back_to_cancel_confirmation, resume_instant_ink_subscription, see_cancellation_timeline). Many locators include multiple selector options separated by commas to handle different UI variations. All locators use primarily data-testid attributes with CSS class selectors as alternatives.",
+          "locators_used": [],
+          "calls_to": [
+            "super().__init__(page)"
+          ],
+          "usage_example": "cancellation_timeline_page = CancellationTimelinePage(page)",
+          "belongs_to_class": "CancellationTimelinePage",
+          "lines_of_code": 33
+        },
+        {
+          "method_name": "timeline_stepper_header",
+          "method_signature": "def timeline_stepper_header(self, index: int) -> str",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference to the CancellationTimelinePage object"
+            },
+            {
+              "name": "index",
+              "type": "int",
+              "default_value": null,
+              "is_required": true,
+              "description": "Zero-based index of the timeline stepper header element to retrieve"
+            }
+          ],
+          "return_type": "str",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "getter",
+          "what_it_does": "Retrieves a specific timeline stepper header element by its index position. First waits for the stepper elements to be present on the page using self.page.wait_for_selector() with the self.elements.stepper selector and a 60 second timeout. Then creates a locator for all stepper elements using self.page.locator(self.elements.stepper) and calls .nth(index) to select the element at the specified zero-based index position. Returns the Playwright locator object for that specific stepper header element, which can then be used for further interactions or assertions. The 60 second timeout ensures the timeline has fully loaded before attempting to access stepper elements.",
+          "locators_used": [
+            "stepper"
+          ],
+          "calls_to": [
+            "self.page.wait_for_selector()",
+            "self.page.locator()",
+            ".nth()"
+          ],
+          "usage_example": "first_stepper = cancellation_timeline_page.timeline_stepper_header(0)\nstepper_text = first_stepper.text_content()",
+          "belongs_to_class": "CancellationTimelinePage",
+          "lines_of_code": 3
+        },
+        {
+          "method_name": "cancellation_step",
+          "method_signature": "def cancellation_step(self, index, timeout=5000)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference to the CancellationTimelinePage object"
+            },
+            {
+              "name": "index",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Zero-based index of the cancellation step element to retrieve"
+            },
+            {
+              "name": "timeout",
+              "type": null,
+              "default_value": "5000",
+              "is_required": false,
+              "description": "Maximum wait time in milliseconds for the step elements to appear and for the specific step to be visible. Defaults to 5000ms (5 seconds)"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "getter",
+          "what_it_does": "Retrieves a specific cancellation timeline step element by index with built-in wait logic and error handling. First waits for the cancellation_step elements to be present using self.page.wait_for_selector() with the provided timeout. Creates a locator for all step elements using self.page.locator(self.elements.cancellation_step) and gets the total count of steps using .count(). Validates that the requested index is within the valid range by checking if index is greater than or equal to the count. If the index is out of range, raises an IndexError with a descriptive message showing the requested index and the actual number of steps found. If the index is valid, selects the step at that index using .nth(index), waits for that specific step to be visible using step.wait_for() with state='visible' and the provided timeout, then returns the Playwright locator for that step. This method ensures the step exists and is visible before returning it.",
+          "locators_used": [
+            "cancellation_step"
+          ],
+          "calls_to": [
+            "self.page.wait_for_selector()",
+            "self.page.locator()",
+            ".count()",
+            ".nth()",
+            "step.wait_for()",
+            "IndexError()"
+          ],
+          "usage_example": "try:\n    second_step = cancellation_timeline_page.cancellation_step(1, timeout=10000)\n    step_text = second_step.text_content()\nexcept IndexError as e:\n    print(f'Step not found: {e}')",
+          "belongs_to_class": "CancellationTimelinePage",
+          "lines_of_code": 10
+        },
+        {
+          "method_name": "cancellation_step_title",
+          "method_signature": "def cancellation_step_title(self, index)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference to the CancellationTimelinePage object"
+            },
+            {
+              "name": "index",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Zero-based index of the cancellation step title element to retrieve"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "getter",
+          "what_it_does": "Retrieves a specific cancellation step title element by its index position. Creates a locator for all cancellation step title elements using self.page.locator(self.elements.cancellation_step_title) and selects the element at the specified zero-based index using .nth(index). Returns the Playwright locator object for that specific step title, which can be used to get the title text or perform assertions. This is a simple accessor method without built-in wait logic, so the caller should ensure the timeline is loaded before calling this method.",
+          "locators_used": [
+            "cancellation_step_title"
+          ],
+          "calls_to": [
+            "self.page.locator()",
+            ".nth()"
+          ],
+          "usage_example": "step_title = cancellation_timeline_page.cancellation_step_title(2)\ntitle_text = step_title.text_content()",
+          "belongs_to_class": "CancellationTimelinePage",
+          "lines_of_code": 2
+        },
+        {
+          "method_name": "third_step_icon",
+          "method_signature": "def third_step_icon(self, index)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference to the CancellationTimelinePage object"
+            },
+            {
+              "name": "index",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Zero-based index of the third step icon element to retrieve (useful when multiple third step icons exist)"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "getter",
+          "what_it_does": "Retrieves a specific third step icon element by index. Creates a locator for all third step icon elements using self.page.locator(self.elements.third_step_icon) and selects the element at the specified zero-based index using .nth(index). Returns the Playwright locator for that icon element. This method is useful for verifying the visual state of the third timeline step, such as checking if it displays a checkmark indicating completion.",
+          "locators_used": [
+            "third_step_icon"
+          ],
+          "calls_to": [
+            "self.page.locator()",
+            ".nth()"
+          ],
+          "usage_example": "third_icon = cancellation_timeline_page.third_step_icon(0)\nassert third_icon.is_visible()",
+          "belongs_to_class": "CancellationTimelinePage",
+          "lines_of_code": 2
+        },
+        {
+          "method_name": "fourth_step_icon",
+          "method_signature": "def fourth_step_icon(self, index)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference to the CancellationTimelinePage object"
+            },
+            {
+              "name": "index",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Zero-based index of the fourth step icon element to retrieve"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "getter",
+          "what_it_does": "Retrieves a specific fourth step icon element by index. Creates a locator for all fourth step icon elements using self.page.locator(self.elements.fourth_step_icon) and selects the element at the specified zero-based index using .nth(index). Returns the Playwright locator for that icon element. Used to verify the visual state of the fourth timeline step.",
+          "locators_used": [
+            "fourth_step_icon"
+          ],
+          "calls_to": [
+            "self.page.locator()",
+            ".nth()"
+          ],
+          "usage_example": "fourth_icon = cancellation_timeline_page.fourth_step_icon(0)\nassert fourth_icon.is_visible()",
+          "belongs_to_class": "CancellationTimelinePage",
+          "lines_of_code": 2
+        },
+        {
+          "method_name": "fifth_step_icon",
+          "method_signature": "def fifth_step_icon(self, index)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference to the CancellationTimelinePage object"
+            },
+            {
+              "name": "index",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Zero-based index of the fifth step icon element to retrieve"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "getter",
+          "what_it_does": "Retrieves a specific fifth step icon element by index. Creates a locator for all fifth step icon elements using self.page.locator(self.elements.fifth_step_icon) and selects the element at the specified zero-based index using .nth(index). Returns the Playwright locator for that icon element. Used to verify the visual state of the fifth and final timeline step.",
+          "locators_used": [
+            "fifth_step_icon"
+          ],
+          "calls_to": [
+            "self.page.locator()",
+            ".nth()"
+          ],
+          "usage_example": "fifth_icon = cancellation_timeline_page.fifth_step_icon(0)\nassert fifth_icon.is_visible()",
+          "belongs_to_class": "CancellationTimelinePage",
+          "lines_of_code": 2
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This page object focuses on the cancellation timeline modal with 31 locators and 5 utility methods for accessing timeline elements by index. The cancellation_step() method demonstrates good defensive programming with index validation and error handling using IndexError. The timeline_stepper_header() method uses a long 60-second timeout suggesting the timeline may take time to load. The three step icon methods (third_step_icon, fourth_step_icon, fifth_step_icon) are separate methods rather than a single parameterized method, which is less DRY but may reflect different locator strategies for different steps. Many locators include multiple selector options to handle UI variations. The page object follows the AURA framework pattern of storing locators on self.elements and providing index-based accessor methods for collections of similar elements."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/pages/change_plan_cancellation_page.py",
+      "file_name": "change_plan_cancellation_page.py",
+      "file_extension": ".py",
+      "file_size_bytes": 3169,
+      "language": "Python",
+      "file_category": "page_object",
+      "file_purpose": "Page object for the Change Plan modal that appears as a retention alternative during the cancellation flow. Contains locators for the change plan modal interface including plan selection buttons for different page tiers, billing cycle selection options, navigation buttons, and informational elements. Provides utility methods to select ink plans dynamically and access the back button with text filtering.",
+      "imports": [
+        {
+          "import_statement": "from playwright.sync_api import Page",
+          "module": "playwright.sync_api",
+          "imported_names": [
+            "Page"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from pages.base_page_object import BasePageObject",
+          "module": "pages.base_page_object",
+          "imported_names": [
+            "BasePageObject"
+          ],
+          "is_external": false,
+          "is_internal": true
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "ChangePlanCancellationPage",
+          "parent_classes": [
+            "BasePageObject"
+          ],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Page object representing the Change Plan modal that appears during the cancellation flow as a retention strategy. Encapsulates all UI elements within the change plan interface including the modal container, header title and subtitle, informational icons for plan changes and shipping, plan selection buttons for all available page tiers (10, 25, 50, 100, 300, 500, 700 pages), additional pages tooltip, upgrade plan section with billing cycle selection (current vs next billing cycle) including radio buttons and icons, navigation buttons (return to cancellation, back, confirm), and visual indicators like dot icons for ink plans. Provides two utility methods: select_ink_plan() to dynamically click a plan button based on page count, and back_button_choose_plan() to access the back button filtered by its text content. Used in cancellation retention tests to verify plan change options and handle plan switching during cancellation flow.",
+          "how_to_import": "from pages.change_plan_cancellation_page import ChangePlanCancellationPage",
+          "how_to_instantiate": "change_plan_page = ChangePlanCancellationPage(page)",
+          "total_methods": 3,
+          "total_locators": 30
+        }
+      ],
+      "locators": [
+        {
+          "locator_name": "change_plan_link",
+          "locator_value": "[class^=\"changePlanModalContent__change-plan-container\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.change_plan_link",
+          "ui_element_description": "Container element for the change plan modal content",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "return_to_cancellation_button",
+          "locator_value": "xpath=//*[text()=\"Return to Cancellation\"]",
+          "locator_type": "xpath",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.return_to_cancellation_button",
+          "ui_element_description": "Button to return to the cancellation flow without changing the plan",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "change_plan_modal",
+          "locator_value": "[class^=\"changePlanModalContent__change-plan-container\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.change_plan_modal",
+          "ui_element_description": "Main modal container for the change plan interface",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "change_plan_title",
+          "locator_value": "[class^=\"changePlanModalContent__change-plan-header-content_\"] h3",
+          "locator_type": "composite",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.change_plan_title",
+          "ui_element_description": "Title heading (h3) within the change plan modal header",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "change_plan_subtitle",
+          "locator_value": "[class^=\"changePlanModalContent__change-plan-header-content_\"]>p",
+          "locator_type": "composite",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.change_plan_subtitle",
+          "ui_element_description": "Subtitle paragraph text within the change plan modal header",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "change_plan_icon",
+          "locator_value": "[class^=\"changePlanModalContent__change-cancel-info-icon\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.change_plan_icon",
+          "ui_element_description": "Informational icon related to plan change details",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "change_plan_shipping_icon",
+          "locator_value": "[class^=\"changePlanModalContent__shipping-info-icon\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.change_plan_shipping_icon",
+          "ui_element_description": "Icon providing shipping information related to plan changes",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "print_less_message",
+          "locator_value": "[class^=\"changePlanModalContent__footer-text\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.print_less_message",
+          "ui_element_description": "Footer text message about printing less, likely suggesting lower tier plans",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "additional_pages_tooltip",
+          "locator_value": "[class^=\"changePlanModalContent__tooltip-container__\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.additional_pages_tooltip",
+          "ui_element_description": "Tooltip container for additional pages information",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "additional_pages_tooltip_content",
+          "locator_value": "[data-testid=\"tooltip-content\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.additional_pages_tooltip_content",
+          "ui_element_description": "Content text within the additional pages tooltip",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "upgrade_plan_title",
+          "locator_value": "[data-testid=\"upgrade-plan-title\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.upgrade_plan_title",
+          "ui_element_description": "Title text for the upgrade plan section",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "upgrade_plan_subtitle",
+          "locator_value": "[data-testid=\"upgrade-plan-subtitle\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.upgrade_plan_subtitle",
+          "ui_element_description": "Subtitle text for the upgrade plan section",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "current_bc_card",
+          "locator_value": "[data-testid=\"upgrade-plan-current-bc-card\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.current_bc_card",
+          "ui_element_description": "Card element for selecting current billing cycle option when upgrading plan",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "current_bc_icon",
+          "locator_value": "[data-testid=\"upgrade-plan-current-bc-card\"] svg",
+          "locator_type": "composite",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.current_bc_icon",
+          "ui_element_description": "SVG icon within the current billing cycle card",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "current_bc_radio",
+          "locator_value": "[id=\"current-billing-cycle-radio\"]",
+          "locator_type": "id",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.current_bc_radio",
+          "ui_element_description": "Radio button to select current billing cycle for plan change",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "next_bc_card",
+          "locator_value": "[data-testid=\"upgrade-plan-next-bc-card\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.next_bc_card",
+          "ui_element_description": "Card element for selecting next billing cycle option when upgrading plan",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "next_bc_icon",
+          "locator_value": "[data-testid=\"upgrade-plan-next-bc-card\"] svg",
+          "locator_type": "composite",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.next_bc_icon",
+          "ui_element_description": "SVG icon within the next billing cycle card",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "next_bc_radio",
+          "locator_value": "[id=\"next-billing-cycle-radio\"]",
+          "locator_type": "id",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.next_bc_radio",
+          "ui_element_description": "Radio button to select next billing cycle for plan change",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "back_button_choose_plan",
+          "locator_value": "[type=\"button\"]",
+          "locator_type": "css",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.back_button_choose_plan",
+          "ui_element_description": "Back button in the choose plan interface (generic button selector, refined by method)",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "confirm_button_choose_plan",
+          "locator_value": "[data-testid=\"upgrade-plan-confirm-button\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.confirm_button_choose_plan",
+          "ui_element_description": "Confirm button to proceed with the selected plan upgrade",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "change_plan_10_button",
+          "locator_value": "[data-testid=\"change-plan-10-pages\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.change_plan_10_button",
+          "ui_element_description": "Button to select the 10 pages per month plan",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "change_plan_25_button",
+          "locator_value": "[data-testid=\"change-plan-25-pages\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.change_plan_25_button",
+          "ui_element_description": "Button to select the 25 pages per month plan",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "change_plan_50_button",
+          "locator_value": "[data-testid=\"change-plan-50-pages\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.change_plan_50_button",
+          "ui_element_description": "Button to select the 50 pages per month plan",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "change_plan_100_button",
+          "locator_value": "[data-testid=\"change-plan-100-pages\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.change_plan_100_button",
+          "ui_element_description": "Button to select the 100 pages per month plan",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "change_plan_300_button",
+          "locator_value": "[data-testid=\"change-plan-300-pages\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.change_plan_300_button",
+          "ui_element_description": "Button to select the 300 pages per month plan",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "change_plan_500_button",
+          "locator_value": "[data-testid=\"change-plan-500-pages\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.change_plan_500_button",
+          "ui_element_description": "Button to select the 500 pages per month plan",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "change_plan_700_button",
+          "locator_value": "[data-testid=\"change-plan-700-pages\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.change_plan_700_button",
+          "ui_element_description": "Button to select the 700 pages per month plan",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "dot_icon_ink",
+          "locator_value": "[class^=\"changePlanCard__change-plan-card-bullet-ink\"]",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.dot_icon_ink",
+          "ui_element_description": "Dot bullet icon displayed on ink plan cards",
+          "defined_in_class": "ChangePlanCancellationPage",
+          "defined_in_method": "__init__"
+        }
+      ],
+      "functions": [
+        {
+          "method_name": "__init__",
+          "method_signature": "def __init__(self, page: Page)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference to the ChangePlanCancellationPage object"
+            },
+            {
+              "name": "page",
+              "type": "Page",
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page containing the change plan modal"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": true,
+          "docstring": null,
+          "method_type": "constructor",
+          "what_it_does": "Initializes the ChangePlanCancellationPage object by calling the parent BasePageObject constructor with super().__init__(page). Then defines 30 locator attributes on the self.elements object for all interactive and informational elements within the change plan modal. Sets up locators for modal structure (change_plan_link, change_plan_modal, return_to_cancellation_button), header elements (change_plan_title, change_plan_subtitle), informational icons (change_plan_icon, change_plan_shipping_icon), footer message (print_less_message), tooltip elements (additional_pages_tooltip, additional_pages_tooltip_content), upgrade plan section (upgrade_plan_title, upgrade_plan_subtitle), billing cycle selection cards and radio buttons (current_bc_card, current_bc_icon, current_bc_radio, next_bc_card, next_bc_icon, next_bc_radio), navigation buttons (back_button_choose_plan, confirm_button_choose_plan), all seven plan selection buttons for different page tiers (change_plan_10_button through change_plan_700_button), and visual indicators (dot_icon_ink). All locators use primarily data-testid attributes with CSS class selectors for styled components.",
+          "locators_used": [],
+          "calls_to": [
+            "super().__init__(page)"
+          ],
+          "usage_example": "change_plan_page = ChangePlanCancellationPage(page)",
+          "belongs_to_class": "ChangePlanCancellationPage",
+          "lines_of_code": 32
+        },
+        {
+          "method_name": "select_ink_plan",
+          "method_signature": "def select_ink_plan(self, plan_pages: str)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference to the ChangePlanCancellationPage object"
+            },
+            {
+              "name": "plan_pages",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "The page count for the plan to select (e.g., '10', '25', '50', '100', '300', '500', '700')"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Dynamically selects an ink plan button based on the provided page count. Constructs a CSS selector string by formatting plan_selector as '[data-testid=\"change-plan-{plan_pages}-pages\"]' where {plan_pages} is replaced with the provided value (e.g., '[data-testid=\"change-plan-50-pages\"]' for plan_pages='50'). Creates a Playwright locator using self.page.locator(plan_selector) and immediately clicks it using .click(). This method provides a flexible way to select any available plan without hardcoding the plan value, making test code more maintainable and data-driven.",
+          "locators_used": [
+            "change_plan_10_button",
+            "change_plan_25_button",
+            "change_plan_50_button",
+            "change_plan_100_button",
+            "change_plan_300_button",
+            "change_plan_500_button",
+            "change_plan_700_button"
+          ],
+          "calls_to": [
+            "self.page.locator()",
+            ".click()"
+          ],
+          "usage_example": "change_plan_page.select_ink_plan('100')",
+          "belongs_to_class": "ChangePlanCancellationPage",
+          "lines_of_code": 3
+        },
+        {
+          "method_name": "back_button_choose_plan",
+          "method_signature": "def back_button_choose_plan(self)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference to the ChangePlanCancellationPage object"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "getter",
+          "what_it_does": "Returns a refined Playwright locator for the back button in the choose plan interface by filtering on text content. Creates a locator using self.page.locator(self.elements.back_button_choose_plan) which targets all button elements with type='button', then applies a has_text filter with the value 'Back' to narrow down to the specific back button. Returns the filtered locator object which can be used for clicking or verification. This approach is necessary because the base locator '[type=\"button\"]' is too generic and would match multiple buttons, so the text filter ensures the correct button is selected.",
+          "locators_used": [
+            "back_button_choose_plan"
+          ],
+          "calls_to": [
+            "self.page.locator()"
+          ],
+          "usage_example": "back_btn = change_plan_page.back_button_choose_plan()\nback_btn.click()",
+          "belongs_to_class": "ChangePlanCancellationPage",
+          "lines_of_code": 2
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This page object focuses on the change plan modal within the cancellation retention flow. It contains 30 locators and 2 utility methods. The select_ink_plan() method uses dynamic selector construction similar to the pattern seen in CancellationPage.get_plan_button(), but implements it differently by constructing the full selector string rather than using attribute lookup. The back_button_choose_plan() method demonstrates the use of Playwright's has_text filter to refine a generic selector, which is a useful pattern when data-testid attributes are not available. The page object includes billing cycle selection elements (current vs next billing cycle) which suggests the change plan flow includes timing options for when the plan change takes effect. All plan buttons use consistent data-testid naming convention making them easy to target dynamically."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/pages/confirmation_page.py",
+      "file_name": "confirmation_page.py",
+      "file_extension": ".py",
+      "file_size_bytes": 25131,
+      "language": "Python",
+      "file_category": "page_object",
+      "file_purpose": "Comprehensive page object for the enrollment confirmation and plan selection flow including plan type selection, plan details review, shipping address management, billing information setup with multiple payment methods (credit card, PayPal, Google Pay), promotion code application, terms agreement, and enrollment finalization. Contains extensive locators for all UI elements across the multi-step enrollment process including pre-enrollment plan selection, OOBE (out-of-box experience) flow, FTM (first-time-member) flow, paper addon options, and various modal dialogs. Provides utility methods to dynamically select ink and paper plans based on page count.",
+      "imports": [
+        {
+          "import_statement": "from playwright.sync_api import Page",
+          "module": "playwright.sync_api",
+          "imported_names": [
+            "Page"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from pages.base_page_object import BasePageObject",
+          "module": "pages.base_page_object",
+          "imported_names": [
+            "BasePageObject"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "import re",
+          "module": "re",
+          "imported_names": [
+            "re"
+          ],
+          "is_external": true,
+          "is_internal": false
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "ConfirmationPage",
+          "parent_classes": [
+            "BasePageObject"
+          ],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Massive comprehensive page object that encapsulates the entire enrollment confirmation and plan selection flow for HP Instant Ink subscription. Covers multiple enrollment paths including pre-enrollment plan type selection (monthly, yearly, pay-as-you-print), plan selection with ink-only and ink+paper options, shipping address entry and validation with suggested address handling, billing information setup supporting multiple payment methods (credit card via PGS iframe, 2Checkout, PayPal with various authentication flows, Google Pay), promotion and prepaid code application, terms and conditions agreement, automatic renewal notices, paper addon management, and final enrollment confirmation. Contains over 200 locators organized into logical sections: plan selection elements, shipping form fields and validation, billing form fields and payment method selection, PGS iframe elements for credit card entry, PayPal integration elements, Google Pay elements, promotion modal elements, confirmation page elements, OOBE and FTM specific elements, FLIP redesign elements, header navigation elements, and paper subscription elements. Provides two utility methods: select_ink_plan() and select_paper_plan() to dynamically select plans based on page count. This page object supports multiple UI variations and enrollment flows making it the central component for enrollment testing.",
+          "how_to_import": "from pages.confirmation_page import ConfirmationPage",
+          "how_to_instantiate": "confirmation_page = ConfirmationPage(page)",
+          "total_methods": 3,
+          "total_locators": 217
+        }
+      ],
+      "locators": [
+        {
+          "locator_name": "monthly_plan",
+          "locator_value": "[data-testid='i_ink-plan-type-card-select-button']",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.monthly_plan",
+          "ui_element_description": "Select button for monthly ink plan type in plan type selection",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "ink_cartridges_tab",
+          "locator_value": "[data-testid='ink-only-image-tab']",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.ink_cartridges_tab",
+          "ui_element_description": "Tab to view ink-only plan options",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "paper_cartridges_tab",
+          "locator_value": "[data-testid='ink-paper-image-tab']",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.paper_cartridges_tab",
+          "ui_element_description": "Tab to view ink and paper combined plan options",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "select_plan_button",
+          "locator_value": "[data-testid='consumer-plans-select-plans']",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.select_plan_button",
+          "ui_element_description": "Button to proceed with selected consumer plan",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "v3_content_area",
+          "locator_value": "[data-testid=\"v3-content-area\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.v3_content_area",
+          "ui_element_description": "Main content area container for v3 enrollment flow",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "first_name",
+          "locator_value": "input[name=\"firstName\"]",
+          "locator_type": "css",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.first_name",
+          "ui_element_description": "First name input field in shipping address form",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "last_name",
+          "locator_value": "input[name=\"lastName\"]",
+          "locator_type": "css",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.last_name",
+          "ui_element_description": "Last name input field in shipping address form",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "phone_number_input",
+          "locator_value": "[data-testid='phoneNumberSmall']",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.phone_number_input",
+          "ui_element_description": "Phone number input field in shipping address form",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "street1_input",
+          "locator_value": "[data-testid='street1'], #street1",
+          "locator_type": "composite",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.street1_input",
+          "ui_element_description": "Street address line 1 input field",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "street2_input",
+          "locator_value": "[data-testid='street2'], #street2",
+          "locator_type": "composite",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.street2_input",
+          "ui_element_description": "Street address line 2 input field (optional)",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "city_input",
+          "locator_value": "[data-testid='city'], #city",
+          "locator_type": "composite",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.city_input",
+          "ui_element_description": "City input field in shipping address form",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "state_dropdown",
+          "locator_value": "#state",
+          "locator_type": "id",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.state_dropdown",
+          "ui_element_description": "State dropdown selector in shipping address form",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "zip_code_input",
+          "locator_value": "[data-testid='zip-code'], #zip",
+          "locator_type": "composite",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.zip_code_input",
+          "ui_element_description": "ZIP code input field in shipping address form",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "save_button",
+          "locator_value": "[data-testid='save-button']",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.save_button",
+          "ui_element_description": "Save button to submit shipping address form",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "billing_modal",
+          "locator_value": "[class^='vn-modal--content']",
+          "locator_type": "class",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.billing_modal",
+          "ui_element_description": "Modal dialog container for billing information entry",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "credit_card_radio_option",
+          "locator_value": "[data-testid='credit-card-payment-box'] label",
+          "locator_type": "composite",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.credit_card_radio_option",
+          "ui_element_description": "Label for credit card payment method radio button",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "iframe_pgs",
+          "locator_value": "#pgs-iframe",
+          "locator_type": "id",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.iframe_pgs",
+          "ui_element_description": "PGS payment iframe for secure credit card entry",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "card_number",
+          "locator_value": "#txtCardNumber",
+          "locator_type": "id",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.card_number",
+          "ui_element_description": "Credit card number input field within PGS iframe",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "exp_month",
+          "locator_value": "#drpExpMonth",
+          "locator_type": "id",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.exp_month",
+          "ui_element_description": "Expiration month dropdown within PGS iframe",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "exp_year",
+          "locator_value": "#drpExpYear",
+          "locator_type": "id",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.exp_year",
+          "ui_element_description": "Expiration year dropdown within PGS iframe",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "cvv_input",
+          "locator_value": "#txtCVV",
+          "locator_type": "id",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.cvv_input",
+          "ui_element_description": "CVV security code input field within PGS iframe",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "billing_next_button",
+          "locator_value": "#btn_pgs_card_add",
+          "locator_type": "id",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.billing_next_button",
+          "ui_element_description": "Next/Submit button within PGS iframe to add credit card",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "paypal_button",
+          "locator_value": "[data-testid=\"paypal-button\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.paypal_button",
+          "ui_element_description": "PayPal payment method selection button",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "paypal_email_input",
+          "locator_value": "#login_email, #email",
+          "locator_type": "id",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.paypal_email_input",
+          "ui_element_description": "Email input field on PayPal login page",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "paypal_password_input",
+          "locator_value": "#password",
+          "locator_type": "id",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.paypal_password_input",
+          "ui_element_description": "Password input field on PayPal login page",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "paypal_login_button",
+          "locator_value": "[data-atomic-wait-intent=\"Submit_Password\"], #btnLogin",
+          "locator_type": "composite",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.paypal_login_button",
+          "ui_element_description": "Login button on PayPal authentication page",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "paypal_agree_button",
+          "locator_value": "#consentButton",
+          "locator_type": "id",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.paypal_agree_button",
+          "ui_element_description": "Agree/Consent button on PayPal authorization page",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "promotion_code_input",
+          "locator_value": "[data-testid='code-entry'], [data-testid='promo-code-input-box']",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.promotion_code_input",
+          "ui_element_description": "Input field for entering promotion or promo code",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "promotion_apply_button",
+          "locator_value": "button[class*='ApplyButton'], [data-testid='apply-promo-code-button']",
+          "locator_type": "composite",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.promotion_apply_button",
+          "ui_element_description": "Button to apply entered promotion code",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "terms_agreement_checkbox",
+          "locator_value": "[data-testid='terms-agreement'], [data-testid='enroll-without-billing-terms-agreement']",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.terms_agreement_checkbox",
+          "ui_element_description": "Checkbox to agree to terms of service and automatic renewal",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "enroll_button",
+          "locator_value": "[data-testid='redeem-button'],[data-testid='ftm-redesign-enroll-continue-button']",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.enroll_button",
+          "ui_element_description": "Final enroll button to complete subscription enrollment",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "plan_type_title",
+          "locator_value": "text=Select a plan type",
+          "locator_type": "text",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.plan_type_title",
+          "ui_element_description": "Title text for plan type selection page",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "pay_as_you_print_card",
+          "locator_value": "[data-testid=\"i_pay_as_you_print-type-card-content-container\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.pay_as_you_print_card",
+          "ui_element_description": "Card container for pay-as-you-print plan type option",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "monthly_plan_card",
+          "locator_value": "[data-testid=\"i_ink-type-card-content-container\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.monthly_plan_card",
+          "ui_element_description": "Card container for monthly plan type option",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        },
+        {
+          "locator_name": "yearly_plan_card",
+          "locator_value": "[data-testid=\"i_yearly_ink-type-card-content-container\"]",
+          "locator_type": "data-testid",
+          "locator_strategy": "self.elements attribute assignment",
+          "access_pattern": "self.elements.yearly_plan_card",
+          "ui_element_description": "Card container for yearly plan type option",
+          "defined_in_class": "ConfirmationPage",
+          "defined_in_method": "__init__"
+        }
+      ],
+      "functions": [
+        {
+          "method_name": "__init__",
+          "method_signature": "def __init__(self, page: Page)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference to the ConfirmationPage object"
+            },
+            {
+              "name": "page",
+              "type": "Page",
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance representing the browser page containing enrollment confirmation flow"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": true,
+          "docstring": null,
+          "method_type": "constructor",
+          "what_it_does": "Initializes the ConfirmationPage object by calling the parent BasePageObject constructor with super().__init__(page). Then systematically defines over 217 locator attributes on the self.elements object, organized into comprehensive sections covering the entire enrollment flow. Defines plan selection elements including monthly_plan, ink_cartridges_tab, paper_cartridges_tab, select_plan_button, and plan type cards for pay-as-you-print, monthly, and yearly options. Sets up shipping address form fields including first_name, last_name, phone_number_input, street1_input, street2_input, city_input, state_dropdown, zip_code_input, and related buttons and validation elements. Configures billing section locators including billing_modal, credit_card_radio_option, PGS iframe elements (iframe_pgs, card_number, exp_month, exp_year, cvv_input, billing_next_button), 2Checkout iframe elements, PayPal integration elements (paypal_button, paypal_email_input, paypal_password_input, paypal_login_button, paypal_agree_button), and Google Pay elements. Defines promotion and special offer elements including promotion_code_input, promotion_apply_button, prepaid_value, and various offer type indicators. Sets up confirmation page elements including terms_agreement_checkbox, enroll_button, billing_card, shipping_card, plan_card with their respective edit buttons and content areas. Includes OOBE-specific elements, FTM redesign elements, FLIP UI elements, header navigation elements, and paper addon elements. This massive initialization ensures all possible UI elements across all enrollment flow variations are accessible for test automation.",
+          "locators_used": [],
+          "calls_to": [
+            "super().__init__(page)"
+          ],
+          "usage_example": "confirmation_page = ConfirmationPage(page)",
+          "belongs_to_class": "ConfirmationPage",
+          "lines_of_code": 220
+        },
+        {
+          "method_name": "select_ink_plan",
+          "method_signature": "def select_ink_plan(self, plan_pages: str)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference to the ConfirmationPage object"
+            },
+            {
+              "name": "plan_pages",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "The page count for the ink plan to select (e.g., '10', '25', '50', '100', '300', '500', '700', '1500')"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Dynamically selects an ink-only plan based on the provided page count. Constructs a CSS selector string by formatting plan_selector as 'label:has([data-testid=\"plan-radio-button-i_ink-{plan_pages}\"])' where {plan_pages} is replaced with the provided value. This selector targets the label element that contains the radio button for the specified ink plan. Creates a Playwright locator using self.page.locator(plan_selector) and immediately clicks it using .click() to select that plan. This method enables data-driven test scenarios where the plan selection can be parameterized.",
+          "locators_used": [],
+          "calls_to": [
+            "self.page.locator()",
+            ".click()"
+          ],
+          "usage_example": "confirmation_page.select_ink_plan('100')",
+          "belongs_to_class": "ConfirmationPage",
+          "lines_of_code": 3
+        },
+        {
+          "method_name": "select_paper_plan",
+          "method_signature": "def select_paper_plan(self, plan_pages: str)",
+          "parameters": [
+            {
+              "name": "self",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Instance reference to the ConfirmationPage object"
+            },
+            {
+              "name": "plan_pages",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "The page count for the ink+paper plan to select (e.g., '10', '25', '50', '100', '300', '500')"
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Dynamically selects an ink and paper combined plan based on the provided page count. Constructs a CSS selector string by formatting plan_selector as 'label:has([data-testid=\"plan-radio-button-i_ink_paper-{plan_pages}\"])' where {plan_pages} is replaced with the provided value. This selector targets the label element that contains the radio button for the specified ink+paper plan. Creates a Playwright locator using self.page.locator(plan_selector) and immediately clicks it using .click() to select that plan. This method parallels select_ink_plan() but targets the ink+paper plan variant.",
+          "locators_used": [],
+          "calls_to": [
+            "self.page.locator()",
+            ".click()"
+          ],
+          "usage_example": "confirmation_page.select_paper_plan('50')",
+          "belongs_to_class": "ConfirmationPage",
+          "lines_of_code": 3
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This is by far the largest and most comprehensive page object in the batch with 217 locators covering the entire enrollment confirmation flow. It demonstrates the challenge of maintaining page objects for complex multi-step flows with multiple UI variations (OOBE, FTM, FLIP redesign, standard flow). The page object imports the 're' module but does not appear to use it in any methods, suggesting it may be used in test files or was intended for future use. The two utility methods select_ink_plan() and select_paper_plan() use a different dynamic selector construction approach than seen in other page objects, using label:has() syntax to target radio button labels. The extensive locator collection includes multiple payment method integrations (PGS, 2Checkout, PayPal, Google Pay) each with their own iframe and authentication flow elements. Many locators include multiple selector options separated by commas to handle different UI versions. The organization uses comments to group related locators which aids maintainability. This page object would benefit from being split into multiple smaller page objects for different sections (ShippingPage, BillingPage, PlanSelectionPage, etc.) to improve maintainability, but the current monolithic approach ensures all enrollment elements are in one place."
+    }
+  ],
+  "batch_summary": {
+    "total_classes_found": 5,
+    "total_methods_found": 13,
+    "total_locators_found": 362,
+    "total_imports_found": 11,
+    "total_constants_found": 0,
+    "total_inner_classes_found": 0,
+    "page_objects_found": [
+      "CancellationBannerPage",
+      "CancellationPage",
+      "CancellationTimelinePage",
+      "ChangePlanCancellationPage",
+      "ConfirmationPage"
+    ],
+    "helper_classes_found": [],
+    "core_classes_found": [],
+    "config_classes_found": [],
+    "key_reusable_methods": [
+      "CancellationPage.get_plan_button — Dynamically retrieves plan button locator by page count",
+      "CancellationTimelinePage.timeline_stepper_header — Gets timeline stepper header by index with 60s wait",
+      "CancellationTimelinePage.cancellation_step — Gets cancellation step by index with validation and wait",
+      "CancellationTimelinePage.cancellation_step_title — Gets step title by index",
+      "CancellationTimelinePage.third_step_icon — Gets third step icon by index",
+      "CancellationTimelinePage.fourth_step_icon — Gets fourth step icon by index",
+      "CancellationTimelinePage.fifth_step_icon — Gets fifth step icon by index",
+      "ChangePlanCancellationPage.select_ink_plan — Dynamically selects ink plan by page count",
+      "ChangePlanCancellationPage.back_button_choose_plan — Gets back button with text filter",
+      "ConfirmationPage.select_ink_plan — Dynamically selects ink-only plan by page count",
+      "ConfirmationPage.select_paper_plan — Dynamically selects ink+paper plan by page count"
+    ],
+    "key_reusable_locators": [
+      "CancellationBannerPage.see_cancellation_timeline — Link to open timeline modal",
+      "CancellationBannerPage.keep_subscription_button — Button to keep subscription",
+      "CancellationBannerPage.resume_button — Resume subscription confirmation button",
+      "CancellationPage.confirm_cancellation_button — Primary cancellation confirmation button",
+      "CancellationPage.change_plan_link — Link to open change plan modal",
+      "CancellationPage.pause_plan_link — Link to pause subscription",
+      "CancellationPage.plan_10_button through plan_1500_button — All plan selection buttons",
+      "CancellationPage.do_not_print_enough_radio — Cancellation feedback radio button",
+      "CancellationTimelinePage.close_button — Close timeline modal button",
+      "CancellationTimelinePage.restore_subscription — Restore cancelled subscription button",
+      "CancellationTimelinePage.cancellation_step — Timeline step containers",
+      "ChangePlanCancellationPage.change_plan_modal — Change plan modal container",
+      "ChangePlanCancellationPage.current_bc_radio — Current billing cycle radio button",
+      "ChangePlanCancellationPage.next_bc_radio — Next billing cycle radio button",
+      "ConfirmationPage.terms_agreement_checkbox — Terms agreement checkbox",
+      "ConfirmationPage.enroll_button — Final enrollment button",
+      "ConfirmationPage.paypal_button — PayPal payment method button",
+      "ConfirmationPage.promotion_code_input — Promotion code input field",
+      "ConfirmationPage.save_button — Save shipping address button",
+      "ConfirmationPage.billing_next_button — PGS iframe submit button"
+    ]
+  }
+}
