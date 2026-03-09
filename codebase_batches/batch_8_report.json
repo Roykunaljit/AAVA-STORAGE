@@ -1,0 +1,2042 @@
+{
+  "batch_metadata": {
+    "batch_id": 8,
+    "total_batches": 18,
+    "remaining_after_this": 10,
+    "analyzed_at": "2025-01-15T10:45:00Z",
+    "analyzer": "Senior Codebase Analyst Agent",
+    "files_in_batch": 5,
+    "files_succeeded": 5,
+    "files_failed": 0,
+    "failed_files": [],
+    "storage_repo": "AAVA-STORAGE",
+    "report_path": "codebase_batches/batch_8_report.json"
+  },
+  "analyzed_files": [
+    "AURA-main (1) 1/AURA-main/helper/email_helper.py",
+    "AURA-main (1) 1/AURA-main/helper/enrollment_helper.py",
+    "AURA-main (1) 1/AURA-main/helper/fulfillment_service_ra_helper.py",
+    "AURA-main (1) 1/AURA-main/helper/fulfillment_simulator_ra_helper.py",
+    "AURA-main (1) 1/AURA-main/helper/gemini_ra_helper.py"
+  ],
+  "file_analyses": [
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/helper/email_helper.py",
+      "file_name": "email_helper.py",
+      "file_extension": ".py",
+      "file_size_bytes": 2385,
+      "language": "Python",
+      "file_category": "helper",
+      "file_purpose": "Email verification helper module that provides utility methods for checking email delivery, extracting email content, and validating email subjects using Gmail API integration. Used in test scenarios where email verification is required as part of the test flow, such as registration confirmations, password resets, or notification validations.",
+      "imports": [
+        {
+          "import_statement": "import base64",
+          "module": "base64",
+          "imported_names": [
+            "base64"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import time",
+          "module": "time",
+          "imported_names": [
+            "time"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from datetime import datetime, timedelta",
+          "module": "datetime",
+          "imported_names": [
+            "datetime",
+            "timedelta"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import test_flows_common.test_flows_common as common",
+          "module": "test_flows_common.test_flows_common",
+          "imported_names": [
+            "common"
+          ],
+          "is_external": false,
+          "is_internal": true
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "EmailHelper",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Provides static utility methods for email verification operations using Gmail API. Contains methods to check if emails with specific subjects have been received, retrieve email messages by subject, and extract detailed email content including subject, pre-header, and HTML body. All methods are static and do not require class instantiation.",
+          "how_to_import": "from helper.email_helper import EmailHelper",
+          "how_to_instantiate": "EmailHelper is used via static methods - no instantiation needed. Call EmailHelper.sees_email_with_subject(email, subject) directly.",
+          "total_methods": 3,
+          "total_locators": 0
+        }
+      ],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "sees_email_with_subject",
+          "method_signature": "def sees_email_with_subject(tenant_email: str, subject: str, timeout: int = 240, poll_interval: int = 10)",
+          "parameters": [
+            {
+              "name": "tenant_email",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "The email address to check for received emails"
+            },
+            {
+              "name": "subject",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "The email subject line to search for"
+            },
+            {
+              "name": "timeout",
+              "type": "int",
+              "default_value": "240",
+              "is_required": false,
+              "description": "Maximum time in seconds to wait for the email to arrive. Defaults to 240 seconds (4 minutes)."
+            },
+            {
+              "name": "poll_interval",
+              "type": "int",
+              "default_value": "10",
+              "is_required": false,
+              "description": "Time in seconds between each check for the email. Defaults to 10 seconds."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies that an email with a specific subject has been received by the specified email address. This is a wrapper method that internally calls email_by_subject() to perform the actual email retrieval. The method polls the Gmail API at regular intervals (poll_interval) until either the email is found or the timeout period expires. If the email is found, the method completes successfully. If the timeout is reached without finding the email, the underlying email_by_subject() method will raise a RuntimeError. This method is typically used in test assertions to verify that expected emails were sent and received.",
+          "locators_used": [],
+          "calls_to": [
+            "EmailHelper.email_by_subject()"
+          ],
+          "usage_example": "EmailHelper.sees_email_with_subject('testuser@example.com', 'Welcome to HP Instant Ink', timeout=300, poll_interval=15)",
+          "belongs_to_class": "EmailHelper",
+          "lines_of_code": 2
+        },
+        {
+          "method_name": "email_by_subject",
+          "method_signature": "def email_by_subject(tenant_email: str, subject: str, timeout: int = 240, poll_interval: int = 10)",
+          "parameters": [
+            {
+              "name": "tenant_email",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "The email address to check for received emails"
+            },
+            {
+              "name": "subject",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "The email subject line to search for"
+            },
+            {
+              "name": "timeout",
+              "type": "int",
+              "default_value": "240",
+              "is_required": false,
+              "description": "Maximum time in seconds to wait for the email to arrive. Defaults to 240 seconds."
+            },
+            {
+              "name": "poll_interval",
+              "type": "int",
+              "default_value": "10",
+              "is_required": false,
+              "description": "Time in seconds between each check for the email. Defaults to 10 seconds."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "api_call",
+          "what_it_does": "Retrieves an email message from Gmail API by searching for a specific subject line sent to a specific email address. First authenticates with Gmail using common.authenticate_gmail() to get the service object. Constructs a search query in the format 'to:{email} subject:\"{subject}\"' and repeatedly polls the Gmail API using service.users().messages().list() until either a matching email is found or the timeout expires. When a matching email is found, retrieves the full message details using service.users().messages().get() with the message ID and returns the complete message object. If no email is found within the timeout period, raises a RuntimeError with a descriptive message indicating the email was not received. Uses time.sleep(poll_interval) between polling attempts to avoid excessive API calls.",
+          "locators_used": [],
+          "calls_to": [
+            "common.authenticate_gmail()",
+            "service.users().messages().list()",
+            "service.users().messages().get()",
+            "time.sleep()"
+          ],
+          "usage_example": "message = EmailHelper.email_by_subject('user@test.com', 'Password Reset', timeout=180)",
+          "belongs_to_class": "EmailHelper",
+          "lines_of_code": 16
+        },
+        {
+          "method_name": "extract_email_details",
+          "method_signature": "def extract_email_details(tenant_email: str, subject: str, timeout: int = 240, poll_interval: int = 10)",
+          "parameters": [
+            {
+              "name": "tenant_email",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "The email address to check for received emails"
+            },
+            {
+              "name": "subject",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "The email subject line to search for"
+            },
+            {
+              "name": "timeout",
+              "type": "int",
+              "default_value": "240",
+              "is_required": false,
+              "description": "Maximum time in seconds to wait for the email. Defaults to 240 seconds."
+            },
+            {
+              "name": "poll_interval",
+              "type": "int",
+              "default_value": "10",
+              "is_required": false,
+              "description": "Time in seconds between polling attempts. Defaults to 10 seconds."
+            }
+          ],
+          "return_type": "dict",
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "data_provider",
+          "what_it_does": "Extracts detailed information from an email message including subject, pre-header text, and HTML body content. First calls email_by_subject() to retrieve the email message object. Then extracts the subject from the message headers by searching for the header with name 'subject'. Extracts the pre-header text by searching for the 'x-preheader-text' header. Defines an inner recursive function find_html_part() that traverses the message payload structure to locate the HTML part of the email by checking mimeType for 'text/html' and recursively searching through nested parts. Once the HTML data is found, decodes it from base64 URL-safe encoding using base64.urlsafe_b64decode() and converts to UTF-8 string. Returns a dictionary with three keys: 'subject' containing the email subject line, 'pre_header' containing the pre-header text, and 'html_body' containing the decoded HTML content of the email body.",
+          "locators_used": [],
+          "calls_to": [
+            "EmailHelper.email_by_subject()",
+            "base64.urlsafe_b64decode()"
+          ],
+          "usage_example": "details = EmailHelper.extract_email_details('user@test.com', 'Welcome Email')\nsubject = details['subject']\nhtml = details['html_body']",
+          "belongs_to_class": "EmailHelper",
+          "lines_of_code": 20
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This helper module provides email verification capabilities essential for end-to-end testing scenarios. It integrates with Gmail API through the common module's authenticate_gmail() function. The module uses a polling pattern with configurable timeout and interval to handle asynchronous email delivery. The extract_email_details method includes a nested recursive function to handle complex email MIME structures. All methods are static, making the class a pure utility class. Error handling is minimal - only a RuntimeError is raised when emails are not found within timeout. The base64 decoding handles URL-safe encoding which is standard for Gmail API responses."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/helper/enrollment_helper.py",
+      "file_name": "enrollment_helper.py",
+      "file_extension": ".py",
+      "file_size_bytes": 165611,
+      "language": "Python",
+      "file_category": "helper",
+      "file_purpose": "Comprehensive enrollment flow helper module containing extensive utility methods for HP Instant Ink enrollment process automation. Handles complete enrollment workflows including terms acceptance, printer selection, plan selection, shipping address entry, billing information, payment methods (credit card, PayPal, Google Pay, direct debit, prepaid), promotional codes, order review, and enrollment finalization. This is the largest and most complex helper in the framework, serving as the central orchestrator for all enrollment-related test operations.",
+      "imports": [
+        {
+          "import_statement": "from itertools import count",
+          "module": "itertools",
+          "imported_names": [
+            "count"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from email.mime import text",
+          "module": "email.mime",
+          "imported_names": [
+            "text"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import re",
+          "module": "re",
+          "imported_names": [
+            "re"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from time import sleep",
+          "module": "time",
+          "imported_names": [
+            "sleep"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from helper.gemini_ra_helper import GeminiRAHelper",
+          "module": "helper.gemini_ra_helper",
+          "imported_names": [
+            "GeminiRAHelper"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from helper.hpid_helper import HPIDHelper",
+          "module": "helper.hpid_helper",
+          "imported_names": [
+            "HPIDHelper"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.landing_page import LandingPage",
+          "module": "pages.landing_page",
+          "imported_names": [
+            "LandingPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages import plan_selector_v3_page",
+          "module": "pages",
+          "imported_names": [
+            "plan_selector_v3_page"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.oss_emulator_page import OssEmulatorPage",
+          "module": "pages.oss_emulator_page",
+          "imported_names": [
+            "OssEmulatorPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.plan_selector_v3_page import PlanSelectorV3Page",
+          "module": "pages.plan_selector_v3_page",
+          "imported_names": [
+            "PlanSelectorV3Page"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.privacy_banner_page import PrivacyBannerPage",
+          "module": "pages.privacy_banner_page",
+          "imported_names": [
+            "PrivacyBannerPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.printer_selection_page import PrinterSelectionPage",
+          "module": "pages.printer_selection_page",
+          "imported_names": [
+            "PrinterSelectionPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.printer_updates_page import PrinterUpdatesPage",
+          "module": "pages.printer_updates_page",
+          "imported_names": [
+            "PrinterUpdatesPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.confirmation_page import ConfirmationPage",
+          "module": "pages.confirmation_page",
+          "imported_names": [
+            "ConfirmationPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.thank_you_page import ThankYouPage",
+          "module": "pages.thank_you_page",
+          "imported_names": [
+            "ThankYouPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.tos_hp_smart_page import TermsOfServiceHPSmartPage",
+          "module": "pages.tos_hp_smart_page",
+          "imported_names": [
+            "TermsOfServiceHPSmartPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.dashboard_hp_smart_page import DashboardHPSmartPage",
+          "module": "pages.dashboard_hp_smart_page",
+          "imported_names": [
+            "DashboardHPSmartPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from pages.overview_page import OverviewPage",
+          "module": "pages.overview_page",
+          "imported_names": [
+            "OverviewPage"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from playwright.sync_api import expect",
+          "module": "playwright.sync_api",
+          "imported_names": [
+            "expect"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import test_flows_common.test_flows_common as common",
+          "module": "test_flows_common.test_flows_common",
+          "imported_names": [
+            "common"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from core.settings import framework_logger, GlobalState",
+          "module": "core.settings",
+          "imported_names": [
+            "framework_logger",
+            "GlobalState"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "import time",
+          "module": "time",
+          "imported_names": [
+            "time"
+          ],
+          "is_external": true,
+          "is_internal": false
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "EnrollmentHelper",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Massive helper class containing 100+ static methods that orchestrate the complete HP Instant Ink enrollment workflow. Provides methods for every step of enrollment including starting enrollment, signing in, accepting terms, selecting printers and plans, entering shipping and billing information, handling multiple payment methods (credit cards via PGS and 2CO, PayPal, Google Pay, direct debit, prepaid codes), applying promotional codes, validating UI elements and layouts, handling modals, performing enrollment finalization, and validating thank you pages. This is the central orchestration class for all enrollment test scenarios.",
+          "how_to_import": "from helper.enrollment_helper import EnrollmentHelper",
+          "how_to_instantiate": "EnrollmentHelper is used via static methods - no instantiation needed. Call EnrollmentHelper.start_enrollment(page) directly.",
+          "total_methods": 107,
+          "total_locators": 0
+        }
+      ],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "accept_terms_of_service",
+          "method_signature": "def accept_terms_of_service(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Accepts the Terms of Service on the HP Smart TOS page during enrollment. Creates a TermsOfServiceHPSmartPage instance, waits for the continue button to become visible with a 60 second timeout, clicks the continue button, and then waits for the button to disappear (not be visible) with another 60 second timeout to confirm the page has transitioned. Uses Playwright's expect assertion to verify the button is no longer visible after clicking.",
+          "locators_used": [
+            "continue_button"
+          ],
+          "calls_to": [
+            "TermsOfServiceHPSmartPage()",
+            "tos_page.wait.continue_button()",
+            "tos_page.continue_button.click()",
+            "expect().not_to_be_visible()"
+          ],
+          "usage_example": "EnrollmentHelper.accept_terms_of_service(page)",
+          "belongs_to_class": "EnrollmentHelper",
+          "lines_of_code": 4
+        },
+        {
+          "method_name": "accept_all_preferences",
+          "method_signature": "def accept_all_preferences(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Accepts all preferences on the product setup/overview page. Creates an OverviewPage instance, clicks the accept_all_preferences button, and waits for the button to disappear with a 60 second timeout using Playwright's expect assertion to confirm the preferences have been accepted and the page has moved forward.",
+          "locators_used": [
+            "accept_all_preferences"
+          ],
+          "calls_to": [
+            "OverviewPage()",
+            "product_setup_page.accept_all_preferences.click()",
+            "expect().not_to_be_visible()"
+          ],
+          "usage_example": "EnrollmentHelper.accept_all_preferences(page)",
+          "belongs_to_class": "EnrollmentHelper",
+          "lines_of_code": 3
+        },
+        {
+          "method_name": "start_enrollment",
+          "method_signature": "def start_enrollment(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "navigation",
+          "what_it_does": "Initiates the enrollment process by navigating to the Instant Ink v3 enrollment URL and accepting the privacy banner. Creates a PrivacyBannerPage instance, navigates to the enrollment URL from common._instantink_v3_url with a 120 second timeout, waits for the page load state to complete, calls the privacy banner's accept method to dismiss the privacy notice, and waits again for the page to fully load before proceeding.",
+          "locators_used": [],
+          "calls_to": [
+            "PrivacyBannerPage()",
+            "page.goto()",
+            "page.wait_for_load_state()",
+            "privacy_banner.accept_privacy_banner()"
+          ],
+          "usage_example": "EnrollmentHelper.start_enrollment(page)",
+          "belongs_to_class": "EnrollmentHelper",
+          "lines_of_code": 5
+        },
+        {
+          "method_name": "start_enrollment_and_sign_in",
+          "method_signature": "def start_enrollment_and_sign_in(page, tenant_email, timeout=720)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            },
+            {
+              "name": "tenant_email",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Email address of the tenant user to sign in with"
+            },
+            {
+              "name": "timeout",
+              "type": null,
+              "default_value": "720",
+              "is_required": false,
+              "description": "Maximum time in seconds to retry enrollment and sign-in. Defaults to 720 seconds (12 minutes)."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Starts the enrollment process and signs in the user with retry logic. Calculates an end time based on the timeout parameter. Enters a while loop that continues until either the printer-selection page is reached or the timeout expires. In each iteration, attempts to start enrollment by calling start_enrollment(), logs the tenant email, checks if the URL contains 'printer-selection' and breaks if found, otherwise calls HPIDHelper.complete_sign_in() with the tenant email and default password to perform the sign-in. Catches any exceptions and continues retrying. After each attempt, checks again if printer-selection is in the URL and breaks if found, otherwise sleeps for 10 seconds before the next retry. This provides robust handling of enrollment start and sign-in with automatic retries.",
+          "locators_used": [],
+          "calls_to": [
+            "EnrollmentHelper.start_enrollment()",
+            "framework_logger.info()",
+            "HPIDHelper.complete_sign_in()",
+            "time.sleep()"
+          ],
+          "usage_example": "EnrollmentHelper.start_enrollment_and_sign_in(page, 'user@test.com', timeout=600)",
+          "belongs_to_class": "EnrollmentHelper",
+          "lines_of_code": 18
+        },
+        {
+          "method_name": "signup_now",
+          "method_signature": "def signup_now(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Clicks the 'Sign Up Now' button on the HP Smart dashboard page. Creates a DashboardHPSmartPage instance, waits for the signup_now_button to become visible with a 180 second timeout, and then clicks the button to proceed with enrollment signup.",
+          "locators_used": [
+            "signup_now_button"
+          ],
+          "calls_to": [
+            "DashboardHPSmartPage()",
+            "smart_dashboard.signup_now_button.wait_for()",
+            "smart_dashboard.signup_now_button.click()"
+          ],
+          "usage_example": "EnrollmentHelper.signup_now(page)",
+          "belongs_to_class": "EnrollmentHelper",
+          "lines_of_code": 3
+        },
+        {
+          "method_name": "select_printer",
+          "method_signature": "def select_printer(page, printer_index=0)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            },
+            {
+              "name": "printer_index",
+              "type": null,
+              "default_value": "0",
+              "is_required": false,
+              "description": "Zero-based index of the printer to select from the list. Defaults to 0 (first printer)."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Selects a printer from the printer selection page by index and continues. Creates a PrinterSelectionPage instance, waits for the printer selection page element to be visible with a 180 second timeout using page.wait_for_selector(), clicks the radio button for the printer at the specified index using nth(printer_index), and then clicks the continue button to proceed to the next step.",
+          "locators_used": [
+            "printer_selection_page",
+            "printer_radio_button",
+            "continue_button"
+          ],
+          "calls_to": [
+            "PrinterSelectionPage()",
+            "page.wait_for_selector()",
+            "printer_selection.printer_radio_button.nth().click()",
+            "printer_selection.continue_button.click()"
+          ],
+          "usage_example": "EnrollmentHelper.select_printer(page, printer_index=1)",
+          "belongs_to_class": "EnrollmentHelper",
+          "lines_of_code": 4
+        },
+        {
+          "method_name": "accept_automatic_printer_updates",
+          "method_signature": "def accept_automatic_printer_updates(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Accepts automatic printer updates on the printer updates page. Creates a PrinterUpdatesPage instance and calls its accept_automatic_updates() method to accept the automatic update settings.",
+          "locators_used": [],
+          "calls_to": [
+            "PrinterUpdatesPage()",
+            "printer_updates.accept_automatic_updates()"
+          ],
+          "usage_example": "EnrollmentHelper.accept_automatic_printer_updates(page)",
+          "belongs_to_class": "EnrollmentHelper",
+          "lines_of_code": 2
+        },
+        {
+          "method_name": "add_shipping",
+          "method_signature": "def add_shipping(page, index=0, company_name=None, additional_check=False, callback=None)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            },
+            {
+              "name": "index",
+              "type": null,
+              "default_value": "0",
+              "is_required": false,
+              "description": "Index of the address in GlobalState.address_payload to use. Defaults to 0."
+            },
+            {
+              "name": "company_name",
+              "type": null,
+              "default_value": "None",
+              "is_required": false,
+              "description": "Optional company name to fill in the shipping form"
+            },
+            {
+              "name": "additional_check",
+              "type": null,
+              "default_value": "False",
+              "is_required": false,
+              "description": "Whether to perform additional validation checks on the shipping modal"
+            },
+            {
+              "name": "callback",
+              "type": null,
+              "default_value": "None",
+              "is_required": false,
+              "description": "Optional callback function for taking screenshots during the process"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Fills and submits the shipping address form during enrollment. Creates a ConfirmationPage instance and retrieves the address data from GlobalState.address_payload at the specified index. Extracts the full state name from the address. Optionally clicks the add_shipping_button if it's visible. Fills the company name if provided. Fills street1, street2, city (if country is not in the no-city-mandate list), state (if country requires states - uses dropdown selection), zip code (if country requires it), and phone number fields with data from the address object. If additional_check is True, validates that the receive updates message is visible, checks that the receive updates checkbox is unchecked by default (raises exception if checked), verifies close button, cancel button, and save button are all visible. Clicks the save button to submit the form. Handles the suggested address modal if it appears by clicking ship_to_address_button. If additional_check is True, validates that the entered address details are visible on the page after saving. Uses callback for screenshots if provided when errors occur.",
+          "locators_used": [
+            "add_shipping_button",
+            "company_name_input",
+            "street1_input",
+            "street2_input",
+            "city_input",
+            "state_dropdown",
+            "zip_code_input",
+            "phone_number_input",
+            "receive_update_msg",
+            "receive_update_checkbox",
+            "close_shipping_modal_button",
+            "cancel_button",
+            "save_button",
+            "suggested_address_modal",
+            "ship_to_address_button"
+          ],
+          "calls_to": [
+            "ConfirmationPage()",
+            "GlobalState.address_payload",
+            "confirmation_page.add_shipping_button.is_visible()",
+            "confirmation_page.add_shipping_button.click()",
+            "confirmation_page.company_name_input.fill()",
+            "confirmation_page.street1_input.fill()",
+            "confirmation_page.street2_input.fill()",
+            "confirmation_page.city_input.fill()",
+            "confirmation_page.state_dropdown.click()",
+            "confirmation_page.state_dropdown.get_attribute()",
+            "page.locator().wait_for()",
+            "page.locator().click()",
+            "confirmation_page.zip_code_input.fill()",
+            "confirmation_page.phone_number_input.fill()",
+            "confirmation_page.save_button.click()",
+            "page.wait_for_selector()",
+            "confirmation_page.ship_to_address_button.click()",
+            "page.locator().wait_for()",
+            "framework_logger.error()",
+            "callback()"
+          ],
+          "usage_example": "EnrollmentHelper.add_shipping(page, index=0, company_name='HP Inc', additional_check=True, callback=screenshot_callback)",
+          "belongs_to_class": "EnrollmentHelper",
+          "lines_of_code": 60
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This is the largest and most complex file in the codebase at 165KB with 107 static methods. It serves as the central orchestrator for the entire HP Instant Ink enrollment workflow. The class handles multiple payment gateways (PGS, 2CO), multiple payment methods (credit card, PayPal, Google Pay, direct debit, prepaid), complex form filling with country-specific logic, modal handling, validation, promotional codes, and both standard and FLIP enrollment flows. Many methods include extensive validation logic, retry mechanisms, and screenshot callbacks for debugging. The file imports 22 different modules including multiple page objects and helpers. Methods are well-organized by enrollment phase (start, printer selection, plan selection, shipping, billing, payment, finalization). Some methods are very long (100+ lines) handling complex multi-step workflows. The class uses GlobalState extensively for country-specific configuration and address data. This is a critical file for enrollment test automation - any test involving enrollment will likely use multiple methods from this helper."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/helper/fulfillment_service_ra_helper.py",
+      "file_name": "fulfillment_service_ra_helper.py",
+      "file_extension": ".py",
+      "file_size_bytes": 4272,
+      "language": "Python",
+      "file_category": "helper",
+      "file_purpose": "Helper module for interacting with the Fulfillment Service Rails Admin interface. Provides methods to access the Rails Admin, navigate to orders by trigger ID, validate order status and shipping information, send orders for fulfillment, and update order error codes. Used in test scenarios that need to verify or manipulate fulfillment service data through the Rails Admin UI.",
+      "imports": [
+        {
+          "import_statement": "from helper.ra_base_helper import RABaseHelper",
+          "module": "helper.ra_base_helper",
+          "imported_names": [
+            "RABaseHelper"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from core.settings import framework_logger",
+          "module": "core.settings",
+          "imported_names": [
+            "framework_logger"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "import test_flows_common.test_flows_common as common",
+          "module": "test_flows_common.test_flows_common",
+          "imported_names": [
+            "common"
+          ],
+          "is_external": false,
+          "is_internal": true
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "FulfillmentServiceRAHelper",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Provides static utility methods for interacting with the Fulfillment Service Rails Admin interface. Contains methods to authenticate and access the Rails Admin, search for and navigate to specific orders by trigger ID, validate order status and shipping details, send orders for processing, update order error codes, and perform complete order receive-and-send workflows. All methods are static and leverage the RABaseHelper for common Rails Admin operations.",
+          "how_to_import": "from helper.fulfillment_service_ra_helper import FulfillmentServiceRAHelper",
+          "how_to_instantiate": "FulfillmentServiceRAHelper is used via static methods - no instantiation needed. Call FulfillmentServiceRAHelper.access(page) directly.",
+          "total_methods": 7,
+          "total_locators": 0
+        }
+      ],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "access",
+          "method_signature": "def access(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "navigation",
+          "what_it_does": "Authenticates and accesses the Fulfillment Service Rails Admin interface. Navigates to the Rails Admin login URL by concatenating common._fulfillmentservice_url with common._agena_cps_and_fulfillment_rails_admin_login_url with a 120 second timeout. Checks if an alert warning indicating the user is already signed in is visible. If already signed in, logs an info message and clicks the home link to go to the main page. If not signed in, fills the admin email field with common._rails_admin_user, fills the admin password field with common._rails_admin_password, clicks the submit button, and waits for the network to be idle with a 120 second timeout. If the URL is still the login URL after submission (indicating login failed), retries the login using credentials from common._client_secrets. Finally clicks the home link to navigate to the main Rails Admin page.",
+          "locators_used": [
+            "div.alert-warning.alert.alert-dismissible",
+            "#admin_email, #admin_user_email",
+            "#admin_password, #admin_user_password",
+            "input[type='submit'][name='commit']",
+            "a.nav-link[href='/']"
+          ],
+          "calls_to": [
+            "page.goto()",
+            "page.locator().is_visible()",
+            "framework_logger.info()",
+            "page.locator().click()",
+            "page.locator().fill()",
+            "page.wait_for_load_state()",
+            "page.locator().type()"
+          ],
+          "usage_example": "FulfillmentServiceRAHelper.access(page)",
+          "belongs_to_class": "FulfillmentServiceRAHelper",
+          "lines_of_code": 18
+        },
+        {
+          "method_name": "access_order_by_trigger_id",
+          "method_signature": "def access_order_by_trigger_id(page, trigger_id)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            },
+            {
+              "name": "trigger_id",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The trigger ID to search for in the Orders section"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "navigation",
+          "what_it_does": "Navigates to a specific order in the Fulfillment Service Rails Admin by searching for its trigger ID. First calls RABaseHelper.access_page() to navigate to the Orders section. Types the trigger_id into the search query input field. Clicks the submit button to perform the search. Constructs a selector for the 'Show' link in the order row results table. Waits for the Show link to become visible with a 5 second timeout and clicks it to open the order details page. Finally calls RABaseHelper.wait_page_to_load() to wait for the Order detail page to fully load.",
+          "locators_used": [
+            "input[name='query']",
+            "button[type='submit']",
+            "tr.order_row td.last ul.nav li[title='Show'] a"
+          ],
+          "calls_to": [
+            "RABaseHelper.access_page()",
+            "page.locator().type()",
+            "page.click()",
+            "page.wait_for_selector()",
+            "link.click()",
+            "RABaseHelper.wait_page_to_load()"
+          ],
+          "usage_example": "FulfillmentServiceRAHelper.access_order_by_trigger_id(page, 'abc123xyz')",
+          "belongs_to_class": "FulfillmentServiceRAHelper",
+          "lines_of_code": 8
+        },
+        {
+          "method_name": "receive_and_send_order",
+          "method_signature": "def receive_and_send_order(page, trigger_id)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            },
+            {
+              "name": "trigger_id",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The trigger ID of the order to process"
+            }
+          ],
+          "return_type": "str",
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Performs a complete order receive and send workflow. First calls validate_order_received() with the trigger_id to verify the order was received and get the order page URL. Then calls send_order() to send the order for fulfillment. Returns the order_link URL for reference.",
+          "locators_used": [],
+          "calls_to": [
+            "FulfillmentServiceRAHelper.validate_order_received()",
+            "FulfillmentServiceRAHelper.send_order()"
+          ],
+          "usage_example": "order_url = FulfillmentServiceRAHelper.receive_and_send_order(page, 'trigger123')",
+          "belongs_to_class": "FulfillmentServiceRAHelper",
+          "lines_of_code": 4
+        },
+        {
+          "method_name": "send_order",
+          "method_signature": "def send_order(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Sends an order for fulfillment through the Rails Admin interface. Calls RABaseHelper.access_menu_of_page() to access the 'Send Order' menu option. Waits for an alert element with class starting with 'alert-' to appear, indicating the send operation completed.",
+          "locators_used": [
+            "[class^='alert-']"
+          ],
+          "calls_to": [
+            "RABaseHelper.access_menu_of_page()",
+            "page.wait_for_selector()"
+          ],
+          "usage_example": "FulfillmentServiceRAHelper.send_order(page)",
+          "belongs_to_class": "FulfillmentServiceRAHelper",
+          "lines_of_code": 3
+        },
+        {
+          "method_name": "validate_order_received",
+          "method_signature": "def validate_order_received(page, status='statusNew', shipping='standard', trigger_id=None, order_link=None)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            },
+            {
+              "name": "status",
+              "type": null,
+              "default_value": "'statusNew'",
+              "is_required": false,
+              "description": "Expected order status. Defaults to 'statusNew'."
+            },
+            {
+              "name": "shipping",
+              "type": null,
+              "default_value": "'standard'",
+              "is_required": false,
+              "description": "Expected shipping option. Defaults to 'standard'."
+            },
+            {
+              "name": "trigger_id",
+              "type": null,
+              "default_value": "None",
+              "is_required": false,
+              "description": "Trigger ID to search for. If provided, will access the order by trigger ID."
+            },
+            {
+              "name": "order_link",
+              "type": null,
+              "default_value": "None",
+              "is_required": false,
+              "description": "Direct URL to the order page. If provided, will navigate directly to this URL."
+            }
+          ],
+          "return_type": "str",
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Validates that an order has been received with the expected status and shipping option. If trigger_id is provided, calls access() to log into Rails Admin and then access_order_by_trigger_id() to navigate to the order. If order_link is provided instead, calls access() and then navigates directly to the order URL using page.goto(). Calls validate_shipping_fields() to verify the status and shipping fields match the expected values. Returns the current page URL as the order link.",
+          "locators_used": [],
+          "calls_to": [
+            "FulfillmentServiceRAHelper.access()",
+            "FulfillmentServiceRAHelper.access_order_by_trigger_id()",
+            "page.goto()",
+            "FulfillmentServiceRAHelper.validate_shipping_fields()"
+          ],
+          "usage_example": "order_url = FulfillmentServiceRAHelper.validate_order_received(page, status='statusNew', shipping='express', trigger_id='abc123')",
+          "belongs_to_class": "FulfillmentServiceRAHelper",
+          "lines_of_code": 9
+        },
+        {
+          "method_name": "validate_shipping_fields",
+          "method_signature": "def validate_shipping_fields(page, status, shipping)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            },
+            {
+              "name": "status",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Expected status value to validate"
+            },
+            {
+              "name": "shipping",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Expected shipping option value to validate"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Validates that the order shipping fields contain the expected values. Uses common.find_field_text_by_header() to extract the 'Status from fulfiller' field value and asserts it equals the expected status parameter, raising an AssertionError with a detailed message if they don't match. Similarly validates that 'Overall part status' equals the expected status. Finally validates that 'Shipping option' equals the expected shipping parameter. All three assertions include descriptive error messages showing expected vs actual values.",
+          "locators_used": [],
+          "calls_to": [
+            "common.find_field_text_by_header()"
+          ],
+          "usage_example": "FulfillmentServiceRAHelper.validate_shipping_fields(page, 'statusNew', 'standard')",
+          "belongs_to_class": "FulfillmentServiceRAHelper",
+          "lines_of_code": 15
+        },
+        {
+          "method_name": "update_order_error_code",
+          "method_signature": "def update_order_error_code(page, error_code)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            },
+            {
+              "name": "error_code",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The error code value to set for the order"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Updates the error code field for an order in the Rails Admin. Calls RABaseHelper.access_menu_of_page() to access the Edit menu. Locates the error code input field using selector '#order_error_code', fills it with the provided error_code value, and logs the action. Scrolls the save button into view if needed, clicks it to save the changes, and logs that the order was updated with the error code.",
+          "locators_used": [
+            "#order_error_code",
+            "[name='_save'][type='submit']"
+          ],
+          "calls_to": [
+            "RABaseHelper.access_menu_of_page()",
+            "page.locator().fill()",
+            "framework_logger.info()",
+            "page.locator().scroll_into_view_if_needed()",
+            "page.locator().click()"
+          ],
+          "usage_example": "FulfillmentServiceRAHelper.update_order_error_code(page, 'ERR_INVALID_ADDRESS')",
+          "belongs_to_class": "FulfillmentServiceRAHelper",
+          "lines_of_code": 10
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This helper provides a focused interface for Fulfillment Service Rails Admin operations. It extends the base RABaseHelper functionality with fulfillment-specific operations. The access method includes retry logic for login failures. The validate_shipping_fields method uses detailed assertion messages for better debugging. The class follows the static method pattern consistent with other helper classes in the framework. Methods are well-organized by operation type (access, validate, update, send). The helper is used in test scenarios that need to verify order fulfillment status or manipulate fulfillment data for testing edge cases."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/helper/fulfillment_simulator_ra_helper.py",
+      "file_name": "fulfillment_simulator_ra_helper.py",
+      "file_extension": ".py",
+      "file_size_bytes": 2154,
+      "language": "Python",
+      "file_category": "helper",
+      "file_purpose": "Helper module for interacting with the Fulfillment Simulator Rails Admin interface. Provides methods to access the simulator, search for orders by trigger ID, update order status and tracking information, and process complete order workflows including triggering background jobs. Used in test scenarios that need to simulate fulfillment operations without actual physical fulfillment.",
+      "imports": [
+        {
+          "import_statement": "from helper.ra_base_helper import RABaseHelper",
+          "module": "helper.ra_base_helper",
+          "imported_names": [
+            "RABaseHelper"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "import test_flows_common.test_flows_common as common",
+          "module": "test_flows_common.test_flows_common",
+          "imported_names": [
+            "common"
+          ],
+          "is_external": false,
+          "is_internal": true
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "FulfillmentSimulatorRAHelper",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Provides static utility methods for interacting with the Fulfillment Simulator Rails Admin interface. Contains methods to access the simulator Rails Admin, search for and navigate to orders by trigger ID, update order status and tracking information to simulate fulfillment events, and orchestrate complete order processing workflows including triggering background jobs in the Fulfillment Service. All methods are static and leverage RABaseHelper for common Rails Admin operations.",
+          "how_to_import": "from helper.fulfillment_simulator_ra_helper import FulfillmentSimulatorRAHelper",
+          "how_to_instantiate": "FulfillmentSimulatorRAHelper is used via static methods - no instantiation needed. Call FulfillmentSimulatorRAHelper.access(page) directly.",
+          "total_methods": 4,
+          "total_locators": 0
+        }
+      ],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "access",
+          "method_signature": "def access(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "navigation",
+          "what_it_does": "Accesses the Fulfillment Simulator Rails Admin interface. Navigates to the Rails Admin URL by concatenating common._fulfillmentsimulator_url with '/rails_admin'. Waits for both networkidle and load states to ensure the page is fully loaded. Clicks the home link to navigate to the main Rails Admin page.",
+          "locators_used": [
+            "a.nav-link[href='/']"
+          ],
+          "calls_to": [
+            "page.goto()",
+            "page.wait_for_load_state()",
+            "page.locator().click()"
+          ],
+          "usage_example": "FulfillmentSimulatorRAHelper.access(page)",
+          "belongs_to_class": "FulfillmentSimulatorRAHelper",
+          "lines_of_code": 4
+        },
+        {
+          "method_name": "access_order_by_trigger_id",
+          "method_signature": "def access_order_by_trigger_id(page, trigger_id)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            },
+            {
+              "name": "trigger_id",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The trigger ID to search for in the Orders section"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "navigation",
+          "what_it_does": "Navigates to a specific order in the Fulfillment Simulator Rails Admin by searching for its trigger ID. Calls RABaseHelper.access_page() to navigate to the Orders section. Types the trigger_id into the search query input field. Clicks the submit button to perform the search. Constructs a selector for the 'Show' link in the order row results and clicks it to open the order details. Calls RABaseHelper.wait_page_to_load() to wait for the Order detail page to fully load.",
+          "locators_used": [
+            "input[name='query']",
+            "button[type='submit']",
+            "tr.order_row td.last ul.nav li[title='Show'] a"
+          ],
+          "calls_to": [
+            "RABaseHelper.access_page()",
+            "page.locator().type()",
+            "page.click()",
+            "RABaseHelper.wait_page_to_load()"
+          ],
+          "usage_example": "FulfillmentSimulatorRAHelper.access_order_by_trigger_id(page, 'trigger123')",
+          "belongs_to_class": "FulfillmentSimulatorRAHelper",
+          "lines_of_code": 7
+        },
+        {
+          "method_name": "update_order",
+          "method_signature": "def update_order(page, status='statusShipped', tracking_number='123456789')",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            },
+            {
+              "name": "status",
+              "type": null,
+              "default_value": "'statusShipped'",
+              "is_required": false,
+              "description": "The status to set for the order. Defaults to 'statusShipped'."
+            },
+            {
+              "name": "tracking_number",
+              "type": null,
+              "default_value": "'123456789'",
+              "is_required": false,
+              "description": "The tracking number to assign to the order. Defaults to '123456789'."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Updates an order in the Fulfillment Simulator with status and tracking information. Waits for and clicks the 'Update order' link in the navigation tabs. Selects the specified status value in the order status dropdown using '#order_status'. Selects the same status for the part status using a selector that starts with 'select[id^='part_']'. Sets the shipping vendor to 'DHL' by filling the '#shipping_vendor' field. Fills the tracking number field '#tracking_number' with the provided tracking_number. Clicks the Update submit button. Waits for a success message 'Call to Fulfillment Service returned status 201' to appear and asserts it is visible to confirm the update was successful.",
+          "locators_used": [
+            "ul.nav.nav-tabs li a:has-text('Update order')",
+            "#order_status",
+            "select[id^='part_']",
+            "#shipping_vendor",
+            "#tracking_number",
+            "input[type=submit][value='Update']",
+            "text=Call to Fulfillment Service returned status 201"
+          ],
+          "calls_to": [
+            "page.wait_for_selector().click()",
+            "page.select_option()",
+            "page.locator().fill()",
+            "page.locator().click()",
+            "page.locator().wait_for()",
+            "page.locator().is_visible()"
+          ],
+          "usage_example": "FulfillmentSimulatorRAHelper.update_order(page, status='statusDelivered', tracking_number='DHL987654321')",
+          "belongs_to_class": "FulfillmentSimulatorRAHelper",
+          "lines_of_code": 11
+        },
+        {
+          "method_name": "process_order",
+          "method_signature": "def process_order(page, trigger_id, status='statusShipped', tracking_number='123456789')",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            },
+            {
+              "name": "trigger_id",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The trigger ID of the order to process"
+            },
+            {
+              "name": "status",
+              "type": null,
+              "default_value": "'statusShipped'",
+              "is_required": false,
+              "description": "The status to set for the order. Defaults to 'statusShipped'."
+            },
+            {
+              "name": "tracking_number",
+              "type": null,
+              "default_value": "'123456789'",
+              "is_required": false,
+              "description": "The tracking number to assign. Defaults to '123456789'."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Performs a complete order processing workflow in the Fulfillment Simulator. First calls access() to log into the Fulfillment Simulator Rails Admin. Calls access_order_by_trigger_id() to navigate to the specific order. Calls update_order() to update the order status and tracking information. Then triggers background job processing by calling RABaseHelper.complete_jobs() twice - first to complete the 'CheckSqsOrderStatusUpdateJob' which checks for order status updates from SQS, and second to complete the 'GeminiCallbackDispatcherJob' which dispatches callbacks to Gemini. This simulates the complete fulfillment flow including asynchronous job processing.",
+          "locators_used": [],
+          "calls_to": [
+            "FulfillmentSimulatorRAHelper.access()",
+            "FulfillmentSimulatorRAHelper.access_order_by_trigger_id()",
+            "FulfillmentSimulatorRAHelper.update_order()",
+            "RABaseHelper.complete_jobs()"
+          ],
+          "usage_example": "FulfillmentSimulatorRAHelper.process_order(page, 'abc123', status='statusDelivered', tracking_number='TRACK999')",
+          "belongs_to_class": "FulfillmentSimulatorRAHelper",
+          "lines_of_code": 10
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This helper provides a focused interface for Fulfillment Simulator operations. It's simpler than the FulfillmentServiceRAHelper because the simulator has fewer features. The process_order method is particularly useful as it orchestrates the complete workflow including background job processing. The update_order method hardcodes the vendor as 'DHL' which may need to be parameterized for more flexible testing. The class follows the static method pattern consistent with other helpers. The simulator is used in testing to avoid actual physical fulfillment while still testing the complete order flow and status updates."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/helper/gemini_ra_helper.py",
+      "file_name": "gemini_ra_helper.py",
+      "file_extension": ".py",
+      "file_size_bytes": 36698,
+      "language": "Python",
+      "file_category": "helper",
+      "file_purpose": "Comprehensive helper module for interacting with the Gemini Rails Admin interface. Provides extensive methods for managing tenants, subscriptions, billing cycles, printers, payments, refunds, notifications, and various subscription operations. This is a critical helper for backend data manipulation and verification in HP Instant Ink test automation, allowing tests to set up preconditions, verify backend state, and simulate backend operations through the Rails Admin UI.",
+      "imports": [
+        {
+          "import_statement": "from datetime import datetime, timedelta",
+          "module": "datetime",
+          "imported_names": [
+            "datetime",
+            "timedelta"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from core.settings import framework_logger",
+          "module": "core.settings",
+          "imported_names": [
+            "framework_logger"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from helper.ra_base_helper import RABaseHelper",
+          "module": "helper.ra_base_helper",
+          "imported_names": [
+            "RABaseHelper"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "import re",
+          "module": "re",
+          "imported_names": [
+            "re"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import test_flows_common.test_flows_common as common",
+          "module": "test_flows_common.test_flows_common",
+          "imported_names": [
+            "common"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "import time",
+          "module": "time",
+          "imported_names": [
+            "time"
+          ],
+          "is_external": true,
+          "is_internal": false
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "GeminiRAHelper",
+          "parent_classes": [],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Massive helper class containing 60+ static methods for comprehensive Gemini Rails Admin operations. Provides methods for authentication and navigation, tenant and subscription management, billing cycle operations (calculate tally, submit charges, refunds), subscription state transitions, printer management, notification verification, payment credential manipulation, free months management, page tally operations, kit shipment, event shifting for time-based testing, and extensive validation methods. This is the primary interface for backend data manipulation and verification in HP Instant Ink testing.",
+          "how_to_import": "from helper.gemini_ra_helper import GeminiRAHelper",
+          "how_to_instantiate": "GeminiRAHelper is used via static methods - no instantiation needed. Call GeminiRAHelper.access(page) directly.",
+          "total_methods": 62,
+          "total_locators": 0
+        }
+      ],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "access",
+          "method_signature": "def access(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "navigation",
+          "what_it_does": "Authenticates and accesses the Gemini Rails Admin interface. Navigates to the Gemini Rails Admin login URL by concatenating common._instantink_url with common._gemini_rails_admin_login_url with a 120 second timeout. Waits for both networkidle and load states to ensure the page is fully loaded. Checks if an alert warning indicating the user is already signed in is visible. If already signed in, logs an info message and returns early without attempting login. If not signed in, types the admin email from common._rails_admin_user into the email field, types the admin password from common._rails_admin_password into the password field, and clicks the submit button to log in.",
+          "locators_used": [
+            "div.alert-warning.alert.alert-dismissible",
+            "#admin_email, #admin_user_email",
+            "#admin_password, #admin_user_password",
+            "#admin_submit, input[type='submit']"
+          ],
+          "calls_to": [
+            "page.goto()",
+            "page.wait_for_load_state()",
+            "page.locator().is_visible()",
+            "framework_logger.info()",
+            "page.locator().type()",
+            "page.locator().click()"
+          ],
+          "usage_example": "GeminiRAHelper.access(page)",
+          "belongs_to_class": "GeminiRAHelper",
+          "lines_of_code": 11
+        },
+        {
+          "method_name": "access_tenant_page",
+          "method_signature": "def access_tenant_page(page, tenant_email: str)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            },
+            {
+              "name": "tenant_email",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "Email address of the tenant to search for"
+            }
+          ],
+          "return_type": "int",
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "navigation",
+          "what_it_does": "Navigates to a specific tenant's page in Gemini Rails Admin by searching for their email address. Navigates to the tenant fetch URL by concatenating common._instantink_url with common._gemini_fetch_tenant_url with a 120 second timeout. Uses common.retry_operation() to retry filling the email input field with the tenant_email and asserting the value was filled correctly, with the operation name 'Fill email input'. Clicks the submit button to search. Waits for a table link to appear with a 180 second timeout and clicks it to open the tenant details. Calls RABaseHelper.wait_page_to_load() to wait for the Tenant page to load. Extracts and returns the tenant ID from the URL using common.last_number_from_url().",
+          "locators_used": [
+            "#email",
+            "input[type='submit']",
+            "[class^='table'] a"
+          ],
+          "calls_to": [
+            "page.goto()",
+            "common.retry_operation()",
+            "page.locator().fill()",
+            "page.locator().type()",
+            "page.locator().input_value()",
+            "page.locator().click()",
+            "page.wait_for_selector().click()",
+            "RABaseHelper.wait_page_to_load()",
+            "common.last_number_from_url()"
+          ],
+          "usage_example": "tenant_id = GeminiRAHelper.access_tenant_page(page, 'user@test.com')",
+          "belongs_to_class": "GeminiRAHelper",
+          "lines_of_code": 10
+        },
+        {
+          "method_name": "ship_cartridge",
+          "method_signature": "def ship_cartridge(page, kit_type='welcome', colors=None)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            },
+            {
+              "name": "kit_type",
+              "type": null,
+              "default_value": "'welcome'",
+              "is_required": false,
+              "description": "Type of kit to ship - either 'welcome' or 'replenishment'. Defaults to 'welcome'."
+            },
+            {
+              "name": "colors",
+              "type": null,
+              "default_value": "None",
+              "is_required": false,
+              "description": "List of color codes to ship. Valid values are 'K', 'CMY', 'C', 'M', 'Y'. If None, no colors are selected."
+            }
+          ],
+          "return_type": "str",
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Ships a cartridge kit (welcome or replenishment) with specified colors through Gemini Rails Admin. Calls RABaseHelper.access_menu_of_page() to access the 'Ship it' menu. Asserts that kit_type is either 'welcome' or 'replenishment', raising an AssertionError if invalid. Sets the radio button for the specified kit type to checked. If colors list is provided, iterates through each color, asserts it is one of the valid values ('K', 'CMY', 'C', 'M', 'Y'), and checks the corresponding supply checkbox by converting the color to lowercase and appending '_supply'. Clicks the 'Ship Ink Now' submit button. Extracts the trigger ID from the alert message using regex to search for 'trigger id (\\w+)' pattern. Returns the extracted trigger_id string or empty string if not found.",
+          "locators_used": [
+            "#{kit_type}",
+            "#{color.lower()}_supply",
+            "input[type=submit][value='Ship Ink Now']",
+            "p.alert"
+          ],
+          "calls_to": [
+            "RABaseHelper.access_menu_of_page()",
+            "page.locator().set_checked()",
+            "page.locator().click()",
+            "page.locator().inner_text()",
+            "re.search()"
+          ],
+          "usage_example": "trigger_id = GeminiRAHelper.ship_cartridge(page, kit_type='replenishment', colors=['K', 'CMY'])",
+          "belongs_to_class": "GeminiRAHelper",
+          "lines_of_code": 16
+        },
+        {
+          "method_name": "event_shift",
+          "method_signature": "def event_shift(page, event_shift, force_billing=True)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            },
+            {
+              "name": "event_shift",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Number of days to shift events forward (as a string)"
+            },
+            {
+              "name": "force_billing",
+              "type": null,
+              "default_value": "True",
+              "is_required": false,
+              "description": "Whether to create a billing cycle after rollback. Defaults to True."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Shifts subscription events forward in time by a specified number of days, used for time-based testing. Calls RABaseHelper.access_menu_of_page() to access the Edit menu. Fills the subscription rollback field '#subscription_rollback' with the event_shift value. Waits for the create billing cycle checkbox to be present. If force_billing is True, clicks the checkbox to enable billing cycle creation after rollback and waits to verify it is checked. Clicks the primary save button to submit the changes. Waits for a success alert to appear with a 10 second timeout and asserts it is visible to confirm the event shift was successful.",
+          "locators_used": [
+            "#subscription_rollback",
+            "#subscription_create_billing_cycle_after_rollback",
+            ".btn.btn-primary",
+            ".alert-success"
+          ],
+          "calls_to": [
+            "RABaseHelper.access_menu_of_page()",
+            "page.fill()",
+            "page.wait_for_selector()",
+            "page.locator().click()",
+            "page.locator().is_checked()",
+            "page.wait_for_selector().click()",
+            "page.is_visible()"
+          ],
+          "usage_example": "GeminiRAHelper.event_shift(page, '30', force_billing=True)",
+          "belongs_to_class": "GeminiRAHelper",
+          "lines_of_code": 11
+        },
+        {
+          "method_name": "submit_charge",
+          "method_signature": "def submit_charge(page)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "action",
+          "what_it_does": "Submits a charge for a billing cycle in Gemini Rails Admin. Calls RABaseHelper.access_menu_of_page() to access the 'Submit Charge' menu option. Waits for the warning button to be visible with a 120 second timeout and clicks it to confirm the charge submission. Waits for a success alert to appear with a 150 second timeout and asserts that the alert text contains 'Billing cycle has been charged' to confirm the charge was successfully submitted.",
+          "locators_used": [
+            ".btn.btn-warning",
+            ".alert-success"
+          ],
+          "calls_to": [
+            "RABaseHelper.access_menu_of_page()",
+            "page.wait_for_selector().click()",
+            "page.inner_text()"
+          ],
+          "usage_example": "GeminiRAHelper.submit_charge(page)",
+          "belongs_to_class": "GeminiRAHelper",
+          "lines_of_code": 5
+        },
+        {
+          "method_name": "verify_rails_admin_info",
+          "method_signature": "def verify_rails_admin_info(page, title, value, retry=True)",
+          "parameters": [
+            {
+              "name": "page",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Playwright Page instance"
+            },
+            {
+              "name": "title",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The field title to verify"
+            },
+            {
+              "name": "value",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "The expected value for the field"
+            },
+            {
+              "name": "retry",
+              "type": null,
+              "default_value": "True",
+              "is_required": false,
+              "description": "Whether to retry verification with page reloads. Defaults to True."
+            }
+          ],
+          "return_type": null,
+          "decorators": [
+            "@staticmethod"
+          ],
+          "is_static": true,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "verification",
+          "what_it_does": "Verifies that a specific field in Rails Admin contains the expected value with retry logic. Defines an inner operation function that calls RABaseHelper.get_field_text_by_title() to get the field value, asserts it equals the expected value with a descriptive error message, logs success, and returns True. Defines an on_retry function that logs a retry message, reloads the page, and waits for load state. Sets max_attempts to 12 if retry is True, otherwise 1. Calls common.retry_operation() with the operation function, operation name, max attempts, 10 second delay, and the on_retry callback if retry is enabled. This provides robust verification with automatic retries and page reloads for eventually consistent data.",
+          "locators_used": [],
+          "calls_to": [
+            "RABaseHelper.get_field_text_by_title()",
+            "framework_logger.info()",
+            "page.reload()",
+            "page.wait_for_load_state()",
+            "common.retry_operation()"
+          ],
+          "usage_example": "GeminiRAHelper.verify_rails_admin_info(page, 'State', 'subscribed', retry=True)",
+          "belongs_to_class": "GeminiRAHelper",
+          "lines_of_code": 18
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [],
+      "analysis_notes": "This is the second largest helper file at 36KB with 62 static methods. It provides comprehensive backend operations for Gemini Rails Admin, which is the core backend system for HP Instant Ink. The class includes methods for complete subscription lifecycle management, billing operations, payment handling, refunds, printer management, and extensive validation. Many methods include retry logic and wait mechanisms to handle asynchronous backend operations. The event_shift method is particularly important for time-based testing, allowing tests to simulate the passage of time. The class uses RABaseHelper extensively for common Rails Admin operations. Methods are well-organized by functional area (tenant, subscription, billing, payment, printer, notification). This is a critical helper for any test that needs to manipulate or verify backend state."
+    },
+    {
+      "method_name": "calculate_and_define_page_tally",
+      "method_signature": "def calculate_and_define_page_tally(page, tally)",
+      "parameters": [
+        {
+          "name": "page",
+          "type": null,
+          "default_value": null,
+          "is_required": true,
+          "description": "Playwright Page instance"
+        },
+        {
+          "name": "tally",
+          "type": null,
+          "default_value": null,
+          "is_required": true,
+          "description": "The page tally value to set"
+        }
+      ],
+      "return_type": null,
+      "decorators": [
+        "@staticmethod"
+      ],
+      "is_static": true,
+      "is_classmethod": false,
+      "is_property": false,
+      "is_async": false,
+      "is_private": false,
+      "is_dunder": false,
+      "docstring": null,
+      "method_type": "action",
+      "what_it_does": "Calculates and sets the page tally for a billing cycle. First attempts to call calculate_page_tally() to calculate the tally automatically, catching and ignoring any exceptions. Then calls define_page_tally() with the provided tally value to set the page count. This two-step approach ensures the tally is set even if automatic calculation fails.",
+      "locators_used": [],
+      "calls_to": [
+        "GeminiRAHelper.calculate_page_tally()",
+        "GeminiRAHelper.define_page_tally()"
+      ],
+      "usage_example": "GeminiRAHelper.calculate_and_define_page_tally(page, '150')",
+      "belongs_to_class": "GeminiRAHelper",
+      "lines_of_code": 6
+    },
+    {
+      "method_name": "make_refund_option",
+      "method_signature": "def make_refund_option(page, refund_option, blocks=None)",
+      "parameters": [
+        {
+          "name": "page",
+          "type": null,
+          "default_value": null,
+          "is_required": true,
+          "description": "Playwright Page instance"
+        },
+        {
+          "name": "refund_option",
+          "type": null,
+          "default_value": null,
+          "is_required": true,
+          "description": "The type of refund to process"
+        },
+        {
+          "name": "blocks",
+          "type": null,
+          "default_value": "None",
+          "is_required": false,
+          "description": "Number of overage blocks to refund if refund_option is 'Instant Ink Overage Blocks'"
+        }
+      ],
+      "return_type": null,
+      "decorators": [
+        "@staticmethod"
+      ],
+      "is_static": true,
+      "is_classmethod": false,
+      "is_property": false,
+      "is_async": false,
+      "is_private": false,
+      "is_dunder": false,
+      "docstring": null,
+      "method_type": "action",
+      "what_it_does": "Processes a refund through Gemini Rails Admin with retry logic. Enters a loop that attempts the refund up to 60 times. In each attempt, accesses the 'Refund Payment' menu, clicks the refund option dropdown, selects the specified refund_option. If the refund option is 'Instant Ink Overage Blocks', fills the overage amount field with the blocks value, presses NumpadEnter, and clicks the submit button for overage options. Otherwise, clicks the generic Submit button. Clicks the final confirmation button with class 'btn-warning one-click-only'. Waits for a success alert to appear with a 10 second timeout, gets the alert message text, asserts the alert is visible, logs the success message, and returns. If any exception occurs and it's not the last attempt, logs a warning and retries after 2 seconds and a page reload. If all 60 attempts fail, logs an error and raises the exception. This provides extremely robust refund processing with extensive retry logic.",
+      "locators_used": [
+        "#refund-option",
+        "#overage_amount",
+        "#showIIOverageOptions > div > form > input.btn.btn-warning",
+        "button:has-text('Submit')",
+        ".btn.btn-warning.one-click-only",
+        ".alert-success"
+      ],
+      "calls_to": [
+        "RABaseHelper.access_menu_of_page()",
+        "page.locator().click()",
+        "page.locator().select_option()",
+        "page.locator().fill()",
+        "page.locator().press()",
+        "page.get_by_role().click()",
+        "page.wait_for_selector()",
+        "page.inner_text()",
+        "page.is_visible()",
+        "framework_logger.info()",
+        "framework_logger.warning()",
+        "framework_logger.error()",
+        "time.sleep()",
+        "page.reload()"
+      ],
+      "usage_example": "GeminiRAHelper.make_refund_option(page, 'Instant Ink Overage Blocks', blocks=5)",
+      "belongs_to_class": "GeminiRAHelper",
+      "lines_of_code": 35
+    }
+  ],
+  "batch_summary": {
+    "total_classes_found": 5,
+    "total_methods_found": 187,
+    "total_locators_found": 0,
+    "total_imports_found": 28,
+    "total_constants_found": 0,
+    "total_inner_classes_found": 0,
+    "page_objects_found": [],
+    "helper_classes_found": [
+      "EmailHelper",
+      "EnrollmentHelper",
+      "FulfillmentServiceRAHelper",
+      "FulfillmentSimulatorRAHelper",
+      "GeminiRAHelper"
+    ],
+    "core_classes_found": [],
+    "config_classes_found": [],
+    "key_reusable_methods": [
+      "EmailHelper.sees_email_with_subject — Verifies email with subject was received",
+      "EmailHelper.extract_email_details — Extracts subject, pre-header, and HTML body from email",
+      "EnrollmentHelper.start_enrollment — Initiates enrollment process and accepts privacy banner",
+      "EnrollmentHelper.start_enrollment_and_sign_in — Starts enrollment and signs in user with retry logic",
+      "EnrollmentHelper.select_printer — Selects printer from list by index",
+      "EnrollmentHelper.add_shipping — Fills and submits shipping address form",
+      "EnrollmentHelper.add_billing — Adds billing information with multiple payment method support",
+      "EnrollmentHelper.add_pgs_billing — Adds PGS credit/debit card billing",
+      "EnrollmentHelper.add_paypal_billing — Adds PayPal billing with popup handling",
+      "EnrollmentHelper.finish_enrollment — Completes enrollment by accepting terms and clicking enroll",
+      "EnrollmentHelper.select_plan_v3 — Selects plan using v3 plan selector",
+      "EnrollmentHelper.apply_promotion_code — Applies promotional or PIN code",
+      "FulfillmentServiceRAHelper.access — Authenticates to Fulfillment Service Rails Admin",
+      "FulfillmentServiceRAHelper.access_order_by_trigger_id — Navigates to order by trigger ID",
+      "FulfillmentServiceRAHelper.validate_order_received — Validates order status and shipping",
+      "FulfillmentServiceRAHelper.send_order — Sends order for fulfillment",
+      "FulfillmentSimulatorRAHelper.update_order — Updates order status and tracking in simulator",
+      "FulfillmentSimulatorRAHelper.process_order — Complete order processing workflow with jobs",
+      "GeminiRAHelper.access — Authenticates to Gemini Rails Admin",
+      "GeminiRAHelper.access_tenant_page — Navigates to tenant page by email",
+      "GeminiRAHelper.ship_cartridge — Ships welcome or replenishment kit with colors",
+      "GeminiRAHelper.event_shift — Shifts subscription events forward in time",
+      "GeminiRAHelper.submit_charge — Submits charge for billing cycle",
+      "GeminiRAHelper.verify_rails_admin_info — Verifies field value with retry logic",
+      "GeminiRAHelper.calculate_and_define_page_tally — Sets page tally for billing cycle",
+      "GeminiRAHelper.make_refund_option — Processes refund with extensive retry logic"
+    ],
+    "key_reusable_locators": []
+  },
+  "commit_message": "[Aava] Batch 8 analysis report | 5 files analyzed | 5 classes | 187 methods | 0 locators"
+}
