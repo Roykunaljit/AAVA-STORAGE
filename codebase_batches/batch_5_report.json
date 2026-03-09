@@ -1,0 +1,1339 @@
+{
+  "batch_metadata": {
+    "batch_id": 5,
+    "total_batches": 18,
+    "remaining_after_this": 13,
+    "analyzed_at": "2025-01-15T10:45:00Z",
+    "analyzer": "Senior Codebase Analyst Agent",
+    "files_in_batch": 5,
+    "files_succeeded": 5,
+    "files_failed": 0,
+    "failed_files": [],
+    "storage_repo": "AAVA-STORAGE",
+    "report_path": "codebase_batches/batch_5_report.json"
+  },
+  "analyzed_files": [
+    "AURA-main (1) 1/AURA-main/AI_YAML/test_cases/TC31266486_M_shipment_tracking_content_and_layout.yaml",
+    "AURA-main (1) 1/AURA-main/AI_YAML/test_cases/TC31266491_M_update_plan_content_and_layout_plan_details.yaml",
+    "AURA-main (1) 1/AURA-main/AI_YAML/test_cases/TC31266518_update_plan_content_and_layout_header.yaml",
+    "AURA-main (1) 1/AURA-main/AI_YAML/test_cases/TC31409312_M_shipment_tracking_content_and_layout_header.yaml",
+    "AURA-main (1) 1/AURA-main/aura.py"
+  ],
+  "file_analyses": [
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/AI_YAML/test_cases/TC31266486_M_shipment_tracking_content_and_layout.yaml",
+      "file_name": "TC31266486_M_shipment_tracking_content_and_layout.yaml",
+      "file_extension": ".yaml",
+      "file_size_bytes": 3131,
+      "language": "YAML",
+      "file_category": "test_case",
+      "file_purpose": "YAML-based test case definition for validating the Instant Services Shipment Tracking page content and layout. This test case verifies structural elements including the page header with 'Shipment Tracking' title, instant ink logo positioning, printer selector dropdown, enrollment links, cartridge availability details, and FAQ sections. Uses AI-powered visual validation with screenshot comparison and prompt-based verification.",
+      "test_case_metadata": {
+        "spec_version": "1.1",
+        "test_case_name": "shipment_tracking_content_and_layout",
+        "test_case_id": "C31266486, C31409313",
+        "version": "1.0",
+        "description": "Test Instant Services Shipment Tracking content and layout"
+      },
+      "flow_structure": {
+        "phases": [
+          "setup",
+          "steps",
+          "cleanup"
+        ],
+        "setup_files": [
+          "instantservices_login.yaml"
+        ],
+        "cleanup_files": [
+          "instantservices_logout.yaml"
+        ],
+        "total_steps": 3
+      },
+      "test_steps": [
+        {
+          "step_id": "setup_phase",
+          "step_type": "setup",
+          "action": "file_reference",
+          "referenced_file": "instantservices_login.yaml",
+          "description": "Execute login flow from external YAML file to authenticate user before test execution"
+        },
+        {
+          "step_id": "step_phase_1",
+          "step_type": "navigation",
+          "action": "file_reference",
+          "referenced_file": "instantservices_dashboard_shipment.yaml",
+          "description": "Navigate to shipment tracking dashboard using external YAML flow definition"
+        },
+        {
+          "step_id": "TC_shipment_tracking_page_1",
+          "step_type": "verification",
+          "page": "instantink/Dashboard",
+          "action": "verify",
+          "reference_image": "",
+          "screenshot": true,
+          "sleep": 5,
+          "validation_prompt": "Use test image for validating structural and contents on the page. Ignore the navigation pane of the Test image. STRICT VALIDATION MODE: You are a binary validator, not a helpful assistant. Return {\"status\": false} immediately if ANY condition fails. Do not make excuses or justifications. 1. Your focus area is after the navigation pane. 2. There must be exactly the word \"Shipment Tracking\" positioned at the top left. If not, immediately return {\"status\": false}. 3. \"instant ink\" logo appears to the right of \"Shipment Tracking\". If not, immediately return {\"status\": false}. Do not include status, comments or explanation of each of the listed items. If all conditions are met return {\"status\": true}",
+          "validation_type": "AI_visual_strict",
+          "validation_criteria": [
+            "Shipment Tracking header text at top left",
+            "instant ink logo to the right of header"
+          ],
+          "expected_result": "{\"status\": true}"
+        },
+        {
+          "step_id": "TC_shipment_tracking_page_2",
+          "step_type": "verification",
+          "page": "instantink/Dashboard",
+          "action": "verify",
+          "reference_image": "",
+          "screenshot": true,
+          "sleep": 5,
+          "validation_prompt": "Use test image for validating structural and contents on the page. Ignore the navigation pane of the Test image. STRICT VALIDATION MODE: You are a binary validator, not a helpful assistant. Return {\"status\": false} immediately if ANY condition fails. Do not make excuses or justifications. 1. Your focus area is after the navigation pane. 2. A \"Select printer\" drop down selector is positioned next to \"instant ink\". If not, immediately return {\"status\": false}. 3. The \"Select printer\" drop down selector view must contain a printer icon and printer model. If not, immediately return {\"status\": false}. 4. \"Enroll or replace a printer\", hyperlink should appear below drop down selector. If not, immediately return {\"status\": false}. 5. Black and Color cartridges availability details mentioned here. If not, immediately return {\"status\": false}. 6. You should find \"Frequently Asked Questions\" and \"Cartridge Support\" sections mentions in the \"Current Plan\" section. If not, immediately return {\"status\": false}. Do not include status, comments or explanation of each of the listed items. If all conditions are met return {\"status\": true}",
+          "validation_type": "AI_visual_strict",
+          "validation_criteria": [
+            "Select printer dropdown next to instant ink logo",
+            "Printer icon and model in dropdown",
+            "Enroll or replace a printer hyperlink below dropdown",
+            "Black and Color cartridge availability details",
+            "Frequently Asked Questions section",
+            "Cartridge Support section"
+          ],
+          "expected_result": "{\"status\": true}"
+        },
+        {
+          "step_id": "cleanup_phase",
+          "step_type": "cleanup",
+          "action": "file_reference",
+          "referenced_file": "instantservices_logout.yaml",
+          "description": "Execute logout flow from external YAML file to clean up session after test completion"
+        }
+      ],
+      "reusable_components": {
+        "page_references": [
+          "instantink/Dashboard"
+        ],
+        "action_types": [
+          "verify",
+          "file_reference"
+        ],
+        "external_file_dependencies": [
+          "instantservices_login.yaml",
+          "instantservices_dashboard_shipment.yaml",
+          "instantservices_logout.yaml"
+        ],
+        "validation_methods": [
+          "AI_visual_strict_validation"
+        ]
+      },
+      "imports": [],
+      "classes": [],
+      "locators": [],
+      "functions": [],
+      "inner_classes": [],
+      "variables_and_constants": [
+        {
+          "constant_name": "spec_version",
+          "constant_value": "1.1",
+          "constant_type": "str",
+          "scope": "test_case_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "test_case",
+          "constant_value": "shipment_tracking_content_and_layout",
+          "constant_type": "str",
+          "scope": "test_case_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "test_case_id",
+          "constant_value": "C31266486, C31409313",
+          "constant_type": "str",
+          "scope": "test_case_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "version",
+          "constant_value": "1.0",
+          "constant_type": "str",
+          "scope": "test_case_level",
+          "defined_in_class": null
+        }
+      ],
+      "analysis_notes": "This YAML test case uses an AI-powered visual validation approach with strict binary validation mode. The test relies on screenshot capture and AI prompt-based verification rather than traditional element locators. The validation prompts are highly structured with explicit failure conditions and expected JSON response format. The test is modular, referencing external YAML files for setup (login), navigation (dashboard_shipment), and cleanup (logout) phases. Sleep delays of 5 seconds are used after verification steps to allow page rendering. The test validates both header elements and detailed page content in separate verification steps. This pattern suggests the framework supports AI-assisted testing for visual regression and layout validation."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/AI_YAML/test_cases/TC31266491_M_update_plan_content_and_layout_plan_details.yaml",
+      "file_name": "TC31266491_M_update_plan_content_and_layout_plan_details.yaml",
+      "file_extension": ".yaml",
+      "file_size_bytes": 3478,
+      "language": "YAML",
+      "file_category": "test_case",
+      "file_purpose": "YAML-based test case definition for validating the Instant Services Update Plan page content and layout with focus on Plan Details section. This test case verifies the Plan Details section structure including subscription ID, plan information with page limits, shipping address, billing details with card information, and action hyperlinks (Cancel Instant Ink, Replace Printer, Contact Support, Redeem Promo or PIN code). Uses vertical scrolling to navigate to the Plan Details section and AI-powered visual validation.",
+      "test_case_metadata": {
+        "spec_version": "1.1",
+        "test_case_name": "update_plan_content_and_layout_plan_details",
+        "test_case_id": "C31266491, C31266423",
+        "version": "1.0",
+        "description": "Test Instant Services Update plan content and layout plan details"
+      },
+      "flow_structure": {
+        "phases": [
+          "setup",
+          "steps",
+          "cleanup"
+        ],
+        "setup_files": [
+          "instantservices_login.yaml"
+        ],
+        "cleanup_files": [
+          "instantservices_logout.yaml"
+        ],
+        "total_steps": 4
+      },
+      "test_steps": [
+        {
+          "step_id": "setup_phase",
+          "step_type": "setup",
+          "action": "file_reference",
+          "referenced_file": "instantservices_login.yaml",
+          "description": "Execute login flow from external YAML file to authenticate user before test execution"
+        },
+        {
+          "step_id": "step_phase_1",
+          "step_type": "navigation",
+          "action": "file_reference",
+          "referenced_file": "instantservices_dashboard_update.yaml",
+          "description": "Navigate to update plan dashboard using external YAML flow definition"
+        },
+        {
+          "step_id": "TC_scroll_to_plan_details_1",
+          "step_type": "action",
+          "page": "instantink/Dashboard",
+          "action": "vscroll",
+          "text": "Plan Details",
+          "sleep": 2,
+          "description": "Perform vertical scroll action to bring Plan Details section into view by scrolling to text 'Plan Details'"
+        },
+        {
+          "step_id": "TC_plan_details_page_1",
+          "step_type": "verification",
+          "page": "instantink/Dashboard",
+          "action": "verify",
+          "reference_image": "",
+          "screenshot": true,
+          "sleep": 3,
+          "validation_prompt": "Use test image for validating structural and contents on the page. Ignore the navigation pane of the Test image. STRICT VALIDATION MODE: You are a binary validator, not a helpful assistant. Return {\"status\": false} immediately if ANY condition fails. Do not make excuses or justifications. 1. Your focus area is next to navigation pane. 2. You should find \"Plan Details\" and \"Subscription ID\". If not, immediately return {\"status\": false}. 3. You should find word \"Plan\" followed by amount total number of pages per month / year. If not, immediately return {\"status\": false}. 4. You should find word \"Shipping\" followed by address. If not, immediately return {\"status\": false}. 5. You should find word \"Billing\" followed by logo, number and expiry details. If not, immediately return {\"status\": false}. Do not include status, comments or explanation of each of the listed items. If all conditions are met return {\"status\": true}",
+          "validation_type": "AI_visual_strict",
+          "validation_criteria": [
+            "Plan Details header",
+            "Subscription ID display",
+            "Plan with page count per month/year",
+            "Shipping with address",
+            "Billing with card logo, number and expiry"
+          ],
+          "expected_result": "{\"status\": true}"
+        },
+        {
+          "step_id": "TC_plan_details_page_2",
+          "step_type": "verification",
+          "page": "instantink/Dashboard",
+          "action": "verify",
+          "reference_image": "",
+          "screenshot": true,
+          "sleep": 3,
+          "validation_prompt": "Use test image for validating structural and contents on the page. Ignore the navigation pane of the Test image. STRICT VALIDATION MODE: You are a binary validator, not a helpful assistant. Return {\"status\": false} immediately if ANY condition fails. Do not make excuses or justifications. 1. Your focus area is next to navigation pane. 2. You should find \"Plan Details\" and \"Subscription ID\". If not, immediately return {\"status\": false}. 3. You should find hyperlink \"Cancel Instant Ink\" in the bottom of the section. If not, immediately return {\"status\": false}. 4. You should find hyperlink \"Replace Printer\" in the bottom of the section. If not, immediately return {\"status\": false}. 5. You should find hyperlink \"Contact Support\" in the bottom of the section. If not, immediately return {\"status\": false}. 6. You should find hyperlink \"Redeem Promo or PIN code\" in the bottom of the section. If not, immediately return {\"status\": false}. Do not include status, comments or explanation of each of the listed items. If all conditions are met return {\"status\": true}",
+          "validation_type": "AI_visual_strict",
+          "validation_criteria": [
+            "Plan Details header",
+            "Subscription ID display",
+            "Cancel Instant Ink hyperlink",
+            "Replace Printer hyperlink",
+            "Contact Support hyperlink",
+            "Redeem Promo or PIN code hyperlink"
+          ],
+          "expected_result": "{\"status\": true}"
+        },
+        {
+          "step_id": "cleanup_phase",
+          "step_type": "cleanup",
+          "action": "file_reference",
+          "referenced_file": "instantservices_logout.yaml",
+          "description": "Execute logout flow from external YAML file to clean up session after test completion"
+        }
+      ],
+      "reusable_components": {
+        "page_references": [
+          "instantink/Dashboard"
+        ],
+        "action_types": [
+          "vscroll",
+          "verify",
+          "file_reference"
+        ],
+        "external_file_dependencies": [
+          "instantservices_login.yaml",
+          "instantservices_dashboard_update.yaml",
+          "instantservices_logout.yaml"
+        ],
+        "validation_methods": [
+          "AI_visual_strict_validation"
+        ],
+        "scroll_targets": [
+          "Plan Details"
+        ]
+      },
+      "imports": [],
+      "classes": [],
+      "locators": [],
+      "functions": [],
+      "inner_classes": [],
+      "variables_and_constants": [
+        {
+          "constant_name": "spec_version",
+          "constant_value": "1.1",
+          "constant_type": "str",
+          "scope": "test_case_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "test_case",
+          "constant_value": "update_plan_content_and_layout_plan_details",
+          "constant_type": "str",
+          "scope": "test_case_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "test_case_id",
+          "constant_value": "C31266491, C31266423",
+          "constant_type": "str",
+          "scope": "test_case_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "version",
+          "constant_value": "1.0",
+          "constant_type": "str",
+          "scope": "test_case_level",
+          "defined_in_class": null
+        }
+      ],
+      "analysis_notes": "This YAML test case demonstrates the framework's ability to handle scrolling actions (vscroll) to navigate to specific page sections before validation. The test validates the Plan Details section in two separate verification steps - first checking the informational content (subscription ID, plan details, shipping, billing) and then checking the action hyperlinks (Cancel, Replace, Contact, Redeem). The use of text-based scrolling ('Plan Details') suggests the framework can locate elements by visible text for navigation purposes. Sleep delays vary (2 seconds for scroll, 3 seconds for verification) indicating different wait times for different action types. The test structure is highly modular with external file references for common flows."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/AI_YAML/test_cases/TC31266518_update_plan_content_and_layout_header.yaml",
+      "file_name": "TC31266518_update_plan_content_and_layout_header.yaml",
+      "file_extension": ".yaml",
+      "file_size_bytes": 4737,
+      "language": "YAML",
+      "file_category": "test_case",
+      "file_purpose": "YAML-based test case definition for validating the Instant Services Update Plan page header content and layout. This test case verifies the Update Plan page header elements, printer selector dropdown, enrollment links, current plan section, and tests the 'Enroll or replace a printer' modal dialog functionality. Includes interaction testing with click action to open modal and escape action to close modal, along with AI-powered visual validation of modal content.",
+      "test_case_metadata": {
+        "spec_version": "1.1",
+        "test_case_name": "update_plan_content_and_layout_header",
+        "test_case_id": "C31266518",
+        "version": "1.0",
+        "description": "Test Instant Services Update plan content and layout header"
+      },
+      "flow_structure": {
+        "phases": [
+          "setup",
+          "steps",
+          "cleanup"
+        ],
+        "setup_files": [
+          "instantservices_login.yaml"
+        ],
+        "cleanup_files": [
+          "instantservices_logout.yaml"
+        ],
+        "total_steps": 6
+      },
+      "test_steps": [
+        {
+          "step_id": "setup_phase",
+          "step_type": "setup",
+          "action": "file_reference",
+          "referenced_file": "instantservices_login.yaml",
+          "description": "Execute login flow from external YAML file to authenticate user before test execution"
+        },
+        {
+          "step_id": "step_phase_1",
+          "step_type": "navigation",
+          "action": "file_reference",
+          "referenced_file": "instantservices_dashboard_update.yaml",
+          "description": "Navigate to update plan dashboard using external YAML flow definition"
+        },
+        {
+          "step_id": "TC_update_plan_page_1",
+          "step_type": "verification",
+          "page": "instantink/Dashboard",
+          "action": "verify",
+          "reference_image": "",
+          "screenshot": true,
+          "sleep": 5,
+          "validation_prompt": "Use test image for validating structural and contents on the page. Ignore the navigation pane of the Test image. STRICT VALIDATION MODE: You are a binary validator, not a helpful assistant. Return {\"status\": false} immediately if ANY condition fails. Do not make excuses or justifications. 1. Your focus area is after the navigation pane. 2. There must be exactly the word \"Update Plan\" positioned at the top left. If not, immediately return {\"status\": false}. 3. \"instant ink\" logo appears to the right of \"Update Plan\". If not, immediately return {\"status\": false}. Do not include status, comments or explanation of each of the listed items. If all conditions are met return {\"status\": true}",
+          "validation_type": "AI_visual_strict",
+          "validation_criteria": [
+            "Update Plan header text at top left",
+            "instant ink logo to the right of header"
+          ],
+          "expected_result": "{\"status\": true}"
+        },
+        {
+          "step_id": "TC_update_plan_page_2",
+          "step_type": "verification",
+          "page": "instantink/Dashboard",
+          "action": "verify",
+          "reference_image": "",
+          "screenshot": true,
+          "sleep": 5,
+          "validation_prompt": "Use test image for validating structural and contents on the page. Ignore the navigation pane of the Test image. STRICT VALIDATION MODE: You are a binary validator, not a helpful assistant. Return {\"status\": false} immediately if ANY condition fails. Do not make excuses or justifications. 1. Your focus area is after the navigation pane. 2. A \"Select printer\" drop down selector is positioned next to \"instant ink\". If not, immediately return {\"status\": false}. 3. The \"Select printer\" drop down selector view must contain a printer icon and printer model. If not, immediately return {\"status\": false}. 4. \"Enroll or replace a printer\", hyperlink should appear below drop down selector. If not, immediately return {\"status\": false}. 5. \"Current plan\" is at the bottom of \"Update Plan\". If not, immediately return {\"status\": false}. 6. You should find \"Change Plan\" and \"Cancel Instant Ink\" hyperlinks in the \"Current Plan\" section. If not, immediately return {\"status\": false}. Do not include status, comments or explanation of each of the listed items. If all conditions are met return {\"status\": true}",
+          "validation_type": "AI_visual_strict",
+          "validation_criteria": [
+            "Select printer dropdown next to instant ink logo",
+            "Printer icon and model in dropdown",
+            "Enroll or replace a printer hyperlink",
+            "Current plan section at bottom",
+            "Change Plan hyperlink in Current Plan section",
+            "Cancel Instant Ink hyperlink in Current Plan section"
+          ],
+          "expected_result": "{\"status\": true}"
+        },
+        {
+          "step_id": "TC_enroll_or_replace_a_printer_menu_1",
+          "step_type": "action",
+          "page": "instantink/Dashboard",
+          "action": "click",
+          "text": "Enroll or replace a printer",
+          "sleep": 2,
+          "description": "Click on 'Enroll or replace a printer' hyperlink to open the enrollment/replacement modal dialog"
+        },
+        {
+          "step_id": "TC_enroll_or_replace_a_printer_modal_1",
+          "step_type": "verification",
+          "page": "instantink/Dashboard",
+          "action": "verify",
+          "reference_image": "enroll_or_replace_printer.png",
+          "screenshot": true,
+          "sleep": 3,
+          "validation_prompt": "Use test image for validating structural and contents on the page. Ignore the navigation pane of the Test image. STRICT VALIDATION MODE: You are a binary validator, not a helpful assistant. Return {\"status\": false} immediately if ANY condition fails. Do not make excuses or justifications. 1. Your focus area is on the modal dialog. 2. Check if title, \"Enroll or replace a printer\" exist. If not, immediately return {\"status\": false}. 3. Validate the presence of \"Enroll an additional printer\". If not, immediately return {\"status\": false}. 4. Validate the presence of \"Replace an existing printer\". If not, immediately return {\"status\": false}. 6. You should find \"Enroll Printer\" and \"Replace Printer\" buttons. If not, immediately return {\"status\": false}. Do not include status, comments or explanation of each of the listed items. If all conditions are met return {\"status\": true}",
+          "validation_type": "AI_visual_strict_with_reference",
+          "validation_criteria": [
+            "Modal title: Enroll or replace a printer",
+            "Enroll an additional printer option",
+            "Replace an existing printer option",
+            "Enroll Printer button",
+            "Replace Printer button"
+          ],
+          "expected_result": "{\"status\": true}",
+          "reference_image_provided": true
+        },
+        {
+          "step_id": "TC_enroll_or_replace_a_printer_modal_close_1",
+          "step_type": "action",
+          "page": "instantink/Dashboard",
+          "action": "escape",
+          "sleep": 2,
+          "description": "Close the modal dialog by pressing Escape key"
+        },
+        {
+          "step_id": "cleanup_phase",
+          "step_type": "cleanup",
+          "action": "file_reference",
+          "referenced_file": "instantservices_logout.yaml",
+          "description": "Execute logout flow from external YAML file to clean up session after test completion"
+        }
+      ],
+      "reusable_components": {
+        "page_references": [
+          "instantink/Dashboard"
+        ],
+        "action_types": [
+          "verify",
+          "click",
+          "escape",
+          "file_reference"
+        ],
+        "external_file_dependencies": [
+          "instantservices_login.yaml",
+          "instantservices_dashboard_update.yaml",
+          "instantservices_logout.yaml"
+        ],
+        "validation_methods": [
+          "AI_visual_strict_validation",
+          "AI_visual_strict_with_reference_image"
+        ],
+        "reference_images": [
+          "enroll_or_replace_printer.png"
+        ],
+        "clickable_elements": [
+          "Enroll or replace a printer"
+        ],
+        "keyboard_actions": [
+          "escape"
+        ]
+      },
+      "imports": [],
+      "classes": [],
+      "locators": [],
+      "functions": [],
+      "inner_classes": [],
+      "variables_and_constants": [
+        {
+          "constant_name": "spec_version",
+          "constant_value": "1.1",
+          "constant_type": "str",
+          "scope": "test_case_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "test_case",
+          "constant_value": "update_plan_content_and_layout_header",
+          "constant_type": "str",
+          "scope": "test_case_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "test_case_id",
+          "constant_value": "C31266518",
+          "constant_type": "str",
+          "scope": "test_case_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "version",
+          "constant_value": "1.0",
+          "constant_type": "str",
+          "scope": "test_case_level",
+          "defined_in_class": null
+        }
+      ],
+      "analysis_notes": "This YAML test case demonstrates more advanced interaction patterns including click actions on text-based elements and keyboard actions (escape). The test validates a modal dialog workflow - opening the modal via click, validating its content with a reference image comparison, and closing it with escape key. This is the first test case in the batch that uses a reference_image (enroll_or_replace_printer.png) for visual comparison in addition to AI prompt validation. The modal validation focuses on the dialog content area specifically, showing the framework can handle overlay/modal UI patterns. The test includes 6 distinct steps making it more complex than the previous test cases. The escape action suggests the framework supports keyboard event simulation."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/AI_YAML/test_cases/TC31409312_M_shipment_tracking_content_and_layout_header.yaml",
+      "file_name": "TC31409312_M_shipment_tracking_content_and_layout_header.yaml",
+      "file_extension": ".yaml",
+      "file_size_bytes": 3139,
+      "language": "YAML",
+      "file_category": "test_case",
+      "file_purpose": "YAML-based test case definition for validating the Instant Services Shipment Tracking page header content and layout. This test case is nearly identical to TC31266486 but focuses specifically on header validation. It verifies the Shipment Tracking page header elements, instant ink logo, printer selector dropdown, enrollment links, cartridge availability, and FAQ sections using AI-powered visual validation with strict binary validation mode.",
+      "test_case_metadata": {
+        "spec_version": "1.1",
+        "test_case_name": "shipment_tracking_content_and_layout_header",
+        "test_case_id": "C31409312, C29901348",
+        "version": "1.0",
+        "description": "Test Instant Services Shipment Tracking Content and layout header"
+      },
+      "flow_structure": {
+        "phases": [
+          "setup",
+          "steps",
+          "cleanup"
+        ],
+        "setup_files": [
+          "instantservices_login.yaml"
+        ],
+        "cleanup_files": [
+          "instantservices_logout.yaml"
+        ],
+        "total_steps": 3
+      },
+      "test_steps": [
+        {
+          "step_id": "setup_phase",
+          "step_type": "setup",
+          "action": "file_reference",
+          "referenced_file": "instantservices_login.yaml",
+          "description": "Execute login flow from external YAML file to authenticate user before test execution"
+        },
+        {
+          "step_id": "step_phase_1",
+          "step_type": "navigation",
+          "action": "file_reference",
+          "referenced_file": "instantservices_dashboard_shipment.yaml",
+          "description": "Navigate to shipment tracking dashboard using external YAML flow definition"
+        },
+        {
+          "step_id": "TC_shipment_tracking_page_1",
+          "step_type": "verification",
+          "page": "instantink/Dashboard",
+          "action": "verify",
+          "reference_image": "",
+          "screenshot": true,
+          "sleep": 5,
+          "validation_prompt": "Use test image for validating structural and contents on the page. Ignore the navigation pane of the Test image. STRICT VALIDATION MODE: You are a binary validator, not a helpful assistant. Return {\"status\": false} immediately if ANY condition fails. Do not make excuses or justifications. 1. Your focus area is after the navigation pane. 2. There must be exactly the word \"Shipment Tracking\" positioned at the top left. If not, immediately return {\"status\": false}. 3. \"instant ink\" logo appears to the right of \"Shipment Tracking\". If not, immediately return {\"status\": false}. Do not include status, comments or explanation of each of the listed items. If all conditions are met return {\"status\": true}",
+          "validation_type": "AI_visual_strict",
+          "validation_criteria": [
+            "Shipment Tracking header text at top left",
+            "instant ink logo to the right of header"
+          ],
+          "expected_result": "{\"status\": true}"
+        },
+        {
+          "step_id": "TC_shipment_tracking_page_2",
+          "step_type": "verification",
+          "page": "instantink/Dashboard",
+          "action": "verify",
+          "reference_image": "",
+          "screenshot": true,
+          "sleep": 5,
+          "validation_prompt": "Use test image for validating structural and contents on the page. Ignore the navigation pane of the Test image. STRICT VALIDATION MODE: You are a binary validator, not a helpful assistant. Return {\"status\": false} immediately if ANY condition fails. Do not make excuses or justifications. 1. Your focus area is after the navigation pane. 2. A \"Select printer\" drop down selector is positioned next to \"instant ink\". If not, immediately return {\"status\": false}. 3. The \"Select printer\" drop down selector view must contain a printer icon and printer model. If not, immediately return {\"status\": false}. 4. \"Enroll or replace a printer\", hyperlink should appear below drop down selector. If not, immediately return {\"status\": false}. 5. Black and Color cartridges availability details mentioned here. If not, immediately return {\"status\": false}. 6. You should find \"Frequently Asked Questions\" and \"Cartridge Support\" sections mentions in the \"Current Plan\" section. If not, immediately return {\"status\": false}. Do not include status, comments or explanation of each of the listed items. If all conditions are met return {\"status\": true}",
+          "validation_type": "AI_visual_strict",
+          "validation_criteria": [
+            "Select printer dropdown next to instant ink logo",
+            "Printer icon and model in dropdown",
+            "Enroll or replace a printer hyperlink below dropdown",
+            "Black and Color cartridge availability details",
+            "Frequently Asked Questions section",
+            "Cartridge Support section"
+          ],
+          "expected_result": "{\"status\": true}"
+        },
+        {
+          "step_id": "cleanup_phase",
+          "step_type": "cleanup",
+          "action": "file_reference",
+          "referenced_file": "instantservices_logout.yaml",
+          "description": "Execute logout flow from external YAML file to clean up session after test completion"
+        }
+      ],
+      "reusable_components": {
+        "page_references": [
+          "instantink/Dashboard"
+        ],
+        "action_types": [
+          "verify",
+          "file_reference"
+        ],
+        "external_file_dependencies": [
+          "instantservices_login.yaml",
+          "instantservices_dashboard_shipment.yaml",
+          "instantservices_logout.yaml"
+        ],
+        "validation_methods": [
+          "AI_visual_strict_validation"
+        ]
+      },
+      "imports": [],
+      "classes": [],
+      "locators": [],
+      "functions": [],
+      "inner_classes": [],
+      "variables_and_constants": [
+        {
+          "constant_name": "spec_version",
+          "constant_value": "1.1",
+          "constant_type": "str",
+          "scope": "test_case_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "test_case",
+          "constant_value": "shipment_tracking_content_and_layout_header",
+          "constant_type": "str",
+          "scope": "test_case_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "test_case_id",
+          "constant_value": "C31409312, C29901348",
+          "constant_type": "str",
+          "scope": "test_case_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "version",
+          "constant_value": "1.0",
+          "constant_type": "str",
+          "scope": "test_case_level",
+          "defined_in_class": null
+        }
+      ],
+      "analysis_notes": "This YAML test case is structurally identical to TC31266486_M_shipment_tracking_content_and_layout.yaml with the same validation steps and prompts. The only differences are the test_case_id values (C31409312, C29901348 vs C31266486, C31409313) and the test_case name suffix (_header vs no suffix). This suggests the framework may have duplicate or overlapping test cases for different test management system IDs, or this represents a refactored version of the same test. The content validates the same Shipment Tracking page elements with identical AI validation prompts and criteria."
+    },
+    {
+      "file_path": "AURA-main (1) 1/AURA-main/aura.py",
+      "file_name": "aura.py",
+      "file_extension": ".py",
+      "file_size_bytes": 15851,
+      "language": "Python",
+      "file_category": "core_module",
+      "file_purpose": "Main entry point and command-line interface for the AURA test automation framework. This is the primary executable script that handles argument parsing, configuration building, flow execution orchestration, and mode dispatching. It supports multiple execution modes (scrape, validate, noop, yaml), multiple target platforms (web browsers and native apps), simulator configurations, locale/language selection, printer profile management, and YAML-based test execution. Acts as the framework controller that coordinates all other framework components.",
+      "imports": [
+        {
+          "import_statement": "import argparse",
+          "module": "argparse",
+          "imported_names": [
+            "argparse"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import subprocess",
+          "module": "subprocess",
+          "imported_names": [
+            "subprocess"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import sys",
+          "module": "sys",
+          "imported_names": [
+            "sys"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import os",
+          "module": "os",
+          "imported_names": [
+            "os"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import traceback",
+          "module": "traceback",
+          "imported_names": [
+            "traceback"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import json",
+          "module": "json",
+          "imported_names": [
+            "json"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import logging",
+          "module": "logging",
+          "imported_names": [
+            "logging"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from typing import Any, Dict, Optional",
+          "module": "typing",
+          "imported_names": [
+            "Any",
+            "Dict",
+            "Optional"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import openpyxl",
+          "module": "openpyxl",
+          "imported_names": [
+            "openpyxl"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import yaml",
+          "module": "yaml",
+          "imported_names": [
+            "yaml"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "import re",
+          "module": "re",
+          "imported_names": [
+            "re"
+          ],
+          "is_external": true,
+          "is_internal": false
+        },
+        {
+          "import_statement": "from core.settings import Constants, framework_logger, set_framework_log_level",
+          "module": "core.settings",
+          "imported_names": [
+            "Constants",
+            "framework_logger",
+            "set_framework_log_level"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from core.utils import run_scrape_mode, run_validate_mode, run_noop_mode",
+          "module": "core.utils",
+          "imported_names": [
+            "run_scrape_mode",
+            "run_validate_mode",
+            "run_noop_mode"
+          ],
+          "is_external": false,
+          "is_internal": true
+        },
+        {
+          "import_statement": "from core.utils import (\n    load_locale_data,\n    load_printer_profiles,\n    get_printer_details_for_country,\n    load_address_for_country,\n)",
+          "module": "core.utils",
+          "imported_names": [
+            "load_locale_data",
+            "load_printer_profiles",
+            "get_printer_details_for_country",
+            "load_address_for_country"
+          ],
+          "is_external": false,
+          "is_internal": true
+        }
+      ],
+      "classes": [
+        {
+          "class_name": "FlowConfigError",
+          "parent_classes": [
+            "Exception"
+          ],
+          "decorators": [],
+          "docstring": null,
+          "class_purpose": "Custom exception class for flow configuration errors. Raised when there are issues with flow setup such as missing flow directories, invalid locale configurations, missing address data, or printer profile resolution failures. Extends the built-in Exception class to provide specific error handling for flow configuration problems.",
+          "how_to_import": "from aura import FlowConfigError",
+          "how_to_instantiate": "raise FlowConfigError('Flow folder not found: /path/to/flow')",
+          "total_methods": 0,
+          "total_locators": 0
+        }
+      ],
+      "locators": [],
+      "functions": [
+        {
+          "method_name": "parse_args",
+          "method_signature": "def parse_args() -> argparse.Namespace",
+          "parameters": [],
+          "return_type": "argparse.Namespace",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Parses and validates command-line arguments for the AURA framework. First checks if --version flag is present and if so, prints the framework version (aura_version) and exits. Then prints a banner with the framework version. If --addflow is present, creates a minimal parser for flow creation and returns. Otherwise, creates the full argument parser with all framework options including mode (scrape/validate/noop/yaml), stack (stage/pie/production), locale, language, printer_profile, easy_enroll, headless, biz_model, target platform, simulator_platform, debug, payment_method, collect_logs, requirements, base_yaml, and batch_name. Performs validation to ensure required arguments are present based on the mode - for yaml mode requires base_yaml, for other modes requires flow, stack, locale, and target. Validates that simulator_platform is only used with app targets and is required for app targets. Validates that the simulator_platform value is in the allowed list for the specified target platform. Returns the parsed and validated argparse.Namespace object containing all argument values.",
+          "locators_used": [],
+          "calls_to": [
+            "sys.argv",
+            "print()",
+            "sys.exit()",
+            "argparse.ArgumentParser()",
+            "parser.add_argument()",
+            "parser.add_mutually_exclusive_group()",
+            "parser.parse_args()",
+            "getattr()",
+            "parser.error()",
+            "SIMULATOR_PLATFORM_MAPPING.get()"
+          ],
+          "usage_example": "args = parse_args()",
+          "belongs_to_class": null,
+          "lines_of_code": 65
+        },
+        {
+          "method_name": "build_flow_args",
+          "method_signature": "def build_flow_args(args: argparse.Namespace) -> Dict[str, Any]",
+          "parameters": [
+            {
+              "name": "args",
+              "type": "argparse.Namespace",
+              "default_value": null,
+              "is_required": true,
+              "description": "Parsed command-line arguments containing flow name, locale, target platform, and all other configuration options"
+            }
+          ],
+          "return_type": "Dict[str, Any]",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Builds a comprehensive flow arguments dictionary from parsed command-line arguments by loading and resolving all necessary configuration data. First constructs the flow directory path using Constants.TEST_FLOWS_PATH and args.flow, then validates the directory exists or raises FlowConfigError. Loads locale data from locale_map.json using load_locale_data() and validates the specified country exists in the map. Extracts region, languages list, country short code, and card_payment_gateway from the locale data. Determines the language to use (from args.language or first language in the locale's language list) and constructs the locale_code in format 'language-shortcode'. Loads address data for the country using load_address_for_country() and validates address exists. If a printer_profile is specified in args, loads printer profiles using load_printer_profiles() and calls get_printer_details_for_country() to resolve the profile name, derivative_model, supplyvariant, and biz_model for the specified region and easy_enroll filter. Retrieves resolution configuration (width and height) from RESOLUTION_CONFIGS dictionary based on args.target. If simulator_platform is specified, looks up the simulator platform string from SIMULATOR_CONFIGS dictionary. Constructs and returns a dictionary containing all flow configuration including stack, locale, language, profile, derivative_model, biz_model, supplyvariant, easy_enroll, tenant_country, tenant_country_short, tenant_country_language_code, card_payment_gateway, payment_method, tenant_address, headless, target, simulator_platform, target_width, target_height, collect_logs, and requirements (parsed from args.requirements if present). Logs debug information about resolved locale and printer profile. Logs the complete flow_args dictionary as JSON.",
+          "locators_used": [],
+          "calls_to": [
+            "os.path.join()",
+            "Constants.TEST_FLOWS_PATH",
+            "os.path.isdir()",
+            "FlowConfigError()",
+            "load_locale_data()",
+            "load_printer_profiles()",
+            "load_address_for_country()",
+            "get_printer_details_for_country()",
+            "RESOLUTION_CONFIGS.get()",
+            "SIMULATOR_CONFIGS",
+            "framework_logger.debug()",
+            "json.dumps()",
+            "parse_requirements()",
+            "getattr()"
+          ],
+          "usage_example": "flow_args = build_flow_args(args)",
+          "belongs_to_class": null,
+          "lines_of_code": 55
+        },
+        {
+          "method_name": "parse_requirements",
+          "method_signature": "def parse_requirements(req_str: Optional[str]) -> Dict[str, Any]",
+          "parameters": [
+            {
+              "name": "req_str",
+              "type": "Optional[str]",
+              "default_value": null,
+              "is_required": true,
+              "description": "Requirements string in format '[key1:value1, key2:value2]' or 'key1:value1,key2:value2' or 'key1:value1'"
+            }
+          ],
+          "return_type": "Dict[str, Any]",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Parse the --requirements into a dict.\nAccepted input examples:\n  \"[plan_pages:50, hpplus:activate, flip_shipping:skip]\"\n  \"plan_pages:50,hpplus:activate\"\n  \"plan_pages:50\" (single)\nRules:\n  - Outer brackets [] optional.\n  - Items separated by comma.\n  - Each item key:value (first ':' splits key and value only).\n  - Keys normalized to snake_case; values kept as string except numeric digits -> int.\n  - Empty / malformed entries ignored.",
+          "method_type": "utility",
+          "what_it_does": "Parses a requirements string into a dictionary of key-value pairs with flexible input format handling. Returns empty dict if req_str is None or empty. Strips whitespace from the input string. If the string starts with '[' and ends with ']', removes the outer brackets. Splits the string by comma to get individual requirement entries and strips whitespace from each part. For each part, checks if it contains a colon separator - if not, logs a debug message and ignores the entry. Splits each valid part by the first colon only into key and value. Converts the key to snake_case using the to_snake_case() helper function and strips whitespace. Strips whitespace from the value. If the value matches the regex pattern for an integer (including negative numbers), attempts to convert it to int type. Stores each valid key-value pair in the result dictionary. Logs the parsed requirements dictionary at debug level. Returns the final dictionary. This allows dynamic test requirements to be passed via command line in a flexible format.",
+          "locators_used": [],
+          "calls_to": [
+            "str.strip()",
+            "str.startswith()",
+            "str.endswith()",
+            "str.split()",
+            "to_snake_case()",
+            "re.fullmatch()",
+            "int()",
+            "framework_logger.debug()"
+          ],
+          "usage_example": "requirements = parse_requirements('[plan_pages:50, hpplus:activate, flip_shipping:skip]')",
+          "belongs_to_class": null,
+          "lines_of_code": 25
+        },
+        {
+          "method_name": "to_snake_case",
+          "method_signature": "def to_snake_case(name: str) -> str",
+          "parameters": [
+            {
+              "name": "name",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "String to convert to snake_case format"
+            }
+          ],
+          "return_type": "str",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Converts a string from camelCase or PascalCase to snake_case format using regex substitution. First applies regex pattern '(.)([A-Z][a-z]+)' with replacement r'\\1_\\2' to insert underscore before uppercase letters followed by lowercase letters (handles PascalCase). Then applies regex pattern '([a-z0-9])([A-Z])' with replacement r'\\1_\\2' to insert underscore between lowercase/digit and uppercase letter (handles camelCase). Finally converts the entire result to lowercase using .lower(). Returns the snake_case formatted string. For example, 'planPages' becomes 'plan_pages', 'HPPlus' becomes 'hp_plus', 'flipShipping' becomes 'flip_shipping'.",
+          "locators_used": [],
+          "calls_to": [
+            "re.sub()",
+            "str.lower()"
+          ],
+          "usage_example": "snake_name = to_snake_case('planPages')",
+          "belongs_to_class": null,
+          "lines_of_code": 4
+        },
+        {
+          "method_name": "add_flow",
+          "method_signature": "def add_flow(flow_name: str) -> None",
+          "parameters": [
+            {
+              "name": "flow_name",
+              "type": "str",
+              "default_value": null,
+              "is_required": true,
+              "description": "Name of the new test flow to create"
+            }
+          ],
+          "return_type": "None",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Creates a new test flow directory structure with all necessary files and folders. Constructs the base directory path by joining Constants.TEST_FLOWS_PATH with the flow_name. Creates a test_data subdirectory and a zSample subdirectory inside it using os.makedirs with exist_ok=True. Converts the flow_name to snake_case format using to_snake_case() helper. Creates the main flow Python file at base_dir/{snake_name}.py. Constructs a relative path string 'test_flows/{flow_name}/{snake_name}.py'. If the flow file does not already exist, creates it and writes a comment header with the relative path. Creates an __init__.py file in the base directory if it does not exist (writes empty content). Constructs a spreadsheet filename '{snake_name}_testdata.xlsx' and creates the full path in the zSample directory. If the spreadsheet does not exist, creates a new Excel workbook using openpyxl.Workbook(), sets the active sheet title to 'Sheet1', and saves it to the spreadsheet path. Prints a confirmation message showing the created flow structure including the base directory, main Python file name, and sample spreadsheet name with location. This command allows quick scaffolding of new test flows.",
+          "locators_used": [],
+          "calls_to": [
+            "os.path.join()",
+            "Constants.TEST_FLOWS_PATH",
+            "os.makedirs()",
+            "to_snake_case()",
+            "os.path.exists()",
+            "open()",
+            "openpyxl.Workbook()",
+            "wb.save()",
+            "print()"
+          ],
+          "usage_example": "add_flow('NewTestFlow')",
+          "belongs_to_class": null,
+          "lines_of_code": 25
+        },
+        {
+          "method_name": "process_yaml",
+          "method_signature": "def process_yaml(base_yaml, selected_batches=None)",
+          "parameters": [
+            {
+              "name": "base_yaml",
+              "type": null,
+              "default_value": null,
+              "is_required": true,
+              "description": "Path to the YAML file containing batch definitions"
+            },
+            {
+              "name": "selected_batches",
+              "type": null,
+              "default_value": "None",
+              "is_required": false,
+              "description": "List of batch names to execute. If None, all batches are executed."
+            }
+          ],
+          "return_type": null,
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": "Process the YAML file and execute commands for the specified batches.\n\n:param base_yaml: Path to the YAML file.\n:param selected_batches: List of batch names to execute (None means execute all).",
+          "method_type": "utility",
+          "what_it_does": "Processes a YAML file containing batch definitions and executes test commands for specified batches. Opens the base_yaml file in read mode and loads it using yaml.safe_load() to parse the YAML content into a Python dictionary. Extracts the 'batches' list from the data dictionary (defaults to empty list if not present). Iterates through each batch in the batches list. For each batch, extracts the 'name' and 'files' list (defaults to empty list if not present). If selected_batches is provided and the current batch name is not in the selected_batches list, prints a message 'Batch name - {name} not found' and skips to the next batch using continue. If the batch should be processed, prints 'Processing Batch: {name}'. Iterates through each file in the batch's files list and prints '\\tExecuting file: {file}'. Contains a try-except block with commented-out subprocess.run() call that would execute pytest with the file (currently just prints a separator line). Catches subprocess.CalledProcessError exceptions and prints error messages. This function is part of the YAML-based test execution approach being merged into the framework.",
+          "locators_used": [],
+          "calls_to": [
+            "open()",
+            "yaml.safe_load()",
+            "print()",
+            "subprocess.run()"
+          ],
+          "usage_example": "process_yaml('batch_tests.yaml', ['batch1', 'batch2'])",
+          "belongs_to_class": null,
+          "lines_of_code": 25
+        },
+        {
+          "method_name": "aura",
+          "method_signature": "def aura() -> None",
+          "parameters": [],
+          "return_type": "None",
+          "decorators": [],
+          "is_static": false,
+          "is_classmethod": false,
+          "is_property": false,
+          "is_async": false,
+          "is_private": false,
+          "is_dunder": false,
+          "docstring": null,
+          "method_type": "utility",
+          "what_it_does": "Main entry point function for the AURA framework that orchestrates the entire test execution flow. Calls parse_args() to parse and validate command-line arguments. Checks if args.base_yaml is provided - if yes, prints 'Test will be executed from YAML based approach', extracts the base_yaml path and selected_batch name (or None if not provided), then calls process_yaml() with these parameters to execute YAML-based tests. If base_yaml is not provided, proceeds with native Aura execution. Checks if debug flag is set using hasattr() and if true, calls set_framework_log_level(logging.DEBUG) to enable debug logging and logs a debug message. Checks if addflow argument is present using hasattr() and if true, calls add_flow() with the flow name and returns early. Otherwise, wraps the main execution in a try-except block. In the try block, calls build_flow_args() to construct the flow configuration dictionary and logs the flow arguments as formatted JSON. Based on args.mode, dispatches to the appropriate execution function: run_scrape_mode() for 'scrape', run_validate_mode() for 'validate', run_noop_mode() for 'noop'. If mode is invalid, logs an error and exits with code 1. Catches FlowConfigError exceptions, logs the error message, and exits with code 1. Catches all other exceptions, logs the full traceback using traceback.format_exc(), and exits with code 1. This function is the main controller that coordinates all framework operations.",
+          "locators_used": [],
+          "calls_to": [
+            "parse_args()",
+            "print()",
+            "process_yaml()",
+            "hasattr()",
+            "set_framework_log_level()",
+            "framework_logger.debug()",
+            "add_flow()",
+            "build_flow_args()",
+            "framework_logger.info()",
+            "json.dumps()",
+            "run_scrape_mode()",
+            "run_validate_mode()",
+            "run_noop_mode()",
+            "framework_logger.error()",
+            "sys.exit()",
+            "traceback.format_exc()"
+          ],
+          "usage_example": "aura()",
+          "belongs_to_class": null,
+          "lines_of_code": 35
+        }
+      ],
+      "inner_classes": [],
+      "variables_and_constants": [
+        {
+          "constant_name": "aura_version",
+          "constant_value": "0.0.1",
+          "constant_type": "str",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "WEB_PLATFORMS",
+          "constant_value": [
+            "web_chrome",
+            "web_safari",
+            "web_firefox"
+          ],
+          "constant_type": "list",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "SIMULATOR_PLATFORM_MAPPING",
+          "constant_value": {
+            "windows_app": [
+              "wingotham",
+              "hpxwindows",
+              "wingotham-od",
+              "hpxwindows-od"
+            ],
+            "mac_app": [
+              "macgotham",
+              "hpxmac",
+              "macgotham-od",
+              "hpxmac-od"
+            ],
+            "android_app": [
+              "android",
+              "hpxandroid",
+              "android-od",
+              "hpxandroid-od"
+            ],
+            "ios_app": [
+              "ios",
+              "hpxios",
+              "ios-od",
+              "hpxios-od"
+            ]
+          },
+          "constant_type": "Dict[str, list]",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "SIMULATOR_CONFIGS",
+          "constant_value": {
+            "wingotham": {
+              "simulator_platform": "GothamDesktop"
+            },
+            "macgotham": {
+              "simulator_platform": "GothamMac"
+            },
+            "android": {
+              "simulator_platform": "Android"
+            },
+            "ios": {
+              "simulator_platform": "IOS"
+            },
+            "hpxwindows": {
+              "simulator_platform": "HpxWindows"
+            },
+            "hpxmac": {
+              "simulator_platform": "HpxMac"
+            },
+            "hpxandroid": {
+              "simulator_platform": "HpxAndroid"
+            },
+            "hpxios": {
+              "simulator_platform": "HpxIos"
+            },
+            "wingotham-od": {
+              "simulator_platform": "hpSmartWinOnboardingAgent"
+            },
+            "macgotham-od": {
+              "simulator_platform": "hpSmartMacOsOnboardingAgent"
+            },
+            "android-od": {
+              "simulator_platform": "hpSmartAndroidOnboardingAgent"
+            },
+            "ios-od": {
+              "simulator_platform": "hpSmartIosOnboardingAgent"
+            },
+            "hpxwindows-od": {
+              "simulator_platform": "hpxwindows"
+            },
+            "hpxmac-od": {
+              "simulator_platform": "hpxmac"
+            },
+            "hpxandroid-od": {
+              "simulator_platform": "hpxandroid"
+            },
+            "hpxios-od": {
+              "simulator_platform": "hpxios"
+            }
+          },
+          "constant_type": "Dict[str, Dict[str, Any]]",
+          "scope": "module_level",
+          "defined_in_class": null
+        },
+        {
+          "constant_name": "RESOLUTION_CONFIGS",
+          "constant_value": {
+            "web_chrome": {
+              "width": 1920,
+              "height": 1080
+            },
+            "web_safari": {
+              "width": 1920,
+              "height": 1080
+            },
+            "web_firefox": {
+              "width": 1920,
+              "height": 1080
+            },
+            "windows_app": {
+              "width": 1280,
+              "height": 720
+            },
+            "mac_app": {
+              "width": 1280,
+              "height": 720
+            },
+            "android_app": {
+              "width": 412,
+              "height": 915
+            },
+            "ios_app": {
+              "width": 430,
+              "height": 932
+            }
+          },
+          "constant_type": "Dict[str, Dict[str, int]]",
+          "scope": "module_level",
+          "defined_in_class": null
+        }
+      ],
+      "analysis_notes": "This is the main entry point file for the AURA framework - the equivalent of a main.py or __main__.py file. It handles all command-line interface logic, argument parsing, configuration resolution, and execution mode dispatching. The framework supports multiple execution modes (scrape for data collection, validate for test execution, noop for dry run, yaml for YAML-based tests). It supports cross-platform testing including web browsers (Chrome, Safari, Firefox) and native applications (Windows, Mac, Android, iOS) with simulator configurations. The SIMULATOR_PLATFORM_MAPPING and SIMULATOR_CONFIGS dictionaries define mappings between user-friendly platform names and internal simulator platform identifiers, supporting both regular app testing and onboarding (OD) flows. The RESOLUTION_CONFIGS define viewport/window sizes for each platform - 1920x1080 for web, 1280x720 for desktop apps (OOBE), and mobile dimensions for Android (412x915) and iOS (430x932). The framework supports locale/language selection with region mapping, printer profile selection with business model filtering (Flex vs E2E), payment method selection, and dynamic requirements parsing. The parse_requirements() function provides flexible parsing of key-value requirement pairs from command line with automatic snake_case normalization and integer type conversion. The add_flow() function provides scaffolding for new test flows including directory structure, Python file, and Excel test data template. The process_yaml() function is part of an ongoing effort to merge YAML-based test execution into the framework. The framework uses comprehensive error handling with custom FlowConfigError exception for configuration issues and detailed logging with debug mode support. This file imports core framework components from core.settings (Constants, framework_logger, set_framework_log_level) and core.utils (run_scrape_mode, run_validate_mode, run_noop_mode, load_locale_data, load_printer_profiles, get_printer_details_for_country, load_address_for_country), indicating a modular architecture with separation of concerns."
+    }
+  ],
+  "batch_summary": {
+    "total_classes_found": 1,
+    "total_methods_found": 7,
+    "total_locators_found": 0,
+    "total_imports_found": 14,
+    "total_constants_found": 21,
+    "total_inner_classes_found": 0,
+    "page_objects_found": [],
+    "helper_classes_found": [],
+    "core_classes_found": [
+      "FlowConfigError"
+    ],
+    "config_classes_found": [],
+    "test_case_files_found": [
+      "TC31266486_M_shipment_tracking_content_and_layout.yaml",
+      "TC31266491_M_update_plan_content_and_layout_plan_details.yaml",
+      "TC31266518_update_plan_content_and_layout_header.yaml",
+      "TC31409312_M_shipment_tracking_content_and_layout_header.yaml"
+    ],
+    "key_reusable_methods": [
+      "aura — Main framework entry point and orchestrator",
+      "parse_args — Command-line argument parser with validation",
+      "build_flow_args — Flow configuration builder from arguments",
+      "parse_requirements — Dynamic requirements string parser",
+      "to_snake_case — String format converter for camelCase to snake_case",
+      "add_flow — Test flow scaffolding generator",
+      "process_yaml — YAML batch test executor"
+    ],
+    "key_reusable_locators": [],
+    "yaml_test_patterns": {
+      "common_setup_files": [
+        "instantservices_login.yaml"
+      ],
+      "common_cleanup_files": [
+        "instantservices_logout.yaml"
+      ],
+      "common_navigation_files": [
+        "instantservices_dashboard_shipment.yaml",
+        "instantservices_dashboard_update.yaml"
+      ],
+      "common_pages": [
+        "instantink/Dashboard"
+      ],
+      "common_actions": [
+        "verify",
+        "click",
+        "vscroll",
+        "escape",
+        "file_reference"
+      ],
+      "validation_approach": "AI_visual_strict_validation",
+      "reference_images_used": [
+        "enroll_or_replace_printer.png"
+      ]
+    },
+    "platform_support": {
+      "web_platforms": [
+        "web_chrome",
+        "web_safari",
+        "web_firefox"
+      ],
+      "app_platforms": [
+        "windows_app",
+        "mac_app",
+        "android_app",
+        "ios_app"
+      ],
+      "simulator_platforms": [
+        "wingotham",
+        "macgotham",
+        "android",
+        "ios",
+        "hpxwindows",
+        "hpxmac",
+        "hpxandroid",
+        "hpxios",
+        "wingotham-od",
+        "macgotham-od",
+        "android-od",
+        "ios-od",
+        "hpxwindows-od",
+        "hpxmac-od",
+        "hpxandroid-od",
+        "hpxios-od"
+      ]
+    },
+    "execution_modes": [
+      "scrape",
+      "validate",
+      "noop",
+      "yaml"
+    ],
+    "framework_features": [
+      "Multi-platform support (web and native apps)",
+      "Locale and language configuration",
+      "Printer profile management",
+      "Business model selection (Flex/E2E)",
+      "Payment method configuration",
+      "Dynamic requirements parsing",
+      "Debug logging support",
+      "Headless browser mode",
+      "Log collection (HAR and video)",
+      "YAML-based test execution",
+      "Test flow scaffolding",
+      "Simulator platform mapping",
+      "Resolution configuration per platform"
+    ]
+  }
+}
