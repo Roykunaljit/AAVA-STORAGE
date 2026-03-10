@@ -1,0 +1,820 @@
+{
+  "mapping_metadata": {
+    "mapping_batch_id": 10,
+    "total_mapping_batches": 18,
+    "remaining_after_this": 8,
+    "codebase_batch_report_path": "codebase_batches/batch_10_report.json",
+    "test_case_source": "test_case_analysis/test_case_analysis.json",
+    "storage_repo": "AAVA-STORAGE",
+    "analyzed_at": "2025-01-15T14:45:00Z",
+    "analyzer": "Senior Test Automation Mapping Specialist Agent",
+    "mapping_dimensions": [
+      "preconditions",
+      "step_actions",
+      "expected_results",
+      "test_data",
+      "overall_flow"
+    ],
+    "files_in_this_batch": [
+      "AURA-main (1) 1/AURA-main/helper/ra_base_helper.py",
+      "AURA-main (1) 1/AURA-main/helper/shipment_tracking_helper.py",
+      "AURA-main (1) 1/AURA-main/helper/update_plan_helper.py",
+      "AURA-main (1) 1/AURA-main/pages/__init__.py",
+      "AURA-main (1) 1/AURA-main/pages/base_page_object.py"
+    ],
+    "summary": {
+      "total_test_cases_evaluated": 1,
+      "test_cases_with_relevant_components": 1,
+      "test_cases_without_relevant_components": 0,
+      "total_page_objects_matched": 1,
+      "total_locators_matched": 0,
+      "total_methods_matched": 6,
+      "total_helpers_matched": 1,
+      "total_constants_matched": 0,
+      "total_precondition_methods_matched": 1,
+      "total_verification_methods_matched": 2,
+      "total_test_data_components_matched": 0
+    }
+  },
+  "test_case_mappings": [
+    {
+      "test_case_id": "C44873414",
+      "test_case_title": "Billing Cycle Period card",
+      "test_case_description": "Test case to verify the Billing Cycle Period card behavior on Print and Payment History page when a plan is paused, including verification of complimentary pages, additional pages, progress bars, tooltips, and page count displays.",
+      "module": "Instant Supply",
+      "has_relevant_components_in_this_batch": true,
+      "precondition_mapping": [
+        {
+          "precondition_text": "Enroll the Ink printer with 50 pages plan or higher.",
+          "precondition_index": 0,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "This precondition requires printer enrollment with a specific plan. No printer enrollment methods, API helpers for enrollment, or enrollment page objects were found in this batch. The batch contains helpers for Resque jobs, shipment tracking, and plan updates, but not printer enrollment. Enrollment methods likely exist in other batches containing enrollment page objects or API helper modules."
+        },
+        {
+          "precondition_text": "Make sure the Subscription has no free months info.",
+          "precondition_index": 1,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "This precondition requires verifying subscription state (no free months). No API helpers for retrieving subscription details or methods for checking free months status were found in this batch. UpdatePlanHelper.doesnt_see_free_months exists but it verifies UI display of free trial info, not the actual subscription state. Subscription state verification methods likely exist in other batches containing subscription API helpers or subscription management modules."
+        },
+        {
+          "precondition_text": "Make sure the subscription is \"subscribed\" status.",
+          "precondition_index": 2,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "This precondition requires verifying subscription status is 'subscribed'. No API helpers for retrieving subscription status or methods for verifying subscription state were found in this batch. Subscription status verification methods likely exist in other batches containing subscription API helpers or state management modules."
+        },
+        {
+          "precondition_text": "Click the Pause Plan button on CIT modal or \"Pause Instant Ink\" link to trigger the pause plan.",
+          "precondition_index": 3,
+          "components_found_in_this_batch": [
+            {
+              "component_type": "method",
+              "method_name": "access_page",
+              "method_signature": "def access_page(page, page_name)",
+              "source_file": "AURA-main (1) 1/AURA-main/helper/ra_base_helper.py",
+              "source_class": "RABaseHelper",
+              "what_it_does": "Navigates to a specific page by clicking on a navigation link with the specified page_name text. Uses an XPath selector to locate an anchor element with class 'nav-link' whose normalized text content exactly matches the provided page_name. This is a general navigation utility that could potentially be used to navigate to the dashboard or page where pause plan action is available.",
+              "how_to_import": "from helper.ra_base_helper import RABaseHelper",
+              "usage_example": "RABaseHelper.access_page(page, 'Dashboard')",
+              "relevance_reason": "This precondition requires navigating to a page and clicking a pause plan button or link. While this method provides general page navigation capability, it is designed for clicking nav-link elements in the main navigation menu, not for clicking pause plan buttons within page content. It could be used to navigate to the dashboard where the pause plan action might be initiated, but it does not directly fulfill the pause plan clicking requirement. The actual pause plan button/link clicking would require different methods or page objects not found in this batch."
+            }
+          ],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "This precondition requires clicking a Pause Plan button on a CIT modal or a 'Pause Instant Ink' link. While RABaseHelper.access_page provides general navigation capability, no specific methods for clicking pause plan buttons, interacting with CIT modals, or triggering plan pause were found in this batch. UpdatePlanHelper.cancellation_subscription exists but it handles subscription cancellation, not plan pause. The DashboardPage page object with pause plan button locators and click methods likely exists in other batches containing dashboard page objects."
+        }
+      ],
+      "matched_page_objects": [
+        {
+          "class_name": "BasePageObject",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/base_page_object.py",
+          "file_category": "core_module",
+          "parent_classes": [],
+          "class_purpose": "Base class for all page objects in the framework, providing core functionality for element locator management and dynamic attribute access. This is the foundational class that PrintAndPaymentHistoryPage and DashboardPage (needed for this test) would inherit from. Provides __getattr__ for dynamic locator to Playwright locator conversion, WaitProxy for wait operations, and get_selector for retrieving raw selector strings.",
+          "how_to_import": "from pages.base_page_object import BasePageObject",
+          "how_to_instantiate": "BasePageObject is not instantiated directly. Page object classes inherit from it: class PrintAndPaymentHistoryPage(BasePageObject): def __init__(self, page): super().__init__(page)",
+          "relevant_to_preconditions": [],
+          "relevant_to_steps": [
+            1,
+            2,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "relevant_to_expected_results": [
+            1,
+            2,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "relevance_reason": "This test case requires page objects for PrintAndPaymentHistoryPage and DashboardPage to interact with UI elements like billing cycle card, progress bars, tooltips, info icons, and page count displays. BasePageObject is the foundational class that these page objects would inherit from to gain dynamic locator access, wait capabilities, and element interaction infrastructure. While the specific page objects are not in this batch, BasePageObject is relevant as the architectural foundation that enables page object functionality throughout the framework."
+        }
+      ],
+      "matched_locators": [],
+      "matched_methods": [
+        {
+          "method_name": "access_page",
+          "method_signature": "def access_page(page, page_name)",
+          "method_type": "navigation",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/ra_base_helper.py",
+          "source_class": "RABaseHelper",
+          "what_it_does": "Navigates to a specific page by clicking on a navigation link with the specified page_name text. Uses an XPath selector to locate an anchor element with class 'nav-link' whose normalized text content exactly matches the provided page_name.",
+          "how_to_import": "from helper.ra_base_helper import RABaseHelper",
+          "usage_example": "RABaseHelper.access_page(page, 'Print and Payment History')",
+          "relevant_to_steps": [
+            1,
+            4
+          ],
+          "relevant_to_preconditions": [
+            3
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "step_action",
+          "relevance_reason": "Steps 1 and 4 require navigating to the Print and Payment History page. This method provides general navigation capability by clicking navigation links. However, it is designed for main navigation menu links (nav-link class), and the actual navigation to Print and Payment History may use different UI patterns. The method could potentially be used if Print and Payment History is accessible via a nav-link in the main menu, but the test case suggests it may be under HP Instant Ink section which might require different navigation approach."
+        },
+        {
+          "method_name": "wait_page_to_load",
+          "method_signature": "def wait_page_to_load(page, page_title, timeout=60000)",
+          "method_type": "waiter",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/ra_base_helper.py",
+          "source_class": "RABaseHelper",
+          "what_it_does": "Waits for a specific page to fully load by checking for the presence of an h1 heading element containing the text 'Details for {page_title}'. Uses Playwright's wait_for_selector with a dynamic selector pattern. Default timeout is 60 seconds.",
+          "how_to_import": "from helper.ra_base_helper import RABaseHelper",
+          "usage_example": "RABaseHelper.wait_page_to_load(page, 'Print and Payment History', timeout=30000)",
+          "relevant_to_steps": [
+            1,
+            4
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            1,
+            4
+          ],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "Steps 1 and 4 involve navigating to Print and Payment History page, and the expected results include verifying the page loaded successfully. This method waits for page load by checking for an h1 heading with pattern 'Details for {page_title}'. However, the Print and Payment History page may not follow this exact heading pattern - it might have a different h1 structure. The method is relevant as a wait utility but may need adaptation for the actual page heading format."
+        },
+        {
+          "method_name": "get_item_by_title",
+          "method_signature": "def get_item_by_title(page, title)",
+          "method_type": "getter",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/ra_base_helper.py",
+          "source_class": "RABaseHelper",
+          "what_it_does": "Locates and returns a card body element by searching for a card with a specific title in its header. Constructs a CSS selector that matches div.card elements containing h5.card-header with exact text matching the title. Returns a locator for the card body element. Waits up to 10 seconds if card not immediately found.",
+          "how_to_import": "from helper.ra_base_helper import RABaseHelper",
+          "usage_example": "billing_card = RABaseHelper.get_item_by_title(page, 'Billing Cycle Period')",
+          "relevant_to_steps": [
+            2,
+            5
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            2,
+            5
+          ],
+          "mapping_dimension": "step_action",
+          "relevance_reason": "Steps 2 and 5 require checking the Billing Cycle Period card. This method locates card elements by their title in the card header, which directly matches the test requirement to locate the 'Billing Cycle Period' card. The method searches for div.card with h5.card-header containing the title text, which is a common UI pattern. This is highly relevant for locating the billing cycle card before verifying its contents."
+        },
+        {
+          "method_name": "get_field_text_by_title",
+          "method_signature": "def get_field_text_by_title(page, title)",
+          "method_type": "getter",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/ra_base_helper.py",
+          "source_class": "RABaseHelper",
+          "what_it_does": "Retrieves the text content from a field within a card section identified by its title. First calls get_item_by_title to locate the card body, then extracts all visible text content using inner_text() and strips whitespace. Returns the cleaned text string.",
+          "how_to_import": "from helper.ra_base_helper import RABaseHelper",
+          "usage_example": "billing_info = RABaseHelper.get_field_text_by_title(page, 'Billing Cycle Period')",
+          "relevant_to_steps": [
+            2,
+            5,
+            8,
+            9,
+            14
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            2,
+            5,
+            8,
+            9,
+            14
+          ],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "Multiple steps require reading text content from the Billing Cycle Period card and other sections (complimentary pages value, info messages, total pages printed). This method extracts text content from card sections identified by title, which is useful for reading the displayed information. However, it returns all text from the card body, so additional parsing would be needed to extract specific values like '0 of 10 used' or progress bar percentages."
+        },
+        {
+          "method_name": "doesnt_see_free_months",
+          "method_signature": "def doesnt_see_free_months(page)",
+          "method_type": "verification",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/update_plan_helper.py",
+          "source_class": "UpdatePlanHelper",
+          "what_it_does": "Verifies that free trial information is not displayed on the update plan page. Uses Playwright's expect() assertion to verify that free_trial_info_card and free_trial_plan_details elements are not visible. This is used in test scenarios where the user should not see free trial offers.",
+          "how_to_import": "from helper.update_plan_helper import UpdatePlanHelper",
+          "usage_example": "UpdatePlanHelper.doesnt_see_free_months(page)",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            1
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Precondition 2 requires verifying that the subscription has no free months info. This method verifies that free trial information is not displayed on the UI, which is related but not exactly the same as verifying the subscription state has no free months. The method checks UI visibility of free trial elements on the update plan page, whereas the precondition requires backend/API verification of subscription state. The method is tangentially relevant but does not directly fulfill the precondition requirement."
+        },
+        {
+          "method_name": "__getattr__",
+          "method_signature": "def __getattr__(self, name)",
+          "method_type": "utility",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/base_page_object.py",
+          "source_class": "BasePageObject",
+          "what_it_does": "Intercepts attribute access on page objects to dynamically convert locator names into Playwright locator objects. When code accesses self.login_button, this method retrieves the selector string from self.elements and returns page.locator(selector_string). This enables clean syntax like self.login_button.click() instead of self.page.locator(self.elements.login_button).click().",
+          "how_to_import": "from pages.base_page_object import BasePageObject",
+          "usage_example": "# In page object: self.billing_cycle_card.click() - automatically converts to locator",
+          "relevant_to_steps": [
+            1,
+            2,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            1,
+            2,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "mapping_dimension": "step_action",
+          "relevance_reason": "All test steps that interact with UI elements (billing cycle card, progress bars, tooltips, info icons, value displays) would use page objects that inherit from BasePageObject. This __getattr__ method is the core mechanism that enables page objects to access elements using clean attribute syntax. While not directly called in test code, it is fundamental infrastructure that makes all page object element interactions possible. Every element access in the test would rely on this dynamic locator conversion."
+        }
+      ],
+      "matched_helpers": [
+        {
+          "helper_name": "RABaseHelper",
+          "helper_signature": "class RABaseHelper (static methods)",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/ra_base_helper.py",
+          "what_it_does": "Provides comprehensive set of static utility methods for Resque job management, page navigation, and data extraction from card-based UI layouts. Contains methods for accessing Resque admin, running scheduled jobs, waiting for job completion, navigating to pages and menus, extracting field data by title, accessing links, validating boolean values, and validating template data with date comparisons.",
+          "how_to_import": "from helper.ra_base_helper import RABaseHelper",
+          "usage_example": "RABaseHelper.get_item_by_title(page, 'Billing Cycle Period')",
+          "relevant_to_preconditions": [
+            3
+          ],
+          "relevant_to_steps": [
+            1,
+            2,
+            4,
+            5
+          ],
+          "relevant_to_expected_results": [
+            1,
+            2,
+            4,
+            5
+          ],
+          "mapping_dimension": "step_action",
+          "relevance_reason": "This helper provides utilities for page navigation (access_page) and data extraction from card-based UI layouts (get_item_by_title, get_field_text_by_title). The test case involves navigating to Print and Payment History page and extracting information from the Billing Cycle Period card, which aligns with this helper's capabilities. The card-based data extraction methods are particularly relevant for locating and reading content from the billing cycle card. However, the helper does not provide methods for the specific UI interactions needed in this test (progress bar verification, tooltip interactions, color validation, page count tracking)."
+        }
+      ],
+      "matched_constants": [],
+      "step_level_mapping": [
+        {
+          "step_number": 1,
+          "step_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "step_test_data": null,
+          "step_expected_result": "Print and Payment History page is loaded",
+          "action_components_found_in_this_batch": {
+            "page_objects": [
+              {
+                "class_name": "BasePageObject",
+                "how_to_import": "from pages.base_page_object import BasePageObject",
+                "how_to_instantiate": "BasePageObject is inherited by page objects, not instantiated directly"
+              }
+            ],
+            "locators": [],
+            "methods": [
+              {
+                "name": "access_page",
+                "usage": "RABaseHelper.access_page(page, 'Print and Payment History')",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/ra_base_helper.py"
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [
+              {
+                "name": "wait_page_to_load",
+                "usage": "RABaseHelper.wait_page_to_load(page, 'Print and Payment History', timeout=30000)",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/ra_base_helper.py",
+                "relevance": "Waits for page to load by checking for h1 heading with 'Details for' pattern. May need adaptation for actual page heading format."
+              }
+            ],
+            "verification_locators": [],
+            "notes": "Limited verification components found. wait_page_to_load provides page load waiting but expects specific h1 heading pattern that may not match actual page. Specific page load verification methods for Print and Payment History page likely exist in other batches containing the PrintAndPaymentHistoryPage page object."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data components found. URL for Print and Payment History page would come from configuration or page object in other batches."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 2,
+          "step_action": "Check the Billing Cycle Period card.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the plan pause information is not displayed.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "get_item_by_title",
+                "usage": "billing_card = RABaseHelper.get_item_by_title(page, 'Billing Cycle Period')",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/ra_base_helper.py"
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [
+              {
+                "name": "get_field_text_by_title",
+                "usage": "billing_text = RABaseHelper.get_field_text_by_title(page, 'Billing Cycle Period')",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/ra_base_helper.py",
+                "relevance": "Retrieves text content from billing cycle card for verification. Would need additional logic to check if pause information is present or not."
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Found methods for locating and reading card content, but no specific methods for verifying element visibility/invisibility. Playwright expect().not_to_be_visible() would be used with specific plan_pause_information locator from page object in other batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "COVERED",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 3,
+          "step_action": "Even shift 32 days and trigger billing charge.",
+          "step_test_data": "32 days",
+          "step_expected_result": "Time shift and billing charge successful",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "This is an API operation requiring backend time manipulation and billing trigger. No API helpers for time shift or billing charge found in this batch. These would exist in API helper modules in other batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "The 32 days value is provided in test case. No constants or generators found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 4,
+          "step_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "step_test_data": null,
+          "step_expected_result": "Page loaded with updated data",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "access_page",
+                "usage": "RABaseHelper.access_page(page, 'Print and Payment History')",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/ra_base_helper.py"
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [
+              {
+                "name": "wait_page_to_load",
+                "usage": "RABaseHelper.wait_page_to_load(page, 'Print and Payment History', timeout=30000)",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/ra_base_helper.py",
+                "relevance": "Waits for page load. May need adaptation for actual page heading."
+              }
+            ],
+            "verification_locators": [],
+            "notes": "Same as step 1 - limited verification components. Page refresh/reload and updated data verification would require page object methods from other batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data components found."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 5,
+          "step_action": "Check the Billing Cycle Period card.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the plan pause information is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "get_item_by_title",
+                "usage": "billing_card = RABaseHelper.get_item_by_title(page, 'Billing Cycle Period')",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/ra_base_helper.py"
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [
+              {
+                "name": "get_field_text_by_title",
+                "usage": "billing_text = RABaseHelper.get_field_text_by_title(page, 'Billing Cycle Period')",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/ra_base_helper.py",
+                "relevance": "Retrieves text content from billing cycle card. Would need additional logic to verify pause information is displayed and contains correct details."
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Found methods for locating and reading card content. Specific verification of plan pause information visibility and content would require page object with plan_pause_information locator and verification methods from other batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "COVERED",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 6,
+          "step_action": "Check the progress bar.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the Complimentary pages progress bar is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No progress bar verification methods found in this batch. Progress bar visibility, styling, and fill verification would require page object with complimentary_pages_progress_bar locator and verification methods from other batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 7,
+          "step_action": "For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify a tooltip with correct message is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No tooltip interaction or verification methods found in this batch. Hover/click actions, device detection, tooltip visibility verification, and tooltip text extraction would require page object methods and utilities from other batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected tooltip message would come from test data file or constants in other batches."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 8,
+          "step_action": "Check the Complimentary pages value.",
+          "step_test_data": "0 of 10(Pause Plan) used",
+          "step_expected_result": "Verify the value is displayed as \"0 of 10(Pause Plan) used\".",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [
+              {
+                "name": "get_field_text_by_title",
+                "usage": "# Could potentially be used if complimentary pages is in a titled card section\nvalue_text = RABaseHelper.get_field_text_by_title(page, 'Complimentary Pages')",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/ra_base_helper.py",
+                "relevance": "Could retrieve text from a card section if complimentary pages info is in a titled card. However, test case suggests this is a value display within the billing cycle card, not a separate titled section. Specific locator for complimentary_pages_value_text would be needed from page object in other batch."
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Limited text extraction capability found. Specific locator for complimentary pages value text and exact text matching assertion would require page object from other batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value '0 of 10(Pause Plan) used' is provided in test case. No constants found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 9,
+          "step_action": "Check the message below \"Complimentary pages\".",
+          "step_test_data": null,
+          "step_expected_result": "Verify the information with correct plan info is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [
+              {
+                "name": "get_field_text_by_title",
+                "usage": "# Could potentially be used if message is in a titled section\nmessage_text = RABaseHelper.get_field_text_by_title(page, 'Complimentary Pages')",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/ra_base_helper.py",
+                "relevance": "Could retrieve text from a card section. However, the message is likely a sub-element within the billing cycle card, not a separate titled section. Specific locator for complimentary_pages_info_message would be needed from page object in other batch."
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Limited text extraction capability found. Specific locator for info message and text content verification would require page object from other batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected message content would come from test data or constants in other batches."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 10,
+          "step_action": "Print some pages(less than the plan, such as 6 pages). Refresh the dashboard page.",
+          "step_test_data": "6 pages",
+          "step_expected_result": "Verify the \"Complimentary pages\" progress bar is filled with the black color and the value is displayed as correct (such as \"6 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No components found for printing pages via API, refreshing page, verifying progress bar color, or verifying updated value. These would require API helpers for page printing and page object methods for progress bar verification from other batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "The 6 pages value is provided in test case. No constants or generators found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 11,
+          "step_action": "Continue to print some pages(more than the plan, such as 15 pages). Refresh the dashboard page.",
+          "step_test_data": "15 pages total",
+          "step_expected_result": "Verify the progress bars for \"Complimentary pages\" and \"Additional pages\" are displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No components found for printing additional pages, refreshing page, or verifying both progress bars. These would require API helpers and page object methods from other batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "The 15 pages total value is provided in test case. No constants or generators found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 12,
+          "step_action": "Check the \"Additional pages\" progress bar.",
+          "step_test_data": "5 of 10 used, Yellow color",
+          "step_expected_result": "Verify the progress bar is filled with the Yellow color and the value is displayed correctly(such as \"5 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No components found for verifying progress bar color or value. These would require page object methods for CSS property checking and text extraction from other batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value '5 of 10 used' and color 'Yellow' are provided in test case. No constants found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 13,
+          "step_action": "Check the icon. For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the info icon is displayed well behind the string \"Additional pages\". Verify a tooltip with correct message is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No tooltip interaction or verification methods found in this batch. Same as step 7 - these would require page object methods and utilities from other batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected tooltip message would come from test data or constants in other batches."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 14,
+          "step_action": "Check the message below \"Additional pages\". Check the Complimentary pages progress bar. Check total pages printed info.",
+          "step_test_data": "10 of 10 used, 15 pages total",
+          "step_expected_result": "Verify a message with the amount of blocks already bought is displayed well. Verify the \"Complimentary pages\" progress bar is full filled with the black color and the value is displayed correctly (such as \"10 of 10 used\"). Verify correct number(such as 15 pages) displayed according to the printed pages.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [
+              {
+                "name": "get_field_text_by_title",
+                "usage": "# Could potentially be used for extracting text from card sections\ntext = RABaseHelper.get_field_text_by_title(page, 'Additional Pages')",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/ra_base_helper.py",
+                "relevance": "Could retrieve text from card sections if organized as titled cards. However, the test requires verifying multiple specific elements (message, progress bar state, value text, total count) which would need specific locators and verification methods from page object in other batch."
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Very limited verification capability found. This complex multi-part verification requires specific locators for message, progress bar, value text, and total count, plus methods for verifying progress bar fill state and color - all from page object in other batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected values '10 of 10 used' and '15 pages' are provided in test case. No constants found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 15,
+          "step_action": "Verify the test case is complete.",
+          "step_test_data": null,
+          "step_expected_result": "All verifications passed successfully.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "This is a summary step. Test framework would track overall pass/fail status automatically. No specific components needed."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for summary step."
+          },
+          "step_action_coverage": "NOT_APPLICABLE",
+          "step_verification_coverage": "NOT_APPLICABLE",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_APPLICABLE"
+        }
+      ],
+      "files_checked_in_this_batch": [
+        "AURA-main (1) 1/AURA-main/helper/ra_base_helper.py",
+        "AURA-main (1) 1/AURA-main/helper/shipment_tracking_helper.py",
+        "AURA-main (1) 1/AURA-main/helper/update_plan_helper.py",
+        "AURA-main (1) 1/AURA-main/pages/__init__.py",
+        "AURA-main (1) 1/AURA-main/pages/base_page_object.py"
+      ],
+      "overall_assessment": "This test case requires extensive UI interaction with the Print and Payment History page including billing cycle card verification, progress bar validation, tooltip interactions, and page count tracking, plus API operations for time manipulation and page printing. Batch 10 contains limited relevant components: (1) RABaseHelper provides general page navigation and card-based data extraction utilities that are partially useful for locating the billing cycle card and reading its content, but lacks specific methods for progress bar verification, tooltip interactions, color validation, and page count tracking. (2) BasePageObject provides the foundational page object architecture that the required PrintAndPaymentHistoryPage would inherit from, but the actual page object with specific locators and methods is not in this batch. (3) UpdatePlanHelper and ShipmentTrackingHelper are not relevant to this test case as they handle different functional areas (plan updates and shipment tracking vs. billing cycle and page usage verification). (4) No API helpers for time manipulation, billing charge triggering, or page printing simulation were found. The majority of components needed for this test case - PrintAndPaymentHistoryPage page object with all locators, API helpers for backend operations, progress bar verification methods, tooltip interaction methods, color validation utilities, and page count tracking methods - likely exist in other batches containing page objects for the Print and Payment History page, API helper modules, and UI verification utilities."
+    }
+  ]
+}
