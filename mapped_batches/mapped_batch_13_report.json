@@ -1,0 +1,1153 @@
+{
+  "mapping_metadata": {
+    "mapping_batch_id": 13,
+    "total_mapping_batches": 18,
+    "remaining_after_this": 5,
+    "codebase_batch_report_path": "codebase_batches/batch_13_report.json",
+    "test_case_source": "test_case_analysis/test_case_analysis.json",
+    "analyzed_at": "2025-01-15T14:50:00Z",
+    "analyzer": "Senior Test Automation Mapping Specialist Agent",
+    "mapping_dimensions": [
+      "preconditions",
+      "step_actions",
+      "expected_results",
+      "test_data",
+      "overall_flow"
+    ],
+    "files_in_this_batch": [
+      "AURA-main (1) 1/AURA-main/pages/notifications_page.py",
+      "AURA-main (1) 1/AURA-main/pages/oss_emulator_page.py",
+      "AURA-main (1) 1/AURA-main/pages/overview_page.py",
+      "AURA-main (1) 1/AURA-main/pages/plan_selector_v3_page.py",
+      "AURA-main (1) 1/AURA-main/pages/print_history_page.py"
+    ],
+    "summary": {
+      "total_test_cases_evaluated": 1,
+      "test_cases_with_relevant_components": 1,
+      "test_cases_without_relevant_components": 0,
+      "total_page_objects_matched": 3,
+      "total_locators_matched": 28,
+      "total_methods_matched": 4,
+      "total_helpers_matched": 0,
+      "total_constants_matched": 0,
+      "total_precondition_methods_matched": 2,
+      "total_verification_methods_matched": 0,
+      "total_test_data_components_matched": 0
+    }
+  },
+  "test_case_mappings": [
+    {
+      "test_case_id": "C44873414",
+      "test_case_title": "Billing Cycle Period card",
+      "test_case_description": "Test case to verify the Billing Cycle Period card behavior on Print and Payment History page when a plan is paused, including verification of complimentary pages, additional pages, progress bars, tooltips, and page count displays.",
+      "module": "Instant Supply",
+      "has_relevant_components_in_this_batch": true,
+      "precondition_mapping": [
+        {
+          "precondition_text": "Enroll the Ink printer with 50 pages plan or higher.",
+          "precondition_index": 0,
+          "components_found_in_this_batch": [
+            {
+              "component_type": "page_object",
+              "class_name": "OssEmulatorPage",
+              "source_file": "AURA-main (1) 1/AURA-main/pages/oss_emulator_page.py",
+              "source_class": null,
+              "what_it_does": "Page object for OSS Emulator testing tool that simulates printer enrollment and setup flows without physical hardware. Contains 52 locators for device configuration, authentication, app selection, and enrollment completion.",
+              "how_to_import": "from pages.oss_emulator_page import OssEmulatorPage",
+              "how_to_instantiate": "oss_emulator_page = OssEmulatorPage(page)",
+              "usage_example": "oss_emulator_page = OssEmulatorPage(page)\n# Use emulator to enroll printer with specific plan",
+              "relevance_reason": "This precondition requires enrolling a printer with a 50+ pages plan. The OssEmulatorPage provides the interface to simulate printer enrollment in test environment, which is essential for setting up the test precondition without physical printers."
+            },
+            {
+              "component_type": "locator",
+              "locator_name": "serial_number",
+              "locator_value": "#serial-number",
+              "locator_type": "id",
+              "source_file": "AURA-main (1) 1/AURA-main/pages/oss_emulator_page.py",
+              "source_class": "OssEmulatorPage",
+              "access_pattern": "oss_emulator_page.elements.serial_number",
+              "ui_element_description": "Serial number input field in Device tab for entering printer serial number during emulator configuration",
+              "relevance_reason": "Printer enrollment requires setting a serial number. This locator targets the serial number input field in the OSS Emulator for configuring the test printer."
+            },
+            {
+              "component_type": "locator",
+              "locator_name": "sku",
+              "locator_value": "#sku",
+              "locator_type": "id",
+              "source_file": "AURA-main (1) 1/AURA-main/pages/oss_emulator_page.py",
+              "source_class": "OssEmulatorPage",
+              "access_pattern": "oss_emulator_page.elements.sku",
+              "ui_element_description": "SKU input field in Device tab for specifying printer model SKU",
+              "relevance_reason": "Printer enrollment requires specifying the printer model SKU. This locator targets the SKU input field for configuring the printer model in the emulator."
+            },
+            {
+              "component_type": "locator",
+              "locator_name": "start_flow_button",
+              "locator_value": "#start-flow-button",
+              "locator_type": "id",
+              "source_file": "AURA-main (1) 1/AURA-main/pages/oss_emulator_page.py",
+              "source_class": "OssEmulatorPage",
+              "access_pattern": "oss_emulator_page.elements.start_flow_button",
+              "ui_element_description": "Start Flow button that initiates the configured printer setup or enrollment flow",
+              "relevance_reason": "After configuring printer details, this button starts the enrollment flow to complete the printer enrollment precondition."
+            }
+          ],
+          "precondition_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "Found OSS Emulator page object with locators for printer enrollment configuration. However, no API helpers or direct enrollment methods found in this batch. The actual enrollment completion and plan selection (50+ pages) would require additional components from other batches."
+        },
+        {
+          "precondition_text": "Make sure the Subscription has no free months info.",
+          "precondition_index": 1,
+          "components_found_in_this_batch": [
+            {
+              "component_type": "locator",
+              "locator_name": "free_months",
+              "locator_value": "[data-testid=\"free-months-message\"], [data-testid=\"free-months-message-parity\"]",
+              "locator_type": "composite",
+              "source_file": "AURA-main (1) 1/AURA-main/pages/overview_page.py",
+              "source_class": "OverviewPage",
+              "access_pattern": "overview_page.elements.free_months",
+              "ui_element_description": "Free months message displaying promotional free trial period information",
+              "relevance_reason": "This precondition requires verifying no free months exist. This locator targets the free months message element that would display if free months were present. Can be used to assert the element is not visible."
+            },
+            {
+              "component_type": "locator",
+              "locator_name": "free_months",
+              "locator_value": "[data-testid=\"free-months-message\"]",
+              "locator_type": "data-testid",
+              "source_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+              "source_class": "PrintHistoryPage",
+              "access_pattern": "print_history_page.elements.free_months",
+              "ui_element_description": "Free months promotional message on Print History page",
+              "relevance_reason": "This locator on the Print History page can also be used to verify no free months message is displayed, fulfilling the precondition check."
+            }
+          ],
+          "precondition_coverage_in_this_batch": "COVERED",
+          "notes": "Found free_months locators on both OverviewPage and PrintHistoryPage that can be used to verify the absence of free months information."
+        },
+        {
+          "precondition_text": "Make sure the subscription is \"subscribed\" status.",
+          "precondition_index": 2,
+          "components_found_in_this_batch": [
+            {
+              "component_type": "locator",
+              "locator_name": "subscription_id",
+              "locator_value": "[id^=\"planDetailsColumn__plan-details-column_\"] p[class=\"caption-small\"]",
+              "locator_type": "composite",
+              "source_file": "AURA-main (1) 1/AURA-main/pages/overview_page.py",
+              "source_class": "OverviewPage",
+              "access_pattern": "overview_page.elements.subscription_id",
+              "ui_element_description": "Subscription ID text displayed in plan details column",
+              "relevance_reason": "Can be used to verify subscription exists and is active by checking subscription ID is displayed."
+            },
+            {
+              "component_type": "locator",
+              "locator_name": "plan_information",
+              "locator_value": "[data-testid='plan-information']",
+              "locator_type": "data-testid",
+              "source_file": "AURA-main (1) 1/AURA-main/pages/overview_page.py",
+              "source_class": "OverviewPage",
+              "access_pattern": "overview_page.elements.plan_information",
+              "ui_element_description": "Plan information section showing current subscription plan name and page allowance",
+              "relevance_reason": "Can be used to verify subscription is active by checking plan information is displayed with valid plan details."
+            }
+          ],
+          "precondition_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "Found locators to verify subscription exists and plan information is displayed, but no direct status verification method or API helper to check subscription status is 'subscribed'. Full verification would require API components from other batches."
+        },
+        {
+          "precondition_text": "Click the Pause Plan button on CIT modal or \"Pause Instant Ink\" link to trigger the pause plan.",
+          "precondition_index": 3,
+          "components_found_in_this_batch": [
+            {
+              "component_type": "locator",
+              "locator_name": "pause_plan_link",
+              "locator_value": "[data-testid=\"pause-ii-plan-link-update-plan\"], [data-testid=\"pause-your-plan\"]",
+              "locator_type": "composite",
+              "source_file": "AURA-main (1) 1/AURA-main/pages/overview_page.py",
+              "source_class": "OverviewPage",
+              "access_pattern": "overview_page.elements.pause_plan_link",
+              "ui_element_description": "Pause Plan link that opens the pause plan modal",
+              "relevance_reason": "This is the exact link mentioned in the precondition to trigger plan pause. Clicking this link opens the pause plan modal."
+            },
+            {
+              "component_type": "locator",
+              "locator_name": "pause_plan_modal",
+              "locator_value": "#pause-plan-modal-container, [data-testid='pause-plan-modal']",
+              "locator_type": "composite",
+              "source_file": "AURA-main (1) 1/AURA-main/pages/overview_page.py",
+              "source_class": "OverviewPage",
+              "access_pattern": "overview_page.elements.pause_plan_modal",
+              "ui_element_description": "Pause plan modal container",
+              "relevance_reason": "The modal that appears after clicking the pause plan link, where pause duration is selected."
+            },
+            {
+              "component_type": "locator",
+              "locator_name": "pause_plan_dropdown",
+              "locator_value": "[datetest-id=\"pause-plan-months-select\"]",
+              "locator_type": "css",
+              "source_file": "AURA-main (1) 1/AURA-main/pages/overview_page.py",
+              "source_class": "OverviewPage",
+              "access_pattern": "overview_page.elements.pause_plan_dropdown",
+              "ui_element_description": "Dropdown to select number of months to pause subscription",
+              "relevance_reason": "Used to select pause duration in the pause plan modal."
+            },
+            {
+              "component_type": "locator",
+              "locator_name": "confirm_pause_plan",
+              "locator_value": "[data-testid=\"pause-plan\"]",
+              "locator_type": "data-testid",
+              "source_file": "AURA-main (1) 1/AURA-main/pages/overview_page.py",
+              "source_class": "OverviewPage",
+              "access_pattern": "overview_page.elements.confirm_pause_plan",
+              "ui_element_description": "Confirm button to finalize pausing the subscription",
+              "relevance_reason": "The button to confirm and execute the plan pause action, completing this precondition."
+            },
+            {
+              "component_type": "locator",
+              "locator_name": "plan_paused_banner",
+              "locator_value": "[data-testid=\"pause-plan-banner\"]",
+              "locator_type": "data-testid",
+              "source_file": "AURA-main (1) 1/AURA-main/pages/overview_page.py",
+              "source_class": "OverviewPage",
+              "access_pattern": "overview_page.elements.plan_paused_banner",
+              "ui_element_description": "Banner displayed when plan is paused showing pause status",
+              "relevance_reason": "Can be used to verify the plan pause action was successful by checking this banner appears."
+            }
+          ],
+          "precondition_coverage_in_this_batch": "COVERED",
+          "notes": "Found complete set of locators for the pause plan flow including the link to open modal, the modal itself, dropdown for duration selection, confirm button, and verification banner. This fully covers the precondition requirement."
+        }
+      ],
+      "matched_page_objects": [
+        {
+          "class_name": "PrintHistoryPage",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+          "file_category": "page_object",
+          "parent_classes": [
+            "BasePageObject"
+          ],
+          "class_purpose": "Page object for Print History page showing billing cycle information, page usage breakdown, invoice downloads, and FAQ. This is the PRIMARY page for this test case.",
+          "how_to_import": "from pages.print_history_page import PrintHistoryPage",
+          "how_to_instantiate": "print_history_page = PrintHistoryPage(page)",
+          "relevant_to_preconditions": [
+            1
+          ],
+          "relevant_to_steps": [
+            1,
+            2,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "relevant_to_expected_results": [
+            1,
+            2,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "relevance_reason": "This is the main page where the test case executes. The test case is specifically about verifying the Billing Cycle Period card on the Print and Payment History page. Steps 1 and 4 navigate to this page, and steps 2-14 perform verifications on elements within this page."
+        },
+        {
+          "class_name": "OverviewPage",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/overview_page.py",
+          "file_category": "page_object",
+          "parent_classes": [
+            "BasePageObject"
+          ],
+          "class_purpose": "Main Overview/Dashboard page with extensive subscription management features including pause plan functionality and navigation to other pages",
+          "how_to_import": "from pages.overview_page import OverviewPage",
+          "how_to_instantiate": "overview_page = OverviewPage(page)",
+          "relevant_to_preconditions": [
+            1,
+            2,
+            3
+          ],
+          "relevant_to_steps": [
+            1,
+            4
+          ],
+          "relevant_to_expected_results": [],
+          "relevance_reason": "Relevant for precondition setup (checking free months, subscription status, pausing plan) and for navigation to Print History page. Contains pause plan functionality needed for precondition 3."
+        },
+        {
+          "class_name": "OssEmulatorPage",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/oss_emulator_page.py",
+          "file_category": "page_object",
+          "parent_classes": [
+            "BasePageObject"
+          ],
+          "class_purpose": "OSS Emulator interface for simulating printer enrollment and setup flows in test environment",
+          "how_to_import": "from pages.oss_emulator_page import OssEmulatorPage",
+          "how_to_instantiate": "oss_emulator_page = OssEmulatorPage(page)",
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_steps": [],
+          "relevant_to_expected_results": [],
+          "relevance_reason": "Relevant for precondition 0 - enrolling printer with 50+ pages plan. Provides emulator interface to simulate printer enrollment without physical hardware."
+        }
+      ],
+      "matched_locators": [
+        {
+          "locator_name": "print_history_card",
+          "locator_value": "[data-testid='print-history-card-parity']",
+          "locator_type": "data-testid",
+          "ui_element_description": "Main print history card container displaying billing cycle information and page usage details",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+          "source_class": "PrintHistoryPage",
+          "defined_in_method": "__init__",
+          "access_pattern": "print_history_page.elements.print_history_card",
+          "relevant_to_steps": [
+            2,
+            5
+          ],
+          "relevant_to_expected_results": [
+            2,
+            5
+          ],
+          "relevance_reason": "Steps 2 and 5 require checking the Billing Cycle Period card. This locator targets the main print history card which is the Billing Cycle Period card mentioned in the test case."
+        },
+        {
+          "locator_name": "plan_pages_bar",
+          "locator_value": "[data-testid='plan-progress-bar']",
+          "locator_type": "data-testid",
+          "ui_element_description": "Progress bar showing plan pages used out of monthly allowance",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+          "source_class": "PrintHistoryPage",
+          "defined_in_method": "__init__",
+          "access_pattern": "print_history_page.elements.plan_pages_bar",
+          "relevant_to_steps": [
+            6,
+            10,
+            14
+          ],
+          "relevant_to_expected_results": [
+            6,
+            10,
+            14
+          ],
+          "relevance_reason": "Step 6 verifies complimentary pages progress bar. Step 10 verifies progress bar is filled with black color after printing. Step 14 verifies progress bar is full. This locator targets the plan/complimentary pages progress bar."
+        },
+        {
+          "locator_name": "rollover_pages_bar",
+          "locator_value": "[data-testid='rollover-progress-bar']",
+          "locator_type": "data-testid",
+          "ui_element_description": "Progress bar showing rollover pages used from previous billing cycles",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+          "source_class": "PrintHistoryPage",
+          "defined_in_method": "__init__",
+          "access_pattern": "print_history_page.elements.rollover_pages_bar",
+          "relevant_to_steps": [
+            11
+          ],
+          "relevant_to_expected_results": [
+            11
+          ],
+          "relevance_reason": "Step 11 mentions verifying progress bars for complimentary and additional pages are displayed. Rollover pages bar may also be relevant for complete page usage display."
+        },
+        {
+          "locator_name": "plan_pages_text",
+          "locator_value": "[data-testid=\"plan-pages-progress-bar\"] [data-testid^=\"text-values-\"]",
+          "locator_type": "composite",
+          "ui_element_description": "Text values within plan pages progress bar showing page counts",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+          "source_class": "PrintHistoryPage",
+          "defined_in_method": "__init__",
+          "access_pattern": "print_history_page.elements.plan_pages_text",
+          "relevant_to_steps": [
+            8,
+            10,
+            14
+          ],
+          "relevant_to_expected_results": [
+            8,
+            10,
+            14
+          ],
+          "relevance_reason": "Step 8 verifies complimentary pages value displays '0 of 10(Pause Plan) used'. Step 10 verifies value after printing. Step 14 verifies '10 of 10 used'. This locator targets the text values within the progress bar."
+        },
+        {
+          "locator_name": "additional_pages_text",
+          "locator_value": "[data-testid=\"text-values-additional\"]",
+          "locator_type": "data-testid",
+          "ui_element_description": "Text displaying additional pages count and details",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+          "source_class": "PrintHistoryPage",
+          "defined_in_method": "__init__",
+          "access_pattern": "print_history_page.elements.additional_pages_text",
+          "relevant_to_steps": [
+            12,
+            14
+          ],
+          "relevant_to_expected_results": [
+            12,
+            14
+          ],
+          "relevance_reason": "Step 12 verifies additional pages value displays '5 of 10 used'. Step 14 checks additional pages message. This locator targets the additional pages text display."
+        },
+        {
+          "locator_name": "additional_pages_message",
+          "locator_value": "[class^=\"progressBar__text-set-pages-additional\"]",
+          "locator_type": "class",
+          "ui_element_description": "Message text about additional pages purchased or used beyond plan allowance",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+          "source_class": "PrintHistoryPage",
+          "defined_in_method": "__init__",
+          "access_pattern": "print_history_page.elements.additional_pages_message",
+          "relevant_to_steps": [
+            14
+          ],
+          "relevant_to_expected_results": [
+            14
+          ],
+          "relevance_reason": "Step 14 requires checking message below Additional pages about blocks bought. This locator targets that message text."
+        },
+        {
+          "locator_name": "total_printed_pages",
+          "locator_value": "[data-testid='total-pages-printed']",
+          "locator_type": "data-testid",
+          "ui_element_description": "Total pages printed count display for selected billing cycle",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+          "source_class": "PrintHistoryPage",
+          "defined_in_method": "__init__",
+          "access_pattern": "print_history_page.elements.total_printed_pages",
+          "relevant_to_steps": [
+            14
+          ],
+          "relevant_to_expected_results": [
+            14
+          ],
+          "relevance_reason": "Step 14 requires verifying total pages printed displays correct number (15 pages). This locator targets the total pages printed display."
+        },
+        {
+          "locator_name": "billing_cycle_option",
+          "locator_value": "[data-testid=\"print-history-chart-parity\"] [class^=\"vn-select__buttons\"]",
+          "locator_type": "composite",
+          "ui_element_description": "Billing cycle selector button within print history chart",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+          "source_class": "PrintHistoryPage",
+          "defined_in_method": "__init__",
+          "access_pattern": "print_history_page.elements.billing_cycle_option",
+          "relevant_to_steps": [
+            1,
+            4
+          ],
+          "relevant_to_expected_results": [],
+          "relevance_reason": "Steps 1 and 4 navigate to Print History page. May need to select current billing cycle to view the correct data."
+        },
+        {
+          "locator_name": "pause_plan_link",
+          "locator_value": "[data-testid=\"pause-ii-plan-link-update-plan\"], [data-testid=\"pause-your-plan\"]",
+          "locator_type": "composite",
+          "ui_element_description": "Pause Plan link that opens pause plan modal",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/overview_page.py",
+          "source_class": "OverviewPage",
+          "defined_in_method": "__init__",
+          "access_pattern": "overview_page.elements.pause_plan_link",
+          "relevant_to_steps": [],
+          "relevant_to_expected_results": [],
+          "relevance_reason": "Used in precondition 3 to pause the plan before test execution."
+        },
+        {
+          "locator_name": "confirm_pause_plan",
+          "locator_value": "[data-testid=\"pause-plan\"]",
+          "locator_type": "data-testid",
+          "ui_element_description": "Confirm button to finalize pausing subscription",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/overview_page.py",
+          "source_class": "OverviewPage",
+          "defined_in_method": "__init__",
+          "access_pattern": "overview_page.elements.confirm_pause_plan",
+          "relevant_to_steps": [],
+          "relevant_to_expected_results": [],
+          "relevance_reason": "Used in precondition 3 to confirm plan pause action."
+        },
+        {
+          "locator_name": "plan_paused_banner",
+          "locator_value": "[data-testid=\"pause-plan-banner\"]",
+          "locator_type": "data-testid",
+          "ui_element_description": "Banner displayed when plan is paused",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/overview_page.py",
+          "source_class": "OverviewPage",
+          "defined_in_method": "__init__",
+          "access_pattern": "overview_page.elements.plan_paused_banner",
+          "relevant_to_steps": [],
+          "relevant_to_expected_results": [],
+          "relevance_reason": "Can verify plan pause was successful by checking this banner appears after precondition 3."
+        }
+      ],
+      "matched_methods": [
+        {
+          "method_name": "get_page_title",
+          "method_signature": "def get_page_title(self, wait=60000)",
+          "method_type": "waiter",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/overview_page.py",
+          "source_class": "OverviewPage",
+          "what_it_does": "Waits for page title element to be present with configurable timeout. Returns element locator once page loads.",
+          "how_to_import": "from pages.overview_page import OverviewPage",
+          "usage_example": "overview_page = OverviewPage(page)\noverview_page.get_page_title(wait=30000)",
+          "relevant_to_steps": [
+            1,
+            4
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            1,
+            4
+          ],
+          "mapping_dimension": "step_action",
+          "relevance_reason": "Steps 1 and 4 navigate to Print History page. This method can be used to wait for page load completion before proceeding with verifications."
+        },
+        {
+          "method_name": "faq_update_plan_link",
+          "method_signature": "@property def faq_update_plan_link(self)",
+          "method_type": "getter",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+          "source_class": "PrintHistoryPage",
+          "what_it_does": "Property that returns Playwright Locator for FAQ update plan link element",
+          "how_to_import": "from pages.print_history_page import PrintHistoryPage",
+          "usage_example": "print_history_page = PrintHistoryPage(page)\nfaq_link = print_history_page.faq_update_plan_link",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "utility",
+          "relevance_reason": "Not directly used in this test case but available for navigation if needed."
+        },
+        {
+          "method_name": "plan_price_text",
+          "method_signature": "@property def plan_price_text(self)",
+          "method_type": "getter",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+          "source_class": "PrintHistoryPage",
+          "what_it_does": "Property that returns Playwright Locator for plan price description text element",
+          "how_to_import": "from pages.print_history_page import PrintHistoryPage",
+          "usage_example": "print_history_page = PrintHistoryPage(page)\nplan_price = print_history_page.plan_price_text.text_content()",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "utility",
+          "relevance_reason": "Could be used to verify plan information but not explicitly required by test steps."
+        }
+      ],
+      "matched_helpers": [],
+      "matched_constants": [],
+      "step_level_mapping": [
+        {
+          "step_number": 1,
+          "step_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "step_test_data": null,
+          "step_expected_result": "Print and Payment History page is loaded",
+          "action_components_found_in_this_batch": {
+            "page_objects": [
+              {
+                "class_name": "PrintHistoryPage",
+                "how_to_import": "from pages.print_history_page import PrintHistoryPage",
+                "how_to_instantiate": "print_history_page = PrintHistoryPage(page)"
+              }
+            ],
+            "locators": [
+              {
+                "name": "page_title",
+                "access": "print_history_page.elements.page_title",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py"
+              }
+            ],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [
+              {
+                "name": "get_page_title",
+                "usage": "overview_page.get_page_title(wait=30000)",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/overview_page.py",
+                "relevance": "Can wait for page load completion"
+              }
+            ],
+            "verification_locators": [
+              {
+                "name": "page_title",
+                "access": "print_history_page.elements.page_title",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+                "relevance": "Verify page title to confirm navigation"
+              }
+            ],
+            "notes": "Found page object and page title locator. No specific navigation method found in this batch - navigation would be done via URL or menu click from other pages."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No URL constants found in this batch. URL would need to come from configuration or other batches."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 2,
+          "step_action": "Check the Billing Cycle Period card.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the plan pause information is not displayed.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [
+              {
+                "name": "print_history_card",
+                "access": "print_history_page.elements.print_history_card",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py"
+              }
+            ],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [
+              {
+                "name": "print_history_card",
+                "access": "print_history_page.elements.print_history_card",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+                "relevance": "Target card to check for pause information"
+              }
+            ],
+            "notes": "Found the main card locator but no specific locator for plan pause information element within the card. Would need to check if pause info text is visible within the card."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No expected text constants found."
+          },
+          "step_action_coverage": "COVERED",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 3,
+          "step_action": "Even shift 32 days and trigger billing charge.",
+          "step_test_data": "32 days",
+          "step_expected_result": "Time shift and billing charge successful",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "This is an API/backend operation. No UI components found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No constants for days to shift found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "This step requires API helpers for time manipulation and billing charge trigger. These components are not in this batch which contains only UI page objects."
+        },
+        {
+          "step_number": 4,
+          "step_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "step_test_data": null,
+          "step_expected_result": "Page loads with updated data after billing charge",
+          "action_components_found_in_this_batch": {
+            "page_objects": [
+              {
+                "class_name": "PrintHistoryPage",
+                "how_to_import": "from pages.print_history_page import PrintHistoryPage",
+                "how_to_instantiate": "print_history_page = PrintHistoryPage(page)"
+              }
+            ],
+            "locators": [
+              {
+                "name": "page_title",
+                "access": "print_history_page.elements.page_title",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py"
+              }
+            ],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [
+              {
+                "name": "get_page_title",
+                "usage": "overview_page.get_page_title(wait=30000)",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/overview_page.py",
+                "relevance": "Wait for page load"
+              }
+            ],
+            "verification_locators": [
+              {
+                "name": "page_title",
+                "access": "print_history_page.elements.page_title",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+                "relevance": "Verify page loaded"
+              }
+            ],
+            "notes": "Same as step 1 - re-navigation to refresh data."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No URL constants found."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 5,
+          "step_action": "Check the Billing Cycle Period card.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the plan pause information is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [
+              {
+                "name": "print_history_card",
+                "access": "print_history_page.elements.print_history_card",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py"
+              }
+            ],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [
+              {
+                "name": "print_history_card",
+                "access": "print_history_page.elements.print_history_card",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+                "relevance": "Target card to verify pause info displayed"
+              }
+            ],
+            "notes": "Found card locator but no specific pause information element locator. Would need to check text content within card."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No expected pause info text constants found."
+          },
+          "step_action_coverage": "COVERED",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 6,
+          "step_action": "Check the progress bar.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the Complimentary pages progress bar is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [
+              {
+                "name": "plan_pages_bar",
+                "access": "print_history_page.elements.plan_pages_bar",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py"
+              }
+            ],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [
+              {
+                "name": "plan_pages_bar",
+                "access": "print_history_page.elements.plan_pages_bar",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+                "relevance": "Target progress bar for complimentary pages"
+              }
+            ],
+            "notes": "Found progress bar locator. Can verify visibility and styling."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No styling constants found."
+          },
+          "step_action_coverage": "COVERED",
+          "step_verification_coverage": "COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 7,
+          "step_action": "For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify a tooltip with correct message is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No info icon or tooltip locators found in this batch for complimentary pages section."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No tooltip message constants found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "No locators found for info icon or tooltip elements in this batch. These UI elements may not have data-testid attributes or may be in different page objects."
+        },
+        {
+          "step_number": 8,
+          "step_action": "Check the Complimentary pages value.",
+          "step_test_data": "0 of 10(Pause Plan) used",
+          "step_expected_result": "Verify the value is displayed as \"0 of 10(Pause Plan) used\".",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [
+              {
+                "name": "plan_pages_text",
+                "access": "print_history_page.elements.plan_pages_text",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py"
+              }
+            ],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [
+              {
+                "name": "plan_pages_text",
+                "access": "print_history_page.elements.plan_pages_text",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+                "relevance": "Text values within progress bar showing page counts"
+              }
+            ],
+            "notes": "Found text locator for plan pages values. Can extract and verify text matches expected format."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value provided in test data but no constant found in codebase."
+          },
+          "step_action_coverage": "COVERED",
+          "step_verification_coverage": "COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 9,
+          "step_action": "Check the message below \"Complimentary pages\".",
+          "step_test_data": null,
+          "step_expected_result": "Verify the information with correct plan info is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No specific locator found for message below complimentary pages section."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No expected message text constants found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "No locator found for the informational message below complimentary pages. May need to use generic text locator or parent container."
+        },
+        {
+          "step_number": 10,
+          "step_action": "Print some pages(less than the plan, such as 6 pages). Refresh the dashboard page.",
+          "step_test_data": "6 pages",
+          "step_expected_result": "Verify the \"Complimentary pages\" progress bar is filled with the black color and the value is displayed as correct (such as \"6 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [
+              {
+                "name": "plan_pages_bar",
+                "access": "print_history_page.elements.plan_pages_bar",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+                "relevance": "Progress bar to verify color and fill"
+              },
+              {
+                "name": "plan_pages_text",
+                "access": "print_history_page.elements.plan_pages_text",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+                "relevance": "Text to verify page count"
+              }
+            ],
+            "notes": "Found progress bar and text locators for verification. Printing action requires API helper not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No constants for pages to print or expected color values."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "Verification components found but printing action requires API helper from other batch."
+        },
+        {
+          "step_number": 11,
+          "step_action": "Continue to print some pages(more than the plan, such as 15 pages). Refresh the dashboard page.",
+          "step_test_data": "15 pages total",
+          "step_expected_result": "Verify the progress bars for \"Complimentary pages\" and \"Additional pages\" are displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [
+              {
+                "name": "plan_pages_bar",
+                "access": "print_history_page.elements.plan_pages_bar",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+                "relevance": "Complimentary pages progress bar"
+              }
+            ],
+            "notes": "Found complimentary pages progress bar but no specific additional pages progress bar locator in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No constants found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "Printing action requires API. Additional pages progress bar locator not found - may use different selector."
+        },
+        {
+          "step_number": 12,
+          "step_action": "Check the \"Additional pages\" progress bar.",
+          "step_test_data": "5 of 10 used, Yellow color",
+          "step_expected_result": "Verify the progress bar is filled with the Yellow color and the value is displayed correctly(such as \"5 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [
+              {
+                "name": "additional_pages_text",
+                "access": "print_history_page.elements.additional_pages_text",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+                "relevance": "Text showing additional pages count"
+              }
+            ],
+            "notes": "Found text locator for additional pages but no specific progress bar locator for additional pages."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No color or value constants found."
+          },
+          "step_action_coverage": "COVERED",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "Found text locator but not progress bar element locator for additional pages."
+        },
+        {
+          "step_number": 13,
+          "step_action": "Check the icon. For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the info icon is displayed well behind the string \"Additional pages\". Verify a tooltip with correct message is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No info icon or tooltip locators found for additional pages section."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No tooltip message constants found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "No locators for info icon or tooltip for additional pages section."
+        },
+        {
+          "step_number": 14,
+          "step_action": "Check the message below \"Additional pages\". Check the Complimentary pages progress bar. Check total pages printed info.",
+          "step_test_data": "10 of 10 used, 15 pages total",
+          "step_expected_result": "Verify a message with the amount of blocks already bought is displayed well. Verify the \"Complimentary pages\" progress bar is full filled with the black color and the value is displayed correctly (such as \"10 of 10 used\"). Verify correct number(such as 15 pages) displayed according to the printed pages.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [
+              {
+                "name": "additional_pages_message",
+                "access": "print_history_page.elements.additional_pages_message",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py"
+              },
+              {
+                "name": "plan_pages_bar",
+                "access": "print_history_page.elements.plan_pages_bar",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py"
+              },
+              {
+                "name": "total_printed_pages",
+                "access": "print_history_page.elements.total_printed_pages",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py"
+              }
+            ],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [
+              {
+                "name": "additional_pages_message",
+                "access": "print_history_page.elements.additional_pages_message",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+                "relevance": "Message about blocks bought"
+              },
+              {
+                "name": "plan_pages_bar",
+                "access": "print_history_page.elements.plan_pages_bar",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+                "relevance": "Progress bar to verify full fill"
+              },
+              {
+                "name": "plan_pages_text",
+                "access": "print_history_page.elements.plan_pages_text",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+                "relevance": "Text showing 10 of 10 used"
+              },
+              {
+                "name": "total_printed_pages",
+                "access": "print_history_page.elements.total_printed_pages",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/print_history_page.py",
+                "relevance": "Total pages printed count"
+              }
+            ],
+            "notes": "Found all three verification targets: additional pages message, complimentary progress bar, and total pages printed."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No expected value constants found."
+          },
+          "step_action_coverage": "COVERED",
+          "step_verification_coverage": "COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 15,
+          "step_action": "Verify the test case is complete.",
+          "step_test_data": null,
+          "step_expected_result": "All verifications passed successfully.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "This is a summary step, not requiring specific components."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Not applicable."
+          },
+          "step_action_coverage": "NOT_APPLICABLE",
+          "step_verification_coverage": "NOT_APPLICABLE",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_APPLICABLE"
+        }
+      ]
+    }
+  ]
+}
