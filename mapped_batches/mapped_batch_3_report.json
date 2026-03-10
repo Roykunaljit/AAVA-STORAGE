@@ -1,0 +1,1165 @@
+{
+  "mapping_metadata": {
+    "mapping_batch_id": 3,
+    "total_mapping_batches": 18,
+    "remaining_after_this": 15,
+    "codebase_batch_report_path": "codebase_batches/batch_3_report.json",
+    "test_case_source": "test_case_analysis/test_case_analysis.json",
+    "storage_repo": "AAVA-STORAGE",
+    "analyzed_at": "2025-01-15T14:35:00Z",
+    "analyzer": "Senior Test Automation Mapping Specialist Agent",
+    "mapping_dimensions": [
+      "preconditions",
+      "step_actions",
+      "expected_results",
+      "test_data",
+      "overall_flow"
+    ],
+    "files_in_this_batch": [
+      "AURA-main (1) 1/AURA-main/AI_YAML/scripts/multibrowsermanager.py",
+      "AURA-main (1) 1/AURA-main/AI_YAML/scripts/test_case_execute.py",
+      "AURA-main (1) 1/AURA-main/AI_YAML/scripts/testflow.yaml",
+      "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+      "AURA-main (1) 1/AURA-main/AI_YAML/test_cases/TC31165176_M_overview_status_card.yaml"
+    ],
+    "summary": {
+      "total_test_cases_evaluated": 1,
+      "test_cases_with_relevant_components": 1,
+      "test_cases_without_relevant_components": 0,
+      "total_page_objects_matched": 0,
+      "total_locators_matched": 0,
+      "total_methods_matched": 18,
+      "total_helpers_matched": 2,
+      "total_constants_matched": 0,
+      "total_precondition_methods_matched": 0,
+      "total_verification_methods_matched": 3,
+      "total_test_data_components_matched": 2
+    }
+  },
+  "test_case_mappings": [
+    {
+      "test_case_id": "C44873414",
+      "test_case_title": "Billing Cycle Period card",
+      "test_case_description": "Test case to verify the Billing Cycle Period card behavior on Print and Payment History page when a plan is paused, including verification of complimentary pages, additional pages, progress bars, tooltips, and page count displays.",
+      "module": "Instant Supply",
+      "has_relevant_components_in_this_batch": true,
+      "precondition_mapping": [
+        {
+          "precondition_text": "Enroll the Ink printer with 50 pages plan or higher.",
+          "precondition_index": 0,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "This batch contains the test execution framework (YamlStepExecutor, test_case_execute) but does not contain API helpers or methods for printer enrollment. Enrollment methods would likely be in a different batch containing HP Instant Ink API utilities or setup helpers."
+        },
+        {
+          "precondition_text": "Make sure the Subscription has no free months info.",
+          "precondition_index": 1,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "No subscription verification or API helper methods found in this batch. This batch focuses on test execution framework rather than HP Instant Ink domain-specific functionality."
+        },
+        {
+          "precondition_text": "Make sure the subscription is \"subscribed\" status.",
+          "precondition_index": 2,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "No subscription status verification methods found in this batch. API helpers for subscription management would be in a different batch."
+        },
+        {
+          "precondition_text": "Click the Pause Plan button on CIT modal or \"Pause Instant Ink\" link to trigger the pause plan.",
+          "precondition_index": 3,
+          "components_found_in_this_batch": [
+            {
+              "component_type": "method",
+              "method_name": "execute_click_action",
+              "method_signature": "def execute_click_action(self, step: Dict[str, Any]) -> None",
+              "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+              "source_class": "YamlStepExecutor",
+              "what_it_does": "Executes a click action on a UI element based on the step definition. Extracts element_id, label, page, text, expand, parent, and multiple parameters from the step dictionary. Loads element metadata for the specified page. Handles navigation element expansion detection. Finds the control by text or label using get_control. Handles iframe switching if the element is in an iframe. Calls click_control to perform the actual click with support for multiple element clicking.",
+              "how_to_import": "from teststep_processor import YamlStepExecutor",
+              "usage_example": "executor = YamlStepExecutor(manager, driver, metadata_filepath='/path/to/metadata', page='instantink/Dashboard')\nresult = executor.execute_click_action({'action': 'click', 'page': 'instantink/Dashboard', 'text': 'Pause Plan', 'multiple': 'False'})",
+              "relevance_reason": "This method provides the generic click action capability needed to click the Pause Plan button or Pause Instant Ink link. However, it requires the element metadata (locators) to be defined in a JSON metadata file, which is not present in this batch. The method itself is reusable but needs the specific locators for the pause plan elements."
+            },
+            {
+              "component_type": "method",
+              "method_name": "click_control",
+              "method_signature": "def click_control(self, control, multiple, timeout: int = 10)",
+              "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+              "source_class": "YamlStepExecutor",
+              "what_it_does": "Attempts to click UI elements using multiple locator strategies with progressive fallback. Validates control metadata dictionary. Builds strategies list prioritizing XPath selectors first, then CSS selectors, then other strategies including id, name, aria_label, data_testid, class_name, and partial_link_text. Iterates through strategies calling do_clicks for each until one succeeds. Returns True if any strategy successfully clicks the element, False if all fail.",
+              "how_to_import": "from teststep_processor import YamlStepExecutor",
+              "usage_example": "executor = YamlStepExecutor(manager, driver, metadata_filepath='/path/to/metadata')\ncontrol_dict = {'xpath_selectors': [\"//button[text()='Pause Plan']\"], 'css_selectors': ['.pause-button'], 'id': 'pause-btn'}\nsuccess = executor.click_control(control_dict, multiple=False, timeout=10)",
+              "relevance_reason": "This is the core click execution method that would be used to click the Pause Plan button. It provides robust fallback through multiple locator strategies. However, it requires the control metadata dictionary with locators, which would need to be defined in the page object metadata files not present in this batch."
+            }
+          ],
+          "precondition_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "Generic click action methods are available in YamlStepExecutor, but the specific locators for Pause Plan button and Pause Instant Ink link are not defined in this batch. The click capability exists but needs element metadata from page object files."
+        }
+      ],
+      "matched_page_objects": [],
+      "matched_locators": [],
+      "matched_methods": [
+        {
+          "method_name": "execute_click_action",
+          "method_signature": "def execute_click_action(self, step: Dict[str, Any]) -> None",
+          "method_type": "action",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+          "source_class": "YamlStepExecutor",
+          "what_it_does": "Executes a click action on a UI element based on YAML step definition. Loads page metadata, handles navigation expansion, finds control by text or label, switches to iframe if needed, and performs click with support for multiple elements.",
+          "how_to_import": "from teststep_processor import YamlStepExecutor",
+          "usage_example": "executor = YamlStepExecutor(manager, driver, metadata_filepath='/path/to/metadata', page='instantink/PrintPaymentHistory')\nresult = executor.execute_click_action({'action': 'click', 'page': 'instantink/PrintPaymentHistory', 'text': 'Billing Cycle Period', 'multiple': False})",
+          "relevant_to_steps": [
+            1,
+            4
+          ],
+          "relevant_to_preconditions": [
+            3
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "step_action",
+          "relevance_reason": "Provides generic click action capability for navigating to Print and Payment History page (steps 1, 4) and clicking pause plan button (precondition 3). Requires element metadata to be defined separately."
+        },
+        {
+          "method_name": "click_control",
+          "method_signature": "def click_control(self, control, multiple, timeout: int = 10)",
+          "method_type": "action",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+          "source_class": "YamlStepExecutor",
+          "what_it_does": "Core click execution method with progressive fallback through multiple locator strategies (XPath, CSS, id, name, aria_label, data_testid, class_name, partial_link_text). Validates control metadata and attempts each strategy until one succeeds.",
+          "how_to_import": "from teststep_processor import YamlStepExecutor",
+          "usage_example": "executor = YamlStepExecutor(manager, driver)\ncontrol = {'xpath_selectors': [\"//div[@class='billing-cycle-card']\"], 'css_selectors': ['.billing-cycle-card']}\nsuccess = executor.click_control(control, multiple=False, timeout=10)",
+          "relevant_to_steps": [
+            1,
+            4,
+            7,
+            13
+          ],
+          "relevant_to_preconditions": [
+            3
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "step_action",
+          "relevance_reason": "Provides robust click capability with fallback strategies for clicking navigation links, info icons, and other interactive elements. Used by execute_click_action internally."
+        },
+        {
+          "method_name": "execute_verify_action",
+          "method_signature": "def execute_verify_action(self, step: Dict[str, Any]) -> None",
+          "method_type": "verification",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+          "source_class": "YamlStepExecutor",
+          "what_it_does": "Executes AI-powered visual verification using Azure OpenAI vision model. Takes screenshot if specified, constructs reference image path, formats prompt with variable substitution, calls run_ai_task for AI analysis, and logs results.",
+          "how_to_import": "from teststep_processor import YamlStepExecutor",
+          "usage_example": "executor = YamlStepExecutor(manager, driver)\nresult = executor.execute_verify_action({'action': 'verify', 'id': 'verify_billing_card', 'screenshot': True, 'prompt': 'Verify Billing Cycle Period card displays plan pause information with correct page counts', 'reference_image': 'billing_card_ref.png'})",
+          "relevant_to_steps": [
+            2,
+            5,
+            6,
+            8,
+            9,
+            10,
+            11,
+            12,
+            14
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            2,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "This method provides AI-powered visual verification capability that could be used to verify all the visual aspects of the test case including billing cycle card display, progress bar colors and fill states, tooltip content, page count displays, and overall UI structure. The AI model can analyze screenshots and validate complex visual requirements that would be difficult with traditional element-based assertions."
+        },
+        {
+          "method_name": "run_ai_task",
+          "method_signature": "def run_ai_task(self, reference, test, prompt)",
+          "method_type": "api_call",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+          "source_class": "YamlStepExecutor",
+          "what_it_does": "Performs AI-powered visual verification using Azure OpenAI vision model. Loads reference and test images, encodes to base64, constructs messages for API call, calls Azure OpenAI chat completions API with vision model, handles streaming or non-streaming responses, parses JSON result, and returns validation data.",
+          "how_to_import": "from teststep_processor import YamlStepExecutor",
+          "usage_example": "executor = YamlStepExecutor(manager, driver)\nresult = executor.run_ai_task(reference='/path/to/reference.png', test='/path/to/test.png', prompt='Verify the complimentary pages progress bar is filled with black color and displays 6 of 10 used')",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            2,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "Core AI verification engine that can validate complex visual requirements including progress bar colors (black for complimentary, yellow for additional), fill percentages, tooltip content, text displays, and overall UI layout. This is particularly valuable for this test case which has extensive visual verification requirements."
+        },
+        {
+          "method_name": "take_screenshot",
+          "method_signature": "def take_screenshot(self, filename: str = \"page.png\")",
+          "method_type": "utility",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+          "source_class": "YamlStepExecutor",
+          "what_it_does": "Captures a screenshot of the current browser page and saves it to the specified file path. Returns the filename.",
+          "how_to_import": "from teststep_processor import YamlStepExecutor",
+          "usage_example": "executor = YamlStepExecutor(manager, driver)\nscreenshot_path = executor.take_screenshot(filename='/tmp/billing_card_state.png')",
+          "relevant_to_steps": [
+            2,
+            5,
+            6,
+            8,
+            9,
+            10,
+            11,
+            12,
+            14
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            2,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "Used to capture screenshots for AI-powered visual verification. Essential for verifying progress bar states, colors, tooltips, and page count displays throughout the test."
+        },
+        {
+          "method_name": "set_variables",
+          "method_signature": "def set_variables(self, **kwargs)",
+          "method_type": "utility",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+          "source_class": "YamlStepExecutor",
+          "what_it_does": "Sets multiple variables in the executor's variables dictionary for use in test steps. Logs each key-value pair and updates the variables dictionary. Returns True.",
+          "how_to_import": "from teststep_processor import YamlStepExecutor",
+          "usage_example": "executor = YamlStepExecutor(manager, driver)\nexecutor.set_variables(PRINT_PAYMENT_HISTORY_URL='https://app.hp.com/instant-ink/print-payment-history', PAGES_TO_PRINT_FIRST=6, PAGES_TO_PRINT_SECOND=9, COMPLIMENTARY_LIMIT=10)",
+          "relevant_to_steps": [
+            1,
+            3,
+            4,
+            10,
+            11
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Provides variable management for storing test data like URLs, page counts, and configuration values that can be referenced throughout the test using ${variable_name} syntax."
+        },
+        {
+          "method_name": "substitute_variables",
+          "method_signature": "def substitute_variables(self, text)",
+          "method_type": "utility",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+          "source_class": "YamlStepExecutor",
+          "what_it_does": "Replaces variable placeholders in text with actual values from the variables dictionary. Uses regex to find ${variable_name} patterns and replaces them. Supports dot notation for nested dictionary access (e.g., ${temp_id.status}).",
+          "how_to_import": "from teststep_processor import YamlStepExecutor",
+          "usage_example": "executor = YamlStepExecutor(manager, driver)\nexecutor.set_variables(BASE_URL='https://app.hp.com', PATH='/instant-ink/print-payment-history')\nfull_url = executor.substitute_variables('${BASE_URL}${PATH}')",
+          "relevant_to_steps": [
+            1,
+            4,
+            8,
+            10,
+            11,
+            12,
+            14
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Enables dynamic test data by allowing YAML steps to reference variables. Used for URLs, page counts, expected values, and other test data that may vary between test runs."
+        },
+        {
+          "method_name": "execute_step",
+          "method_signature": "def execute_step(self, step: Dict[str, Any]) -> None",
+          "method_type": "action",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+          "source_class": "YamlStepExecutor",
+          "what_it_does": "Central dispatcher that executes a single test step by routing to the appropriate action handler based on action type. Validates step dictionary, extracts action and page, updates current page, dispatches to action-specific methods (click, set, verify, navigate, etc.), handles sleep delays between steps, and returns result.",
+          "how_to_import": "from teststep_processor import YamlStepExecutor",
+          "usage_example": "executor = YamlStepExecutor(manager, driver, metadata_filepath='/path/to/metadata')\nresult = executor.execute_step({'action': 'click', 'page': 'instantink/PrintPaymentHistory', 'text': 'Billing Cycle Period', 'sleep': 2})",
+          "relevant_to_steps": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "overall_flow",
+          "relevance_reason": "Core step execution dispatcher that would execute each test step in the test case. This is the main execution engine that routes each action to its appropriate handler."
+        },
+        {
+          "method_name": "execute_flow",
+          "method_signature": "def execute_flow(self, yaml_data: Dict[str, Any], flow_result = None) -> None",
+          "method_type": "action",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+          "source_class": "YamlStepExecutor",
+          "what_it_does": "Executes a complete test flow defined in YAML data. Validates YAML structure, iterates through all steps, executes each step with timing and error handling, collects results, generates CSV report with step-level timing and status, and prints execution summary.",
+          "how_to_import": "from teststep_processor import YamlStepExecutor",
+          "usage_example": "executor = YamlStepExecutor(manager, driver, metadata_filepath='/path/to/metadata')\nyaml_data = {'flow': {'steps': [{'action': 'click', 'text': 'Login'}, {'action': 'verify', 'prompt': 'Check dashboard'}]}}\nexecutor.execute_flow(yaml_data, flow_result='/path/to/results.csv')",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "overall_flow",
+          "relevance_reason": "Orchestrates the complete test execution lifecycle. This method would execute the entire test case flow from start to finish, handling all 15 steps with timing, error handling, and result reporting."
+        },
+        {
+          "method_name": "load_json_metadata",
+          "method_signature": "def load_json_metadata(self, page)",
+          "method_type": "utility",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+          "source_class": "YamlStepExecutor",
+          "what_it_does": "Loads UI element metadata from a JSON file into the control_map dictionary. Splits page identifier to extract module and file name, looks up folder name in metadata dictionary, constructs JSON file path, reads and parses JSON file, and stores in control_map.",
+          "how_to_import": "from teststep_processor import YamlStepExecutor",
+          "usage_example": "executor = YamlStepExecutor(manager, driver, metadata_filepath='/path/to/metadata')\nexecutor.load_json_metadata('instantink/PrintPaymentHistory')",
+          "relevant_to_steps": [
+            1,
+            4
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "step_action",
+          "relevance_reason": "Loads element metadata for the Print and Payment History page. Required before interacting with elements on that page. However, the actual JSON metadata files with locators are not in this batch."
+        },
+        {
+          "method_name": "get_control",
+          "method_signature": "def get_control(self, name)",
+          "method_type": "getter",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+          "source_class": "YamlStepExecutor",
+          "what_it_does": "Searches for a UI control in the loaded metadata by matching its text or label_text. Iterates through control_map['interactive_elements'] and returns the control dictionary if text or label_text matches the provided name.",
+          "how_to_import": "from teststep_processor import YamlStepExecutor",
+          "usage_example": "executor = YamlStepExecutor(manager, driver, metadata_filepath='/path/to/metadata')\nexecutor.load_json_metadata('instantink/PrintPaymentHistory')\ncontrol = executor.get_control('Billing Cycle Period')",
+          "relevant_to_steps": [
+            2,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "relevant_to_preconditions": [
+            3
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "step_action",
+          "relevance_reason": "Retrieves element metadata by visible text or label. Used to find controls like billing cycle card, progress bars, info icons, and tooltips. Requires metadata to be loaded first."
+        },
+        {
+          "method_name": "set_control_value",
+          "method_signature": "def set_control_value(self, control, value, timeout=10)",
+          "method_type": "action",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+          "source_class": "YamlStepExecutor",
+          "what_it_does": "Sets a value in a UI control (input field or dropdown) using multiple locator strategies with fallback. Handles both text inputs (clear + send_keys) and select dropdowns (select by visible text or value). Tries CSS selectors, XPath selectors, and other strategies until one succeeds.",
+          "how_to_import": "from teststep_processor import YamlStepExecutor",
+          "usage_example": "executor = YamlStepExecutor(manager, driver)\ncontrol = {'css_selectors': ['#pages-input'], 'id': 'pages-input'}\nsuccess = executor.set_control_value(control, '6', timeout=10)",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "step_action",
+          "relevance_reason": "While this test case doesn't have explicit input fields, this method could be useful if there were fields to enter page counts or other values. Not directly applicable to current test steps but part of the framework."
+        },
+        {
+          "method_name": "do_clicks",
+          "method_signature": "def do_clicks(self, strategy, multiple, timeout, delay=0.10)",
+          "method_type": "action",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+          "source_class": "YamlStepExecutor",
+          "what_it_does": "Performs the actual clicking of elements located by a specific strategy. Waits for elements to be present, iterates through found elements, checks display and enabled state, attempts click with exception handling, supports clicking multiple elements with delay, and returns success status.",
+          "how_to_import": "from teststep_processor import YamlStepExecutor",
+          "usage_example": "executor = YamlStepExecutor(manager, driver)\nfrom selenium.webdriver.common.by import By\nsuccess = executor.do_clicks((By.CSS_SELECTOR, '.info-icon'), multiple=False, timeout=10)",
+          "relevant_to_steps": [
+            7,
+            13
+          ],
+          "relevant_to_preconditions": [
+            3
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "step_action",
+          "relevance_reason": "Core click execution method used internally by click_control. Handles the actual WebDriver click operations with wait and retry logic. Used for clicking info icons and other interactive elements."
+        },
+        {
+          "method_name": "load_yaml_file",
+          "method_signature": "def load_yaml_file(self, file_path: str) -> Dict[str, Any]",
+          "method_type": "utility",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+          "source_class": "YamlStepExecutor",
+          "what_it_does": "Loads and parses a YAML file from the filesystem. Opens file with UTF-8 encoding, uses yaml.safe_load to parse content, returns parsed dictionary or empty dict if file is empty. Raises FileNotFoundError or ValueError on errors.",
+          "how_to_import": "from teststep_processor import YamlStepExecutor",
+          "usage_example": "executor = YamlStepExecutor(manager, driver)\nyaml_data = executor.load_yaml_file('test_cases/billing_cycle_test.yaml')",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "overall_flow",
+          "relevance_reason": "Used to load the YAML test case definition file. The test case C44873414 would need to be written as a YAML file and loaded using this method."
+        },
+        {
+          "method_name": "driver",
+          "method_signature": "@pytest.fixture(scope=\"module\")\ndef driver()",
+          "method_type": "fixture",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/test_case_execute.py",
+          "source_class": null,
+          "what_it_does": "Pytest fixture with module scope that creates and manages a browser instance for the entire test module. Creates MultiBrowserManager, calls create_normal_browser with profile 'instantink', yields driver to test, and calls driver.quit() in cleanup.",
+          "how_to_import": "from test_case_execute import driver",
+          "usage_example": "def test_billing_cycle(driver):\n    driver.get('https://app.hp.com/instant-ink/print-payment-history')",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "overall_flow",
+          "relevance_reason": "Provides the browser driver instance needed for test execution. This fixture would be used to create the browser for running the billing cycle test case."
+        },
+        {
+          "method_name": "test_case_execute",
+          "method_signature": "def test_case_execute(yaml_data, yaml_file_path, driver)",
+          "method_type": "test_script",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/test_case_execute.py",
+          "source_class": null,
+          "what_it_does": "Main test function that executes a YAML-defined test case flow. Loads config, retrieves printer info, creates YamlStepExecutor, creates trace folder, sets global variables, loads YAML flow, and calls executor.execute_flow to run the test with result capture.",
+          "how_to_import": "from test_case_execute import test_case_execute",
+          "usage_example": "pytest test_case_execute.py --yaml-file=test_cases/billing_cycle_test.yaml",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "overall_flow",
+          "relevance_reason": "Main pytest test entry point that would execute the billing cycle test case. This function orchestrates the complete test execution from setup through execution to result capture."
+        },
+        {
+          "method_name": "create_normal_browser",
+          "method_signature": "def create_normal_browser(self, profile_name: str, user_data_dir: str = None)",
+          "method_type": "factory",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/multibrowsermanager.py",
+          "source_class": "MultiBrowserManager",
+          "what_it_does": "Creates a new Chrome browser instance in normal mode with extensive automation detection suppression. Adds arguments to hide automation indicators, configures preferences to disable credential service and notifications, creates Chrome WebDriver, stores driver in browsers registry with metadata, and returns driver instance.",
+          "how_to_import": "from multibrowsermanager import MultiBrowserManager",
+          "usage_example": "manager = MultiBrowserManager()\ndriver = manager.create_normal_browser(profile_name='instantink_test', user_data_dir='/path/to/profile')",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "overall_flow",
+          "relevance_reason": "Creates the browser instance used for test execution. The driver fixture in test_case_execute.py uses this method to create the browser."
+        },
+        {
+          "method_name": "switch_to_window_by_url",
+          "method_signature": "def switch_to_window_by_url(self, url_part: str, exact_match: bool = False)",
+          "method_type": "action",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/multibrowsermanager.py",
+          "source_class": "MultiBrowserManager",
+          "what_it_does": "Searches for and switches to the first window that contains or matches the specified URL across all browsers. Iterates through all browsers and windows, checks URL match (exact or partial), switches to matching window, sets current_browser, and returns dictionary with browser_name, window_handle, url, and driver.",
+          "how_to_import": "from multibrowsermanager import MultiBrowserManager",
+          "usage_example": "manager = MultiBrowserManager()\nresult = manager.switch_to_window_by_url('print-payment-history', exact_match=False)",
+          "relevant_to_steps": [
+            1,
+            4
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "step_action",
+          "relevance_reason": "Could be used to switch to the Print and Payment History page window if it opens in a new window or tab. Useful for multi-window test scenarios."
+        }
+      ],
+      "matched_helpers": [
+        {
+          "helper_name": "YamlStepExecutor",
+          "helper_signature": "class YamlStepExecutor",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+          "what_it_does": "Core test execution engine that processes YAML test definitions and executes test steps. Manages UI element metadata, handles variable substitution, executes various action types, integrates with AI vision models for visual verification, and tracks test execution results. Provides comprehensive framework for YAML-based test automation.",
+          "how_to_import": "from teststep_processor import YamlStepExecutor",
+          "usage_example": "executor = YamlStepExecutor(manager, driver, metadata_filepath='/path/to/metadata', page='instantink/PrintPaymentHistory')\nexecutor.set_variables(URL='https://app.hp.com', PAGES_TO_PRINT=6)\nyaml_data = executor.load_yaml_file('test_cases/billing_cycle_test.yaml')\nexecutor.execute_flow(yaml_data, flow_result='/path/to/results.csv')",
+          "relevant_to_preconditions": [
+            3
+          ],
+          "relevant_to_steps": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15
+          ],
+          "relevant_to_expected_results": [
+            2,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14
+          ],
+          "mapping_dimension": "overall_flow",
+          "relevance_reason": "This is the main test execution engine that would be used to run the billing cycle test case. It provides all the core capabilities needed: click actions, visual verification with AI, variable management, step execution, and flow orchestration. The test case would be written as a YAML file and executed using this class."
+        },
+        {
+          "helper_name": "MultiBrowserManager",
+          "helper_signature": "class MultiBrowserManager",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/multibrowsermanager.py",
+          "what_it_does": "Manages multiple browser instances with different profiles and modes. Provides methods to create browsers, switch between them, bring windows to foreground, find windows by URL, wait for new windows, load URLs in specific browsers, and manage browser lifecycle. Supports OS-specific window management operations.",
+          "how_to_import": "from multibrowsermanager import MultiBrowserManager",
+          "usage_example": "manager = MultiBrowserManager()\ndriver = manager.create_normal_browser(profile_name='instantink_test')\nmanager.switch_to_browser('instantink_test', bring_to_focus=True)\nmanager.load_url_in_browser('instantink_test', 'https://app.hp.com/instant-ink/print-payment-history', new_tab=False)",
+          "relevant_to_preconditions": [],
+          "relevant_to_steps": [
+            1,
+            4
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "overall_flow",
+          "relevance_reason": "Provides browser management capabilities including browser creation, window switching, and URL loading. Used by the test execution framework to manage the browser instance during test execution."
+        }
+      ],
+      "matched_constants": [],
+      "step_level_mapping": [
+        {
+          "step_number": 1,
+          "step_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "step_test_data": null,
+          "step_expected_result": "Print and Payment History page is loaded",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "execute_click_action",
+                "usage": "executor.execute_click_action({'action': 'click', 'page': 'instantink/Dashboard', 'text': 'Print and Payment History', 'multiple': False})",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "Provides generic click action to navigate to Print and Payment History page by clicking a navigation link. Requires element metadata with locators to be defined separately."
+              },
+              {
+                "name": "load_json_metadata",
+                "usage": "executor.load_json_metadata('instantink/PrintPaymentHistory')",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "Loads UI element metadata for the Print and Payment History page. Required before interacting with elements on that page."
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No specific page load verification methods found in this batch. The framework relies on implicit waits and element presence checks. AI-powered verification could be used to verify page loaded by checking for key page elements."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No URL constants found in this batch. The Print and Payment History URL would need to be set as a variable using set_variables or defined in config.yaml."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "Generic navigation capability exists through execute_click_action, but specific page object, locators, and URL for Print and Payment History page are not in this batch."
+        },
+        {
+          "step_number": 2,
+          "step_action": "Check the Billing Cycle Period card.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the plan pause information is not displayed.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "get_control",
+                "usage": "control = executor.get_control('Billing Cycle Period')",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "Retrieves element metadata for the Billing Cycle Period card by text. Requires metadata to be loaded first."
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "execute_verify_action",
+                "usage": "executor.execute_verify_action({'action': 'verify', 'id': 'verify_no_pause_info', 'screenshot': True, 'prompt': 'STRICT VALIDATION MODE: Verify that plan pause information is NOT displayed on the Billing Cycle Period card. Return {status: false} immediately if any pause information is visible.', 'reference_image': None})",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "AI-powered visual verification that can check if plan pause information is not displayed by analyzing a screenshot of the billing cycle card."
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "AI-powered verification is the best approach for this step since it requires verifying the absence of specific information on a card. Traditional element-based assertions would be difficult."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "COVERED",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "AI verification capability exists and is well-suited for this step. Element metadata for the billing cycle card is not in this batch."
+        },
+        {
+          "step_number": 3,
+          "step_action": "Even shift 32 days and trigger billing charge.",
+          "step_test_data": "32 days",
+          "step_expected_result": "Time shift and billing charge successful",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "This is a backend API operation. No API helpers for time shifting or billing charge triggering found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "The 32 days value could be stored as a variable using set_variables, but the actual API methods to perform time shift are not in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "PARTIALLY_COVERED",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "This step requires API helpers for time manipulation and billing charge triggering which are not present in this batch. These would be in a batch containing HP Instant Ink API utilities."
+        },
+        {
+          "step_number": 4,
+          "step_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "step_test_data": null,
+          "step_expected_result": "Page loaded with updated data",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "execute_click_action",
+                "usage": "executor.execute_click_action({'action': 'click', 'page': 'instantink/Dashboard', 'text': 'Print and Payment History', 'multiple': False})",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "Re-navigation to Print and Payment History page to see updated data after time shift."
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No specific verification for updated data. Could use AI verification to check that data has changed."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No URL constants in this batch."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "Same as step 1 - generic navigation capability exists but specific page object and locators not in this batch."
+        },
+        {
+          "step_number": 5,
+          "step_action": "Check the Billing Cycle Period card.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the plan pause information is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "get_control",
+                "usage": "control = executor.get_control('Billing Cycle Period')",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "Retrieves element metadata for the billing cycle card."
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "execute_verify_action",
+                "usage": "executor.execute_verify_action({'action': 'verify', 'id': 'verify_pause_info_displayed', 'screenshot': True, 'prompt': 'STRICT VALIDATION MODE: Verify that plan pause information IS displayed on the Billing Cycle Period card with correct pause plan details. Return {status: false} if pause information is not visible or incomplete.', 'reference_image': 'billing_card_with_pause_ref.png'})",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "AI-powered verification to check that pause information is now displayed after billing charge."
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "AI verification is ideal for checking that pause information is displayed with correct content and formatting."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "COVERED",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "AI verification capability is well-suited for this step. Element metadata not in this batch."
+        },
+        {
+          "step_number": 6,
+          "step_action": "Check the progress bar.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the Complimentary pages progress bar is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "get_control",
+                "usage": "control = executor.get_control('Complimentary pages progress bar')",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "Retrieves element metadata for the progress bar."
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "execute_verify_action",
+                "usage": "executor.execute_verify_action({'action': 'verify', 'id': 'verify_complimentary_progress_bar', 'screenshot': True, 'prompt': 'STRICT VALIDATION MODE: Verify the Complimentary pages progress bar is displayed with proper styling and structure. Check that the progress bar element is visible and has correct CSS properties. Return {status: false} if progress bar is not displayed or has incorrect styling.', 'reference_image': 'complimentary_progress_bar_ref.png'})",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "AI verification can validate progress bar display, styling, and visual appearance."
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "AI verification is excellent for visual validation of progress bar styling and structure."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "COVERED",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "AI verification provides strong coverage for visual validation. Element metadata not in this batch."
+        },
+        {
+          "step_number": 7,
+          "step_action": "For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify a tooltip with correct message is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "execute_click_action",
+                "usage": "executor.execute_click_action({'action': 'click', 'page': 'instantink/PrintPaymentHistory', 'text': 'Complimentary pages info icon', 'multiple': False})",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "Can click the info icon for mobile/tablet. Hover functionality would need to be implemented separately."
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "execute_verify_action",
+                "usage": "executor.execute_verify_action({'action': 'verify', 'id': 'verify_complimentary_tooltip', 'screenshot': True, 'prompt': 'STRICT VALIDATION MODE: Verify that a tooltip is displayed with the correct message about complimentary pages. The tooltip should be visible and contain accurate information. Return {status: false} if tooltip is not visible or message is incorrect.', 'reference_image': None})",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "AI verification can validate tooltip display and message content after hover/click."
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "AI verification is ideal for checking tooltip appearance and content. Hover action for desktop would need custom implementation."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected tooltip message would need to be defined as test data."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "Click action exists but hover action for desktop not found. AI verification covers tooltip validation well. Element metadata and expected tooltip text not in this batch."
+        },
+        {
+          "step_number": 8,
+          "step_action": "Check the Complimentary pages value.",
+          "step_test_data": "0 of 10(Pause Plan) used",
+          "step_expected_result": "Verify the value is displayed as \"0 of 10(Pause Plan) used\".",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "get_control",
+                "usage": "control = executor.get_control('Complimentary pages value')",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "Retrieves element metadata for the value text."
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "execute_verify_action",
+                "usage": "executor.execute_verify_action({'action': 'verify', 'id': 'verify_complimentary_value', 'screenshot': True, 'prompt': 'STRICT VALIDATION MODE: Verify the Complimentary pages value displays exactly \"0 of 10(Pause Plan) used\". Return {status: false} if the text does not match exactly or is not visible.', 'reference_image': None})",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "AI verification can validate exact text match for the page count value."
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "AI verification is excellent for exact text matching."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value '0 of 10(Pause Plan) used' could be stored as a variable."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "COVERED",
+          "step_test_data_coverage": "PARTIALLY_COVERED",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "AI verification provides strong coverage for text validation. Element metadata not in this batch. Variable management exists for storing expected value."
+        },
+        {
+          "step_number": 9,
+          "step_action": "Check the message below \"Complimentary pages\".",
+          "step_test_data": null,
+          "step_expected_result": "Verify the information with correct plan info is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "get_control",
+                "usage": "control = executor.get_control('Complimentary pages info message')",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "Retrieves element metadata for the info message."
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "execute_verify_action",
+                "usage": "executor.execute_verify_action({'action': 'verify', 'id': 'verify_complimentary_message', 'screenshot': True, 'prompt': 'STRICT VALIDATION MODE: Verify the message below Complimentary pages contains correct plan information. The message should be visible and contain accurate details about the pause plan. Return {status: false} if message is not visible or contains incorrect information.', 'reference_image': None})",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "AI verification can validate message content and accuracy."
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "AI verification is well-suited for checking message content."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected message content would need to be defined."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "AI verification covers message validation. Element metadata and expected message not in this batch."
+        },
+        {
+          "step_number": 10,
+          "step_action": "Print some pages(less than the plan, such as 6 pages). Refresh the dashboard page.",
+          "step_test_data": "6 pages",
+          "step_expected_result": "Verify the \"Complimentary pages\" progress bar is filled with the black color and the value is displayed as correct (such as \"6 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "execute_verify_action",
+                "usage": "executor.execute_verify_action({'action': 'verify', 'id': 'verify_progress_after_6_pages', 'screenshot': True, 'prompt': 'STRICT VALIDATION MODE: Verify the Complimentary pages progress bar is filled with black color and displays \"6 of 10 used\". Check both the color (must be black) and the exact text. Return {status: false} if color is not black or text does not match.', 'reference_image': None})",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "AI verification can validate both progress bar color (black) and text value (6 of 10 used)."
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "AI verification is excellent for validating both color and text. The print pages API action is not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Pages to print (6) could be stored as a variable using set_variables."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "COVERED",
+          "step_test_data_coverage": "PARTIALLY_COVERED",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "Print pages API action not found in this batch. AI verification provides strong coverage for visual validation. Variable management exists for test data."
+        },
+        {
+          "step_number": 11,
+          "step_action": "Continue to print some pages(more than the plan, such as 15 pages). Refresh the dashboard page.",
+          "step_test_data": "15 pages total",
+          "step_expected_result": "Verify the progress bars for \"Complimentary pages\" and \"Additional pages\" are displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "execute_verify_action",
+                "usage": "executor.execute_verify_action({'action': 'verify', 'id': 'verify_both_progress_bars', 'screenshot': True, 'prompt': 'STRICT VALIDATION MODE: Verify that both Complimentary pages and Additional pages progress bars are displayed. Both progress bars should be visible with proper styling. Return {status: false} if either progress bar is not displayed.', 'reference_image': None})",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "AI verification can validate that both progress bars are displayed after exceeding complimentary limit."
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "AI verification is ideal for checking that the additional pages progress bar appears dynamically."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Total pages (15) could be stored as a variable."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "COVERED",
+          "step_test_data_coverage": "PARTIALLY_COVERED",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "Print pages API action not in this batch. AI verification covers visual validation well."
+        },
+        {
+          "step_number": 12,
+          "step_action": "Check the \"Additional pages\" progress bar.",
+          "step_test_data": "5 of 10 used, Yellow color",
+          "step_expected_result": "Verify the progress bar is filled with the Yellow color and the value is displayed correctly(such as \"5 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "get_control",
+                "usage": "control = executor.get_control('Additional pages progress bar')",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "Retrieves element metadata for the additional pages progress bar."
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "execute_verify_action",
+                "usage": "executor.execute_verify_action({'action': 'verify', 'id': 'verify_additional_progress_bar', 'screenshot': True, 'prompt': 'STRICT VALIDATION MODE: Verify the Additional pages progress bar is filled with yellow color and displays \"5 of 10 used\". Check both the color (must be yellow) and the exact text. Return {status: false} if color is not yellow or text does not match.', 'reference_image': None})",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "AI verification can validate both progress bar color (yellow) and text value (5 of 10 used)."
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "AI verification is excellent for validating color and text together."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value '5 of 10 used' and color 'yellow' could be stored as variables."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "COVERED",
+          "step_test_data_coverage": "PARTIALLY_COVERED",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "AI verification provides strong coverage for color and text validation. Element metadata not in this batch."
+        },
+        {
+          "step_number": 13,
+          "step_action": "Check the icon. For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the info icon is displayed well behind the string \"Additional pages\". Verify a tooltip with correct message is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "execute_click_action",
+                "usage": "executor.execute_click_action({'action': 'click', 'page': 'instantink/PrintPaymentHistory', 'text': 'Additional pages info icon', 'multiple': False})",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "Can click the info icon for mobile/tablet."
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "execute_verify_action",
+                "usage": "executor.execute_verify_action({'action': 'verify', 'id': 'verify_additional_icon_tooltip', 'screenshot': True, 'prompt': 'STRICT VALIDATION MODE: Verify the info icon is displayed next to Additional pages label and a tooltip with correct message appears on hover/click. Return {status: false} if icon is not visible or tooltip does not appear with correct message.', 'reference_image': None})",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "AI verification can validate both icon display and tooltip content."
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "AI verification covers both icon visibility and tooltip validation."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected tooltip message would need to be defined."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "Click action exists but hover not found. AI verification covers validation well. Element metadata and expected tooltip not in this batch."
+        },
+        {
+          "step_number": 14,
+          "step_action": "Check the message below \"Additional pages\". Check the Complimentary pages progress bar. Check total pages printed info.",
+          "step_test_data": "10 of 10 used, 15 pages total",
+          "step_expected_result": "Verify a message with the amount of blocks already bought is displayed well. Verify the \"Complimentary pages\" progress bar is full filled with the black color and the value is displayed correctly (such as \"10 of 10 used\"). Verify correct number(such as 15 pages) displayed according to the printed pages.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "get_control",
+                "usage": "control = executor.get_control('Additional pages info message')",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "Retrieves element metadata for the additional pages message."
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "execute_verify_action",
+                "usage": "executor.execute_verify_action({'action': 'verify', 'id': 'verify_final_state', 'screenshot': True, 'prompt': 'STRICT VALIDATION MODE: Verify three things: (1) Message below Additional pages shows blocks bought information, (2) Complimentary pages progress bar is 100% filled with black color showing \"10 of 10 used\", (3) Total pages printed displays 15 pages. Return {status: false} if any of these three conditions fail.', 'reference_image': None})",
+                "from_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+                "relevance": "AI verification can validate all three aspects in a single check: message content, progress bar state, and total page count."
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "AI verification is excellent for multi-part validation in a single step."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected values (10 of 10, 15 pages) could be stored as variables."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "COVERED",
+          "step_test_data_coverage": "PARTIALLY_COVERED",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "AI verification provides comprehensive coverage for this complex multi-part verification. Element metadata not in this batch."
+        },
+        {
+          "step_number": 15,
+          "step_action": "Verify the test case is complete.",
+          "step_test_data": null,
+          "step_expected_result": "All verifications passed successfully.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "This is a summary step. The execute_flow method tracks overall test status and generates a report with pass/fail for each step."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed."
+          },
+          "step_action_coverage": "NOT_APPLICABLE",
+          "step_verification_coverage": "NOT_APPLICABLE",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_APPLICABLE",
+          "notes": "This is a summary step. The execute_flow method provides overall test status tracking and reporting."
+        }
+      ],
+      "overall_assessment": "This batch contains the core YAML-based test execution framework (YamlStepExecutor, MultiBrowserManager, test_case_execute) which provides the infrastructure to run the test case, but does NOT contain the domain-specific components needed for HP Instant Ink functionality. The framework provides: (1) Generic action methods (click, set, verify, navigate) that can be used once element metadata is provided, (2) AI-powered visual verification capability which is EXCELLENT for this test case's extensive visual validation requirements (progress bar colors, tooltips, text displays), (3) Variable management for test data, (4) Test flow orchestration and result reporting. However, the batch is MISSING: (1) Page objects for Print and Payment History page and Dashboard page, (2) Locators for billing cycle card, progress bars, tooltips, info icons, and page count elements, (3) API helpers for printer enrollment, subscription management, time shifting, billing triggers, and page printing simulation, (4) Constants for URLs, page limits, and expected values. The test case would need to be written as a YAML file similar to TC31165176_M_overview_status_card.yaml and would leverage the AI verification capability extensively. The AI-powered verification is particularly well-suited for this test case because it can validate complex visual requirements like progress bar colors, fill states, tooltip content, and text displays that would be difficult with traditional element-based assertions. The missing components (page objects, locators, API helpers) would be found in other batches containing HP Instant Ink domain-specific code.",
+      "files_checked_in_this_batch": [
+        "AURA-main (1) 1/AURA-main/AI_YAML/scripts/multibrowsermanager.py",
+        "AURA-main (1) 1/AURA-main/AI_YAML/scripts/test_case_execute.py",
+        "AURA-main (1) 1/AURA-main/AI_YAML/scripts/testflow.yaml",
+        "AURA-main (1) 1/AURA-main/AI_YAML/scripts/teststep_processor.py",
+        "AURA-main (1) 1/AURA-main/AI_YAML/test_cases/TC31165176_M_overview_status_card.yaml"
+      ]
+    }
+  ]
+}
