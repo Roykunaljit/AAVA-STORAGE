@@ -1,0 +1,903 @@
+{
+  "mapping_metadata": {
+    "mapping_batch_id": 8,
+    "total_mapping_batches": 18,
+    "remaining_after_this": 10,
+    "codebase_batch_report_path": "codebase_batches/batch_8_report.json",
+    "test_case_source": "test_case_analysis/test_case_analysis.json",
+    "analyzed_at": "2025-01-15T14:45:00Z",
+    "analyzer": "Senior Test Automation Mapping Specialist Agent",
+    "mapping_dimensions": [
+      "preconditions",
+      "step_actions",
+      "expected_results",
+      "test_data",
+      "overall_flow"
+    ],
+    "files_in_this_batch": [
+      "AURA-main (1) 1/AURA-main/helper/email_helper.py",
+      "AURA-main (1) 1/AURA-main/helper/enrollment_helper.py",
+      "AURA-main (1) 1/AURA-main/helper/fulfillment_service_ra_helper.py",
+      "AURA-main (1) 1/AURA-main/helper/fulfillment_simulator_ra_helper.py",
+      "AURA-main (1) 1/AURA-main/helper/gemini_ra_helper.py"
+    ],
+    "summary": {
+      "total_test_cases_evaluated": 1,
+      "test_cases_with_relevant_components": 1,
+      "test_cases_without_relevant_components": 0,
+      "total_page_objects_matched": 0,
+      "total_locators_matched": 0,
+      "total_methods_matched": 4,
+      "total_helpers_matched": 3,
+      "total_constants_matched": 0,
+      "total_precondition_methods_matched": 4,
+      "total_verification_methods_matched": 1,
+      "total_test_data_components_matched": 0
+    }
+  },
+  "test_case_mappings": [
+    {
+      "test_case_id": "C44873414",
+      "test_case_title": "Billing Cycle Period card",
+      "test_case_description": "Test case to verify the Billing Cycle Period card display and behavior on Print and Payment History page when a subscription plan is paused, including verification of complimentary pages progress bar, additional pages tracking, tooltips, and page usage information display across different printing scenarios.",
+      "module": "HP Instant Ink",
+      "has_relevant_components_in_this_batch": true,
+      "precondition_mapping": [
+        {
+          "precondition_text": "Enroll the Ink printer with 50 pages plan or higher.",
+          "precondition_index": 0,
+          "components_found_in_this_batch": [
+            {
+              "component_type": "helper",
+              "helper_name": "EnrollmentHelper",
+              "source_file": "AURA-main (1) 1/AURA-main/helper/enrollment_helper.py",
+              "what_it_does": "Comprehensive helper class providing static utility methods for automating HP Instant Ink enrollment flows. Contains over 100 methods covering all enrollment stages including terms acceptance, printer selection, plan selection with multiple plan types (ink-only, ink+paper, monthly, yearly, pay-as-you-print), shipping address management, billing information with support for multiple payment methods, promotional code application, and enrollment completion.",
+              "how_to_import": "from helper.enrollment_helper import EnrollmentHelper",
+              "usage_example": "EnrollmentHelper.start_enrollment_and_sign_in(page, 'testuser@example.com')\nEnrollmentHelper.select_printer(page, printer_index=0)\nEnrollmentHelper.finish_enrollment(page)",
+              "relevance_reason": "This helper provides complete enrollment workflow methods needed to fulfill the precondition of enrolling a printer with a 50+ pages plan. The start_enrollment_and_sign_in, select_printer, and finish_enrollment methods can be used to set up the required printer enrollment state before the test begins."
+            },
+            {
+              "component_type": "method",
+              "method_name": "start_enrollment_and_sign_in",
+              "method_signature": "def start_enrollment_and_sign_in(page, tenant_email, timeout=720)",
+              "source_file": "AURA-main (1) 1/AURA-main/helper/enrollment_helper.py",
+              "source_class": "EnrollmentHelper",
+              "what_it_does": "Starts enrollment and signs in the user with retry logic to handle timing issues. Calculates end_time by adding timeout to current time. Enters a while loop that continues until end_time is reached. In each iteration, wraps operations in try-except to catch and ignore exceptions. Calls start_enrollment to navigate to enrollment URL and accept privacy banner. Checks if current URL contains 'printer-selection' - if yes, breaks out of loop as sign-in succeeded. If not on printer selection page, calls HPIDHelper.complete_sign_in with tenant email and default password to perform HPID authentication. If any exception occurs, silently continues to next iteration.",
+              "how_to_import": "from helper.enrollment_helper import EnrollmentHelper",
+              "usage_example": "EnrollmentHelper.start_enrollment_and_sign_in(page, 'testuser@example.com', timeout=600)",
+              "relevance_reason": "This method initiates the enrollment process and authenticates the user, which is the first step in fulfilling the precondition of enrolling a printer with a specific plan."
+            },
+            {
+              "component_type": "method",
+              "method_name": "select_printer",
+              "method_signature": "def select_printer(page, printer_index=0)",
+              "source_file": "AURA-main (1) 1/AURA-main/helper/enrollment_helper.py",
+              "source_class": "EnrollmentHelper",
+              "what_it_does": "Selects a printer from the printer selection page by index and continues. Creates a PrinterSelectionPage instance. Waits for the printer selection page element to be visible with 180 second timeout. Clicks the radio button for the printer at the specified index using nth(printer_index). Clicks the continue button to proceed with the selected printer.",
+              "how_to_import": "from helper.enrollment_helper import EnrollmentHelper",
+              "usage_example": "EnrollmentHelper.select_printer(page, printer_index=0)",
+              "relevance_reason": "This method selects the printer to enroll, which is part of the enrollment precondition setup."
+            },
+            {
+              "component_type": "method",
+              "method_name": "finish_enrollment",
+              "method_signature": "def finish_enrollment(page)",
+              "source_file": "AURA-main (1) 1/AURA-main/helper/enrollment_helper.py",
+              "source_class": "EnrollmentHelper",
+              "what_it_does": "Completes the enrollment process by accepting terms and clicking through to completion. Creates ConfirmationPage and ThankYouPage instances. Attempts to click continue_enrollment_button with 15 second timeout, then click it again, wait for TOS link to be visible, open TOS link in new popup, wait for new tab to load, verify no error message appears, and close the new tab. Waits for terms_agreement_checkbox to be visible with 60 second timeout. Checks the checkbox using force=True. Clicks the enroll_button to submit enrollment. Waits for continue_button on thank you page to be visible with 60 second timeout. Clicks the continue button to complete the flow.",
+              "how_to_import": "from helper.enrollment_helper import EnrollmentHelper",
+              "usage_example": "EnrollmentHelper.finish_enrollment(page)",
+              "relevance_reason": "This method completes the enrollment process, finalizing the precondition of having an enrolled printer with a plan."
+            }
+          ],
+          "precondition_coverage_in_this_batch": "COVERED"
+        },
+        {
+          "precondition_text": "Make sure the Subscription has no free months info.",
+          "precondition_index": 1,
+          "components_found_in_this_batch": [
+            {
+              "component_type": "helper",
+              "helper_name": "GeminiRAHelper",
+              "source_file": "AURA-main (1) 1/AURA-main/helper/gemini_ra_helper.py",
+              "what_it_does": "Comprehensive helper class providing static utility methods for interacting with the Gemini Rails Admin interface in test automation. Contains over 60 methods covering tenant management, subscription operations (state transitions, obsoleting, RPL updates, free months management), billing cycle operations, payment credential management, printer operations, notification verification, cartridge shipping, event shifting for time-based testing, and extensive validation methods for verifying Rails Admin field values.",
+              "how_to_import": "from helper.gemini_ra_helper import GeminiRAHelper",
+              "usage_example": "GeminiRAHelper.access(page)\nGeminiRAHelper.access_tenant_page(page, 'testuser@example.com')\nGeminiRAHelper.verify_rails_admin_info(page, 'Free months', '0', retry=True)",
+              "relevance_reason": "This helper provides access to Gemini Rails Admin where subscription details including free months can be verified and managed. The verify_rails_admin_info method can be used to check that the subscription has no free months."
+            },
+            {
+              "component_type": "method",
+              "method_name": "access",
+              "method_signature": "def access(page)",
+              "source_file": "AURA-main (1) 1/AURA-main/helper/gemini_ra_helper.py",
+              "source_class": "GeminiRAHelper",
+              "what_it_does": "Accesses and authenticates to the Gemini Rails Admin interface. Navigates to the Instant Ink URL concatenated with the Gemini Rails Admin login URL from common config with 120 second timeout. Waits for network idle and load states to ensure page is fully loaded. Checks if an alert warning message is visible indicating already signed in. If alert is visible, logs info message that already signed in to Gemini Rails Admin and returns early without attempting login. If not already signed in, types the rails_admin_user from common config into the admin email field. Types the rails_admin_password from common config into the admin password field. Clicks the admin submit button to log in.",
+              "how_to_import": "from helper.gemini_ra_helper import GeminiRAHelper",
+              "usage_example": "GeminiRAHelper.access(page)",
+              "relevance_reason": "This method provides access to Gemini Rails Admin where subscription free months information can be verified."
+            },
+            {
+              "component_type": "method",
+              "method_name": "access_tenant_page",
+              "method_signature": "def access_tenant_page(page, tenant_email: str)",
+              "source_file": "AURA-main (1) 1/AURA-main/helper/gemini_ra_helper.py",
+              "source_class": "GeminiRAHelper",
+              "what_it_does": "Navigates to a specific tenant's page in Gemini Rails Admin by searching for their email address. Navigates to the Instant Ink URL concatenated with the Gemini fetch tenant URL from common config with 120 second timeout. Calls common.retry_operation() to retry the email filling operation. Clicks the submit button to execute the tenant search. Waits for a table link to appear with 180 second timeout and clicks the first result. Calls RABaseHelper.wait_page_to_load() to wait for the Tenant details page to fully load. Calls common.last_number_from_url() to extract and return the tenant ID from the URL.",
+              "how_to_import": "from helper.gemini_ra_helper import GeminiRAHelper",
+              "usage_example": "tenant_id = GeminiRAHelper.access_tenant_page(page, 'testuser@example.com')",
+              "relevance_reason": "This method navigates to the tenant's subscription page where free months information can be verified."
+            },
+            {
+              "component_type": "method",
+              "method_name": "verify_rails_admin_info",
+              "method_signature": "def verify_rails_admin_info(page, title, value, retry=True)",
+              "source_file": "AURA-main (1) 1/AURA-main/helper/gemini_ra_helper.py",
+              "source_class": "GeminiRAHelper",
+              "what_it_does": "Verifies that a Rails Admin field has the expected value with optional retry logic. Defines an inner operation function that gets the field text using RABaseHelper.get_field_text_by_title() for the specified title. Asserts the field text equals the expected value, providing detailed error message if mismatch. Logs info message confirming the field has the expected value. Returns True on success. Defines an inner on_retry function that logs a retry message and reloads the page, waiting for load state. Sets max_attempts to 12 if retry is True, otherwise 1 (no retries). Calls common.retry_operation() with the operation function, operation name, max_attempts, 10 second delay between attempts, and the on_retry callback if retry is enabled.",
+              "how_to_import": "from helper.gemini_ra_helper import GeminiRAHelper",
+              "usage_example": "GeminiRAHelper.verify_rails_admin_info(page, 'Free months', '0', retry=True)",
+              "relevance_reason": "This method can verify that the subscription's free months field is null or zero, fulfilling the precondition requirement."
+            }
+          ],
+          "precondition_coverage_in_this_batch": "COVERED"
+        },
+        {
+          "precondition_text": "Make sure the subscription is \"subscribed\" status.",
+          "precondition_index": 2,
+          "components_found_in_this_batch": [
+            {
+              "component_type": "method",
+              "method_name": "subscription_to_subscribed",
+              "method_signature": "def subscription_to_subscribed(page)",
+              "source_file": "AURA-main (1) 1/AURA-main/helper/gemini_ra_helper.py",
+              "source_class": "GeminiRAHelper",
+              "what_it_does": "Transitions a subscription to 'subscribed' state if not already in that state. Checks if the current State field value is not 'subscribed' using RABaseHelper.get_field_text_by_title(). If state is not subscribed, calls RABaseHelper.access_menu_of_page() to click the Edit menu option. Locates the subscription_state_event dropdown. Wraps the dropdown selection in try-except to handle cases where the event option may not be available. Attempts to select the 'event_hise_pens_inserted' option which triggers the transition to subscribed state. If an exception occurs during selection, logs the error. Locates the save button with class 'btn btn-primary'. Scrolls the save button into view if needed. Clicks the save button to submit the state change. Calls RABaseHelper.wait_page_to_load() to wait for the Subscription page to reload. Asserts that the State field now equals 'subscribed' using RABaseHelper.get_field_text_by_title().",
+              "how_to_import": "from helper.gemini_ra_helper import GeminiRAHelper",
+              "usage_example": "GeminiRAHelper.subscription_to_subscribed(page)",
+              "relevance_reason": "This method directly fulfills the precondition by ensuring the subscription is in 'subscribed' status. It checks the current state and transitions it if needed."
+            }
+          ],
+          "precondition_coverage_in_this_batch": "COVERED"
+        },
+        {
+          "precondition_text": "Click the Pause Plan button on CIT modal or \"Pause Instant Ink\" link to trigger the pause plan.",
+          "precondition_index": 3,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "No methods found in this batch for pausing a plan via UI interaction. This batch contains enrollment helpers, Rails Admin helpers for backend operations, and email verification helpers, but no page objects or methods for interacting with pause plan UI elements like CIT modal or Pause Instant Ink link. The pause plan functionality likely exists in page object files in other batches."
+        }
+      ],
+      "matched_page_objects": [],
+      "matched_locators": [],
+      "matched_methods": [
+        {
+          "method_name": "start_enrollment_and_sign_in",
+          "method_signature": "def start_enrollment_and_sign_in(page, tenant_email, timeout=720)",
+          "method_type": "action",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/enrollment_helper.py",
+          "source_class": "EnrollmentHelper",
+          "what_it_does": "Starts enrollment and signs in the user with retry logic to handle timing issues. Navigates to enrollment URL, accepts privacy banner, and performs HPID authentication. Includes retry logic with configurable timeout to handle intermittent failures.",
+          "how_to_import": "from helper.enrollment_helper import EnrollmentHelper",
+          "usage_example": "EnrollmentHelper.start_enrollment_and_sign_in(page, 'testuser@example.com', timeout=600)",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Used to initiate enrollment process for precondition 1 - enrolling printer with plan."
+        },
+        {
+          "method_name": "subscription_to_subscribed",
+          "method_signature": "def subscription_to_subscribed(page)",
+          "method_type": "action",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/gemini_ra_helper.py",
+          "source_class": "GeminiRAHelper",
+          "what_it_does": "Transitions a subscription to 'subscribed' state if not already in that state via Gemini Rails Admin. Checks current state, accesses edit menu, selects state transition event, saves changes, and verifies the state is now 'subscribed'.",
+          "how_to_import": "from helper.gemini_ra_helper import GeminiRAHelper",
+          "usage_example": "GeminiRAHelper.subscription_to_subscribed(page)",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            2
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Directly fulfills precondition 3 by ensuring subscription is in 'subscribed' status before test begins."
+        },
+        {
+          "method_name": "verify_rails_admin_info",
+          "method_signature": "def verify_rails_admin_info(page, title, value, retry=True)",
+          "method_type": "verification",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/gemini_ra_helper.py",
+          "source_class": "GeminiRAHelper",
+          "what_it_does": "Verifies that a Rails Admin field has the expected value with optional retry logic. Gets field text by title, asserts it equals expected value, includes retry with page reloads to handle async updates. Allows verification to wait up to 2 minutes for async updates to propagate.",
+          "how_to_import": "from helper.gemini_ra_helper import GeminiRAHelper",
+          "usage_example": "GeminiRAHelper.verify_rails_admin_info(page, 'Free months', '0', retry=True)",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            1
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Can verify precondition 2 by checking that subscription has no free months via Rails Admin field verification."
+        },
+        {
+          "method_name": "event_shift",
+          "method_signature": "def event_shift(page, event_shift, force_billing=True)",
+          "method_type": "action",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/gemini_ra_helper.py",
+          "source_class": "GeminiRAHelper",
+          "what_it_does": "Shifts subscription events forward in time by a specified number of days, optionally forcing billing cycle creation. Accesses edit menu, fills rollback field with days to shift, optionally enables billing cycle creation checkbox, saves changes, and verifies success. Commonly used to simulate time passing in tests without waiting for real time.",
+          "how_to_import": "from helper.gemini_ra_helper import GeminiRAHelper",
+          "usage_example": "GeminiRAHelper.event_shift(page, '32', force_billing=True)",
+          "relevant_to_steps": [
+            3
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "step_action",
+          "relevance_reason": "Directly matches step 3 requirement to 'shift 32 days and trigger billing charge'. This method provides the time manipulation capability needed for the test."
+        }
+      ],
+      "matched_helpers": [
+        {
+          "helper_name": "EnrollmentHelper",
+          "helper_signature": "class EnrollmentHelper (static methods)",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/enrollment_helper.py",
+          "what_it_does": "Comprehensive helper class providing static utility methods for automating HP Instant Ink enrollment flows. Contains over 100 methods covering all enrollment stages including terms acceptance, printer selection, plan selection, shipping address management, billing information, promotional codes, and enrollment completion. Supports multiple enrollment variants.",
+          "how_to_import": "from helper.enrollment_helper import EnrollmentHelper",
+          "usage_example": "EnrollmentHelper.start_enrollment_and_sign_in(page, 'test@example.com')\nEnrollmentHelper.select_printer(page, 0)\nEnrollmentHelper.finish_enrollment(page)",
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_steps": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Provides complete enrollment workflow needed to fulfill precondition 1 - enrolling printer with 50+ pages plan."
+        },
+        {
+          "helper_name": "GeminiRAHelper",
+          "helper_signature": "class GeminiRAHelper (static methods)",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/gemini_ra_helper.py",
+          "what_it_does": "Comprehensive helper class providing static utility methods for interacting with Gemini Rails Admin interface. Contains over 60 methods covering tenant management, subscription operations (state transitions, free months management), billing cycle operations, payment credential management, printer operations, event shifting for time-based testing, and extensive validation methods.",
+          "how_to_import": "from helper.gemini_ra_helper import GeminiRAHelper",
+          "usage_example": "GeminiRAHelper.access(page)\nGeminiRAHelper.access_tenant_page(page, 'test@example.com')\nGeminiRAHelper.subscription_to_subscribed(page)\nGeminiRAHelper.event_shift(page, '32', force_billing=True)",
+          "relevant_to_preconditions": [
+            1,
+            2
+          ],
+          "relevant_to_steps": [
+            3
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Provides Rails Admin access for verifying subscription state (preconditions 2 and 3) and event shifting capability for step 3 time manipulation."
+        },
+        {
+          "helper_name": "EmailHelper",
+          "helper_signature": "class EmailHelper (static methods)",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/email_helper.py",
+          "what_it_does": "Helper module for email-related operations in test automation. Provides utility methods for checking email receipt, extracting email content, and validating email subjects using Gmail API integration. Used for verifying email notifications sent during test flows.",
+          "how_to_import": "from helper.email_helper import EmailHelper",
+          "usage_example": "EmailHelper.sees_email_with_subject('test@example.com', 'Welcome to HP Instant Ink', timeout=300)",
+          "relevant_to_preconditions": [],
+          "relevant_to_steps": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "test_data",
+          "relevance_reason": "While not directly used in this test case, this helper could be used to verify email notifications related to subscription enrollment or pause plan actions if such verification is added to the test."
+        }
+      ],
+      "matched_constants": [],
+      "step_level_mapping": [
+        {
+          "step_number": 1,
+          "step_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "step_test_data": null,
+          "step_expected_result": "Print and Payment History page loads successfully",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No components found in this batch for navigating to or verifying Print and Payment History page. This batch contains enrollment helpers, Rails Admin helpers, and email helpers, but no page objects for Print and Payment History page."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No URL constants or navigation data found in this batch for Print and Payment History page."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 2,
+          "step_action": "Check the Billing Cycle Period card.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the plan pause information is not displayed.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No components found for verifying Billing Cycle Period card elements. This batch contains backend Rails Admin helpers but no UI page objects for Print and Payment History page."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data components found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 3,
+          "step_action": "Even shift 32 days and trigger billing charge.",
+          "step_test_data": "32 days",
+          "step_expected_result": "Time shift and billing charge successful",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "event_shift",
+                "usage": "GeminiRAHelper.event_shift(page, '32', force_billing=True)",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/gemini_ra_helper.py"
+              }
+            ],
+            "helpers": [
+              {
+                "name": "GeminiRAHelper",
+                "usage": "from helper.gemini_ra_helper import GeminiRAHelper\nGeminiRAHelper.access(page)\nGeminiRAHelper.access_tenant_page(page, tenant_email)\nGeminiRAHelper.event_shift(page, '32', force_billing=True)",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/gemini_ra_helper.py"
+              }
+            ]
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "The event_shift method includes internal verification of success via alert checking, but no separate verification methods found for validating the time shift result."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "The '32' days value would be hardcoded as a string parameter to event_shift method."
+          },
+          "step_action_coverage": "COVERED",
+          "step_verification_coverage": "COVERED",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "FULLY_COVERED"
+        },
+        {
+          "step_number": 4,
+          "step_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "step_test_data": null,
+          "step_expected_result": "Page loads with updated data after time shift",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No components found for navigating to or verifying Print and Payment History page."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No navigation data found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 5,
+          "step_action": "Check the Billing Cycle Period card.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the plan pause information is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No UI verification components found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data components found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 6,
+          "step_action": "Check the progress bar.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the Complimentary pages progress bar is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No progress bar verification components found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data components found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 7,
+          "step_action": "For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify a tooltip with correct message is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No tooltip interaction or verification components found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No device type configuration found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 8,
+          "step_action": "Check the Complimentary pages value.",
+          "step_test_data": "0 of 10(Pause Plan) used",
+          "step_expected_result": "Verify the value is displayed as \"0 of 10(Pause Plan) used\".",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No text verification components found for UI elements."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No constants found for expected page usage values."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 9,
+          "step_action": "Check the message below \"Complimentary pages\".",
+          "step_test_data": null,
+          "step_expected_result": "Verify the information with correct plan info is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No message verification components found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data components found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 10,
+          "step_action": "Print some pages(less than the plan, such as 6 pages).",
+          "step_test_data": "6 pages",
+          "step_expected_result": "Print job registered successfully",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No print job simulation or verification components found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No page count constants found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 11,
+          "step_action": "Refresh the dashboard page.",
+          "step_test_data": "6 of 10 used",
+          "step_expected_result": "Verify the \"Complimentary pages\" progress bar is filled with the black color and the value is displayed as correct (such as \"6 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No page refresh or progress bar verification components found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No expected value constants found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 12,
+          "step_action": "Continue to print some pages(more than the plan, such as 15 pages).",
+          "step_test_data": "15 pages total",
+          "step_expected_result": "Additional print job registered successfully",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No print simulation components found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No page count data found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 13,
+          "step_action": "Refresh the dashboard page.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the progress bars for \"Complimentary pages\" and \"Additional pages\" are displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No refresh or dual progress bar verification components found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data components found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 14,
+          "step_action": "Check the \"Additional pages\" progress bar.",
+          "step_test_data": "5 of 10 used",
+          "step_expected_result": "Verify the progress bar is filled with the Yellow color and the value is displayed correctly(such as \"5 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No color or value verification components found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No expected value constants found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 15,
+          "step_action": "Check the icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the info icon is displayed well behind the string \"Additional pages\".",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No icon verification components found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data components found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 16,
+          "step_action": "For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify a tooltip with correct message is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No tooltip components found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No device type data found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 17,
+          "step_action": "Check the message below \"Additional pages\".",
+          "step_test_data": null,
+          "step_expected_result": "Verify a message with the amount of blocks already bought is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No message verification components found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data components found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 18,
+          "step_action": "Check the Complimentary pages progress bar.",
+          "step_test_data": "10 of 10 used",
+          "step_expected_result": "Verify the \"Complimentary pages\" progress bar is full filled with the black color and the value is displayed correctly (such as \"10 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No full progress bar verification components found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No expected value constants found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 19,
+          "step_action": "Check total pages printed info.",
+          "step_test_data": "15 pages",
+          "step_expected_result": "Verify correct number(such as 15 pages) displayed according to the printed pages.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No total pages verification components found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No total pages constants found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 20,
+          "step_action": "Verify screenshot matches expected design",
+          "step_test_data": null,
+          "step_expected_result": "Visual verification of Billing Cycle Period card layout and styling",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No visual regression testing components found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No baseline image data found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 21,
+          "step_action": "Verify all UI elements are properly styled and responsive",
+          "step_test_data": null,
+          "step_expected_result": "All elements display correctly on Desktop, Mobile, and Tablet",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No responsive testing components found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No viewport size data found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        }
+      ],
+      "files_checked_in_this_batch": [
+        "AURA-main (1) 1/AURA-main/helper/email_helper.py",
+        "AURA-main (1) 1/AURA-main/helper/enrollment_helper.py",
+        "AURA-main (1) 1/AURA-main/helper/fulfillment_service_ra_helper.py",
+        "AURA-main (1) 1/AURA-main/helper/fulfillment_simulator_ra_helper.py",
+        "AURA-main (1) 1/AURA-main/helper/gemini_ra_helper.py"
+      ],
+      "batch_analysis_summary": "Batch 8 contains helper modules focused on backend operations and test setup rather than UI page interactions. The batch provides PARTIAL coverage for this test case, specifically for precondition setup (enrollment, subscription state management) and one critical test step (time shifting). However, the batch lacks all UI page objects, locators, and methods needed for the main test flow which involves interacting with the Print and Payment History page, verifying billing cycle cards, progress bars, tooltips, and page usage displays. The EnrollmentHelper provides comprehensive enrollment workflow methods useful for precondition 1. The GeminiRAHelper provides Rails Admin access for subscription state verification (preconditions 2 and 3) and critically includes the event_shift method which directly fulfills step 3's requirement to shift time by 32 days. The batch does not contain any components for: navigating to Print and Payment History page, interacting with billing cycle period cards, verifying progress bars and their colors, handling tooltips, simulating page printing, or verifying page usage values. These components likely exist in page object files in other batches. The FulfillmentServiceRAHelper and FulfillmentSimulatorRAHelper are not relevant to this test case as they deal with order fulfillment rather than subscription billing UI. The EmailHelper is also not directly relevant but could be used for verifying enrollment or pause plan notification emails if such verification is added."
+    }
+  ]
+}
