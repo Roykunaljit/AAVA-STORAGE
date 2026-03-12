@@ -71,12 +71,12 @@ def billing_cycle_period_card(stage_callback):
             # Precondition 4: Pause the plan
             DashboardHelper.first_access(page, tenant_email)
             overview_page = OverviewPage(page)
-            expect(overview_page.elements.pause_plan_link).to_be_visible(timeout=30000)
-            overview_page.elements.pause_plan_link.click()
-            expect(overview_page.elements.pause_plan_modal).to_be_visible(timeout=30000)
-            overview_page.elements.pause_plan_dropdown.select_option("1")
-            overview_page.elements.confirm_pause_plan.click()
-            expect(overview_page.elements.plan_paused_banner).to_be_visible(timeout=30000)
+            expect(overview_page.pause_plan_link).to_be_visible(timeout=30000)
+            overview_page.pause_plan_link.click()
+            expect(overview_page.pause_plan_modal).to_be_visible(timeout=30000)
+            overview_page.pause_plan_dropdown.select_option("1")
+            overview_page.confirm_pause_plan.click()
+            expect(overview_page.plan_paused_banner).to_be_visible(timeout=30000)
             framework_logger.info("Precondition: Plan paused successfully")
 
             # ══════════════════════════════════════════════
@@ -92,12 +92,10 @@ def billing_cycle_period_card(stage_callback):
             print_history_page = PrintHistoryPage(page)
 
             # Step 2: Check the Billing Cycle Period card - verify plan pause info NOT displayed
-            expect(print_history_page.elements.billing_cycle_period_title).to_be_visible(timeout=30000)
-            pause_info_count = page.locator(print_history_page.elements.plan_pause_info_text).count()
-            if pause_info_count == 0:
-                framework_logger.info("Verified: Plan pause information is not displayed (before time shift)")
-            else:
-                framework_logger.warning("Plan pause information found before time shift - unexpected")
+            expect(print_history_page.billing_cycle_period_title).to_be_visible(timeout=30000)
+            pause_info_count = print_history_page.plan_pause_info_text.count()
+            assert pause_info_count == 0, f"Plan pause information should not be displayed before time shift, but found {pause_info_count} elements"
+            framework_logger.info("Verified: Plan pause information is not displayed (before time shift)")
 
             # Step 3: Shift 32 days and trigger billing charge
             GeminiRAHelper.access(page)
@@ -115,33 +113,30 @@ def billing_cycle_period_card(stage_callback):
             print_history_page = PrintHistoryPage(page)
 
             # Step 5: Check the Billing Cycle Period card - verify plan pause info IS displayed
-            expect(print_history_page.elements.billing_cycle_period_title).to_be_visible(timeout=30000)
-            expect(page.locator(print_history_page.elements.plan_pause_info_text).first).to_be_visible(timeout=30000)
+            expect(print_history_page.billing_cycle_period_title).to_be_visible(timeout=30000)
+            expect(print_history_page.plan_pause_info_text.first).to_be_visible(timeout=30000)
             framework_logger.info("Verified: Plan pause information is displayed after time shift")
 
             # Step 6: Check the progress bar - verify Complimentary pages progress bar displayed
-            expect(print_history_page.elements.complimentary_pages_progress_bar).to_be_visible(timeout=30000)
+            expect(print_history_page.complimentary_pages_progress_bar).to_be_visible(timeout=30000)
             framework_logger.info("Verified: Complimentary pages progress bar is displayed")
 
             # Step 7: Hover over info icon (desktop) or click (mobile/tablet)
-            complimentary_info_icon = page.locator(print_history_page.elements.complimentary_pages_info_icon).first
+            complimentary_info_icon = print_history_page.complimentary_pages_info_icon.first
             expect(complimentary_info_icon).to_be_visible(timeout=30000)
             complimentary_info_icon.hover()
-            complimentary_tooltip = page.locator(print_history_page.elements.complimentary_pages_tooltip).first
+            complimentary_tooltip = print_history_page.complimentary_pages_tooltip.first
             expect(complimentary_tooltip).to_be_visible(timeout=10000)
             framework_logger.info("Verified: Complimentary pages tooltip displayed on hover")
 
             # Step 8: Check the Complimentary pages value - verify "0 of 10(Pause Plan) used"
-            complimentary_value = print_history_page.elements.complimentary_pages_value_text
-            expect(page.locator(complimentary_value).first).to_be_visible(timeout=30000)
-            value_text = page.locator(complimentary_value).first.text_content()
-            if "0" in value_text and "10" in value_text and "Pause Plan" in value_text:
-                framework_logger.info(f"Verified: Complimentary pages value displays correctly: {value_text}")
-            else:
-                framework_logger.warning(f"Complimentary pages value unexpected: {value_text}")
+            expect(print_history_page.complimentary_pages_value_text.first).to_be_visible(timeout=30000)
+            value_text = print_history_page.complimentary_pages_value_text.first.text_content()
+            assert "0" in value_text and "10" in value_text and "Pause Plan" in value_text, f"Complimentary pages value incorrect: expected '0 of 10(Pause Plan) used', got: {value_text}"
+            framework_logger.info(f"Verified: Complimentary pages value displays correctly: {value_text}")
 
             # Step 9: Check the message below Complimentary pages
-            complimentary_message = page.locator(print_history_page.elements.complimentary_pages_info_message).first
+            complimentary_message = print_history_page.complimentary_pages_info_message.first
             expect(complimentary_message).to_be_visible(timeout=30000)
             framework_logger.info("Verified: Informational message below Complimentary pages is displayed")
 
@@ -154,12 +149,10 @@ def billing_cycle_period_card(stage_callback):
             page.reload()
             page.wait_for_load_state("domcontentloaded", timeout=30000)
             print_history_page = PrintHistoryPage(page)
-            expect(print_history_page.elements.complimentary_pages_progress_bar).to_be_visible(timeout=30000)
-            value_text_after = page.locator(print_history_page.elements.complimentary_pages_value_text).first.text_content()
-            if "6" in value_text_after and "10" in value_text_after:
-                framework_logger.info(f"Verified: Complimentary pages updated to: {value_text_after}")
-            else:
-                framework_logger.warning(f"Complimentary pages value unexpected after print: {value_text_after}")
+            expect(print_history_page.complimentary_pages_progress_bar).to_be_visible(timeout=30000)
+            value_text_after = print_history_page.complimentary_pages_value_text.first.text_content()
+            assert "6" in value_text_after and "10" in value_text_after, f"Complimentary pages value incorrect after print: expected '6 of 10 used', got: {value_text_after}"
+            framework_logger.info(f"Verified: Complimentary pages updated to: {value_text_after}")
 
             # Step 12: Print 9 more pages (total 15, exceeding limit)
             additional_pages = 9
@@ -170,50 +163,44 @@ def billing_cycle_period_card(stage_callback):
             page.reload()
             page.wait_for_load_state("domcontentloaded", timeout=30000)
             print_history_page = PrintHistoryPage(page)
-            expect(print_history_page.elements.complimentary_pages_progress_bar).to_be_visible(timeout=30000)
-            expect(print_history_page.elements.additional_pages_progress_bar).to_be_visible(timeout=30000)
+            expect(print_history_page.complimentary_pages_progress_bar).to_be_visible(timeout=30000)
+            expect(print_history_page.additional_pages_progress_bar).to_be_visible(timeout=30000)
             framework_logger.info("Verified: Both Complimentary and Additional pages progress bars displayed")
 
             # Step 14: Check Additional pages progress bar - verify yellow color and value
-            additional_value = page.locator(print_history_page.elements.additional_pages_value_text).first
+            additional_value = print_history_page.additional_pages_value_text.first
             expect(additional_value).to_be_visible(timeout=30000)
             additional_text = additional_value.text_content()
-            if "5" in additional_text and "10" in additional_text:
-                framework_logger.info(f"Verified: Additional pages value: {additional_text}")
-            else:
-                framework_logger.warning(f"Additional pages value unexpected: {additional_text}")
+            assert "5" in additional_text and "10" in additional_text, f"Additional pages value incorrect: expected '5 of 10 used', got: {additional_text}"
+            framework_logger.info(f"Verified: Additional pages value: {additional_text}")
 
             # Step 15: Check the info icon for Additional pages
-            additional_info_icon = page.locator(print_history_page.elements.additional_pages_info_icon).first
+            additional_info_icon = print_history_page.additional_pages_info_icon.first
             expect(additional_info_icon).to_be_visible(timeout=30000)
             framework_logger.info("Verified: Additional pages info icon is displayed")
 
             # Step 16: Hover over Additional pages info icon
             additional_info_icon.hover()
-            additional_tooltip = page.locator(print_history_page.elements.additional_pages_tooltip).first
+            additional_tooltip = print_history_page.additional_pages_tooltip.first
             expect(additional_tooltip).to_be_visible(timeout=10000)
             framework_logger.info("Verified: Additional pages tooltip displayed on hover")
 
             # Step 17: Check message below Additional pages
-            additional_message = page.locator(print_history_page.elements.additional_pages_info_message).first
+            additional_message = print_history_page.additional_pages_info_message.first
             expect(additional_message).to_be_visible(timeout=30000)
             framework_logger.info("Verified: Message with blocks bought info is displayed")
 
             # Step 18: Check Complimentary pages progress bar is full
-            complimentary_full_value = page.locator(print_history_page.elements.complimentary_pages_value_text).first.text_content()
-            if "10" in complimentary_full_value and "10" in complimentary_full_value:
-                framework_logger.info(f"Verified: Complimentary pages full: {complimentary_full_value}")
-            else:
-                framework_logger.warning(f"Complimentary pages not full: {complimentary_full_value}")
+            complimentary_full_value = print_history_page.complimentary_pages_value_text.first.text_content()
+            assert "10" in complimentary_full_value and "used" in complimentary_full_value, f"Complimentary pages not full: expected '10 of 10 used', got: {complimentary_full_value}"
+            framework_logger.info(f"Verified: Complimentary pages full: {complimentary_full_value}")
 
             # Step 19: Check total pages printed info
-            total_pages = page.locator(print_history_page.elements.total_printed_pages).first
+            total_pages = print_history_page.total_printed_pages.first
             expect(total_pages).to_be_visible(timeout=30000)
             total_text = total_pages.text_content()
-            if "15" in total_text:
-                framework_logger.info(f"Verified: Total pages printed: {total_text}")
-            else:
-                framework_logger.warning(f"Total pages unexpected: {total_text}")
+            assert "15" in total_text, f"Total pages printed incorrect: expected 15 pages, got: {total_text}"
+            framework_logger.info(f"Verified: Total pages printed: {total_text}")
 
             # Step 20: Visual verification (screenshot comparison would go here)
             framework_logger.info("Visual verification: Billing Cycle Period card layout verified")
