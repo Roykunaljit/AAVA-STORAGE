@@ -88,15 +88,15 @@ def billing_cycle_period_card(stage_callback):
             page.wait_for_load_state("networkidle", timeout=30000)
             page.wait_for_timeout(2000)
             overview_page = OverviewPage(page)
-            expect(overview_page.elements.pause_plan_link).to_be_visible(timeout=30000)
-            overview_page.elements.pause_plan_link.click()
-            expect(overview_page.elements.pause_plan_modal).to_be_visible(timeout=30000)
+            expect(page.locator(overview_page.elements.pause_plan_link)).to_be_visible(timeout=30000)
+            page.locator(overview_page.elements.pause_plan_link).click()
+            expect(page.locator(overview_page.elements.pause_plan_modal)).to_be_visible(timeout=30000)
             pause_duration = 1
-            overview_page.elements.pause_plan_dropdown.select_option(str(pause_duration))
+            page.locator(overview_page.elements.pause_plan_dropdown).select_option(str(pause_duration))
             page.wait_for_timeout(500)
-            overview_page.elements.confirm_pause_plan.click()
+            page.locator(overview_page.elements.confirm_pause_plan).click()
             page.wait_for_timeout(2000)
-            expect(overview_page.elements.plan_paused_banner).to_be_visible(timeout=30000)
+            expect(page.locator(overview_page.elements.plan_paused_banner)).to_be_visible(timeout=30000)
             GeminiRAHelper.access(page)
             GeminiRAHelper.access_tenant_page(page, tenant_email)
             GeminiRAHelper.verify_rails_admin_info(page, "State", "paused")
@@ -113,14 +113,14 @@ def billing_cycle_period_card(stage_callback):
             page.wait_for_load_state("networkidle", timeout=30000)
             
             print_history_page = PrintHistoryPage(page)
-            expect(print_history_page.elements.billing_cycle_period_card).to_be_visible(timeout=30000)
+            expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)
             framework_logger.info("Step 1 completed: Print and Payment History page loaded successfully")
 
             # Step 2: Check the Billing Cycle Period card - verify plan pause info NOT displayed
-            expect(print_history_page.elements.billing_cycle_period_title).to_be_visible(timeout=30000)
+            expect(page.locator(print_history_page.elements.billing_cycle_period_title)).to_be_visible(timeout=30000)
             # Plan pause info should not be visible before time shift
             # If it is visible, the test should fail
-            expect(print_history_page.elements.plan_pause_info_text.first).not_to_be_visible(timeout=5000)
+            expect(page.locator(print_history_page.elements.plan_pause_info_text).first).not_to_be_visible(timeout=5000)
             framework_logger.info("Step 2 completed: Plan pause information is not displayed (before time shift)")
 
             # Step 3: Shift 32 days and trigger billing charge
@@ -141,32 +141,32 @@ def billing_cycle_period_card(stage_callback):
             page.wait_for_load_state("networkidle", timeout=30000)
             
             print_history_page = PrintHistoryPage(page)
-            expect(print_history_page.elements.billing_cycle_period_card).to_be_visible(timeout=30000)
+            expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)
             framework_logger.info("Step 4 completed: Print and Payment History page loaded with updated data")
 
             # Step 5: Check the Billing Cycle Period card - verify plan pause info IS displayed
-            expect(print_history_page.elements.billing_cycle_period_title).to_be_visible(timeout=30000)
-            plan_pause_info = print_history_page.elements.plan_pause_info_text.first
+            expect(page.locator(print_history_page.elements.billing_cycle_period_title)).to_be_visible(timeout=30000)
+            plan_pause_info = page.locator(print_history_page.elements.plan_pause_info_text).first
             expect(plan_pause_info).to_be_visible(timeout=30000)
             expect(plan_pause_info).to_contain_text("pause", timeout=30000)
             framework_logger.info("Step 5 completed: Plan pause information is displayed with correct content")
 
             # Step 6: Check the progress bar - verify Complimentary pages progress bar displayed
-            expect(print_history_page.elements.complimentary_pages_progress_bar).to_be_visible(timeout=30000)
+            expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)
             framework_logger.info("Step 6 completed: Complimentary pages progress bar is displayed")
 
             # Step 7: Hover over info icon (desktop) or click (mobile/tablet)
-            complimentary_info_icon = print_history_page.elements.complimentary_pages_info_icon.first
+            complimentary_info_icon = page.locator(print_history_page.elements.complimentary_pages_info_icon).first
             expect(complimentary_info_icon).to_be_visible(timeout=30000)
             complimentary_info_icon.hover()
             page.wait_for_timeout(1000)
-            complimentary_tooltip = print_history_page.elements.complimentary_pages_tooltip.first
+            complimentary_tooltip = page.locator(print_history_page.elements.complimentary_pages_tooltip).first
             expect(complimentary_tooltip).to_be_visible(timeout=5000)
             expect(complimentary_tooltip).to_contain_text("complimentary", timeout=5000)
             framework_logger.info("Step 7 completed: Complimentary pages tooltip displayed with correct message")
 
             # Step 8: Check the Complimentary pages value - verify "0 of 10(Pause Plan) used"
-            complimentary_value_locator = print_history_page.elements.complimentary_pages_value_text.first
+            complimentary_value_locator = page.locator(print_history_page.elements.complimentary_pages_value_text).first
             expect(complimentary_value_locator).to_be_visible(timeout=30000)
             expect(complimentary_value_locator).to_contain_text("0", timeout=30000)
             expect(complimentary_value_locator).to_contain_text("10", timeout=30000)
@@ -174,7 +174,7 @@ def billing_cycle_period_card(stage_callback):
             framework_logger.info("Step 8 completed: Complimentary pages value displays correctly")
 
             # Step 9: Check the message below Complimentary pages
-            complimentary_message = print_history_page.elements.complimentary_pages_info_message.first
+            complimentary_message = page.locator(print_history_page.elements.complimentary_pages_info_message).first
             expect(complimentary_message).to_be_visible(timeout=30000)
             expect(complimentary_message).to_contain_text("plan", timeout=30000)
             framework_logger.info("Step 9 completed: Informational message displays correct plan info")
@@ -183,6 +183,8 @@ def billing_cycle_period_card(stage_callback):
             pages_to_print = 6
             framework_logger.info(f"Printing {pages_to_print} pages using printer entity_id={printer_data.entity_id}")
             common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid)
+            # Verify print job was registered successfully
+            assert common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid) is not None, "Print job registration failed"
             page.wait_for_timeout(5000)
             framework_logger.info(f"Step 10 completed: Simulated printing {pages_to_print} pages")
 
@@ -191,11 +193,11 @@ def billing_cycle_period_card(stage_callback):
             page.wait_for_load_state("domcontentloaded", timeout=30000)
             page.wait_for_load_state("networkidle", timeout=30000)
             print_history_page = PrintHistoryPage(page)
-            complimentary_bar = print_history_page.elements.complimentary_pages_progress_bar
+            complimentary_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)
             expect(complimentary_bar).to_be_visible(timeout=30000)
             bar_color = complimentary_bar.evaluate("el => window.getComputedStyle(el).getPropertyValue('background-color')")
             framework_logger.info(f"Complimentary pages progress bar color: {bar_color}")
-            complimentary_value_after = print_history_page.elements.complimentary_pages_value_text.first
+            complimentary_value_after = page.locator(print_history_page.elements.complimentary_pages_value_text).first
             expect(complimentary_value_after).to_contain_text("6", timeout=30000)
             expect(complimentary_value_after).to_contain_text("10", timeout=30000)
             framework_logger.info("Step 11 completed: Complimentary pages updated correctly")
@@ -204,6 +206,8 @@ def billing_cycle_period_card(stage_callback):
             additional_pages = 9
             framework_logger.info(f"Printing {additional_pages} more pages (total 15) using printer entity_id={printer_data.entity_id}")
             common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid)
+            # Verify additional print job was registered successfully
+            assert common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid) is not None, "Additional print job registration failed"
             page.wait_for_timeout(5000)
             framework_logger.info(f"Step 12 completed: Simulated printing {additional_pages} more pages (total 15)")
 
@@ -212,50 +216,50 @@ def billing_cycle_period_card(stage_callback):
             page.wait_for_load_state("domcontentloaded", timeout=30000)
             page.wait_for_load_state("networkidle", timeout=30000)
             print_history_page = PrintHistoryPage(page)
-            expect(print_history_page.elements.complimentary_pages_progress_bar).to_be_visible(timeout=30000)
-            expect(print_history_page.elements.additional_pages_progress_bar).to_be_visible(timeout=30000)
+            expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)
+            expect(page.locator(print_history_page.elements.additional_pages_progress_bar)).to_be_visible(timeout=30000)
             framework_logger.info("Step 13 completed: Both Complimentary and Additional pages progress bars displayed")
 
             # Step 14: Check Additional pages progress bar - verify yellow color and value
-            additional_bar = print_history_page.elements.additional_pages_progress_bar
+            additional_bar = page.locator(print_history_page.elements.additional_pages_progress_bar)
             bar_color = additional_bar.evaluate("el => window.getComputedStyle(el).getPropertyValue('background-color')")
             framework_logger.info(f"Additional pages progress bar color: {bar_color}")
-            additional_value = print_history_page.elements.additional_pages_value_text.first
+            additional_value = page.locator(print_history_page.elements.additional_pages_value_text).first
             expect(additional_value).to_be_visible(timeout=30000)
             expect(additional_value).to_contain_text("5", timeout=30000)
             expect(additional_value).to_contain_text("10", timeout=30000)
             framework_logger.info("Step 14 completed: Additional pages value displays correctly")
 
             # Step 15: Check the info icon for Additional pages
-            additional_info_icon = print_history_page.elements.additional_pages_info_icon.first
+            additional_info_icon = page.locator(print_history_page.elements.additional_pages_info_icon).first
             expect(additional_info_icon).to_be_visible(timeout=30000)
             framework_logger.info("Step 15 completed: Additional pages info icon is displayed")
 
             # Step 16: Hover over Additional pages info icon
             additional_info_icon.hover()
             page.wait_for_timeout(1000)
-            additional_tooltip = print_history_page.elements.additional_pages_tooltip.first
+            additional_tooltip = page.locator(print_history_page.elements.additional_pages_tooltip).first
             expect(additional_tooltip).to_be_visible(timeout=5000)
             expect(additional_tooltip).to_contain_text("additional", timeout=5000)
             framework_logger.info("Step 16 completed: Additional pages tooltip displayed with correct message")
 
             # Step 17: Check message below Additional pages
-            additional_message = print_history_page.elements.additional_pages_info_message.first
+            additional_message = page.locator(print_history_page.elements.additional_pages_info_message).first
             expect(additional_message).to_be_visible(timeout=30000)
             expect(additional_message).to_contain_text("block", timeout=30000)
             framework_logger.info("Step 17 completed: Message displays blocks bought information")
 
             # Step 18: Check Complimentary pages progress bar is full
-            complimentary_bar_full = print_history_page.elements.complimentary_pages_progress_bar
+            complimentary_bar_full = page.locator(print_history_page.elements.complimentary_pages_progress_bar)
             bar_color = complimentary_bar_full.evaluate("el => window.getComputedStyle(el).getPropertyValue('background-color')")
             framework_logger.info(f"Complimentary pages progress bar color (full): {bar_color}")
-            complimentary_full_locator = print_history_page.elements.complimentary_pages_value_text.first
+            complimentary_full_locator = page.locator(print_history_page.elements.complimentary_pages_value_text).first
             expect(complimentary_full_locator).to_contain_text("10", timeout=30000)
             expect(complimentary_full_locator).to_contain_text("used", timeout=30000)
             framework_logger.info("Step 18 completed: Complimentary pages full")
 
             # Step 19: Check total pages printed info
-            total_pages = print_history_page.elements.total_printed_pages.first
+            total_pages = page.locator(print_history_page.elements.total_printed_pages).first
             expect(total_pages).to_be_visible(timeout=30000)
             expect(total_pages).to_contain_text("15", timeout=30000)
             framework_logger.info("Step 19 completed: Total pages printed verified")
@@ -269,7 +273,7 @@ def billing_cycle_period_card(stage_callback):
             for width, height in viewports:
                 page.set_viewport_size({"width": width, "height": height})
                 page.wait_for_timeout(1000)
-                expect(print_history_page.elements.billing_cycle_period_card).to_be_visible(timeout=30000)
+                expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)
                 framework_logger.info(f"Step 21 completed: Layout verified at {width}x{height}")
 
             framework_logger.info("=== C44873414 - Billing Cycle Period card flow finished successfully ===")
