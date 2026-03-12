@@ -2,13 +2,13 @@
   "scoring_metadata": {
     "scored_at": "2025-01-15T16:45:00Z",
     "scorer": "Test_Script_Quality_Auditor",
-    "overall_score": 37,
+    "overall_score": 19,
     "score_formula": "100 - (CRITICAL×3 + MODERATE×2 + MINOR×1), floor 0",
-    "total_violations": 21,
-    "critical_count": 21,
+    "total_violations": 27,
+    "critical_count": 27,
     "moderate_count": 0,
     "minor_count": 0,
-    "total_deduction": 63,
+    "total_deduction": 81,
     "total_files_analyzed": 3,
     "files_analyzed": [
       "test_scripts/billing_cycle_period_card.py",
@@ -26,34 +26,22 @@
       "file_path": "test_scripts/billing_cycle_period_card.py",
       "file_type": "test_script",
       "test_case_id": "C44873414",
-      "score": 37,
-      "violation_count": 21,
-      "critical_count": 21,
+      "score": 19,
+      "violation_count": 27,
+      "critical_count": 27,
       "moderate_count": 0,
       "minor_count": 0,
-      "deduction": 63,
+      "deduction": 81,
       "checkpoints_evaluated": 45,
       "checkpoints_passed": [
         "A01",
         "A02",
-        "A03",
         "A04",
-        "A07",
-        "A08",
         "A09",
-        "A10",
         "A13",
-        "A14",
-        "A15",
         "B01",
         "B02",
         "B04",
-        "B05",
-        "C01",
-        "C02",
-        "C03",
-        "C04",
-        "C05",
         "D01",
         "D02",
         "D03",
@@ -68,355 +56,448 @@
         "D12",
         "D13",
         "D14",
-        "D15",
         "E01",
         "E02",
-        "E03",
-        "E04",
         "E05",
         "E06",
         "E07",
         "E08"
       ],
       "checkpoints_failed": [
-        "A12",
-        "B03"
+        "A05",
+        "A12"
       ],
       "violations": [
         {
           "violation_id": "V001",
-          "rule_id": "CHECKPOINT_A12",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_elements_namespace",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(overview_page.elements.pause_plan_link).to_be_visible(timeout=30000)",
-          "expected_code": "expect(page.locator(overview_page.elements.pause_plan_link)).to_be_visible(timeout=30000)",
-          "explanation": "The Elements container stores STRING selectors, not Locator objects. When accessing elements via the .elements. namespace, you must wrap the selector string in page.locator() to create a Playwright Locator object. The current code attempts to use the string selector directly in expect(), which will fail at runtime. This violates the framework's Pattern B for Elements containers.",
+          "current_code": "expect(page.locator(overview_page.elements.pause_plan_link)).to_be_visible(timeout=30000)",
+          "expected_code": "expect(overview_page.pause_plan_link).to_be_visible(timeout=30000)",
+          "explanation": "Inline page.locator() with POM elements reference used in test body. The locator pause_plan_link is defined in overview_page_additions.py and should be accessed as a direct property via overview_page.pause_plan_link, not via page.locator(overview_page.elements.pause_plan_link). This violates Prohibition 6 which states: ZERO page.locator() in test function body.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(overview_page.elements.pause_plan_link).to_be_visible(timeout=30000)",
-            "replace_with": "expect(page.locator(overview_page.elements.pause_plan_link)).to_be_visible(timeout=30000)"
+            "find": "expect(page.locator(overview_page.elements.pause_plan_link)).to_be_visible(timeout=30000)",
+            "replace_with": "expect(overview_page.pause_plan_link).to_be_visible(timeout=30000)"
           }
         },
         {
           "violation_id": "V002",
-          "rule_id": "CHECKPOINT_A12",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_elements_namespace",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "overview_page.elements.pause_plan_link.click()",
-          "expected_code": "page.locator(overview_page.elements.pause_plan_link).click()",
-          "explanation": "The Elements container stores STRING selectors, not Locator objects. When accessing elements via the .elements. namespace, you must wrap the selector string in page.locator() to create a Playwright Locator object before calling action methods like .click(). The current code attempts to call .click() on a string, which will fail at runtime.",
+          "current_code": "page.locator(overview_page.elements.pause_plan_link).click()",
+          "expected_code": "overview_page.pause_plan_link.click()",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "overview_page.elements.pause_plan_link.click()",
-            "replace_with": "page.locator(overview_page.elements.pause_plan_link).click()"
+            "find": "page.locator(overview_page.elements.pause_plan_link).click()",
+            "replace_with": "overview_page.pause_plan_link.click()"
           }
         },
         {
           "violation_id": "V003",
-          "rule_id": "CHECKPOINT_A12",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_elements_namespace",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(overview_page.elements.pause_plan_modal).to_be_visible(timeout=30000)",
-          "expected_code": "expect(page.locator(overview_page.elements.pause_plan_modal)).to_be_visible(timeout=30000)",
-          "explanation": "The Elements container stores STRING selectors, not Locator objects. Must wrap in page.locator() before using in expect().",
+          "current_code": "expect(page.locator(overview_page.elements.pause_plan_modal)).to_be_visible(timeout=30000)",
+          "expected_code": "expect(overview_page.pause_plan_modal).to_be_visible(timeout=30000)",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(overview_page.elements.pause_plan_modal).to_be_visible(timeout=30000)",
-            "replace_with": "expect(page.locator(overview_page.elements.pause_plan_modal)).to_be_visible(timeout=30000)"
+            "find": "expect(page.locator(overview_page.elements.pause_plan_modal)).to_be_visible(timeout=30000)",
+            "replace_with": "expect(overview_page.pause_plan_modal).to_be_visible(timeout=30000)"
           }
         },
         {
           "violation_id": "V004",
-          "rule_id": "CHECKPOINT_A12",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_elements_namespace",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "overview_page.elements.pause_plan_dropdown.select_option(str(pause_duration))",
-          "expected_code": "page.locator(overview_page.elements.pause_plan_dropdown).select_option(str(pause_duration))",
-          "explanation": "The Elements container stores STRING selectors, not Locator objects. Must wrap in page.locator() before calling .select_option().",
+          "current_code": "page.locator(overview_page.elements.pause_plan_dropdown).select_option(str(pause_duration))",
+          "expected_code": "overview_page.pause_plan_dropdown.select_option(str(pause_duration))",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "overview_page.elements.pause_plan_dropdown.select_option(str(pause_duration))",
-            "replace_with": "page.locator(overview_page.elements.pause_plan_dropdown).select_option(str(pause_duration))"
+            "find": "page.locator(overview_page.elements.pause_plan_dropdown).select_option(str(pause_duration))",
+            "replace_with": "overview_page.pause_plan_dropdown.select_option(str(pause_duration))"
           }
         },
         {
           "violation_id": "V005",
-          "rule_id": "CHECKPOINT_A12",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_elements_namespace",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "overview_page.elements.confirm_pause_plan.click()",
-          "expected_code": "page.locator(overview_page.elements.confirm_pause_plan).click()",
-          "explanation": "The Elements container stores STRING selectors, not Locator objects. Must wrap in page.locator() before calling .click().",
+          "current_code": "page.locator(overview_page.elements.confirm_pause_plan).click()",
+          "expected_code": "overview_page.confirm_pause_plan.click()",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "overview_page.elements.confirm_pause_plan.click()",
-            "replace_with": "page.locator(overview_page.elements.confirm_pause_plan).click()"
+            "find": "page.locator(overview_page.elements.confirm_pause_plan).click()",
+            "replace_with": "overview_page.confirm_pause_plan.click()"
           }
         },
         {
           "violation_id": "V006",
-          "rule_id": "CHECKPOINT_A12",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_elements_namespace",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(overview_page.elements.plan_paused_banner).to_be_visible(timeout=30000)",
-          "expected_code": "expect(page.locator(overview_page.elements.plan_paused_banner)).to_be_visible(timeout=30000)",
-          "explanation": "The Elements container stores STRING selectors, not Locator objects. Must wrap in page.locator() before using in expect().",
+          "current_code": "expect(page.locator(overview_page.elements.plan_paused_banner)).to_be_visible(timeout=30000)",
+          "expected_code": "expect(overview_page.plan_paused_banner).to_be_visible(timeout=30000)",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(overview_page.elements.plan_paused_banner).to_be_visible(timeout=30000)",
-            "replace_with": "expect(page.locator(overview_page.elements.plan_paused_banner)).to_be_visible(timeout=30000)"
+            "find": "expect(page.locator(overview_page.elements.plan_paused_banner)).to_be_visible(timeout=30000)",
+            "replace_with": "expect(overview_page.plan_paused_banner).to_be_visible(timeout=30000)"
           }
         },
         {
           "violation_id": "V007",
-          "rule_id": "CHECKPOINT_A12",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_elements_namespace",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(print_history_page.elements.billing_cycle_period_card).to_be_visible(timeout=30000)",
-          "expected_code": "expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)",
-          "explanation": "The Elements container stores STRING selectors, not Locator objects. Must wrap in page.locator() before using in expect().",
+          "current_code": "expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)",
+          "expected_code": "expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(print_history_page.elements.billing_cycle_period_card).to_be_visible(timeout=30000)",
-            "replace_with": "expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)"
+            "find": "expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)",
+            "replace_with": "expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)"
           }
         },
         {
           "violation_id": "V008",
-          "rule_id": "CHECKPOINT_A12",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_elements_namespace",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(print_history_page.elements.billing_cycle_period_title).to_be_visible(timeout=30000)",
-          "expected_code": "expect(page.locator(print_history_page.elements.billing_cycle_period_title)).to_be_visible(timeout=30000)",
-          "explanation": "The Elements container stores STRING selectors, not Locator objects. Must wrap in page.locator() before using in expect().",
+          "current_code": "expect(page.locator(print_history_page.elements.billing_cycle_period_title)).to_be_visible(timeout=30000)",
+          "expected_code": "expect(print_history_page.billing_cycle_period_title).to_be_visible(timeout=30000)",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(print_history_page.elements.billing_cycle_period_title).to_be_visible(timeout=30000)",
-            "replace_with": "expect(page.locator(print_history_page.elements.billing_cycle_period_title)).to_be_visible(timeout=30000)"
+            "find": "expect(page.locator(print_history_page.elements.billing_cycle_period_title)).to_be_visible(timeout=30000)",
+            "replace_with": "expect(print_history_page.billing_cycle_period_title).to_be_visible(timeout=30000)"
           }
         },
         {
           "violation_id": "V009",
-          "rule_id": "CHECKPOINT_A12",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_elements_namespace",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(print_history_page.elements.plan_pause_info_text.first).not_to_be_visible(timeout=5000)",
-          "expected_code": "expect(page.locator(print_history_page.elements.plan_pause_info_text).first).not_to_be_visible(timeout=5000)",
-          "explanation": "The Elements container stores STRING selectors, not Locator objects. Must wrap in page.locator() before calling .first and using in expect().",
+          "current_code": "expect(page.locator(print_history_page.elements.plan_pause_info_text).first).not_to_be_visible(timeout=5000)",
+          "expected_code": "expect(print_history_page.plan_pause_info_text).not_to_be_visible(timeout=5000)",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access. The .first is also unnecessary if the locator is properly defined.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(print_history_page.elements.plan_pause_info_text.first).not_to_be_visible(timeout=5000)",
-            "replace_with": "expect(page.locator(print_history_page.elements.plan_pause_info_text).first).not_to_be_visible(timeout=5000)"
+            "find": "expect(page.locator(print_history_page.elements.plan_pause_info_text).first).not_to_be_visible(timeout=5000)",
+            "replace_with": "expect(print_history_page.plan_pause_info_text).not_to_be_visible(timeout=5000)"
           }
         },
         {
           "violation_id": "V010",
-          "rule_id": "CHECKPOINT_A12",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_elements_namespace",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "plan_pause_info = print_history_page.elements.plan_pause_info_text.first",
-          "expected_code": "plan_pause_info = page.locator(print_history_page.elements.plan_pause_info_text).first",
-          "explanation": "The Elements container stores STRING selectors, not Locator objects. Must wrap in page.locator() before calling .first to create a Locator object.",
+          "current_code": "plan_pause_info = page.locator(print_history_page.elements.plan_pause_info_text).first",
+          "expected_code": "plan_pause_info = print_history_page.plan_pause_info_text",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "plan_pause_info = print_history_page.elements.plan_pause_info_text.first",
-            "replace_with": "plan_pause_info = page.locator(print_history_page.elements.plan_pause_info_text).first"
+            "find": "plan_pause_info = page.locator(print_history_page.elements.plan_pause_info_text).first",
+            "replace_with": "plan_pause_info = print_history_page.plan_pause_info_text"
           }
         },
         {
           "violation_id": "V011",
-          "rule_id": "CHECKPOINT_A12",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_elements_namespace",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(print_history_page.elements.complimentary_pages_progress_bar).to_be_visible(timeout=30000)",
-          "expected_code": "expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)",
-          "explanation": "The Elements container stores STRING selectors, not Locator objects. Must wrap in page.locator() before using in expect().",
+          "current_code": "expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)",
+          "expected_code": "expect(print_history_page.complimentary_pages_progress_bar).to_be_visible(timeout=30000)",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(print_history_page.elements.complimentary_pages_progress_bar).to_be_visible(timeout=30000)",
-            "replace_with": "expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)"
+            "find": "expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)",
+            "replace_with": "expect(print_history_page.complimentary_pages_progress_bar).to_be_visible(timeout=30000)"
           }
         },
         {
           "violation_id": "V012",
-          "rule_id": "CHECKPOINT_A12",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_elements_namespace",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_info_icon = print_history_page.elements.complimentary_pages_info_icon.first",
-          "expected_code": "complimentary_info_icon = page.locator(print_history_page.elements.complimentary_pages_info_icon).first",
-          "explanation": "The Elements container stores STRING selectors, not Locator objects. Must wrap in page.locator() before calling .first.",
+          "current_code": "complimentary_info_icon = page.locator(print_history_page.elements.complimentary_pages_info_icon).first",
+          "expected_code": "complimentary_info_icon = print_history_page.complimentary_pages_info_icon",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_info_icon = print_history_page.elements.complimentary_pages_info_icon.first",
-            "replace_with": "complimentary_info_icon = page.locator(print_history_page.elements.complimentary_pages_info_icon).first"
+            "find": "complimentary_info_icon = page.locator(print_history_page.elements.complimentary_pages_info_icon).first",
+            "replace_with": "complimentary_info_icon = print_history_page.complimentary_pages_info_icon"
           }
         },
         {
           "violation_id": "V013",
-          "rule_id": "CHECKPOINT_A12",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_elements_namespace",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_tooltip = print_history_page.elements.complimentary_pages_tooltip.first",
-          "expected_code": "complimentary_tooltip = page.locator(print_history_page.elements.complimentary_pages_tooltip).first",
-          "explanation": "The Elements container stores STRING selectors, not Locator objects. Must wrap in page.locator() before calling .first.",
+          "current_code": "complimentary_tooltip = page.locator(print_history_page.elements.complimentary_pages_tooltip).first",
+          "expected_code": "complimentary_tooltip = print_history_page.complimentary_pages_tooltip",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_tooltip = print_history_page.elements.complimentary_pages_tooltip.first",
-            "replace_with": "complimentary_tooltip = page.locator(print_history_page.elements.complimentary_pages_tooltip).first"
+            "find": "complimentary_tooltip = page.locator(print_history_page.elements.complimentary_pages_tooltip).first",
+            "replace_with": "complimentary_tooltip = print_history_page.complimentary_pages_tooltip"
           }
         },
         {
           "violation_id": "V014",
-          "rule_id": "CHECKPOINT_A12",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_elements_namespace",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_value_locator = print_history_page.elements.complimentary_pages_value_text.first",
-          "expected_code": "complimentary_value_locator = page.locator(print_history_page.elements.complimentary_pages_value_text).first",
-          "explanation": "The Elements container stores STRING selectors, not Locator objects. Must wrap in page.locator() before calling .first.",
+          "current_code": "complimentary_value_locator = page.locator(print_history_page.elements.complimentary_pages_value_text).first",
+          "expected_code": "complimentary_value_locator = print_history_page.complimentary_pages_value_text",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_value_locator = print_history_page.elements.complimentary_pages_value_text.first",
-            "replace_with": "complimentary_value_locator = page.locator(print_history_page.elements.complimentary_pages_value_text).first"
+            "find": "complimentary_value_locator = page.locator(print_history_page.elements.complimentary_pages_value_text).first",
+            "replace_with": "complimentary_value_locator = print_history_page.complimentary_pages_value_text"
           }
         },
         {
           "violation_id": "V015",
-          "rule_id": "CHECKPOINT_A12",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_elements_namespace",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_message = print_history_page.elements.complimentary_pages_info_message.first",
-          "expected_code": "complimentary_message = page.locator(print_history_page.elements.complimentary_pages_info_message).first",
-          "explanation": "The Elements container stores STRING selectors, not Locator objects. Must wrap in page.locator() before calling .first.",
+          "current_code": "complimentary_message = page.locator(print_history_page.elements.complimentary_pages_info_message).first",
+          "expected_code": "complimentary_message = print_history_page.complimentary_pages_info_message",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_message = print_history_page.elements.complimentary_pages_info_message.first",
-            "replace_with": "complimentary_message = page.locator(print_history_page.elements.complimentary_pages_info_message).first"
+            "find": "complimentary_message = page.locator(print_history_page.elements.complimentary_pages_info_message).first",
+            "replace_with": "complimentary_message = print_history_page.complimentary_pages_info_message"
           }
         },
         {
           "violation_id": "V016",
-          "rule_id": "CHECKPOINT_A12",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_elements_namespace",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_bar = print_history_page.elements.complimentary_pages_progress_bar",
-          "expected_code": "complimentary_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)",
-          "explanation": "The Elements container stores STRING selectors, not Locator objects. Must wrap in page.locator() to create a Locator object before using it.",
+          "current_code": "complimentary_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)",
+          "expected_code": "complimentary_bar = print_history_page.complimentary_pages_progress_bar",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_bar = print_history_page.elements.complimentary_pages_progress_bar",
-            "replace_with": "complimentary_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)"
+            "find": "complimentary_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)",
+            "replace_with": "complimentary_bar = print_history_page.complimentary_pages_progress_bar"
           }
         },
         {
           "violation_id": "V017",
-          "rule_id": "CHECKPOINT_A12",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_elements_namespace",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_value_after = print_history_page.elements.complimentary_pages_value_text.first",
-          "expected_code": "complimentary_value_after = page.locator(print_history_page.elements.complimentary_pages_value_text).first",
-          "explanation": "The Elements container stores STRING selectors, not Locator objects. Must wrap in page.locator() before calling .first.",
+          "current_code": "complimentary_value_after = page.locator(print_history_page.elements.complimentary_pages_value_text).first",
+          "expected_code": "complimentary_value_after = print_history_page.complimentary_pages_value_text",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_value_after = print_history_page.elements.complimentary_pages_value_text.first",
-            "replace_with": "complimentary_value_after = page.locator(print_history_page.elements.complimentary_pages_value_text).first"
+            "find": "complimentary_value_after = page.locator(print_history_page.elements.complimentary_pages_value_text).first",
+            "replace_with": "complimentary_value_after = print_history_page.complimentary_pages_value_text"
           }
         },
         {
           "violation_id": "V018",
-          "rule_id": "CHECKPOINT_A12",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_elements_namespace",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(print_history_page.elements.additional_pages_progress_bar).to_be_visible(timeout=30000)",
-          "expected_code": "expect(page.locator(print_history_page.elements.additional_pages_progress_bar)).to_be_visible(timeout=30000)",
-          "explanation": "The Elements container stores STRING selectors, not Locator objects. Must wrap in page.locator() before using in expect().",
+          "current_code": "expect(page.locator(print_history_page.elements.additional_pages_progress_bar)).to_be_visible(timeout=30000)",
+          "expected_code": "expect(print_history_page.additional_pages_progress_bar).to_be_visible(timeout=30000)",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(print_history_page.elements.additional_pages_progress_bar).to_be_visible(timeout=30000)",
-            "replace_with": "expect(page.locator(print_history_page.elements.additional_pages_progress_bar)).to_be_visible(timeout=30000)"
+            "find": "expect(page.locator(print_history_page.elements.additional_pages_progress_bar)).to_be_visible(timeout=30000)",
+            "replace_with": "expect(print_history_page.additional_pages_progress_bar).to_be_visible(timeout=30000)"
           }
         },
         {
           "violation_id": "V019",
-          "rule_id": "CHECKPOINT_A12",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_elements_namespace",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "additional_bar = print_history_page.elements.additional_pages_progress_bar",
-          "expected_code": "additional_bar = page.locator(print_history_page.elements.additional_pages_progress_bar)",
-          "explanation": "The Elements container stores STRING selectors, not Locator objects. Must wrap in page.locator() to create a Locator object.",
+          "current_code": "additional_bar = page.locator(print_history_page.elements.additional_pages_progress_bar)",
+          "expected_code": "additional_bar = print_history_page.additional_pages_progress_bar",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "additional_bar = print_history_page.elements.additional_pages_progress_bar",
-            "replace_with": "additional_bar = page.locator(print_history_page.elements.additional_pages_progress_bar)"
+            "find": "additional_bar = page.locator(print_history_page.elements.additional_pages_progress_bar)",
+            "replace_with": "additional_bar = print_history_page.additional_pages_progress_bar"
           }
         },
         {
           "violation_id": "V020",
-          "rule_id": "CHECKPOINT_B03",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_assertion",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid)\npage.wait_for_timeout(5000)\nframework_logger.info(f\"Step 10 completed: Simulated printing {pages_to_print} pages\")",
-          "expected_code": "common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid)\npage.wait_for_timeout(5000)\n# Verify print job was registered successfully\nassert common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid) is not None, \"Print job registration failed\"\nframework_logger.info(f\"Step 10 completed: Simulated printing {pages_to_print} pages\")",
-          "explanation": "Step 10 expected result is 'Print job registered successfully' but the script has no assertion verifying the print job was registered. The test case requires verification that the print simulation succeeded before proceeding. Add an assertion to verify the API call returned successfully.",
-          "fix_action": "ADD_ASSERTION",
+          "current_code": "additional_value = page.locator(print_history_page.elements.additional_pages_value_text).first",
+          "expected_code": "additional_value = print_history_page.additional_pages_value_text",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
+          "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "insert_after": "common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid)",
-            "assertion_code": "# Verify print job was registered successfully\nassert common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid) is not None, \"Print job registration failed\""
+            "find": "additional_value = page.locator(print_history_page.elements.additional_pages_value_text).first",
+            "replace_with": "additional_value = print_history_page.additional_pages_value_text"
           }
         },
         {
           "violation_id": "V021",
-          "rule_id": "CHECKPOINT_B03",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_assertion",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid)\npage.wait_for_timeout(5000)\nframework_logger.info(f\"Step 12 completed: Simulated printing {additional_pages} more pages (total 15)\")",
-          "expected_code": "common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid)\npage.wait_for_timeout(5000)\n# Verify additional print job was registered successfully\nassert common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid) is not None, \"Additional print job registration failed\"\nframework_logger.info(f\"Step 12 completed: Simulated printing {additional_pages} more pages (total 15)\")",
-          "explanation": "Step 12 expected result is 'Additional print job registered successfully' but the script has no assertion verifying the print job was registered. The test case requires verification that the print simulation succeeded before proceeding. Add an assertion to verify the API call returned successfully.",
-          "fix_action": "ADD_ASSERTION",
+          "current_code": "additional_info_icon = page.locator(print_history_page.elements.additional_pages_info_icon).first",
+          "expected_code": "additional_info_icon = print_history_page.additional_pages_info_icon",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
+          "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "insert_after": "common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid)",
-            "assertion_code": "# Verify additional print job was registered successfully\nassert common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid) is not None, \"Additional print job registration failed\""
+            "find": "additional_info_icon = page.locator(print_history_page.elements.additional_pages_info_icon).first",
+            "replace_with": "additional_info_icon = print_history_page.additional_pages_info_icon"
+          }
+        },
+        {
+          "violation_id": "V022",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "inline_page_locator",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "additional_tooltip = page.locator(print_history_page.elements.additional_pages_tooltip).first",
+          "expected_code": "additional_tooltip = print_history_page.additional_pages_tooltip",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "additional_tooltip = page.locator(print_history_page.elements.additional_pages_tooltip).first",
+            "replace_with": "additional_tooltip = print_history_page.additional_pages_tooltip"
+          }
+        },
+        {
+          "violation_id": "V023",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "inline_page_locator",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "additional_message = page.locator(print_history_page.elements.additional_pages_info_message).first",
+          "expected_code": "additional_message = print_history_page.additional_pages_info_message",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "additional_message = page.locator(print_history_page.elements.additional_pages_info_message).first",
+            "replace_with": "additional_message = print_history_page.additional_pages_info_message"
+          }
+        },
+        {
+          "violation_id": "V024",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "inline_page_locator",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "complimentary_bar_full = page.locator(print_history_page.elements.complimentary_pages_progress_bar)",
+          "expected_code": "complimentary_bar_full = print_history_page.complimentary_pages_progress_bar",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "complimentary_bar_full = page.locator(print_history_page.elements.complimentary_pages_progress_bar)",
+            "replace_with": "complimentary_bar_full = print_history_page.complimentary_pages_progress_bar"
+          }
+        },
+        {
+          "violation_id": "V025",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "inline_page_locator",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "complimentary_full_locator = page.locator(print_history_page.elements.complimentary_pages_value_text).first",
+          "expected_code": "complimentary_full_locator = print_history_page.complimentary_pages_value_text",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "complimentary_full_locator = page.locator(print_history_page.elements.complimentary_pages_value_text).first",
+            "replace_with": "complimentary_full_locator = print_history_page.complimentary_pages_value_text"
+          }
+        },
+        {
+          "violation_id": "V026",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "inline_page_locator",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "total_pages = page.locator(print_history_page.elements.total_printed_pages).first",
+          "expected_code": "total_pages = print_history_page.total_printed_pages",
+          "explanation": "Inline page.locator() with POM elements reference. Should use direct property access.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "total_pages = page.locator(print_history_page.elements.total_printed_pages).first",
+            "replace_with": "total_pages = print_history_page.total_printed_pages"
+          }
+        },
+        {
+          "violation_id": "V027",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "inline_page_locator",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)",
+          "expected_code": "expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)",
+          "explanation": "Inline page.locator() with POM elements reference in responsive verification loop. Should use direct property access.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)",
+            "replace_with": "expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)"
           }
         }
       ]
@@ -470,25 +551,23 @@
   ],
   "violation_summary": {
     "by_severity": {
-      "CRITICAL": 21,
+      "CRITICAL": 27,
       "MODERATE": 0,
       "MINOR": 0
     },
     "by_category": {
-      "missing_elements_namespace": 19,
-      "missing_assertion": 2
+      "inline_page_locator": 27
     },
     "by_rule": {
-      "CHECKPOINT_A12": 19,
-      "CHECKPOINT_B03": 2
+      "PROHIBITION_6": 27
     },
-    "most_common_violation": "CHECKPOINT_A12 (missing_elements_namespace) — 19 occurrences",
-    "most_impacted_file": "test_scripts/billing_cycle_period_card.py — 21 violations, score 37"
+    "most_common_violation": "PROHIBITION_6 (inline_page_locator) — 27 occurrences",
+    "most_impacted_file": "test_scripts/billing_cycle_period_card.py — 27 violations, score 19"
   },
   "fix_priority_order": [
     {
       "priority": 1,
-      "category": "missing_elements_namespace",
+      "category": "inline_page_locator",
       "severity": "CRITICAL",
       "violation_ids": [
         "V001",
@@ -509,29 +588,22 @@
         "V016",
         "V017",
         "V018",
-        "V019"
-      ],
-      "total_count": 19,
-      "total_deduction": 57,
-      "affected_files": [
-        "test_scripts/billing_cycle_period_card.py"
-      ],
-      "fix_approach": "The Elements container in page objects stores STRING selectors, not Locator objects. Every access to page_obj.elements.selector_name must be wrapped in page.locator() to create a Playwright Locator object before using it in expect() assertions or calling action methods like .click(), .fill(), .select_option(), etc. This is the framework's Pattern B for Elements containers. Replace all instances of 'overview_page.elements.X' and 'print_history_page.elements.X' with 'page.locator(overview_page.elements.X)' and 'page.locator(print_history_page.elements.X)' respectively throughout the test script."
-    },
-    {
-      "priority": 2,
-      "category": "missing_assertion",
-      "severity": "CRITICAL",
-      "violation_ids": [
+        "V019",
         "V020",
-        "V021"
+        "V021",
+        "V022",
+        "V023",
+        "V024",
+        "V025",
+        "V026",
+        "V027"
       ],
-      "total_count": 2,
-      "total_deduction": 6,
+      "total_count": 27,
+      "total_deduction": 81,
       "affected_files": [
         "test_scripts/billing_cycle_period_card.py"
       ],
-      "fix_approach": "Add assertions after each print job simulation API call (common.send_rtp_devicestatus) to verify the operation succeeded. The test case expected results require verification that print jobs were registered successfully. Add assert statements checking the API call return value is not None or checking for success status before proceeding with the test flow."
+      "fix_approach": "Replace every page.locator(page_obj.elements.selector) pattern with direct property access page_obj.selector. The page additions files define locators in Elements classes that should be accessed as direct properties on the page object, not via page.locator(). For each occurrence, remove the page.locator() wrapper and the .elements. namespace, and remove any .first calls. The page object's __getattr__ method will automatically convert the property access to a locator."
     }
   ]
 }
