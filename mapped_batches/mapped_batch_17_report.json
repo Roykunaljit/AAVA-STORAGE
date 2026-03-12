@@ -1,0 +1,1466 @@
+{
+  "mapping_metadata": {
+    "mapping_batch_id": 17,
+    "total_mapping_batches": 18,
+    "remaining_after_this": 1,
+    "codebase_batch_report_path": "codebase_batches/batch_17_report.json",
+    "test_case_source": "test_case_analysis/test_case_analysis.json",
+    "analyzed_at": "2025-01-20T12:00:00Z",
+    "analyzer": "Senior Test Automation Mapping Specialist Agent",
+    "mapping_dimensions": [
+      "preconditions",
+      "step_actions",
+      "expected_results",
+      "test_data",
+      "overall_flow"
+    ],
+    "files_in_this_batch": [
+      "AURA-main (1) 1/AURA-main/test_flows_common/locale_map.json",
+      "AURA-main (1) 1/AURA-main/test_flows_common/offers.json",
+      "AURA-main (1) 1/AURA-main/test_flows_common/payment_method_data.json",
+      "AURA-main (1) 1/AURA-main/test_flows_common/printer_profiles.json",
+      "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py"
+    ],
+    "summary": {
+      "total_test_cases_evaluated": 1,
+      "test_cases_with_relevant_components": 1,
+      "test_cases_without_relevant_components": 0,
+      "total_page_objects_matched": 0,
+      "total_locators_matched": 0,
+      "total_methods_matched": 23,
+      "total_helpers_matched": 4,
+      "total_constants_matched": 8,
+      "total_precondition_methods_matched": 8,
+      "total_verification_methods_matched": 5,
+      "total_test_data_components_matched": 10
+    }
+  },
+  "test_case_mappings": [
+    {
+      "test_case_id": "C44873414",
+      "test_case_title": "Billing Cycle Period card",
+      "test_case_description": "Test case to verify the Billing Cycle Period card display and behavior on Print and Payment History page when a subscription plan is paused",
+      "module": "HP Instant Ink",
+      "has_relevant_components_in_this_batch": true,
+      "precondition_mapping": [
+        {
+          "precondition_text": "Enroll the Ink printer with 50 pages plan or higher.",
+          "precondition_index": 0,
+          "components_found_in_this_batch": [
+            {
+              "component_type": "method",
+              "method_name": "create_virtual_printer",
+              "method_signature": "def create_virtual_printer()",
+              "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+              "source_class": null,
+              "what_it_does": "Creates a virtual printer through the G2 simulator API with retry logic for each step. Orchestrates printer creation, registration, postcard generation, and fingerprint retrieval.",
+              "how_to_import": "from test_flows_common import create_virtual_printer",
+              "usage_example": "printer = create_virtual_printer(); entity_id = printer.entity_id; model_number = printer.model_number",
+              "relevance_reason": "This method creates a virtual printer which is required to fulfill the precondition of enrolling a printer. It returns a PrinterData object containing all printer identification data needed for enrollment."
+            },
+            {
+              "component_type": "method",
+              "method_name": "create_and_claim_virtual_printer",
+              "method_signature": "def create_and_claim_virtual_printer()",
+              "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+              "source_class": null,
+              "what_it_does": "Orchestrates the complete flow of creating and claiming a virtual printer. Calls get_org_aware_token(), create_virtual_printer(), and claim_virtual_printer() in sequence.",
+              "how_to_import": "from test_flows_common import create_and_claim_virtual_printer",
+              "usage_example": "printer = create_and_claim_virtual_printer(); serial = printer.entity_id",
+              "relevance_reason": "This high-level method combines printer creation and claiming, which is part of the enrollment process required by this precondition."
+            },
+            {
+              "component_type": "method",
+              "method_name": "create_and_claim_virtual_printer_and_add_address",
+              "method_signature": "def create_and_claim_virtual_printer_and_add_address()",
+              "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+              "source_class": null,
+              "what_it_does": "Complete setup function that creates printer, claims it, and adds shipping address. Most comprehensive printer setup for enrollment testing.",
+              "how_to_import": "from test_flows_common import create_and_claim_virtual_printer_and_add_address",
+              "usage_example": "printer = create_and_claim_virtual_printer_and_add_address()",
+              "relevance_reason": "This is the most complete printer setup method that prepares everything needed for enrollment including printer and address, fulfilling the enrollment precondition."
+            },
+            {
+              "component_type": "method",
+              "method_name": "claim_virtual_printer",
+              "method_signature": "def claim_virtual_printer(org_token, tenant_id, model_number, device_uuid, postcard, fingerprint)",
+              "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+              "source_class": null,
+              "what_it_does": "Claims a virtual printer to a tenant account through the UCDE API with retry logic. Associates printer with user's tenant account.",
+              "how_to_import": "from test_flows_common import claim_virtual_printer",
+              "usage_example": "claim_virtual_printer(org_token, tenant_id, '1G5L3A', 'uuid-string', 'postcard-base64', 'fingerprint-base64')",
+              "relevance_reason": "Claiming the printer to the tenant account is a critical step in the enrollment process required by this precondition."
+            },
+            {
+              "component_type": "test_data",
+              "constant_name": "printer_profiles.json",
+              "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/printer_profiles.json",
+              "what_it_does": "Contains printer SKU profiles organized by model and region, including SKU numbers, easy enrollment flags, and supply variant types (IIC or IPH).",
+              "how_to_import": "from core.utils import load_json_file; printer_profiles = load_json_file('test_flows_common/printer_profiles.json')",
+              "usage_example": "printer_profiles = load_json_file('test_flows_common/printer_profiles.json'); manhattan_skus = printer_profiles['manhattan_yeti']['skus']['NA']",
+              "relevance_reason": "This file provides the printer model and SKU data needed to create a virtual printer with the correct configuration for enrollment."
+            },
+            {
+              "component_type": "method",
+              "method_name": "get_plans_data",
+              "method_signature": "def get_plans_data()",
+              "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+              "source_class": null,
+              "what_it_does": "Retrieves all Instant Ink plans data from Agena API for the current country, including plans with 50+ pages.",
+              "how_to_import": "from test_flows_common import get_plans_data",
+              "usage_example": "plans = get_plans_data(); plan_50 = [p for p in plans if p['pages'] >= 50][0]",
+              "relevance_reason": "This method retrieves plan data which is needed to enroll the printer with a 50+ pages plan as required by the precondition."
+            },
+            {
+              "component_type": "method",
+              "method_name": "get_filtered_plan_data",
+              "method_signature": "def get_filtered_plan_data(key='pages', value=100)",
+              "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+              "source_class": null,
+              "what_it_does": "Retrieves plans filtered by a specific attribute value, such as page count.",
+              "how_to_import": "from test_flows_common import get_filtered_plan_data",
+              "usage_example": "plans_100 = get_filtered_plan_data('pages', 100)",
+              "relevance_reason": "This method can filter plans to find those with 50+ pages, supporting the enrollment precondition requirement."
+            }
+          ],
+          "precondition_coverage_in_this_batch": "COVERED"
+        },
+        {
+          "precondition_text": "Make sure the Subscription has no free months info.",
+          "precondition_index": 1,
+          "components_found_in_this_batch": [
+            {
+              "component_type": "method",
+              "method_name": "subscription_data_from_gemini",
+              "method_signature": "def subscription_data_from_gemini(id)",
+              "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+              "source_class": null,
+              "what_it_does": "Retrieves subscription data from Gemini API using service token. Returns complete subscription data including free months information.",
+              "how_to_import": "from test_flows_common import subscription_data_from_gemini",
+              "usage_example": "sub_data = subscription_data_from_gemini('12345'); free_months = sub_data.get('freeMonths', 0)",
+              "relevance_reason": "This method retrieves full subscription data which can be used to verify that the subscription has no free months as required by this precondition."
+            },
+            {
+              "component_type": "method",
+              "method_name": "get_subscription_state",
+              "method_signature": "def get_subscription_state(id)",
+              "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+              "source_class": null,
+              "what_it_does": "Extracts subscription state from Gemini subscription data. Can be extended to check free months field.",
+              "how_to_import": "from test_flows_common import get_subscription_state",
+              "usage_example": "state = get_subscription_state('12345')",
+              "relevance_reason": "While this method focuses on state, it accesses subscription data that includes free months information, which can be verified for this precondition."
+            }
+          ],
+          "precondition_coverage_in_this_batch": "COVERED"
+        },
+        {
+          "precondition_text": "Make sure the subscription is \"subscribed\" status.",
+          "precondition_index": 2,
+          "components_found_in_this_batch": [
+            {
+              "component_type": "method",
+              "method_name": "get_subscription_state",
+              "method_signature": "def get_subscription_state(id)",
+              "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+              "source_class": null,
+              "what_it_does": "Extracts subscription state from Gemini subscription data. Returns the subscriptionState value.",
+              "how_to_import": "from test_flows_common import get_subscription_state",
+              "usage_example": "state = get_subscription_state('12345'); assert state == 'SUBSCRIBED'",
+              "relevance_reason": "This method directly retrieves the subscription state, which can be used to verify the subscription is in 'subscribed' status as required by this precondition."
+            },
+            {
+              "component_type": "method",
+              "method_name": "validate_subscription_state",
+              "method_signature": "def validate_subscription_state(sub_id, expected_state)",
+              "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+              "source_class": null,
+              "what_it_does": "Validates that subscription reaches expected state within 60 seconds using polling. Asserts state matches expected value.",
+              "how_to_import": "from test_flows_common import validate_subscription_state",
+              "usage_example": "validate_subscription_state('12345', 'SUBSCRIBED')",
+              "relevance_reason": "This method validates subscription state with polling and assertion, perfect for verifying the subscription is in 'subscribed' status before the test begins."
+            },
+            {
+              "component_type": "method",
+              "method_name": "subscription_data_from_gemini",
+              "method_signature": "def subscription_data_from_gemini(id)",
+              "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+              "source_class": null,
+              "what_it_does": "Retrieves complete subscription data from Gemini API including subscription state.",
+              "how_to_import": "from test_flows_common import subscription_data_from_gemini",
+              "usage_example": "sub_data = subscription_data_from_gemini('12345'); state = sub_data['userSubInfo']['subscriptionInfo']['minSubInfo']['subscriptionState']",
+              "relevance_reason": "This method provides full subscription data which includes the subscription state, allowing verification of the 'subscribed' status precondition."
+            }
+          ],
+          "precondition_coverage_in_this_batch": "COVERED"
+        },
+        {
+          "precondition_text": "Click the Pause Plan button on CIT modal or \"Pause Instant Ink\" link to trigger the pause plan.",
+          "precondition_index": 3,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "No UI page objects, locators, or methods for clicking pause plan buttons or links were found in this batch. This batch contains only test data files (JSON) and backend helper functions (test_flows_common.py) with no page objects for the CIT modal or Instant Ink dashboard. The pause plan UI interaction components likely exist in other batches containing page object files for the dashboard or modal dialogs."
+        }
+      ],
+      "matched_page_objects": [],
+      "matched_locators": [],
+      "matched_methods": [
+        {
+          "method_name": "create_virtual_printer",
+          "method_signature": "def create_virtual_printer()",
+          "method_type": "api_call",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Creates a virtual printer through the G2 simulator API with retry logic for each step. Returns PrinterData tuple with entity_id, model_number, device_uuid, cloud_id, postcard, and fingerprint.",
+          "how_to_import": "from test_flows_common import create_virtual_printer",
+          "usage_example": "printer = create_virtual_printer(); entity_id = printer.entity_id; cloud_id = printer.cloud_id",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Creates the virtual printer needed for precondition 0 (printer enrollment)."
+        },
+        {
+          "method_name": "create_and_claim_virtual_printer",
+          "method_signature": "def create_and_claim_virtual_printer()",
+          "method_type": "action",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Orchestrates complete printer creation and claiming flow. Combines get_org_aware_token(), create_virtual_printer(), and claim_virtual_printer().",
+          "how_to_import": "from test_flows_common import create_and_claim_virtual_printer",
+          "usage_example": "printer = create_and_claim_virtual_printer(); serial = printer.entity_id",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "High-level method that creates and claims printer for precondition 0 enrollment."
+        },
+        {
+          "method_name": "create_and_claim_virtual_printer_and_add_address",
+          "method_signature": "def create_and_claim_virtual_printer_and_add_address()",
+          "method_type": "action",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Most complete printer setup including creation, claiming, and address addition. Prepares everything for enrollment.",
+          "how_to_import": "from test_flows_common import create_and_claim_virtual_printer_and_add_address",
+          "usage_example": "printer = create_and_claim_virtual_printer_and_add_address()",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Complete printer setup for precondition 0 enrollment including address."
+        },
+        {
+          "method_name": "claim_virtual_printer",
+          "method_signature": "def claim_virtual_printer(org_token, tenant_id, model_number, device_uuid, postcard, fingerprint)",
+          "method_type": "api_call",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Claims virtual printer to tenant account through UCDE API with retry logic.",
+          "how_to_import": "from test_flows_common import claim_virtual_printer",
+          "usage_example": "claim_virtual_printer(org_token, tenant_id, '1G5L3A', 'uuid-string', 'postcard-base64', 'fingerprint-base64')",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Claims printer to tenant for precondition 0 enrollment."
+        },
+        {
+          "method_name": "get_plans_data",
+          "method_signature": "def get_plans_data()",
+          "method_type": "api_call",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Retrieves all Instant Ink plans data from Agena API for current country.",
+          "how_to_import": "from test_flows_common import get_plans_data",
+          "usage_example": "plans = get_plans_data(); plan_50 = [p for p in plans if p['pages'] >= 50][0]",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Retrieves plan data for 50+ pages plan enrollment in precondition 0."
+        },
+        {
+          "method_name": "get_filtered_plan_data",
+          "method_signature": "def get_filtered_plan_data(key='pages', value=100)",
+          "method_type": "data_provider",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Retrieves plans filtered by attribute value like page count.",
+          "how_to_import": "from test_flows_common import get_filtered_plan_data",
+          "usage_example": "plans_100 = get_filtered_plan_data('pages', 100)",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Filters plans to find 50+ pages plans for precondition 0."
+        },
+        {
+          "method_name": "subscription_data_from_gemini",
+          "method_signature": "def subscription_data_from_gemini(id)",
+          "method_type": "api_call",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Retrieves complete subscription data from Gemini API including state and free months.",
+          "how_to_import": "from test_flows_common import subscription_data_from_gemini",
+          "usage_example": "sub_data = subscription_data_from_gemini('12345'); state = sub_data['userSubInfo']['subscriptionInfo']['minSubInfo']['subscriptionState']",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            1,
+            2
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Retrieves subscription data to verify no free months (precondition 1) and subscribed status (precondition 2)."
+        },
+        {
+          "method_name": "get_subscription_state",
+          "method_signature": "def get_subscription_state(id)",
+          "method_type": "getter",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Extracts subscription state from Gemini subscription data.",
+          "how_to_import": "from test_flows_common import get_subscription_state",
+          "usage_example": "state = get_subscription_state('12345'); assert state == 'SUBSCRIBED'",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            1,
+            2
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Gets subscription state to verify subscribed status for preconditions 1 and 2."
+        },
+        {
+          "method_name": "validate_subscription_state",
+          "method_signature": "def validate_subscription_state(sub_id, expected_state)",
+          "method_type": "verification",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Validates subscription reaches expected state within 60 seconds with polling and assertion.",
+          "how_to_import": "from test_flows_common import validate_subscription_state",
+          "usage_example": "validate_subscription_state('12345', 'SUBSCRIBED')",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            2
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Validates subscription is in subscribed status for precondition 2."
+        },
+        {
+          "method_name": "send_rtp_devicestatus",
+          "method_signature": "def send_rtp_devicestatus(entity_id, cloud_id, device_uuid)",
+          "method_type": "api_call",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Sends RTP device status telemetry to G2 simulator. Can be used to simulate printer activity and page printing by updating impression counts in the binary payload.",
+          "how_to_import": "from test_flows_common import send_rtp_devicestatus",
+          "usage_example": "response = send_rtp_devicestatus('ABC123', 'cloud-id', 'uuid-string')",
+          "relevant_to_steps": [
+            10,
+            12
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "step_action",
+          "relevance_reason": "Can simulate printing pages for steps 10 and 12 by sending device status with updated page counts."
+        },
+        {
+          "method_name": "extract_numbers_from_text",
+          "method_signature": "def extract_numbers_from_text(text: str) -> list",
+          "method_type": "utility",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Extracts all numeric values (integers and decimals) from text string using regex.",
+          "how_to_import": "from test_flows_common import extract_numbers_from_text",
+          "usage_example": "numbers = extract_numbers_from_text('6 of 10 used'); assert numbers == ['6', '10']",
+          "relevant_to_steps": [
+            8,
+            11,
+            14,
+            18,
+            19
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            8,
+            11,
+            14,
+            18,
+            19
+          ],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "Extracts numbers from page usage text like '6 of 10 used' for verification in steps 8, 11, 14, 18, 19."
+        },
+        {
+          "method_name": "parse_flexible_date",
+          "method_signature": "def parse_flexible_date(date_string)",
+          "method_type": "utility",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Parses date strings in multiple formats into datetime objects.",
+          "how_to_import": "from test_flows_common import parse_flexible_date",
+          "usage_example": "dt = parse_flexible_date('Sep 14, 2025, 2:41:11 PM')",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Can parse dates if billing cycle dates need to be validated."
+        },
+        {
+          "method_name": "extract_date_from_text",
+          "method_signature": "def extract_date_from_text(text: str)",
+          "method_type": "utility",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Extracts and parses date from text containing mixed content using regex patterns.",
+          "how_to_import": "from test_flows_common import extract_date_from_text",
+          "usage_example": "dt = extract_date_from_text('Next shipment: Sep 14, 2025, 2:41:11 PM')",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Can extract dates from billing cycle text if date validation is needed."
+        },
+        {
+          "method_name": "get_font_details",
+          "method_signature": "def get_font_details(element)",
+          "method_type": "getter",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Extracts comprehensive font and text styling details from element using JavaScript evaluation of computed styles.",
+          "how_to_import": "from test_flows_common import get_font_details",
+          "usage_example": "font_details = get_font_details(heading_element); assert font_details['font-family'] == 'Forma DJR UI'",
+          "relevant_to_steps": [
+            20,
+            21
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            20,
+            21
+          ],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "Can extract styling details for visual verification in steps 20 and 21."
+        },
+        {
+          "method_name": "verify_font_details_property_value",
+          "method_signature": "def verify_font_details_property_value(element, property, value)",
+          "method_type": "verification",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Verifies CSS property has expected value with assertion.",
+          "how_to_import": "from test_flows_common import verify_font_details_property_value",
+          "usage_example": "verify_font_details_property_value(heading, 'font-size', '24px')",
+          "relevant_to_steps": [
+            20,
+            21
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            20,
+            21
+          ],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "Can verify styling properties for visual validation in steps 20 and 21."
+        },
+        {
+          "method_name": "is_element_actionable",
+          "method_signature": "def is_element_actionable(page, locator)",
+          "method_type": "verification",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Checks if element is actionable by verifying it's the topmost element at its center point.",
+          "how_to_import": "from test_flows_common import is_element_actionable",
+          "usage_example": "if is_element_actionable(page, button_locator): button_locator.click()",
+          "relevant_to_steps": [
+            7,
+            16
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "step_action",
+          "relevance_reason": "Can verify info icons are actionable before hover/click in steps 7 and 16."
+        },
+        {
+          "method_name": "get_org_aware_token",
+          "method_signature": "def get_org_aware_token(email=None)",
+          "method_type": "api_call",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Obtains organization-aware user access token through multi-step token exchange process.",
+          "how_to_import": "from test_flows_common import get_org_aware_token",
+          "usage_example": "org_token, tenant_id = get_org_aware_token('test@example.com')",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Gets authentication token needed for printer claiming in precondition 0."
+        },
+        {
+          "method_name": "add_address_to_tenant",
+          "method_signature": "def add_address_to_tenant(org_token, tenant_id)",
+          "method_type": "api_call",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Adds shipping address to tenant account via Gemini comfe API.",
+          "how_to_import": "from test_flows_common import add_address_to_tenant",
+          "usage_example": "add_address_to_tenant(org_token, tenant_id)",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Adds address needed for subscription enrollment in precondition 0."
+        },
+        {
+          "method_name": "create_ii_v2_account",
+          "method_signature": "def create_ii_v2_account(page)",
+          "method_type": "action",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Creates new Instant Ink v2 account through complete sign-up flow including email verification.",
+          "how_to_import": "from test_flows_common import create_ii_v2_account",
+          "usage_example": "page = create_ii_v2_account(page)",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Creates account needed for printer enrollment in precondition 0."
+        },
+        {
+          "method_name": "create_new_ii_v2_account",
+          "method_signature": "def create_new_ii_v2_account(page, new_account_auth_option='use_password')",
+          "method_type": "action",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Enhanced account creation with support for password and OTP authentication flows.",
+          "how_to_import": "from test_flows_common import create_new_ii_v2_account",
+          "usage_example": "page = create_new_ii_v2_account(page, new_account_auth_option='send_sign_in_code')",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Creates account with flexible authentication for precondition 0."
+        },
+        {
+          "method_name": "login_ii_v2_account",
+          "method_signature": "def login_ii_v2_account(page, username=None, oobe=False)",
+          "method_type": "action",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Logs into existing Instant Ink v2 account with optional OOBE flow.",
+          "how_to_import": "from test_flows_common import login_ii_v2_account",
+          "usage_example": "page = login_ii_v2_account(page, username='test@example.com', oobe=True)",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Logs into account for accessing subscription and printer management."
+        },
+        {
+          "method_name": "printer_colors",
+          "method_signature": "def printer_colors()",
+          "method_type": "data_provider",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "source_class": null,
+          "what_it_does": "Returns ink colors list based on supply variant (IPH returns ['CMY', 'K'], IIC returns ['K', 'C', 'M', 'Y']).",
+          "how_to_import": "from test_flows_common import printer_colors",
+          "usage_example": "colors = printer_colors()",
+          "relevant_to_steps": [
+            10,
+            12
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Provides color array for RTP payload when simulating printing in steps 10 and 12."
+        }
+      ],
+      "matched_helpers": [
+        {
+          "helper_name": "test_flows_common",
+          "helper_signature": "module",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "what_it_does": "Comprehensive test flow helper module providing utilities for authentication, printer simulation, API calls, subscription management, and test data handling.",
+          "how_to_import": "from test_flows_common import *",
+          "usage_example": "from test_flows_common import create_and_claim_virtual_printer, get_subscription_state, send_rtp_devicestatus",
+          "relevant_to_preconditions": [
+            0,
+            1,
+            2
+          ],
+          "relevant_to_steps": [
+            10,
+            12
+          ],
+          "relevant_to_expected_results": [
+            8,
+            11,
+            14,
+            18,
+            19
+          ],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Central utility module providing most of the backend functionality needed for test setup and execution."
+        },
+        {
+          "helper_name": "locale_map.json",
+          "helper_signature": "test_data_file",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/locale_map.json",
+          "what_it_does": "Country/locale mapping with ISO codes, languages, regions, and payment gateway assignments for 38 countries.",
+          "how_to_import": "from core.utils import load_json_file; locale_data = load_json_file('test_flows_common/locale_map.json')",
+          "usage_example": "locale_data = load_json_file('test_flows_common/locale_map.json'); us_config = locale_data['United States']",
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_steps": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Provides country configuration data for test setup."
+        },
+        {
+          "helper_name": "offers.json",
+          "helper_signature": "test_data_file",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/offers.json",
+          "what_it_does": "Offer configurations by country with GUIDs, identifiers, types (free/prepaid), and pricing.",
+          "how_to_import": "from core.utils import load_json_file; offers = load_json_file('test_flows_common/offers.json')",
+          "usage_example": "offers = load_json_file('test_flows_common/offers.json'); us_offers = offers['US']",
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_steps": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Provides offer data for subscription enrollment."
+        },
+        {
+          "helper_name": "payment_method_data.json",
+          "helper_signature": "test_data_file",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/payment_method_data.json",
+          "what_it_does": "Payment method test credentials for credit cards, direct debit, PayPal, and Google Pay.",
+          "how_to_import": "from test_flows_common import get_payment_method_data; card_data = get_payment_method_data('credit_card_master')",
+          "usage_example": "card_data = get_payment_method_data('credit_card_visa'); card_number = card_data['credit_card_number']",
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_steps": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Provides payment credentials for subscription enrollment."
+        }
+      ],
+      "matched_constants": [
+        {
+          "constant_name": "DEFAULT_FIRSTNAME",
+          "constant_value": "InstantInk",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "how_to_import": "from test_flows_common import DEFAULT_FIRSTNAME",
+          "usage_example": "first_name = DEFAULT_FIRSTNAME",
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_steps": [],
+          "relevant_to_test_data": true,
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Default first name for account creation in precondition setup."
+        },
+        {
+          "constant_name": "DEFAULT_LASTNAME",
+          "constant_value": "User",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "how_to_import": "from test_flows_common import DEFAULT_LASTNAME",
+          "usage_example": "last_name = DEFAULT_LASTNAME",
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_steps": [],
+          "relevant_to_test_data": true,
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Default last name for account creation in precondition setup."
+        },
+        {
+          "constant_name": "DEFAULT_PASSWORD",
+          "constant_value": "Test@123",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "how_to_import": "from test_flows_common import DEFAULT_PASSWORD",
+          "usage_example": "password = DEFAULT_PASSWORD",
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_steps": [],
+          "relevant_to_test_data": true,
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Default password for account creation in precondition setup."
+        },
+        {
+          "constant_name": "STACK_CONFIG",
+          "constant_value": "Dictionary with pie/stage/production environment configurations",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "how_to_import": "from test_flows_common import STACK_CONFIG",
+          "usage_example": "stage_config = STACK_CONFIG['stage']; instantink_url = stage_config['instantink_url']",
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_steps": [],
+          "relevant_to_test_data": true,
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Environment configuration for API endpoints and URLs."
+        },
+        {
+          "constant_name": "OFFERS_DATA",
+          "constant_value": "Loaded offers.json data",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+          "how_to_import": "from test_flows_common import OFFERS_DATA",
+          "usage_example": "us_offers = OFFERS_DATA['US']",
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_steps": [],
+          "relevant_to_test_data": true,
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Offer data for subscription enrollment."
+        },
+        {
+          "constant_name": "printer_profiles.json",
+          "constant_value": "Printer SKU profiles by model and region",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/printer_profiles.json",
+          "how_to_import": "from core.utils import load_json_file; printer_profiles = load_json_file('test_flows_common/printer_profiles.json')",
+          "usage_example": "printer_profiles = load_json_file('test_flows_common/printer_profiles.json'); manhattan_skus = printer_profiles['manhattan_yeti']['skus']",
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_steps": [],
+          "relevant_to_test_data": true,
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Printer model and SKU data for virtual printer creation."
+        },
+        {
+          "constant_name": "locale_map.json",
+          "constant_value": "Country/locale configuration data",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/locale_map.json",
+          "how_to_import": "from core.utils import load_json_file; locale_data = load_json_file('test_flows_common/locale_map.json')",
+          "usage_example": "locale_data = load_json_file('test_flows_common/locale_map.json'); country_code = locale_data['United States']['code']",
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_steps": [],
+          "relevant_to_test_data": true,
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Country configuration for test setup."
+        },
+        {
+          "constant_name": "payment_method_data.json",
+          "constant_value": "Payment method test credentials",
+          "source_file": "AURA-main (1) 1/AURA-main/test_flows_common/payment_method_data.json",
+          "how_to_import": "from test_flows_common import get_payment_method_data",
+          "usage_example": "card_data = get_payment_method_data('credit_card_master')",
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_steps": [],
+          "relevant_to_test_data": true,
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Payment credentials for subscription enrollment."
+        }
+      ],
+      "step_level_mapping": [
+        {
+          "step_number": 1,
+          "step_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "step_test_data": null,
+          "step_expected_result": "Page loads successfully",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No page objects or navigation methods for Print and Payment History page found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No URL constants or navigation data found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 2,
+          "step_action": "Check the Billing Cycle Period card.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the plan pause information is not displayed.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No page objects or verification methods for Billing Cycle Period card found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 3,
+          "step_action": "Even shift 32 days and trigger billing charge.",
+          "step_test_data": "32 days",
+          "step_expected_result": "Time shift and billing charge successful",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No time manipulation or billing trigger methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "The 32 days value is provided in the test case but no time shift utilities found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 4,
+          "step_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "step_test_data": null,
+          "step_expected_result": "Page loaded with updated data",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No page objects or navigation methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No navigation data found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 5,
+          "step_action": "Check the Billing Cycle Period card.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the plan pause information is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No page objects or verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 6,
+          "step_action": "Check the progress bar.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the Complimentary pages progress bar is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No page objects or progress bar verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 7,
+          "step_action": "For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify a tooltip with correct message is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "is_element_actionable",
+                "usage": "if is_element_actionable(page, info_icon_locator): info_icon_locator.click()",
+                "from_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py"
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "is_element_actionable can verify icon is clickable but no tooltip verification methods found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No device type configuration found in this batch."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 8,
+          "step_action": "Check the Complimentary pages value.",
+          "step_test_data": "0 of 10(Pause Plan) used",
+          "step_expected_result": "Verify the value is displayed as \"0 of 10(Pause Plan) used\".",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [
+              {
+                "name": "extract_numbers_from_text",
+                "usage": "numbers = extract_numbers_from_text('0 of 10(Pause Plan) used'); assert numbers == ['0', '10']",
+                "from_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+                "relevance": "Extracts numbers from the page usage text for verification"
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "extract_numbers_from_text can parse the numbers but no page object to get the text from."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value provided in test case."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "COVERED",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 9,
+          "step_action": "Check the message below \"Complimentary pages\".",
+          "step_test_data": null,
+          "step_expected_result": "Verify the information with correct plan info is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No page objects or message verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 10,
+          "step_action": "Print some pages(less than the plan, such as 6 pages).",
+          "step_test_data": "6 pages",
+          "step_expected_result": "Print job registered successfully",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "send_rtp_devicestatus",
+                "usage": "response = send_rtp_devicestatus('ABC123', 'cloud-id', 'uuid-string')",
+                "from_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py"
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "send_rtp_devicestatus can simulate printing but no direct print job registration method found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "6 pages value provided in test case."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "COVERED",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 11,
+          "step_action": "Refresh the dashboard page.",
+          "step_test_data": "6 of 10 used",
+          "step_expected_result": "Verify the \"Complimentary pages\" progress bar is filled with the black color and the value is displayed as correct (such as \"6 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [
+              {
+                "name": "extract_numbers_from_text",
+                "usage": "numbers = extract_numbers_from_text('6 of 10 used'); assert numbers == ['6', '10']",
+                "from_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+                "relevance": "Extracts numbers from updated page usage text"
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "extract_numbers_from_text can parse numbers but no page refresh or color verification methods found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value provided in test case."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "COVERED",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 12,
+          "step_action": "Continue to print some pages(more than the plan, such as 15 pages).",
+          "step_test_data": "15 pages total",
+          "step_expected_result": "Additional print job registered successfully",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "send_rtp_devicestatus",
+                "usage": "response = send_rtp_devicestatus('ABC123', 'cloud-id', 'uuid-string')",
+                "from_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py"
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "send_rtp_devicestatus can simulate additional printing."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "15 pages value provided in test case."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "COVERED",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 13,
+          "step_action": "Refresh the dashboard page.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the progress bars for \"Complimentary pages\" and \"Additional pages\" are displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No page refresh or progress bar verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 14,
+          "step_action": "Check the \"Additional pages\" progress bar.",
+          "step_test_data": "5 of 10 used",
+          "step_expected_result": "Verify the progress bar is filled with the Yellow color and the value is displayed correctly(such as \"5 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [
+              {
+                "name": "extract_numbers_from_text",
+                "usage": "numbers = extract_numbers_from_text('5 of 10 used'); assert numbers == ['5', '10']",
+                "from_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+                "relevance": "Extracts numbers from additional pages text"
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "extract_numbers_from_text can parse numbers but no color verification methods found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value provided in test case."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "COVERED",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 15,
+          "step_action": "Check the icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the info icon is displayed well behind the string \"Additional pages\".",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No page objects or icon verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 16,
+          "step_action": "For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify a tooltip with correct message is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "is_element_actionable",
+                "usage": "if is_element_actionable(page, info_icon_locator): info_icon_locator.click()",
+                "from_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py"
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "is_element_actionable can verify icon is clickable but no tooltip verification methods found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No device type configuration found."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 17,
+          "step_action": "Check the message below \"Additional pages\".",
+          "step_test_data": null,
+          "step_expected_result": "Verify a message with the amount of blocks already bought is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No page objects or message verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 18,
+          "step_action": "Check the Complimentary pages progress bar.",
+          "step_test_data": "10 of 10 used",
+          "step_expected_result": "Verify the \"Complimentary pages\" progress bar is full filled with the black color and the value is displayed correctly (such as \"10 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [
+              {
+                "name": "extract_numbers_from_text",
+                "usage": "numbers = extract_numbers_from_text('10 of 10 used'); assert numbers == ['10', '10']",
+                "from_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+                "relevance": "Extracts numbers from full usage text"
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "extract_numbers_from_text can parse numbers but no color or fullness verification methods found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value provided in test case."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "COVERED",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 19,
+          "step_action": "Check total pages printed info.",
+          "step_test_data": "15 pages",
+          "step_expected_result": "Verify correct number(such as 15 pages) displayed according to the printed pages.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [
+              {
+                "name": "extract_numbers_from_text",
+                "usage": "numbers = extract_numbers_from_text('15 pages'); assert '15' in numbers",
+                "from_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+                "relevance": "Extracts total pages number from text"
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "extract_numbers_from_text can parse the total but no page object to get the text from."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value provided in test case."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "COVERED",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 20,
+          "step_action": "Verify screenshot matches expected design",
+          "step_test_data": null,
+          "step_expected_result": "Visual verification of Billing Cycle Period card layout and styling",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [
+              {
+                "name": "get_font_details",
+                "usage": "font_details = get_font_details(element); assert font_details['font-family'] == expected",
+                "from_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+                "relevance": "Can extract styling details for visual verification"
+              },
+              {
+                "name": "verify_font_details_property_value",
+                "usage": "verify_font_details_property_value(element, 'font-size', '24px')",
+                "from_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+                "relevance": "Can verify CSS properties with assertion"
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Generic styling utilities found but no screenshot comparison or visual regression tools."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No baseline image data found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 21,
+          "step_action": "Verify all UI elements are properly styled and responsive",
+          "step_test_data": null,
+          "step_expected_result": "All elements display correctly on Desktop, Mobile, and Tablet",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [
+              {
+                "name": "get_font_details",
+                "usage": "font_details = get_font_details(element)",
+                "from_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+                "relevance": "Can extract styling details"
+              },
+              {
+                "name": "verify_font_details_property_value",
+                "usage": "verify_font_details_property_value(element, property, value)",
+                "from_file": "AURA-main (1) 1/AURA-main/test_flows_common/test_flows_common.py",
+                "relevance": "Can verify CSS properties"
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Generic styling utilities found but no viewport resizing or responsive testing methods."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No viewport size configuration found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        }
+      ]
+    }
+  ]
+}
