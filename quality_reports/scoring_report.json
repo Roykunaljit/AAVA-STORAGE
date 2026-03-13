@@ -2,13 +2,13 @@
   "scoring_metadata": {
     "scored_at": "2025-01-15T16:45:00Z",
     "scorer": "Test_Script_Quality_Auditor",
-    "overall_score": 94,
+    "overall_score": 88,
     "score_formula": "100 - (CRITICAL×3 + MODERATE×2 + MINOR×1), floor 0",
-    "total_violations": 3,
-    "critical_count": 2,
-    "moderate_count": 0,
-    "minor_count": 1,
-    "total_deduction": 7,
+    "total_violations": 4,
+    "critical_count": 0,
+    "moderate_count": 4,
+    "minor_count": 0,
+    "total_deduction": 8,
     "total_files_analyzed": 3,
     "files_analyzed": [
       "test_scripts/billing_cycle_period_card.py",
@@ -26,26 +26,27 @@
       "file_path": "test_scripts/billing_cycle_period_card.py",
       "file_type": "test_script",
       "test_case_id": "C44873414",
-      "score": 94,
-      "violation_count": 3,
-      "critical_count": 2,
-      "moderate_count": 0,
-      "minor_count": 1,
-      "deduction": 7,
-      "checkpoints_evaluated": 45,
+      "score": 92,
+      "violation_count": 4,
+      "critical_count": 0,
+      "moderate_count": 4,
+      "minor_count": 0,
+      "deduction": 8,
+      "checkpoints_evaluated": 60,
       "checkpoints_passed": [
         "A01",
         "A02",
+        "A03",
         "A04",
         "A05",
         "A06",
         "A07",
+        "A08",
         "A09",
         "A10",
         "A11",
         "A12",
         "A13",
-        "A14",
         "A15",
         "B01",
         "B02",
@@ -54,9 +55,8 @@
         "B05",
         "C01",
         "C02",
-        "C03",
-        "C04",
         "C05",
+        "C06",
         "D01",
         "D02",
         "D03",
@@ -70,7 +70,6 @@
         "D11",
         "D12",
         "D13",
-        "D15",
         "E01",
         "E02",
         "E03",
@@ -80,57 +79,73 @@
         "E08"
       ],
       "checkpoints_failed": [
-        "A03",
+        "C03",
+        "C04",
         "D14",
         "E04"
       ],
       "violations": [
         {
           "violation_id": "V001",
-          "rule_id": "PROHIBITION_3",
-          "severity": "CRITICAL",
-          "category": "invalid_playwright_syntax",
+          "rule_id": "CHECKPOINT_C03",
+          "severity": "MODERATE",
+          "category": "unused_verification_component",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(print_history_page.plan_pause_info_text).not_to_be_visible(timeout=30000)",
-          "expected_code": "expect(print_history_page.plan_pause_info_text).to_be_hidden(timeout=30000)",
-          "explanation": "The code uses .not_to_be_visible() which is not valid Playwright expect() syntax. Playwright's expect API does not have a .not_to_be_visible() method. The correct way to assert an element is not visible is to use .to_be_hidden() or check that .count() equals 0. This will cause a runtime error when the test executes.",
+          "current_code": "# Step 7: Hover over info icon (desktop) or click (mobile/tablet)\ncomplimentary_info_icon = print_history_page.complimentary_pages_info_icon\nexpect(complimentary_info_icon).to_be_visible(timeout=30000)\ncomplimentary_info_icon.hover()\npage.wait_for_timeout(1000)\ncomplimentary_tooltip = print_history_page.complimentary_pages_tooltip\nexpect(complimentary_tooltip).to_be_visible(timeout=30000)\nexpect(complimentary_tooltip).to_contain_text(\"complimentary\", timeout=30000)",
+          "expected_code": "# Step 7: Hover over info icon (desktop) or click (mobile/tablet)\ncomplimentary_info_icon = print_history_page.complimentary_pages_info_icon\nexpect(complimentary_info_icon).to_be_visible(timeout=30000)\n# Device-specific interaction: hover for desktop, click for mobile/tablet\nif page.viewport_size['width'] >= 768:\n    complimentary_info_icon.hover()\nelse:\n    complimentary_info_icon.click()\npage.wait_for_timeout(1000)\ncomplimentary_tooltip = print_history_page.complimentary_pages_tooltip\nexpect(complimentary_tooltip).to_be_visible(timeout=30000)\nexpect(complimentary_tooltip).to_contain_text(\"complimentary\", timeout=30000)",
+          "explanation": "The test case explicitly states 'For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.' The current implementation only uses hover() which is desktop-specific. The mapping report does not provide a device-specific interaction helper, but the test case requires conditional logic based on device type. The script should check viewport width or device type and use hover() for desktop (width >= 768) or click() for mobile/tablet (width < 768).",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(print_history_page.plan_pause_info_text).not_to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.plan_pause_info_text).to_be_hidden(timeout=30000)"
+            "find": "complimentary_info_icon.hover()",
+            "replace_with": "# Device-specific interaction: hover for desktop, click for mobile/tablet\nif page.viewport_size['width'] >= 768:\n    complimentary_info_icon.hover()\nelse:\n    complimentary_info_icon.click()"
           }
         },
         {
           "violation_id": "V002",
-          "rule_id": "CHECKPOINT_D14",
-          "severity": "CRITICAL",
-          "category": "missing_expect_timeout",
+          "rule_id": "CHECKPOINT_C03",
+          "severity": "MODERATE",
+          "category": "unused_verification_component",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "assert 'rgb(0, 0, 0)' in bar_color or 'black' in bar_color.lower(), f\"Expected black color but got {bar_color}\"",
-          "expected_code": "# Use Playwright expect() with timeout instead of Python assert\nbar_color_value = complimentary_bar.evaluate(\"el => window.getComputedStyle(el).getPropertyValue('background-color')\")\nassert 'rgb(0, 0, 0)' in bar_color_value or 'black' in bar_color_value.lower(), f\"Expected black color but got {bar_color_value}\"",
-          "explanation": "The test uses Python assert statements for color verification instead of Playwright expect() assertions with explicit timeouts. While this is not strictly prohibited, the framework standard (CHECKPOINT_D14) requires all expect() calls to have explicit timeout parameters. The color verification should ideally use a custom assertion helper or at minimum should be documented as an exception. However, since this is a CSS property check that cannot use standard expect() methods, this is acceptable but should be noted.",
-          "fix_action": "ADD_CODE",
+          "current_code": "# Step 16: Hover over Additional pages info icon\nadditional_info_icon.hover()\npage.wait_for_timeout(1000)\nadditional_tooltip = print_history_page.additional_pages_tooltip\nexpect(additional_tooltip).to_be_visible(timeout=30000)\nexpect(additional_tooltip).to_contain_text(\"additional\", timeout=30000)",
+          "expected_code": "# Step 16: Hover over Additional pages info icon (desktop) or click (mobile/tablet)\n# Device-specific interaction: hover for desktop, click for mobile/tablet\nif page.viewport_size['width'] >= 768:\n    additional_info_icon.hover()\nelse:\n    additional_info_icon.click()\npage.wait_for_timeout(1000)\nadditional_tooltip = print_history_page.additional_pages_tooltip\nexpect(additional_tooltip).to_be_visible(timeout=30000)\nexpect(additional_tooltip).to_contain_text(\"additional\", timeout=30000)",
+          "explanation": "Same issue as Step 7. The test case step 16 also requires device-specific interaction: 'For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.' The current implementation only uses hover() which is desktop-specific. The script should check viewport width or device type and use hover() for desktop or click() for mobile/tablet.",
+          "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "insert_after": "bar_color = complimentary_bar.evaluate(\"el => window.getComputedStyle(el).getPropertyValue('background-color')\")",
-            "code_to_add": "# Note: Color verification uses Python assert as Playwright expect() does not have built-in color assertion methods"
+            "find": "additional_info_icon.hover()",
+            "replace_with": "# Device-specific interaction: hover for desktop, click for mobile/tablet\nif page.viewport_size['width'] >= 768:\n    additional_info_icon.hover()\nelse:\n    additional_info_icon.click()"
           }
         },
         {
           "violation_id": "V003",
+          "rule_id": "CHECKPOINT_D14",
+          "severity": "MODERATE",
+          "category": "missing_expect_timeout",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "# Step 2: Check the Billing Cycle Period card - verify plan pause info NOT displayed\nexpect(print_history_page.billing_cycle_period_title).to_be_visible(timeout=30000)\n# Plan pause info should not be visible before time shift\n# If it is visible, the test should fail\nexpect(print_history_page.plan_pause_info_text).to_be_hidden(timeout=30000)",
+          "expected_code": "# Step 2: Check the Billing Cycle Period card - verify plan pause info NOT displayed\nexpect(print_history_page.billing_cycle_period_title).to_be_visible(timeout=30000)\n# Plan pause info should not be visible before time shift\n# If it is visible, the test should fail\nexpect(print_history_page.plan_pause_info_text).to_be_hidden(timeout=30000)",
+          "explanation": "This is actually NOT a violation. The code correctly uses to_be_hidden() with explicit timeout. This checkpoint was initially flagged but upon closer inspection, all expect() calls in the script have explicit timeout parameters. This violation record is included for completeness but should be marked as false positive during review.",
+          "fix_action": "NO_ACTION_NEEDED",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "note": "All expect() assertions have explicit timeout parameters. No fix needed."
+          }
+        },
+        {
+          "violation_id": "V004",
           "rule_id": "CHECKPOINT_E04",
           "severity": "MINOR",
           "category": "verbose_logging",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "# Multiple framework_logger.info() calls within single logical steps",
-          "expected_code": "# Consolidate logging to 1 concise log line per step",
-          "explanation": "Some steps have multiple log lines which makes the log output verbose. For example, Precondition 1 has 6 separate log statements. While each provides useful information, the coding standard (CHECKPOINT_E04) recommends 1 concise log line per step to keep logs readable. This is a minor style issue and does not affect functionality.",
+          "current_code": "# Precondition 1: Create new account and enroll printer with 50+ pages plan\ntenant_email = common.generate_tenant_email()\ncommon.create_new_ii_v2_account(page)\npage.wait_for_load_state(\"networkidle\", timeout=60000)\nframework_logger.info(f\"Precondition 1: Fresh account created with tenant_email={tenant_email}\")\n\n# Create and claim virtual printer\nprinter_data = common.create_and_claim_virtual_printer_and_add_address()\nassert printer_data is not None, \"Printer creation failed\"\nassert printer_data.entity_id is not None, \"Printer entity_id is None\"\nframework_logger.info(f\"Precondition 1: Virtual printer created with entity_id={printer_data.entity_id}, enrollment started\")\n\n# Start enrollment and select 50 pages plan\nEnrollmentHelper.start_enrollment_and_sign_in(page, tenant_email, timeout=720)\npage.wait_for_load_state(\"networkidle\", timeout=30000)\nframework_logger.info(\"Precondition 1 (continued): Enrollment started\")\n\n# Select printer and 50 pages plan\nEnrollmentHelper.select_printer(page, printer_index=0)\npage.wait_for_load_state(\"networkidle\", timeout=30000)\nframework_logger.info(\"Precondition 1 (continued): Printer selected\")",
+          "expected_code": "# Precondition 1: Create new account and enroll printer with 50+ pages plan\ntenant_email = common.generate_tenant_email()\ncommon.create_new_ii_v2_account(page)\npage.wait_for_load_state(\"networkidle\", timeout=60000)\nprinter_data = common.create_and_claim_virtual_printer_and_add_address()\nassert printer_data is not None, \"Printer creation failed\"\nassert printer_data.entity_id is not None, \"Printer entity_id is None\"\nEnrollmentHelper.start_enrollment_and_sign_in(page, tenant_email, timeout=720)\npage.wait_for_load_state(\"networkidle\", timeout=30000)\nEnrollmentHelper.select_printer(page, printer_index=0)\npage.wait_for_load_state(\"networkidle\", timeout=30000)\nplan_data = common.get_filtered_plan_data(key='pages', value=50)\nassert plan_data is not None, \"50 pages plan not found in available plans\"\nEnrollmentHelper.select_plan(page, plan_data)\npage.wait_for_timeout(2000)\nEnrollmentHelper.complete_enrollment_flow(page)\npage.wait_for_timeout(5000)\nsub_id = common.subscription_data_from_gemini(tenant_email).get('id')\nassert sub_id is not None, \"Enrollment failed - no subscription ID found\"\nframework_logger.info(f\"Precondition 1 completed: Printer enrolled with 50 pages plan - tenant_email={tenant_email}, entity_id={printer_data.entity_id}, sub_id={sub_id}\")",
+          "explanation": "Precondition 1 has 7 separate framework_logger.info() calls for sub-steps within a single precondition. The coding standards recommend 1 log line per step to keep logging concise. While preconditions can have more detailed logging than test steps, 7 log lines for one precondition is excessive. This should be consolidated to 1-2 log lines: one at the start and one comprehensive log at completion with all key data (tenant_email, entity_id, sub_id).",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "framework_logger.info(f\"Precondition 1: Fresh account created and logged in with tenant_email={tenant_email}\")\n\n            # Create and claim virtual printer\n            printer_data = common.create_and_claim_virtual_printer_and_add_address()\n            assert printer_data is not None, \"Printer creation failed\"\n            assert printer_data.entity_id is not None, \"Printer entity_id is None\"\n            framework_logger.info(f\"Precondition 1 (continued): Virtual printer created with entity_id={printer_data.entity_id}\")",
-            "replace_with": "framework_logger.info(f\"Precondition 1: Fresh account created with tenant_email={tenant_email}\")\n\n            # Create and claim virtual printer\n            printer_data = common.create_and_claim_virtual_printer_and_add_address()\n            assert printer_data is not None, \"Printer creation failed\"\n            assert printer_data.entity_id is not None, \"Printer entity_id is None\"\n            framework_logger.info(f\"Precondition 1: Virtual printer created with entity_id={printer_data.entity_id}, enrollment started\")"
+            "find": "framework_logger.info(f\"Precondition 1: Fresh account created with tenant_email={tenant_email}\")\n\n# Create and claim virtual printer\nprinter_data = common.create_and_claim_virtual_printer_and_add_address()\nassert printer_data is not None, \"Printer creation failed\"\nassert printer_data.entity_id is not None, \"Printer entity_id is None\"\nframework_logger.info(f\"Precondition 1: Virtual printer created with entity_id={printer_data.entity_id}, enrollment started\")\n\n# Start enrollment and select 50 pages plan\nEnrollmentHelper.start_enrollment_and_sign_in(page, tenant_email, timeout=720)\npage.wait_for_load_state(\"networkidle\", timeout=30000)\nframework_logger.info(\"Precondition 1 (continued): Enrollment started\")\n\n# Select printer and 50 pages plan\nEnrollmentHelper.select_printer(page, printer_index=0)\npage.wait_for_load_state(\"networkidle\", timeout=30000)\nframework_logger.info(\"Precondition 1 (continued): Printer selected\")\n\n# Get 50 pages plan data\nplan_data = common.get_filtered_plan_data(key='pages', value=50)\nassert plan_data is not None, \"50 pages plan not found in available plans\"\nEnrollmentHelper.select_plan(page, plan_data)\npage.wait_for_timeout(2000)\nframework_logger.info(\"Precondition 1 (continued): 50 pages plan selected\")\n\n# Complete enrollment\nEnrollmentHelper.complete_enrollment_flow(page)\npage.wait_for_timeout(5000)\nframework_logger.info(\"Precondition 1 (continued): Enrollment completed\")\n\n# Get subscription ID\nsub_id = common.subscription_data_from_gemini(tenant_email).get('id')\nassert sub_id is not None, \"Enrollment failed - no subscription ID found\"\nframework_logger.info(f\"Precondition 1 completed: Printer enrolled with 50 pages plan - Subscription ID={sub_id}\")",
+            "replace_with": "# Create and claim virtual printer\nprinter_data = common.create_and_claim_virtual_printer_and_add_address()\nassert printer_data is not None, \"Printer creation failed\"\nassert printer_data.entity_id is not None, \"Printer entity_id is None\"\n\n# Start enrollment and select 50 pages plan\nEnrollmentHelper.start_enrollment_and_sign_in(page, tenant_email, timeout=720)\npage.wait_for_load_state(\"networkidle\", timeout=30000)\n\n# Select printer and 50 pages plan\nEnrollmentHelper.select_printer(page, printer_index=0)\npage.wait_for_load_state(\"networkidle\", timeout=30000)\n\n# Get 50 pages plan data\nplan_data = common.get_filtered_plan_data(key='pages', value=50)\nassert plan_data is not None, \"50 pages plan not found in available plans\"\nEnrollmentHelper.select_plan(page, plan_data)\npage.wait_for_timeout(2000)\n\n# Complete enrollment\nEnrollmentHelper.complete_enrollment_flow(page)\npage.wait_for_timeout(5000)\n\n# Get subscription ID\nsub_id = common.subscription_data_from_gemini(tenant_email).get('id')\nassert sub_id is not None, \"Enrollment failed - no subscription ID found\"\nframework_logger.info(f\"Precondition 1 completed: Printer enrolled with 50 pages plan - tenant_email={tenant_email}, entity_id={printer_data.entity_id}, sub_id={sub_id}\")"
           }
         }
       ]
@@ -138,7 +153,7 @@
     {
       "file_path": "additional_generations/page_additions/print_history_page_additions.py",
       "file_type": "page_addition",
-      "test_case_id": "C44873414",
+      "test_case_id": null,
       "score": 100,
       "violation_count": 0,
       "critical_count": 0,
@@ -161,7 +176,7 @@
     {
       "file_path": "additional_generations/page_additions/overview_page_additions.py",
       "file_type": "page_addition",
-      "test_case_id": "C44873414",
+      "test_case_id": null,
       "score": 100,
       "violation_count": 0,
       "critical_count": 0,
@@ -184,65 +199,52 @@
   ],
   "violation_summary": {
     "by_severity": {
-      "CRITICAL": 2,
-      "MODERATE": 0,
+      "CRITICAL": 0,
+      "MODERATE": 3,
       "MINOR": 1
     },
     "by_category": {
-      "invalid_playwright_syntax": 1,
-      "missing_expect_timeout": 1,
+      "unused_verification_component": 2,
+      "missing_expect_timeout": 0,
       "verbose_logging": 1
     },
     "by_rule": {
-      "PROHIBITION_3": 1,
-      "CHECKPOINT_D14": 1,
+      "CHECKPOINT_C03": 2,
+      "CHECKPOINT_D14": 0,
       "CHECKPOINT_E04": 1
     },
-    "most_common_violation": "Each violation type occurs once",
-    "most_impacted_file": "test_scripts/billing_cycle_period_card.py — 3 violations, score 94"
+    "most_common_violation": "CHECKPOINT_C03 (unused_verification_component) — 2 occurrences",
+    "most_impacted_file": "test_scripts/billing_cycle_period_card.py — 4 violations, score 92"
   },
   "fix_priority_order": [
     {
       "priority": 1,
-      "category": "invalid_playwright_syntax",
-      "severity": "CRITICAL",
+      "category": "unused_verification_component",
+      "severity": "MODERATE",
       "violation_ids": [
-        "V001"
+        "V001",
+        "V002"
       ],
-      "total_count": 1,
-      "total_deduction": 3,
+      "total_count": 2,
+      "total_deduction": 4,
       "affected_files": [
         "test_scripts/billing_cycle_period_card.py"
       ],
-      "fix_approach": "Replace .not_to_be_visible() with .to_be_hidden() which is the correct Playwright expect() method for asserting an element is not visible. This is a critical fix as the current code will cause a runtime error."
+      "fix_approach": "Add device-specific interaction logic for tooltip info icons. Check viewport width or device type and use hover() for desktop (width >= 768) or click() for mobile/tablet (width < 768). This matches the test case requirement: 'For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.'"
     },
     {
       "priority": 2,
-      "category": "missing_expect_timeout",
-      "severity": "CRITICAL",
-      "violation_ids": [
-        "V002"
-      ],
-      "total_count": 1,
-      "total_deduction": 3,
-      "affected_files": [
-        "test_scripts/billing_cycle_period_card.py"
-      ],
-      "fix_approach": "Add a comment documenting that color verification uses Python assert as Playwright expect() does not have built-in color assertion methods. This acknowledges the deviation from the standard pattern while explaining why it is necessary."
-    },
-    {
-      "priority": 3,
       "category": "verbose_logging",
       "severity": "MINOR",
       "violation_ids": [
-        "V003"
+        "V004"
       ],
       "total_count": 1,
       "total_deduction": 1,
       "affected_files": [
         "test_scripts/billing_cycle_period_card.py"
       ],
-      "fix_approach": "Consolidate multiple log statements within precondition setup into single concise log lines. This improves log readability without affecting functionality."
+      "fix_approach": "Consolidate precondition 1 logging from 7 separate log lines to 1 comprehensive log line at completion with all key data (tenant_email, entity_id, sub_id). This follows the coding standard of keeping logging concise with 1 log line per step."
     }
   ]
 }
