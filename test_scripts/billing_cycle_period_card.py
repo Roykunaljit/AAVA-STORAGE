@@ -33,40 +33,34 @@ def billing_cycle_period_card(stage_callback):
             tenant_email = common.generate_tenant_email()
             common.create_new_ii_v2_account(page)
             page.wait_for_load_state("networkidle", timeout=60000)
-            framework_logger.info(f"Precondition 1: Fresh account created with tenant_email={tenant_email}")
 
             # Create and claim virtual printer
             printer_data = common.create_and_claim_virtual_printer_and_add_address()
             assert printer_data is not None, "Printer creation failed"
             assert printer_data.entity_id is not None, "Printer entity_id is None"
-            framework_logger.info(f"Precondition 1: Virtual printer created with entity_id={printer_data.entity_id}, enrollment started")
 
             # Start enrollment and select 50 pages plan
             EnrollmentHelper.start_enrollment_and_sign_in(page, tenant_email, timeout=720)
             page.wait_for_load_state("networkidle", timeout=30000)
-            framework_logger.info("Precondition 1 (continued): Enrollment started")
 
             # Select printer and 50 pages plan
             EnrollmentHelper.select_printer(page, printer_index=0)
             page.wait_for_load_state("networkidle", timeout=30000)
-            framework_logger.info("Precondition 1 (continued): Printer selected")
 
             # Get 50 pages plan data
             plan_data = common.get_filtered_plan_data(key='pages', value=50)
             assert plan_data is not None, "50 pages plan not found in available plans"
             EnrollmentHelper.select_plan(page, plan_data)
             page.wait_for_timeout(2000)
-            framework_logger.info("Precondition 1 (continued): 50 pages plan selected")
 
             # Complete enrollment
             EnrollmentHelper.complete_enrollment_flow(page)
             page.wait_for_timeout(5000)
-            framework_logger.info("Precondition 1 (continued): Enrollment completed")
 
             # Get subscription ID
             sub_id = common.subscription_data_from_gemini(tenant_email).get('id')
             assert sub_id is not None, "Enrollment failed - no subscription ID found"
-            framework_logger.info(f"Precondition 1 completed: Printer enrolled with 50 pages plan - Subscription ID={sub_id}")
+            framework_logger.info(f"Precondition 1 completed: Printer enrolled with 50 pages plan - tenant_email={tenant_email}, entity_id={printer_data.entity_id}, sub_id={sub_id}")
 
             # Precondition 2: Make sure the Subscription has no free months info
             # Precondition 3: Make sure the subscription is "subscribed" status
@@ -157,7 +151,11 @@ def billing_cycle_period_card(stage_callback):
             # Step 7: Hover over info icon (desktop) or click (mobile/tablet)
             complimentary_info_icon = print_history_page.complimentary_pages_info_icon
             expect(complimentary_info_icon).to_be_visible(timeout=30000)
-            complimentary_info_icon.hover()
+            # Device-specific interaction: hover for desktop, click for mobile/tablet
+            if page.viewport_size['width'] >= 768:
+                complimentary_info_icon.hover()
+            else:
+                complimentary_info_icon.click()
             page.wait_for_timeout(1000)
             complimentary_tooltip = print_history_page.complimentary_pages_tooltip
             expect(complimentary_tooltip).to_be_visible(timeout=30000)
@@ -233,7 +231,11 @@ def billing_cycle_period_card(stage_callback):
             framework_logger.info("Step 15 completed: Additional pages info icon is displayed")
 
             # Step 16: Hover over Additional pages info icon
-            additional_info_icon.hover()
+            # Device-specific interaction: hover for desktop, click for mobile/tablet
+            if page.viewport_size['width'] >= 768:
+                additional_info_icon.hover()
+            else:
+                additional_info_icon.click()
             page.wait_for_timeout(1000)
             additional_tooltip = print_history_page.additional_pages_tooltip
             expect(additional_tooltip).to_be_visible(timeout=30000)
