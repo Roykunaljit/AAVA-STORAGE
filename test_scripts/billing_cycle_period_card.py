@@ -33,13 +33,13 @@ def billing_cycle_period_card(stage_callback):
             tenant_email = common.generate_tenant_email()
             common.create_new_ii_v2_account(page)
             page.wait_for_load_state("networkidle", timeout=60000)
-            framework_logger.info(f"Precondition 1: Fresh account created and logged in with tenant_email={tenant_email}")
+            framework_logger.info(f"Precondition 1: Fresh account created with tenant_email={tenant_email}")
 
             # Create and claim virtual printer
             printer_data = common.create_and_claim_virtual_printer_and_add_address()
             assert printer_data is not None, "Printer creation failed"
             assert printer_data.entity_id is not None, "Printer entity_id is None"
-            framework_logger.info(f"Precondition 1 (continued): Virtual printer created with entity_id={printer_data.entity_id}")
+            framework_logger.info(f"Precondition 1: Virtual printer created with entity_id={printer_data.entity_id}, enrollment started")
 
             # Start enrollment and select 50 pages plan
             EnrollmentHelper.start_enrollment_and_sign_in(page, tenant_email, timeout=720)
@@ -119,7 +119,7 @@ def billing_cycle_period_card(stage_callback):
             expect(print_history_page.billing_cycle_period_title).to_be_visible(timeout=30000)
             # Plan pause info should not be visible before time shift
             # If it is visible, the test should fail
-            expect(print_history_page.plan_pause_info_text).not_to_be_visible(timeout=30000)
+            expect(print_history_page.plan_pause_info_text).to_be_hidden(timeout=30000)
             framework_logger.info("Step 2 completed: Plan pause information is not displayed (before time shift)")
 
             # Step 3: Shift 32 days and trigger billing charge
@@ -192,6 +192,7 @@ def billing_cycle_period_card(stage_callback):
             complimentary_bar = print_history_page.complimentary_pages_progress_bar
             expect(complimentary_bar).to_be_visible(timeout=30000)
             bar_color = complimentary_bar.evaluate("el => window.getComputedStyle(el).getPropertyValue('background-color')")
+            # Note: Color verification uses Python assert as Playwright expect() does not have built-in color assertion methods
             # Verify color is black (expected result from test case)
             assert 'rgb(0, 0, 0)' in bar_color or 'black' in bar_color.lower(), f"Expected black color but got {bar_color}"
             complimentary_value_after = print_history_page.complimentary_pages_value_text
@@ -217,6 +218,7 @@ def billing_cycle_period_card(stage_callback):
             # Step 14: Check Additional pages progress bar - verify yellow color and value
             additional_bar = print_history_page.additional_pages_progress_bar
             bar_color = additional_bar.evaluate("el => window.getComputedStyle(el).getPropertyValue('background-color')")
+            # Note: Color verification uses Python assert as Playwright expect() does not have built-in color assertion methods
             # Verify color is yellow (expected result from test case)
             assert 'rgb(255, 255, 0)' in bar_color or 'yellow' in bar_color.lower(), f"Expected yellow color but got {bar_color}"
             additional_value = print_history_page.additional_pages_value_text
@@ -247,6 +249,7 @@ def billing_cycle_period_card(stage_callback):
             # Step 18: Check Complimentary pages progress bar is full
             complimentary_bar_full = print_history_page.complimentary_pages_progress_bar
             bar_color = complimentary_bar_full.evaluate("el => window.getComputedStyle(el).getPropertyValue('background-color')")
+            # Note: Color verification uses Python assert as Playwright expect() does not have built-in color assertion methods
             # Verify color is black and bar is 100% filled
             assert 'rgb(0, 0, 0)' in bar_color or 'black' in bar_color.lower(), f"Expected black color but got {bar_color}"
             complimentary_full_locator = print_history_page.complimentary_pages_value_text
