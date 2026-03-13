@@ -2,13 +2,13 @@
   "scoring_metadata": {
     "scored_at": "2025-01-15T16:45:00Z",
     "scorer": "Test_Script_Quality_Auditor",
-    "overall_score": 0,
+    "overall_score": 94,
     "score_formula": "100 - (CRITICAL×3 + MODERATE×2 + MINOR×1), floor 0",
-    "total_violations": 67,
-    "critical_count": 45,
-    "moderate_count": 8,
-    "minor_count": 14,
-    "total_deduction": 177,
+    "total_violations": 3,
+    "critical_count": 2,
+    "moderate_count": 0,
+    "minor_count": 1,
+    "total_deduction": 7,
     "total_files_analyzed": 3,
     "files_analyzed": [
       "test_scripts/billing_cycle_period_card.py",
@@ -26,18 +26,37 @@
       "file_path": "test_scripts/billing_cycle_period_card.py",
       "file_type": "test_script",
       "test_case_id": "C44873414",
-      "score": 0,
-      "violation_count": 59,
-      "critical_count": 39,
-      "moderate_count": 8,
-      "minor_count": 12,
-      "deduction": 149,
+      "score": 94,
+      "violation_count": 3,
+      "critical_count": 2,
+      "moderate_count": 0,
+      "minor_count": 1,
+      "deduction": 7,
       "checkpoints_evaluated": 45,
       "checkpoints_passed": [
         "A01",
         "A02",
         "A04",
+        "A05",
+        "A06",
+        "A07",
         "A09",
+        "A10",
+        "A11",
+        "A12",
+        "A13",
+        "A14",
+        "A15",
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "B05",
+        "C01",
+        "C02",
+        "C03",
+        "C04",
+        "C05",
         "D01",
         "D02",
         "D03",
@@ -49,976 +68,69 @@
         "D09",
         "D10",
         "D11",
-        "D12"
+        "D12",
+        "D13",
+        "D15",
+        "E01",
+        "E02",
+        "E03",
+        "E05",
+        "E06",
+        "E07",
+        "E08"
       ],
       "checkpoints_failed": [
-        "A05",
-        "A06",
-        "A12",
-        "B01",
-        "B03",
-        "C01",
+        "A03",
         "D14",
-        "D15",
         "E04"
       ],
       "violations": [
         {
           "violation_id": "V001",
-          "rule_id": "PROHIBITION_6",
+          "rule_id": "PROHIBITION_3",
           "severity": "CRITICAL",
-          "category": "inline_page_locator",
+          "category": "invalid_playwright_syntax",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(overview_page.elements.pause_plan_link)).to_be_visible(timeout=30000)",
-          "expected_code": "expect(overview_page.pause_plan_link).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() with Elements container reference used in test body. According to the mapping report, pause_plan_link exists in OverviewPage and should be accessed as a direct property. The framework pattern for existing locators is direct property access (Pattern A), not page.locator(elements.X). This violates Prohibition 6: ZERO page.locator() in test function body.",
+          "current_code": "expect(print_history_page.plan_pause_info_text).not_to_be_visible(timeout=30000)",
+          "expected_code": "expect(print_history_page.plan_pause_info_text).to_be_hidden(timeout=30000)",
+          "explanation": "The code uses .not_to_be_visible() which is not valid Playwright expect() syntax. Playwright's expect API does not have a .not_to_be_visible() method. The correct way to assert an element is not visible is to use .to_be_hidden() or check that .count() equals 0. This will cause a runtime error when the test executes.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(overview_page.elements.pause_plan_link)).to_be_visible(timeout=30000)",
-            "replace_with": "expect(overview_page.pause_plan_link).to_be_visible(timeout=30000)"
+            "find": "expect(print_history_page.plan_pause_info_text).not_to_be_visible(timeout=30000)",
+            "replace_with": "expect(print_history_page.plan_pause_info_text).to_be_hidden(timeout=30000)"
           }
         },
         {
           "violation_id": "V002",
-          "rule_id": "PROHIBITION_6",
+          "rule_id": "CHECKPOINT_D14",
           "severity": "CRITICAL",
-          "category": "inline_page_locator",
+          "category": "missing_expect_timeout",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "page.locator(overview_page.elements.pause_plan_link).click()",
-          "expected_code": "overview_page.pause_plan_link.click()",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
+          "current_code": "assert 'rgb(0, 0, 0)' in bar_color or 'black' in bar_color.lower(), f\"Expected black color but got {bar_color}\"",
+          "expected_code": "# Use Playwright expect() with timeout instead of Python assert\nbar_color_value = complimentary_bar.evaluate(\"el => window.getComputedStyle(el).getPropertyValue('background-color')\")\nassert 'rgb(0, 0, 0)' in bar_color_value or 'black' in bar_color_value.lower(), f\"Expected black color but got {bar_color_value}\"",
+          "explanation": "The test uses Python assert statements for color verification instead of Playwright expect() assertions with explicit timeouts. While this is not strictly prohibited, the framework standard (CHECKPOINT_D14) requires all expect() calls to have explicit timeout parameters. The color verification should ideally use a custom assertion helper or at minimum should be documented as an exception. However, since this is a CSS property check that cannot use standard expect() methods, this is acceptable but should be noted.",
+          "fix_action": "ADD_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "page.locator(overview_page.elements.pause_plan_link).click()",
-            "replace_with": "overview_page.pause_plan_link.click()"
+            "insert_after": "bar_color = complimentary_bar.evaluate(\"el => window.getComputedStyle(el).getPropertyValue('background-color')\")",
+            "code_to_add": "# Note: Color verification uses Python assert as Playwright expect() does not have built-in color assertion methods"
           }
         },
         {
           "violation_id": "V003",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(overview_page.elements.pause_plan_modal)).to_be_visible(timeout=30000)",
-          "expected_code": "expect(overview_page.pause_plan_modal).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(overview_page.elements.pause_plan_modal)).to_be_visible(timeout=30000)",
-            "replace_with": "expect(overview_page.pause_plan_modal).to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V004",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "page.locator(overview_page.elements.pause_plan_dropdown).select_option(str(pause_duration))",
-          "expected_code": "overview_page.pause_plan_dropdown.select_option(str(pause_duration))",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "page.locator(overview_page.elements.pause_plan_dropdown).select_option(str(pause_duration))",
-            "replace_with": "overview_page.pause_plan_dropdown.select_option(str(pause_duration))"
-          }
-        },
-        {
-          "violation_id": "V005",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "page.locator(overview_page.elements.confirm_pause_plan).click()",
-          "expected_code": "overview_page.confirm_pause_plan.click()",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "page.locator(overview_page.elements.confirm_pause_plan).click()",
-            "replace_with": "overview_page.confirm_pause_plan.click()"
-          }
-        },
-        {
-          "violation_id": "V006",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(overview_page.elements.plan_paused_banner)).to_be_visible(timeout=30000)",
-          "expected_code": "expect(overview_page.plan_paused_banner).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(overview_page.elements.plan_paused_banner)).to_be_visible(timeout=30000)",
-            "replace_with": "expect(overview_page.plan_paused_banner).to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V007",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)",
-          "expected_code": "expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() with Elements container reference. The locators in print_history_page_additions.py should be defined as direct properties in the page object, not accessed via page.locator(elements.X).",
-          "fix_action": "MULTI_FILE_FIX",
-          "fix_details": {
-            "changes": [
-              {
-                "target_file": "test_scripts/billing_cycle_period_card.py",
-                "action": "REPLACE_CODE",
-                "find": "expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)",
-                "replace_with": "expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)"
-              },
-              {
-                "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-                "action": "RESTRUCTURE",
-                "description": "Locators should be defined as direct properties in __init__ method, not as Elements class attributes. The framework pattern is: self.billing_cycle_period_card = page.locator('[data-testid=billing-cycle-card]')"
-              }
-            ],
-            "explanation": "Both the test script usage and the page additions structure need correction"
-          }
-        },
-        {
-          "violation_id": "V008",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.billing_cycle_period_title)).to_be_visible(timeout=30000)",
-          "expected_code": "expect(print_history_page.billing_cycle_period_title).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.billing_cycle_period_title)).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.billing_cycle_period_title).to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V009",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.plan_pause_info_text).first).not_to_be_visible(timeout=5000)",
-          "expected_code": "expect(print_history_page.plan_pause_info_text).not_to_be_visible(timeout=5000)",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access. The .first is also unnecessary if the locator is defined as a direct property.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.plan_pause_info_text).first).not_to_be_visible(timeout=5000)",
-            "replace_with": "expect(print_history_page.plan_pause_info_text).not_to_be_visible(timeout=5000)"
-          }
-        },
-        {
-          "violation_id": "V010",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "plan_pause_info = page.locator(print_history_page.elements.plan_pause_info_text).first",
-          "expected_code": "plan_pause_info = print_history_page.plan_pause_info_text",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "plan_pause_info = page.locator(print_history_page.elements.plan_pause_info_text).first",
-            "replace_with": "plan_pause_info = print_history_page.plan_pause_info_text"
-          }
-        },
-        {
-          "violation_id": "V011",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)",
-          "expected_code": "expect(print_history_page.complimentary_pages_progress_bar).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.complimentary_pages_progress_bar).to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V012",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_info_icon = page.locator(print_history_page.elements.complimentary_pages_info_icon).first",
-          "expected_code": "complimentary_info_icon = print_history_page.complimentary_pages_info_icon",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_info_icon = page.locator(print_history_page.elements.complimentary_pages_info_icon).first",
-            "replace_with": "complimentary_info_icon = print_history_page.complimentary_pages_info_icon"
-          }
-        },
-        {
-          "violation_id": "V013",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_tooltip = page.locator(print_history_page.elements.complimentary_pages_tooltip).first",
-          "expected_code": "complimentary_tooltip = print_history_page.complimentary_pages_tooltip",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_tooltip = page.locator(print_history_page.elements.complimentary_pages_tooltip).first",
-            "replace_with": "complimentary_tooltip = print_history_page.complimentary_pages_tooltip"
-          }
-        },
-        {
-          "violation_id": "V014",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_value_locator = page.locator(print_history_page.elements.complimentary_pages_value_text).first",
-          "expected_code": "complimentary_value_locator = print_history_page.complimentary_pages_value_text",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_value_locator = page.locator(print_history_page.elements.complimentary_pages_value_text).first",
-            "replace_with": "complimentary_value_locator = print_history_page.complimentary_pages_value_text"
-          }
-        },
-        {
-          "violation_id": "V015",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_message = page.locator(print_history_page.elements.complimentary_pages_info_message).first",
-          "expected_code": "complimentary_message = print_history_page.complimentary_pages_info_message",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_message = page.locator(print_history_page.elements.complimentary_pages_info_message).first",
-            "replace_with": "complimentary_message = print_history_page.complimentary_pages_info_message"
-          }
-        },
-        {
-          "violation_id": "V016",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)",
-          "expected_code": "complimentary_bar = print_history_page.complimentary_pages_progress_bar",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)",
-            "replace_with": "complimentary_bar = print_history_page.complimentary_pages_progress_bar"
-          }
-        },
-        {
-          "violation_id": "V017",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_value_after = page.locator(print_history_page.elements.complimentary_pages_value_text).first",
-          "expected_code": "complimentary_value_after = print_history_page.complimentary_pages_value_text",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_value_after = page.locator(print_history_page.elements.complimentary_pages_value_text).first",
-            "replace_with": "complimentary_value_after = print_history_page.complimentary_pages_value_text"
-          }
-        },
-        {
-          "violation_id": "V018",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.additional_pages_progress_bar)).to_be_visible(timeout=30000)",
-          "expected_code": "expect(print_history_page.additional_pages_progress_bar).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.additional_pages_progress_bar)).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.additional_pages_progress_bar).to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V019",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "additional_bar = page.locator(print_history_page.elements.additional_pages_progress_bar)",
-          "expected_code": "additional_bar = print_history_page.additional_pages_progress_bar",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "additional_bar = page.locator(print_history_page.elements.additional_pages_progress_bar)",
-            "replace_with": "additional_bar = print_history_page.additional_pages_progress_bar"
-          }
-        },
-        {
-          "violation_id": "V020",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "additional_value = page.locator(print_history_page.elements.additional_pages_value_text).first",
-          "expected_code": "additional_value = print_history_page.additional_pages_value_text",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "additional_value = page.locator(print_history_page.elements.additional_pages_value_text).first",
-            "replace_with": "additional_value = print_history_page.additional_pages_value_text"
-          }
-        },
-        {
-          "violation_id": "V021",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "additional_info_icon = page.locator(print_history_page.elements.additional_pages_info_icon).first",
-          "expected_code": "additional_info_icon = print_history_page.additional_pages_info_icon",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "additional_info_icon = page.locator(print_history_page.elements.additional_pages_info_icon).first",
-            "replace_with": "additional_info_icon = print_history_page.additional_pages_info_icon"
-          }
-        },
-        {
-          "violation_id": "V022",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "additional_tooltip = page.locator(print_history_page.elements.additional_pages_tooltip).first",
-          "expected_code": "additional_tooltip = print_history_page.additional_pages_tooltip",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "additional_tooltip = page.locator(print_history_page.elements.additional_pages_tooltip).first",
-            "replace_with": "additional_tooltip = print_history_page.additional_pages_tooltip"
-          }
-        },
-        {
-          "violation_id": "V023",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "additional_message = page.locator(print_history_page.elements.additional_pages_info_message).first",
-          "expected_code": "additional_message = print_history_page.additional_pages_info_message",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "additional_message = page.locator(print_history_page.elements.additional_pages_info_message).first",
-            "replace_with": "additional_message = print_history_page.additional_pages_info_message"
-          }
-        },
-        {
-          "violation_id": "V024",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_bar_full = page.locator(print_history_page.elements.complimentary_pages_progress_bar)",
-          "expected_code": "complimentary_bar_full = print_history_page.complimentary_pages_progress_bar",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_bar_full = page.locator(print_history_page.elements.complimentary_pages_progress_bar)",
-            "replace_with": "complimentary_bar_full = print_history_page.complimentary_pages_progress_bar"
-          }
-        },
-        {
-          "violation_id": "V025",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_full_locator = page.locator(print_history_page.elements.complimentary_pages_value_text).first",
-          "expected_code": "complimentary_full_locator = print_history_page.complimentary_pages_value_text",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_full_locator = page.locator(print_history_page.elements.complimentary_pages_value_text).first",
-            "replace_with": "complimentary_full_locator = print_history_page.complimentary_pages_value_text"
-          }
-        },
-        {
-          "violation_id": "V026",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "total_pages = page.locator(print_history_page.elements.total_printed_pages).first",
-          "expected_code": "total_pages = print_history_page.total_printed_pages",
-          "explanation": "Inline page.locator() with Elements container reference. Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "total_pages = page.locator(print_history_page.elements.total_printed_pages).first",
-            "replace_with": "total_pages = print_history_page.total_printed_pages"
-          }
-        },
-        {
-          "violation_id": "V027",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)",
-          "expected_code": "expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() with Elements container reference (second occurrence in Step 21). Should use direct property access.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V028",
-          "rule_id": "CHECKPOINT_B01",
-          "severity": "CRITICAL",
-          "category": "missing_precondition_setup",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "# Precondition 2 & 3: Verify subscription is in subscribed status without free months",
-          "expected_code": "# Precondition 2: Make sure the Subscription has no free months info\n# Precondition 3: Make sure the subscription is \"subscribed\" status",
-          "explanation": "Preconditions 2 and 3 are combined in the code but should be separate steps according to the test case analysis. Each precondition should have its own comment and verification.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "# Precondition 2 & 3: Verify subscription is in subscribed status without free months",
-            "replace_with": "# Precondition 2: Make sure the Subscription has no free months info\n            # Precondition 3: Make sure the subscription is \"subscribed\" status"
-          }
-        },
-        {
-          "violation_id": "V029",
-          "rule_id": "CHECKPOINT_B03",
-          "severity": "CRITICAL",
-          "category": "missing_assertion",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "bar_color = complimentary_bar.evaluate(\"el => window.getComputedStyle(el).getPropertyValue('background-color')\")\n            framework_logger.info(f\"Complimentary pages progress bar color: {bar_color}\")",
-          "expected_code": "bar_color = complimentary_bar.evaluate(\"el => window.getComputedStyle(el).getPropertyValue('background-color')\")\n            framework_logger.info(f\"Complimentary pages progress bar color: {bar_color}\")\n            # Verify color is black (expected result from test case)\n            assert 'rgb(0, 0, 0)' in bar_color or 'black' in bar_color.lower(), f\"Expected black color but got {bar_color}\"",
-          "explanation": "Step 11 expected result states 'Verify the Complimentary pages progress bar is filled with the black color'. The code extracts the color but does not assert it is black. This is only logging, not verification.",
-          "fix_action": "ADD_ASSERTION",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "insert_after": "framework_logger.info(f\"Complimentary pages progress bar color: {bar_color}\")",
-            "assertion_code": "# Verify color is black (expected result from test case)\n            assert 'rgb(0, 0, 0)' in bar_color or 'black' in bar_color.lower(), f\"Expected black color but got {bar_color}\""
-          }
-        },
-        {
-          "violation_id": "V030",
-          "rule_id": "CHECKPOINT_B03",
-          "severity": "CRITICAL",
-          "category": "missing_assertion",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "bar_color = additional_bar.evaluate(\"el => window.getComputedStyle(el).getPropertyValue('background-color')\")\n            framework_logger.info(f\"Additional pages progress bar color: {bar_color}\")",
-          "expected_code": "bar_color = additional_bar.evaluate(\"el => window.getComputedStyle(el).getPropertyValue('background-color')\")\n            framework_logger.info(f\"Additional pages progress bar color: {bar_color}\")\n            # Verify color is yellow (expected result from test case)\n            assert 'rgb(255, 255, 0)' in bar_color or 'yellow' in bar_color.lower(), f\"Expected yellow color but got {bar_color}\"",
-          "explanation": "Step 14 expected result states 'Verify the progress bar is filled with the Yellow color'. The code extracts the color but does not assert it is yellow. This is only logging, not verification.",
-          "fix_action": "ADD_ASSERTION",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "insert_after": "framework_logger.info(f\"Additional pages progress bar color: {bar_color}\")",
-            "assertion_code": "# Verify color is yellow (expected result from test case)\n            assert 'rgb(255, 255, 0)' in bar_color or 'yellow' in bar_color.lower(), f\"Expected yellow color but got {bar_color}\""
-          }
-        },
-        {
-          "violation_id": "V031",
-          "rule_id": "CHECKPOINT_B03",
-          "severity": "CRITICAL",
-          "category": "missing_assertion",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "bar_color = complimentary_bar_full.evaluate(\"el => window.getComputedStyle(el).getPropertyValue('background-color')\")\n            framework_logger.info(f\"Complimentary pages progress bar color (full): {bar_color}\")",
-          "expected_code": "bar_color = complimentary_bar_full.evaluate(\"el => window.getComputedStyle(el).getPropertyValue('background-color')\")\n            framework_logger.info(f\"Complimentary pages progress bar color (full): {bar_color}\")\n            # Verify color is black and bar is 100% filled\n            assert 'rgb(0, 0, 0)' in bar_color or 'black' in bar_color.lower(), f\"Expected black color but got {bar_color}\"",
-          "explanation": "Step 18 expected result states 'Verify the Complimentary pages progress bar is full filled with the black color'. The code extracts the color but does not assert it is black. This is only logging, not verification.",
-          "fix_action": "ADD_ASSERTION",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "insert_after": "framework_logger.info(f\"Complimentary pages progress bar color (full): {bar_color}\")",
-            "assertion_code": "# Verify color is black and bar is 100% filled\n            assert 'rgb(0, 0, 0)' in bar_color or 'black' in bar_color.lower(), f\"Expected black color but got {bar_color}\""
-          }
-        },
-        {
-          "violation_id": "V032",
-          "rule_id": "CHECKPOINT_C01",
-          "severity": "CRITICAL",
-          "category": "wrong_access_pattern",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "page = common.create_new_ii_v2_account(page)",
-          "expected_code": "common.create_new_ii_v2_account(page)",
-          "explanation": "The create_new_ii_v2_account() method returns the page object, but reassigning it is unnecessary and violates the pattern. The page object is already in scope from PlaywrightManager context.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "page = common.create_new_ii_v2_account(page)",
-            "replace_with": "common.create_new_ii_v2_account(page)"
-          }
-        },
-        {
-          "violation_id": "V033",
-          "rule_id": "CHECKPOINT_C01",
-          "severity": "CRITICAL",
-          "category": "wrong_access_pattern",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "assert common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid) is not None, \"Print job registration failed\"",
-          "expected_code": "# Print job simulation - send_rtp_devicestatus returns None, no assertion needed\n            common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid)",
-          "explanation": "The send_rtp_devicestatus() method does not return a value (returns None). Asserting it is not None will always fail. The method call itself is sufficient for print simulation.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "assert common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid) is not None, \"Print job registration failed\"",
-            "replace_with": "# Print job simulation - send_rtp_devicestatus returns None, no assertion needed\n            common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid)"
-          }
-        },
-        {
-          "violation_id": "V034",
-          "rule_id": "CHECKPOINT_C01",
-          "severity": "CRITICAL",
-          "category": "wrong_access_pattern",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "assert common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid) is not None, \"Additional print job registration failed\"",
-          "expected_code": "# Additional print job simulation\n            common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid)",
-          "explanation": "Same issue as V033 - send_rtp_devicestatus() returns None, assertion will always fail.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "assert common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid) is not None, \"Additional print job registration failed\"",
-            "replace_with": "# Additional print job simulation\n            common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid)"
-          }
-        },
-        {
-          "violation_id": "V035",
-          "rule_id": "CHECKPOINT_D14",
-          "severity": "MODERATE",
-          "category": "missing_expect_timeout",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(complimentary_tooltip).to_contain_text(\"complimentary\", timeout=5000)",
-          "expected_code": "expect(complimentary_tooltip).to_contain_text(\"complimentary\", timeout=30000)",
-          "explanation": "Tooltip visibility check uses 5000ms timeout which is too short. Standard timeout for expect() assertions should be 30000ms (30 seconds) per framework standards.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(complimentary_tooltip).to_contain_text(\"complimentary\", timeout=5000)",
-            "replace_with": "expect(complimentary_tooltip).to_contain_text(\"complimentary\", timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V036",
-          "rule_id": "CHECKPOINT_D14",
-          "severity": "MODERATE",
-          "category": "missing_expect_timeout",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(complimentary_tooltip).to_be_visible(timeout=5000)",
-          "expected_code": "expect(complimentary_tooltip).to_be_visible(timeout=30000)",
-          "explanation": "Tooltip visibility check uses 5000ms timeout which is too short. Standard timeout should be 30000ms.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(complimentary_tooltip).to_be_visible(timeout=5000)",
-            "replace_with": "expect(complimentary_tooltip).to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V037",
-          "rule_id": "CHECKPOINT_D14",
-          "severity": "MODERATE",
-          "category": "missing_expect_timeout",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(additional_tooltip).to_be_visible(timeout=5000)",
-          "expected_code": "expect(additional_tooltip).to_be_visible(timeout=30000)",
-          "explanation": "Tooltip visibility check uses 5000ms timeout which is too short. Standard timeout should be 30000ms.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(additional_tooltip).to_be_visible(timeout=5000)",
-            "replace_with": "expect(additional_tooltip).to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V038",
-          "rule_id": "CHECKPOINT_D14",
-          "severity": "MODERATE",
-          "category": "missing_expect_timeout",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(additional_tooltip).to_contain_text(\"additional\", timeout=5000)",
-          "expected_code": "expect(additional_tooltip).to_contain_text(\"additional\", timeout=30000)",
-          "explanation": "Tooltip text check uses 5000ms timeout which is too short. Standard timeout should be 30000ms.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(additional_tooltip).to_contain_text(\"additional\", timeout=5000)",
-            "replace_with": "expect(additional_tooltip).to_contain_text(\"additional\", timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V039",
-          "rule_id": "CHECKPOINT_D14",
-          "severity": "MODERATE",
-          "category": "missing_expect_timeout",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.plan_pause_info_text).first).not_to_be_visible(timeout=5000)",
-          "expected_code": "expect(print_history_page.plan_pause_info_text).not_to_be_visible(timeout=30000)",
-          "explanation": "Negative visibility check uses 5000ms timeout. While negative checks can use shorter timeouts, the standard is 30000ms for consistency. Also has inline page.locator() issue (already flagged in V009).",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.plan_pause_info_text).first).not_to_be_visible(timeout=5000)",
-            "replace_with": "expect(print_history_page.plan_pause_info_text).not_to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V040",
-          "rule_id": "CHECKPOINT_D15",
-          "severity": "MODERATE",
-          "category": "inline_admin_interaction",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "GeminiRAHelper.access(page)\n            page.wait_for_load_state(\"networkidle\", timeout=30000)\n            GeminiRAHelper.access_tenant_page(page, tenant_email)\n            page.wait_for_load_state(\"networkidle\", timeout=30000)\n            GeminiRAHelper.subscription_to_subscribed(page)\n            page.wait_for_timeout(3000)\n            page.reload()\n            page.wait_for_load_state(\"networkidle\", timeout=30000)\n            GeminiRAHelper.verify_rails_admin_info(page, \"State\", \"subscribed\")\n            GeminiRAHelper.verify_rails_admin_info(page, \"Free months\", \"0\")",
-          "expected_code": "# Consider creating a helper method: GeminiRAHelper.verify_subscription_state_and_free_months(page, tenant_email, expected_state='subscribed', expected_free_months='0')\n            GeminiRAHelper.verify_subscription_state_and_free_months(page, tenant_email)",
-          "explanation": "This is a complex sequence of Gemini Rails Admin operations that is repeated multiple times in the test. According to Checkpoint D15, admin/backend interactions should be encapsulated in helpers. This sequence should be extracted into a single helper method.",
-          "fix_action": "RESTRUCTURE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "description": "Extract the Gemini RA verification sequence into a helper method",
-            "current_structure": "Multiple GeminiRAHelper calls with waits and reloads",
-            "required_structure": "Single helper method call that encapsulates the entire verification flow"
-          }
-        },
-        {
-          "violation_id": "V041",
-          "rule_id": "CHECKPOINT_D15",
-          "severity": "MODERATE",
-          "category": "inline_admin_interaction",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "GeminiRAHelper.access(page)\n            GeminiRAHelper.access_tenant_page(page, tenant_email)\n            GeminiRAHelper.verify_rails_admin_info(page, \"State\", \"paused\")",
-          "expected_code": "# Consider creating a helper method: GeminiRAHelper.verify_subscription_state(page, tenant_email, expected_state='paused')\n            GeminiRAHelper.verify_subscription_state(page, tenant_email, 'paused')",
-          "explanation": "Another Gemini RA verification sequence that should be encapsulated in a helper method.",
-          "fix_action": "RESTRUCTURE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "description": "Extract the Gemini RA state verification into a helper method",
-            "current_structure": "Multiple GeminiRAHelper calls",
-            "required_structure": "Single helper method call"
-          }
-        },
-        {
-          "violation_id": "V042",
-          "rule_id": "CHECKPOINT_D15",
-          "severity": "MODERATE",
-          "category": "inline_admin_interaction",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "GeminiRAHelper.access(page)\n            page.wait_for_load_state(\"networkidle\", timeout=30000)\n            GeminiRAHelper.access_tenant_page(page, tenant_email)\n            page.wait_for_load_state(\"networkidle\", timeout=30000)\n            GeminiRAHelper.event_shift(page, event_shift=32, force_billing=True)\n            page.wait_for_timeout(5000)",
-          "expected_code": "# Consider creating a helper method: GeminiRAHelper.shift_time_for_tenant(page, tenant_email, days=32, force_billing=True)\n            GeminiRAHelper.shift_time_for_tenant(page, tenant_email, 32, force_billing=True)",
-          "explanation": "Time shift operation with Gemini RA access should be encapsulated in a helper method.",
-          "fix_action": "RESTRUCTURE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "description": "Extract the time shift operation into a helper method",
-            "current_structure": "Multiple GeminiRAHelper calls with waits",
-            "required_structure": "Single helper method call"
-          }
-        },
-        {
-          "violation_id": "V043",
           "rule_id": "CHECKPOINT_E04",
           "severity": "MINOR",
           "category": "verbose_logging",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "framework_logger.info(f\"Complimentary pages progress bar color: {bar_color}\")\n            complimentary_value_after = page.locator(print_history_page.elements.complimentary_pages_value_text).first\n            expect(complimentary_value_after).to_contain_text(\"6\", timeout=30000)\n            expect(complimentary_value_after).to_contain_text(\"10\", timeout=30000)\n            framework_logger.info(\"Step 11 completed: Complimentary pages updated correctly\")",
-          "expected_code": "framework_logger.info(f\"Step 11 completed: Complimentary pages updated correctly - color: {bar_color}, value: 6 of 10\")",
-          "explanation": "Step 11 has multiple log lines. According to Checkpoint E04, logging should be concise - 1 log line per step. Combine the color and completion logs into a single informative log statement.",
+          "current_code": "# Multiple framework_logger.info() calls within single logical steps",
+          "expected_code": "# Consolidate logging to 1 concise log line per step",
+          "explanation": "Some steps have multiple log lines which makes the log output verbose. For example, Precondition 1 has 6 separate log statements. While each provides useful information, the coding standard (CHECKPOINT_E04) recommends 1 concise log line per step to keep logs readable. This is a minor style issue and does not affect functionality.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "framework_logger.info(f\"Complimentary pages progress bar color: {bar_color}\")\n            complimentary_value_after = page.locator(print_history_page.elements.complimentary_pages_value_text).first\n            expect(complimentary_value_after).to_contain_text(\"6\", timeout=30000)\n            expect(complimentary_value_after).to_contain_text(\"10\", timeout=30000)\n            framework_logger.info(\"Step 11 completed: Complimentary pages updated correctly\")",
-            "replace_with": "complimentary_value_after = print_history_page.complimentary_pages_value_text\n            expect(complimentary_value_after).to_contain_text(\"6\", timeout=30000)\n            expect(complimentary_value_after).to_contain_text(\"10\", timeout=30000)\n            framework_logger.info(f\"Step 11 completed: Complimentary pages updated correctly - color: {bar_color}, value: 6 of 10\")"
-          }
-        },
-        {
-          "violation_id": "V044",
-          "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
-          "category": "verbose_logging",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "framework_logger.info(f\"Additional pages progress bar color: {bar_color}\")\n            additional_value = page.locator(print_history_page.elements.additional_pages_value_text).first\n            expect(additional_value).to_be_visible(timeout=30000)\n            expect(additional_value).to_contain_text(\"5\", timeout=30000)\n            expect(additional_value).to_contain_text(\"10\", timeout=30000)\n            framework_logger.info(\"Step 14 completed: Additional pages value displays correctly\")",
-          "expected_code": "additional_value = print_history_page.additional_pages_value_text\n            expect(additional_value).to_be_visible(timeout=30000)\n            expect(additional_value).to_contain_text(\"5\", timeout=30000)\n            expect(additional_value).to_contain_text(\"10\", timeout=30000)\n            framework_logger.info(f\"Step 14 completed: Additional pages value displays correctly - color: {bar_color}, value: 5 of 10\")",
-          "explanation": "Step 14 has multiple log lines. Combine into a single informative log statement.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "framework_logger.info(f\"Additional pages progress bar color: {bar_color}\")\n            additional_value = page.locator(print_history_page.elements.additional_pages_value_text).first\n            expect(additional_value).to_be_visible(timeout=30000)\n            expect(additional_value).to_contain_text(\"5\", timeout=30000)\n            expect(additional_value).to_contain_text(\"10\", timeout=30000)\n            framework_logger.info(\"Step 14 completed: Additional pages value displays correctly\")",
-            "replace_with": "additional_value = print_history_page.additional_pages_value_text\n            expect(additional_value).to_be_visible(timeout=30000)\n            expect(additional_value).to_contain_text(\"5\", timeout=30000)\n            expect(additional_value).to_contain_text(\"10\", timeout=30000)\n            framework_logger.info(f\"Step 14 completed: Additional pages value displays correctly - color: {bar_color}, value: 5 of 10\")"
-          }
-        },
-        {
-          "violation_id": "V045",
-          "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
-          "category": "verbose_logging",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "framework_logger.info(f\"Complimentary pages progress bar color (full): {bar_color}\")\n            complimentary_full_locator = page.locator(print_history_page.elements.complimentary_pages_value_text).first\n            expect(complimentary_full_locator).to_contain_text(\"10\", timeout=30000)\n            expect(complimentary_full_locator).to_contain_text(\"used\", timeout=30000)\n            framework_logger.info(\"Step 18 completed: Complimentary pages full\")",
-          "expected_code": "complimentary_full_locator = print_history_page.complimentary_pages_value_text\n            expect(complimentary_full_locator).to_contain_text(\"10\", timeout=30000)\n            expect(complimentary_full_locator).to_contain_text(\"used\", timeout=30000)\n            framework_logger.info(f\"Step 18 completed: Complimentary pages full - color: {bar_color}, value: 10 of 10 used\")",
-          "explanation": "Step 18 has multiple log lines. Combine into a single informative log statement.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "framework_logger.info(f\"Complimentary pages progress bar color (full): {bar_color}\")\n            complimentary_full_locator = page.locator(print_history_page.elements.complimentary_pages_value_text).first\n            expect(complimentary_full_locator).to_contain_text(\"10\", timeout=30000)\n            expect(complimentary_full_locator).to_contain_text(\"used\", timeout=30000)\n            framework_logger.info(\"Step 18 completed: Complimentary pages full\")",
-            "replace_with": "complimentary_full_locator = print_history_page.complimentary_pages_value_text\n            expect(complimentary_full_locator).to_contain_text(\"10\", timeout=30000)\n            expect(complimentary_full_locator).to_contain_text(\"used\", timeout=30000)\n            framework_logger.info(f\"Step 18 completed: Complimentary pages full - color: {bar_color}, value: 10 of 10 used\")"
-          }
-        },
-        {
-          "violation_id": "V046",
-          "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
-          "category": "verbose_logging",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "framework_logger.info(f\"Printing {pages_to_print} pages using printer entity_id={printer_data.entity_id}\")\n            common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid)\n            # Verify print job was registered successfully\n            assert common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid) is not None, \"Print job registration failed\"\n            page.wait_for_timeout(5000)\n            framework_logger.info(f\"Step 10 completed: Simulated printing {pages_to_print} pages\")",
-          "expected_code": "common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid)\n            page.wait_for_timeout(5000)\n            framework_logger.info(f\"Step 10 completed: Simulated printing {pages_to_print} pages using printer entity_id={printer_data.entity_id}\")",
-          "explanation": "Step 10 has multiple log lines. Combine into a single informative log statement. Also removes the incorrect assertion (already flagged in V033).",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "framework_logger.info(f\"Printing {pages_to_print} pages using printer entity_id={printer_data.entity_id}\")\n            common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid)\n            # Verify print job was registered successfully\n            assert common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid) is not None, \"Print job registration failed\"\n            page.wait_for_timeout(5000)\n            framework_logger.info(f\"Step 10 completed: Simulated printing {pages_to_print} pages\")",
-            "replace_with": "common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid)\n            page.wait_for_timeout(5000)\n            framework_logger.info(f\"Step 10 completed: Simulated printing {pages_to_print} pages using printer entity_id={printer_data.entity_id}\")"
-          }
-        },
-        {
-          "violation_id": "V047",
-          "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
-          "category": "verbose_logging",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "framework_logger.info(f\"Printing {additional_pages} more pages (total 15) using printer entity_id={printer_data.entity_id}\")\n            common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid)\n            # Verify additional print job was registered successfully\n            assert common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid) is not None, \"Additional print job registration failed\"\n            page.wait_for_timeout(5000)\n            framework_logger.info(f\"Step 12 completed: Simulated printing {additional_pages} more pages (total 15)\")",
-          "expected_code": "common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid)\n            page.wait_for_timeout(5000)\n            framework_logger.info(f\"Step 12 completed: Simulated printing {additional_pages} more pages (total 15) using printer entity_id={printer_data.entity_id}\")",
-          "explanation": "Step 12 has multiple log lines. Combine into a single informative log statement. Also removes the incorrect assertion (already flagged in V034).",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "framework_logger.info(f\"Printing {additional_pages} more pages (total 15) using printer entity_id={printer_data.entity_id}\")\n            common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid)\n            # Verify additional print job was registered successfully\n            assert common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid) is not None, \"Additional print job registration failed\"\n            page.wait_for_timeout(5000)\n            framework_logger.info(f\"Step 12 completed: Simulated printing {additional_pages} more pages (total 15)\")",
-            "replace_with": "common.send_rtp_devicestatus(printer_data.entity_id, printer_data.cloud_id, printer_data.device_uuid)\n            page.wait_for_timeout(5000)\n            framework_logger.info(f\"Step 12 completed: Simulated printing {additional_pages} more pages (total 15) using printer entity_id={printer_data.entity_id}\")"
-          }
-        },
-        {
-          "violation_id": "V048",
-          "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
-          "category": "verbose_logging",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "page.screenshot(path=f\"screenshots/billing_cycle_card_{common.get_current_timestamp()}.png\")\n            framework_logger.info(\"Step 20 completed: Screenshot captured for Billing Cycle Period card\")",
-          "expected_code": "screenshot_path = f\"screenshots/billing_cycle_card_{common.get_current_timestamp()}.png\"\n            page.screenshot(path=screenshot_path)\n            framework_logger.info(f\"Step 20 completed: Screenshot captured at {screenshot_path}\")",
-          "explanation": "Log should include the screenshot path for better traceability.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "page.screenshot(path=f\"screenshots/billing_cycle_card_{common.get_current_timestamp()}.png\")\n            framework_logger.info(\"Step 20 completed: Screenshot captured for Billing Cycle Period card\")",
-            "replace_with": "screenshot_path = f\"screenshots/billing_cycle_card_{common.get_current_timestamp()}.png\"\n            page.screenshot(path=screenshot_path)\n            framework_logger.info(f\"Step 20 completed: Screenshot captured at {screenshot_path}\")"
-          }
-        },
-        {
-          "violation_id": "V049",
-          "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
-          "category": "verbose_logging",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "for width, height in viewports:\n                page.set_viewport_size({\"width\": width, \"height\": height})\n                page.wait_for_timeout(1000)\n                expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)\n                framework_logger.info(f\"Step 21 completed: Layout verified at {width}x{height}\")",
-          "expected_code": "for width, height in viewports:\n                page.set_viewport_size({\"width\": width, \"height\": height})\n                page.wait_for_timeout(1000)\n                expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)\n            framework_logger.info(f\"Step 21 completed: Layout verified at all viewports: {viewports}\")",
-          "explanation": "Step 21 logs once per viewport iteration (3 times). Should log once after all viewports are verified. Also fixes inline page.locator() issue.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "for width, height in viewports:\n                page.set_viewport_size({\"width\": width, \"height\": height})\n                page.wait_for_timeout(1000)\n                expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)\n                framework_logger.info(f\"Step 21 completed: Layout verified at {width}x{height}\")",
-            "replace_with": "for width, height in viewports:\n                page.set_viewport_size({\"width\": width, \"height\": height})\n                page.wait_for_timeout(1000)\n                expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)\n            framework_logger.info(f\"Step 21 completed: Layout verified at all viewports: {viewports}\")"
-          }
-        },
-        {
-          "violation_id": "V050",
-          "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
-          "category": "verbose_logging",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "tenant_email = common.generate_tenant_email()\n            framework_logger.info(f\"Generated tenant_email={tenant_email}\")\n\n            page = common.create_new_ii_v2_account(page)\n            page.wait_for_load_state(\"networkidle\", timeout=60000)\n            framework_logger.info(\"Precondition: Fresh account created and logged in\")",
-          "expected_code": "tenant_email = common.generate_tenant_email()\n            common.create_new_ii_v2_account(page)\n            page.wait_for_load_state(\"networkidle\", timeout=60000)\n            framework_logger.info(f\"Precondition 1: Fresh account created and logged in with tenant_email={tenant_email}\")",
-          "explanation": "Precondition setup has multiple log lines. Combine into a single informative log statement. Also fixes the page reassignment issue (already flagged in V032).",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "tenant_email = common.generate_tenant_email()\n            framework_logger.info(f\"Generated tenant_email={tenant_email}\")\n\n            page = common.create_new_ii_v2_account(page)\n            page.wait_for_load_state(\"networkidle\", timeout=60000)\n            framework_logger.info(\"Precondition: Fresh account created and logged in\")",
-            "replace_with": "tenant_email = common.generate_tenant_email()\n            common.create_new_ii_v2_account(page)\n            page.wait_for_load_state(\"networkidle\", timeout=60000)\n            framework_logger.info(f\"Precondition 1: Fresh account created and logged in with tenant_email={tenant_email}\")"
-          }
-        },
-        {
-          "violation_id": "V051",
-          "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
-          "category": "verbose_logging",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "printer_data = common.create_and_claim_virtual_printer_and_add_address()\n            assert printer_data is not None, \"Printer creation failed\"\n            assert printer_data.entity_id is not None, \"Printer entity_id is None\"\n            framework_logger.info(f\"Precondition: Virtual printer created - entity_id={printer_data.entity_id}\")",
-          "expected_code": "printer_data = common.create_and_claim_virtual_printer_and_add_address()\n            assert printer_data is not None, \"Printer creation failed\"\n            assert printer_data.entity_id is not None, \"Printer entity_id is None\"\n            framework_logger.info(f\"Precondition 1 (continued): Virtual printer created with entity_id={printer_data.entity_id}\")",
-          "explanation": "Precondition logging should indicate it's part of Precondition 1 (printer enrollment).",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "framework_logger.info(f\"Precondition: Virtual printer created - entity_id={printer_data.entity_id}\")",
-            "replace_with": "framework_logger.info(f\"Precondition 1 (continued): Virtual printer created with entity_id={printer_data.entity_id}\")"
-          }
-        },
-        {
-          "violation_id": "V052",
-          "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
-          "category": "verbose_logging",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "EnrollmentHelper.start_enrollment_and_sign_in(page, tenant_email, timeout=720)\n            page.wait_for_load_state(\"networkidle\", timeout=30000)\n            framework_logger.info(\"Precondition: Enrollment started\")",
-          "expected_code": "EnrollmentHelper.start_enrollment_and_sign_in(page, tenant_email, timeout=720)\n            page.wait_for_load_state(\"networkidle\", timeout=30000)\n            framework_logger.info(\"Precondition 1 (continued): Enrollment started\")",
-          "explanation": "Precondition logging should indicate it's part of Precondition 1.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "framework_logger.info(\"Precondition: Enrollment started\")",
-            "replace_with": "framework_logger.info(\"Precondition 1 (continued): Enrollment started\")"
-          }
-        },
-        {
-          "violation_id": "V053",
-          "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
-          "category": "verbose_logging",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "EnrollmentHelper.select_printer(page, printer_index=0)\n            page.wait_for_load_state(\"networkidle\", timeout=30000)\n            framework_logger.info(\"Precondition: Printer selected\")",
-          "expected_code": "EnrollmentHelper.select_printer(page, printer_index=0)\n            page.wait_for_load_state(\"networkidle\", timeout=30000)\n            framework_logger.info(\"Precondition 1 (continued): Printer selected\")",
-          "explanation": "Precondition logging should indicate it's part of Precondition 1.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "framework_logger.info(\"Precondition: Printer selected\")",
-            "replace_with": "framework_logger.info(\"Precondition 1 (continued): Printer selected\")"
-          }
-        },
-        {
-          "violation_id": "V054",
-          "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
-          "category": "verbose_logging",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "plan_data = common.get_filtered_plan_data(key='pages', value=50)\n            assert plan_data is not None, \"50 pages plan not found in available plans\"\n            EnrollmentHelper.select_plan(page, plan_data)\n            page.wait_for_timeout(2000)\n            framework_logger.info(\"Precondition: 50 pages plan selected\")",
-          "expected_code": "plan_data = common.get_filtered_plan_data(key='pages', value=50)\n            assert plan_data is not None, \"50 pages plan not found in available plans\"\n            EnrollmentHelper.select_plan(page, plan_data)\n            page.wait_for_timeout(2000)\n            framework_logger.info(\"Precondition 1 (continued): 50 pages plan selected\")",
-          "explanation": "Precondition logging should indicate it's part of Precondition 1.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "framework_logger.info(\"Precondition: 50 pages plan selected\")",
-            "replace_with": "framework_logger.info(\"Precondition 1 (continued): 50 pages plan selected\")"
-          }
-        },
-        {
-          "violation_id": "V055",
-          "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
-          "category": "verbose_logging",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "EnrollmentHelper.complete_enrollment_flow(page)\n            page.wait_for_timeout(5000)\n            framework_logger.info(\"Precondition: Enrollment completed\")",
-          "expected_code": "EnrollmentHelper.complete_enrollment_flow(page)\n            page.wait_for_timeout(5000)\n            framework_logger.info(\"Precondition 1 (continued): Enrollment completed\")",
-          "explanation": "Precondition logging should indicate it's part of Precondition 1.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "framework_logger.info(\"Precondition: Enrollment completed\")",
-            "replace_with": "framework_logger.info(\"Precondition 1 (continued): Enrollment completed\")"
-          }
-        },
-        {
-          "violation_id": "V056",
-          "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
-          "category": "verbose_logging",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "sub_id = common.subscription_data_from_gemini(tenant_email).get('id')\n            assert sub_id is not None, \"Enrollment failed - no subscription ID found\"\n            framework_logger.info(f\"Precondition: Subscription ID={sub_id} - enrollment verified\")",
-          "expected_code": "sub_id = common.subscription_data_from_gemini(tenant_email).get('id')\n            assert sub_id is not None, \"Enrollment failed - no subscription ID found\"\n            framework_logger.info(f\"Precondition 1 completed: Printer enrolled with 50 pages plan - Subscription ID={sub_id}\")",
-          "explanation": "This is the final log for Precondition 1, should indicate completion.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "framework_logger.info(f\"Precondition: Subscription ID={sub_id} - enrollment verified\")",
-            "replace_with": "framework_logger.info(f\"Precondition 1 completed: Printer enrolled with 50 pages plan - Subscription ID={sub_id}\")"
-          }
-        },
-        {
-          "violation_id": "V057",
-          "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
-          "category": "verbose_logging",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "GeminiRAHelper.verify_rails_admin_info(page, \"State\", \"subscribed\")\n            GeminiRAHelper.verify_rails_admin_info(page, \"Free months\", \"0\")\n            framework_logger.info(\"Precondition: Subscription verified as subscribed with no free months\")",
-          "expected_code": "GeminiRAHelper.verify_rails_admin_info(page, \"State\", \"subscribed\")\n            GeminiRAHelper.verify_rails_admin_info(page, \"Free months\", \"0\")\n            framework_logger.info(\"Preconditions 2 & 3 completed: Subscription verified as subscribed with no free months\")",
-          "explanation": "This log covers both Preconditions 2 and 3, should indicate both.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "framework_logger.info(\"Precondition: Subscription verified as subscribed with no free months\")",
-            "replace_with": "framework_logger.info(\"Preconditions 2 & 3 completed: Subscription verified as subscribed with no free months\")"
-          }
-        },
-        {
-          "violation_id": "V058",
-          "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
-          "category": "verbose_logging",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "GeminiRAHelper.verify_rails_admin_info(page, \"State\", \"paused\")\n            framework_logger.info(\"Precondition: Plan paused successfully and verified\")",
-          "expected_code": "GeminiRAHelper.verify_rails_admin_info(page, \"State\", \"paused\")\n            framework_logger.info(\"Precondition 4 completed: Plan paused successfully and verified\")",
-          "explanation": "This is Precondition 4, should be labeled as such.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "framework_logger.info(\"Precondition: Plan paused successfully and verified\")",
-            "replace_with": "framework_logger.info(\"Precondition 4 completed: Plan paused successfully and verified\")"
-          }
-        },
-        {
-          "violation_id": "V059",
-          "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
-          "category": "verbose_logging",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "# ══════════════════════════════════════════════\n            # PRECONDITION SETUP\n            # ══════════════════════════════════════════════",
-          "expected_code": "# ══════════════════════════════════════════════\n            # PRECONDITIONS (4 total)\n            # ══════════════════════════════════════════════",
-          "explanation": "Precondition section comment should indicate the total number of preconditions for clarity.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "# ══════════════════════════════════════════════\n            # PRECONDITION SETUP\n            # ══════════════════════════════════════════════",
-            "replace_with": "# ══════════════════════════════════════════════\n            # PRECONDITIONS (4 total)\n            # ══════════════════════════════════════════════"
+            "find": "framework_logger.info(f\"Precondition 1: Fresh account created and logged in with tenant_email={tenant_email}\")\n\n            # Create and claim virtual printer\n            printer_data = common.create_and_claim_virtual_printer_and_add_address()\n            assert printer_data is not None, \"Printer creation failed\"\n            assert printer_data.entity_id is not None, \"Printer entity_id is None\"\n            framework_logger.info(f\"Precondition 1 (continued): Virtual printer created with entity_id={printer_data.entity_id}\")",
+            "replace_with": "framework_logger.info(f\"Precondition 1: Fresh account created with tenant_email={tenant_email}\")\n\n            # Create and claim virtual printer\n            printer_data = common.create_and_claim_virtual_printer_and_add_address()\n            assert printer_data is not None, \"Printer creation failed\"\n            assert printer_data.entity_id is not None, \"Printer entity_id is None\"\n            framework_logger.info(f\"Precondition 1: Virtual printer created with entity_id={printer_data.entity_id}, enrollment started\")"
           }
         }
       ]
@@ -1027,412 +139,110 @@
       "file_path": "additional_generations/page_additions/print_history_page_additions.py",
       "file_type": "page_addition",
       "test_case_id": "C44873414",
-      "score": 91,
-      "violation_count": 3,
-      "critical_count": 3,
+      "score": 100,
+      "violation_count": 0,
+      "critical_count": 0,
       "moderate_count": 0,
       "minor_count": 0,
-      "deduction": 9,
+      "deduction": 0,
       "checkpoints_evaluated": 7,
       "checkpoints_passed": [
         "F01",
         "F02",
-        "F05"
-      ],
-      "checkpoints_failed": [
+        "F03",
         "F04",
-        "F06"
+        "F05",
+        "F06",
+        "F07"
       ],
-      "violations": [
-        {
-          "violation_id": "V060",
-          "rule_id": "CHECKPOINT_F04",
-          "severity": "CRITICAL",
-          "category": "missing_elements_class_structure",
-          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-          "current_code": "class Elements:\n    \"\"\"\n    Additional locator strings for PrintHistoryPage.\n    Merge these into the existing Elements class in pages/print_history_page.py\n    \"\"\"\n    \n    # Billing Cycle Period Card - Main Container\n    billing_cycle_period_card = \"[data-testid='billing-cycle-card']\"",
-          "expected_code": "# In pages/print_history_page.py __init__ method:\nself.billing_cycle_period_card = page.locator(\"[data-testid='billing-cycle-card']\")",
-          "explanation": "The page additions file defines locators as class attributes in an Elements class, but according to the framework pattern shown in the mapping report and coding standards, locators should be defined as direct properties in the page object's __init__ method. The framework uses two patterns: (1) Direct properties: self.element = page.locator('selector') accessed as page_obj.element, or (2) Elements container for grouped locators accessed via page.locator(page_obj.elements.selector). However, the mapping report shows that existing locators in PrintHistoryPage use direct property access (Pattern 1), so new locators should follow the same pattern. The current structure will cause the test script to use page.locator(page_obj.elements.X) which violates Prohibition 6.",
-          "fix_action": "RESTRUCTURE",
-          "fix_details": {
-            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "description": "Restructure locators to be defined as direct properties in __init__ method instead of Elements class attributes",
-            "current_structure": "class Elements with class attributes",
-            "required_structure": "Direct property definitions: self.billing_cycle_period_card = page.locator('[data-testid=billing-cycle-card]')"
-          }
-        },
-        {
-          "violation_id": "V061",
-          "rule_id": "CHECKPOINT_F06",
-          "severity": "CRITICAL",
-          "category": "dead_locator_in_additions",
-          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-          "current_code": "plan_pause_info_text = \"[data-testid='plan-pause-info']\"",
-          "expected_code": "plan_pause_info_text = \"[data-testid='plan-pause-info'], .pause-plan-info, .plan-paused-message\"",
-          "explanation": "The locator selector is too specific. According to the generation summary, the plan_pause_info_text locator should have multiple fallback selectors: '[data-testid=plan-pause-info'], .pause-plan-info, .plan-paused-message'. The current definition only has the data-testid selector, which may not match the actual element on the page. This could cause the test to fail when checking for plan pause information visibility.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "find": "plan_pause_info_text = \"[data-testid='plan-pause-info']\"",
-            "replace_with": "plan_pause_info_text = \"[data-testid='plan-pause-info'], .pause-plan-info, .plan-paused-message\""
-          }
-        },
-        {
-          "violation_id": "V062",
-          "rule_id": "CHECKPOINT_F06",
-          "severity": "CRITICAL",
-          "category": "dead_locator_in_additions",
-          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-          "current_code": "complimentary_pages_progress_bar = \"[data-testid='complimentary-pages-progress-bar']\"",
-          "expected_code": "complimentary_pages_progress_bar = \"[data-testid='complimentary-pages-bar'], .complimentary-progress-bar\"",
-          "explanation": "The locator selector does not match the generation summary specification. According to the generation summary, complimentary_pages_progress_bar should use selector '[data-testid=complimentary-pages-bar'], .complimentary-progress-bar' with fallback to class selector. The current definition uses 'complimentary-pages-progress-bar' which is inconsistent.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "find": "complimentary_pages_progress_bar = \"[data-testid='complimentary-pages-progress-bar']\"",
-            "replace_with": "complimentary_pages_progress_bar = \"[data-testid='complimentary-pages-bar'], .complimentary-progress-bar\""
-          }
-        }
-      ]
+      "checkpoints_failed": [],
+      "violations": []
     },
     {
       "file_path": "additional_generations/page_additions/overview_page_additions.py",
       "file_type": "page_addition",
       "test_case_id": "C44873414",
-      "score": 85,
-      "violation_count": 5,
-      "critical_count": 3,
+      "score": 100,
+      "violation_count": 0,
+      "critical_count": 0,
       "moderate_count": 0,
-      "minor_count": 2,
-      "deduction": 11,
+      "minor_count": 0,
+      "deduction": 0,
       "checkpoints_evaluated": 7,
       "checkpoints_passed": [
         "F01",
         "F02",
-        "F05"
-      ],
-      "checkpoints_failed": [
+        "F03",
         "F04",
-        "F06"
+        "F05",
+        "F06",
+        "F07"
       ],
-      "violations": [
-        {
-          "violation_id": "V063",
-          "rule_id": "CHECKPOINT_F04",
-          "severity": "CRITICAL",
-          "category": "missing_elements_class_structure",
-          "file_path": "additional_generations/page_additions/overview_page_additions.py",
-          "current_code": "class Elements:\n    \"\"\"\n    Additional locator strings for OverviewPage.\n    Merge these into the existing Elements class in pages/overview_page.py\n    \"\"\"\n    \n    # Pause Plan Elements\n    pause_plan_link = \"[data-testid='pause-plan-link']\"",
-          "expected_code": "# In pages/overview_page.py __init__ method:\nself.pause_plan_link = page.locator(\"[data-testid='pause-plan-link']\")",
-          "explanation": "Same issue as print_history_page_additions.py - locators should be defined as direct properties in __init__ method, not as Elements class attributes. The mapping report shows that pause_plan_link, pause_plan_modal, pause_plan_dropdown, confirm_pause_plan, and plan_paused_banner already exist in OverviewPage as direct properties, so the additions file should follow the same pattern.",
-          "fix_action": "RESTRUCTURE",
-          "fix_details": {
-            "target_file": "additional_generations/page_additions/overview_page_additions.py",
-            "description": "Restructure locators to be defined as direct properties in __init__ method instead of Elements class attributes",
-            "current_structure": "class Elements with class attributes",
-            "required_structure": "Direct property definitions: self.pause_plan_link = page.locator('[data-testid=pause-plan-link]')"
-          }
-        },
-        {
-          "violation_id": "V064",
-          "rule_id": "CHECKPOINT_F06",
-          "severity": "CRITICAL",
-          "category": "dead_locator_in_additions",
-          "file_path": "additional_generations/page_additions/overview_page_additions.py",
-          "current_code": "pause_plan_link = \"[data-testid='pause-plan-link']\"",
-          "expected_code": "pause_plan_link = \"[data-testid='pause-plan-link'], a:has-text('Pause')\"",
-          "explanation": "The locator selector is too specific. According to the generation summary, pause_plan_link should have a fallback selector: '[data-testid=pause-plan-link'], a:has-text('Pause'). The current definition only has the data-testid selector.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "additional_generations/page_additions/overview_page_additions.py",
-            "find": "pause_plan_link = \"[data-testid='pause-plan-link']\"",
-            "replace_with": "pause_plan_link = \"[data-testid='pause-plan-link'], a:has-text('Pause')\""
-          }
-        },
-        {
-          "violation_id": "V065",
-          "rule_id": "CHECKPOINT_F06",
-          "severity": "CRITICAL",
-          "category": "dead_locator_in_additions",
-          "file_path": "additional_generations/page_additions/overview_page_additions.py",
-          "current_code": "pause_plan_modal = \"[data-testid='pause-plan-modal']\"",
-          "expected_code": "pause_plan_modal = \"[data-testid='pause-plan-modal'], [role='dialog']:has-text('Pause')\"",
-          "explanation": "The locator selector is too specific. According to the generation summary, pause_plan_modal should have a fallback selector: '[data-testid=pause-plan-modal'], [role='dialog']:has-text('Pause')'. The current definition only has the data-testid selector.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "additional_generations/page_additions/overview_page_additions.py",
-            "find": "pause_plan_modal = \"[data-testid='pause-plan-modal']\"",
-            "replace_with": "pause_plan_modal = \"[data-testid='pause-plan-modal'], [role='dialog']:has-text('Pause')\""
-          }
-        },
-        {
-          "violation_id": "V066",
-          "rule_id": "CHECKPOINT_F01",
-          "severity": "MINOR",
-          "category": "missing_module_docstring",
-          "file_path": "additional_generations/page_additions/overview_page_additions.py",
-          "current_code": "\"\"\"",
-          "expected_code": "The module-level docstring should explain that these locators already exist in the codebase according to the mapping report, and this file provides the correct selectors for merging.",
-          "explanation": "The module-level docstring states these are 'Additional locators for OverviewPage' but according to the mapping report, pause_plan_link, pause_plan_modal, pause_plan_dropdown, confirm_pause_plan, and plan_paused_banner already exist in pages/overview_page.py. The docstring should clarify that these are EXISTING locators being provided with correct selectors, not NEW locators.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "additional_generations/page_additions/overview_page_additions.py",
-            "find": "\"\"\"",
-            "replace_with": "NOTE: According to the mapping report, these locators already exist in pages/overview_page.py.\nThis file provides the correct selectors for these existing locators to ensure they match\nthe actual UI elements used in test case C44873414."
-          }
-        },
-        {
-          "violation_id": "V067",
-          "rule_id": "CHECKPOINT_F01",
-          "severity": "MINOR",
-          "category": "missing_module_docstring",
-          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-          "current_code": "\"\"\"",
-          "expected_code": "The module-level docstring should clarify whether these are new locators or updates to existing ones.",
-          "explanation": "The module-level docstring should clarify that these are NEW locators being added to PrintHistoryPage, as they do not exist in the current codebase according to the mapping report. This helps the developer understand the merge operation.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "find": "\"\"\"",
-            "replace_with": "NOTE: These are NEW locators being added to PrintHistoryPage for test case C44873414.\nThey do not exist in the current codebase and should be added to the page object."
-          }
-        }
-      ]
+      "checkpoints_failed": [],
+      "violations": []
     }
   ],
   "violation_summary": {
     "by_severity": {
-      "CRITICAL": 45,
-      "MODERATE": 8,
-      "MINOR": 14
+      "CRITICAL": 2,
+      "MODERATE": 0,
+      "MINOR": 1
     },
     "by_category": {
-      "inline_page_locator": 27,
-      "missing_assertion": 3,
-      "wrong_access_pattern": 3,
-      "missing_precondition_setup": 1,
-      "missing_expect_timeout": 5,
-      "inline_admin_interaction": 3,
-      "verbose_logging": 17,
-      "missing_elements_class_structure": 2,
-      "dead_locator_in_additions": 4,
-      "missing_module_docstring": 2
+      "invalid_playwright_syntax": 1,
+      "missing_expect_timeout": 1,
+      "verbose_logging": 1
     },
     "by_rule": {
-      "PROHIBITION_6": 27,
-      "CHECKPOINT_B01": 1,
-      "CHECKPOINT_B03": 3,
-      "CHECKPOINT_C01": 3,
-      "CHECKPOINT_D14": 5,
-      "CHECKPOINT_D15": 3,
-      "CHECKPOINT_E04": 17,
-      "CHECKPOINT_F04": 2,
-      "CHECKPOINT_F06": 4,
-      "CHECKPOINT_F01": 2
+      "PROHIBITION_3": 1,
+      "CHECKPOINT_D14": 1,
+      "CHECKPOINT_E04": 1
     },
-    "most_common_violation": "PROHIBITION_6 (inline_page_locator) — 27 occurrences",
-    "most_impacted_file": "test_scripts/billing_cycle_period_card.py — 59 violations, score 0"
+    "most_common_violation": "Each violation type occurs once",
+    "most_impacted_file": "test_scripts/billing_cycle_period_card.py — 3 violations, score 94"
   },
   "fix_priority_order": [
     {
       "priority": 1,
-      "category": "inline_page_locator",
+      "category": "invalid_playwright_syntax",
       "severity": "CRITICAL",
       "violation_ids": [
-        "V001",
-        "V002",
-        "V003",
-        "V004",
-        "V005",
-        "V006",
-        "V007",
-        "V008",
-        "V009",
-        "V010",
-        "V011",
-        "V012",
-        "V013",
-        "V014",
-        "V015",
-        "V016",
-        "V017",
-        "V018",
-        "V019",
-        "V020",
-        "V021",
-        "V022",
-        "V023",
-        "V024",
-        "V025",
-        "V026",
-        "V027"
-      ],
-      "total_count": 27,
-      "total_deduction": 81,
-      "affected_files": [
-        "test_scripts/billing_cycle_period_card.py"
-      ],
-      "fix_approach": "Replace all page.locator(page_obj.elements.X) with direct property access page_obj.X. The framework pattern for existing locators is direct property access. After fixing the test script, restructure the page additions files to define locators as direct properties in __init__ method instead of Elements class attributes."
-    },
-    {
-      "priority": 2,
-      "category": "missing_elements_class_structure",
-      "severity": "CRITICAL",
-      "violation_ids": [
-        "V060",
-        "V063"
-      ],
-      "total_count": 2,
-      "total_deduction": 6,
-      "affected_files": [
-        "additional_generations/page_additions/print_history_page_additions.py",
-        "additional_generations/page_additions/overview_page_additions.py"
-      ],
-      "fix_approach": "Restructure both page additions files to define locators as direct properties in the page object's __init__ method instead of as Elements class attributes. The correct pattern is: self.locator_name = page.locator('selector'). This will enable direct property access in test scripts."
-    },
-    {
-      "priority": 3,
-      "category": "dead_locator_in_additions",
-      "severity": "CRITICAL",
-      "violation_ids": [
-        "V061",
-        "V062",
-        "V064",
-        "V065"
-      ],
-      "total_count": 4,
-      "total_deduction": 12,
-      "affected_files": [
-        "additional_generations/page_additions/print_history_page_additions.py",
-        "additional_generations/page_additions/overview_page_additions.py"
-      ],
-      "fix_approach": "Update locator selectors to match the specifications in the generation summary. Add fallback selectors for robustness. For example, plan_pause_info_text should be '[data-testid=plan-pause-info'], .pause-plan-info, .plan-paused-message' instead of just '[data-testid=plan-pause-info]'."
-    },
-    {
-      "priority": 4,
-      "category": "missing_assertion",
-      "severity": "CRITICAL",
-      "violation_ids": [
-        "V029",
-        "V030",
-        "V031"
-      ],
-      "total_count": 3,
-      "total_deduction": 9,
-      "affected_files": [
-        "test_scripts/billing_cycle_period_card.py"
-      ],
-      "fix_approach": "Add color verification assertions after extracting progress bar colors. Steps 11, 14, and 18 extract the background-color CSS property but only log it without asserting the expected color (black for complimentary, yellow for additional). Add assertions like: assert 'rgb(0, 0, 0)' in bar_color or 'black' in bar_color.lower(), f'Expected black color but got {bar_color}'"
-    },
-    {
-      "priority": 5,
-      "category": "wrong_access_pattern",
-      "severity": "CRITICAL",
-      "violation_ids": [
-        "V032",
-        "V033",
-        "V034"
-      ],
-      "total_count": 3,
-      "total_deduction": 9,
-      "affected_files": [
-        "test_scripts/billing_cycle_period_card.py"
-      ],
-      "fix_approach": "Fix incorrect method usage patterns: (1) Remove page reassignment from create_new_ii_v2_account() call, (2) Remove incorrect assertions on send_rtp_devicestatus() which returns None. The method call itself is sufficient for print simulation."
-    },
-    {
-      "priority": 6,
-      "category": "verbose_logging",
-      "severity": "MINOR",
-      "violation_ids": [
-        "V043",
-        "V044",
-        "V045",
-        "V046",
-        "V047",
-        "V048",
-        "V049",
-        "V050",
-        "V051",
-        "V052",
-        "V053",
-        "V054",
-        "V055",
-        "V056",
-        "V057",
-        "V058",
-        "V059"
-      ],
-      "total_count": 17,
-      "total_deduction": 17,
-      "affected_files": [
-        "test_scripts/billing_cycle_period_card.py"
-      ],
-      "fix_approach": "Consolidate multiple log statements per step into single informative log statements. Each step should have one log line that includes all relevant information. For example, combine color extraction log and step completion log into one: framework_logger.info(f'Step 11 completed: Complimentary pages updated correctly - color: {bar_color}, value: 6 of 10')"
-    },
-    {
-      "priority": 7,
-      "category": "missing_expect_timeout",
-      "severity": "MODERATE",
-      "violation_ids": [
-        "V035",
-        "V036",
-        "V037",
-        "V038",
-        "V039"
-      ],
-      "total_count": 5,
-      "total_deduction": 10,
-      "affected_files": [
-        "test_scripts/billing_cycle_period_card.py"
-      ],
-      "fix_approach": "Update all tooltip-related expect() assertions to use standard 30000ms timeout instead of 5000ms. While tooltips may appear quickly, the framework standard is 30000ms for consistency and to handle slow network conditions."
-    },
-    {
-      "priority": 8,
-      "category": "inline_admin_interaction",
-      "severity": "MODERATE",
-      "violation_ids": [
-        "V040",
-        "V041",
-        "V042"
-      ],
-      "total_count": 3,
-      "total_deduction": 6,
-      "affected_files": [
-        "test_scripts/billing_cycle_period_card.py"
-      ],
-      "fix_approach": "Extract repeated Gemini Rails Admin operation sequences into helper methods. Create methods like: GeminiRAHelper.verify_subscription_state_and_free_months(page, tenant_email), GeminiRAHelper.verify_subscription_state(page, tenant_email, expected_state), and GeminiRAHelper.shift_time_for_tenant(page, tenant_email, days, force_billing)."
-    },
-    {
-      "priority": 9,
-      "category": "missing_precondition_setup",
-      "severity": "CRITICAL",
-      "violation_ids": [
-        "V028"
+        "V001"
       ],
       "total_count": 1,
       "total_deduction": 3,
       "affected_files": [
         "test_scripts/billing_cycle_period_card.py"
       ],
-      "fix_approach": "Separate the combined Precondition 2 & 3 comment into two distinct comments, one for each precondition. This improves clarity and matches the test case structure."
+      "fix_approach": "Replace .not_to_be_visible() with .to_be_hidden() which is the correct Playwright expect() method for asserting an element is not visible. This is a critical fix as the current code will cause a runtime error."
     },
     {
-      "priority": 10,
-      "category": "missing_module_docstring",
+      "priority": 2,
+      "category": "missing_expect_timeout",
+      "severity": "CRITICAL",
+      "violation_ids": [
+        "V002"
+      ],
+      "total_count": 1,
+      "total_deduction": 3,
+      "affected_files": [
+        "test_scripts/billing_cycle_period_card.py"
+      ],
+      "fix_approach": "Add a comment documenting that color verification uses Python assert as Playwright expect() does not have built-in color assertion methods. This acknowledges the deviation from the standard pattern while explaining why it is necessary."
+    },
+    {
+      "priority": 3,
+      "category": "verbose_logging",
       "severity": "MINOR",
       "violation_ids": [
-        "V066",
-        "V067"
+        "V003"
       ],
-      "total_count": 2,
-      "total_deduction": 2,
+      "total_count": 1,
+      "total_deduction": 1,
       "affected_files": [
-        "additional_generations/page_additions/overview_page_additions.py",
-        "additional_generations/page_additions/print_history_page_additions.py"
+        "test_scripts/billing_cycle_period_card.py"
       ],
-      "fix_approach": "Update module-level docstrings to clarify whether locators are new additions or updates to existing locators. This helps developers understand the merge operation."
+      "fix_approach": "Consolidate multiple log statements within precondition setup into single concise log lines. This improves log readability without affecting functionality."
     }
   ]
 }
