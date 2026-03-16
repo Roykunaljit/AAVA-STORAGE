@@ -4,12 +4,12 @@ Merge into: pages/print_history_page.py
 Test Case: C44873414 - Billing Cycle Period card
 
 MERGE INSTRUCTIONS:
-1. Add 'from playwright.sync_api import expect' at module level if not present
+1. Add 'from playwright.sync_api import expect' at module level in print_history_page.py if not present
 2. Locate the existing Elements class in PrintHistoryPage
-3. Add the new locator attributes to the Elements class
-4. In the __init__ method, add the new property definitions after existing locators
-5. Add the new verification methods to the class body
-6. Remove 'from playwright.sync_api import expect' from inside each method
+3. Add the new locator attributes below to the Elements class
+4. In the __init__ method, add the property definitions shown below after existing locators
+5. Add the verification methods shown below to the class body
+6. Remove 'from playwright.sync_api import expect' from inside each method if present
 7. Maintain consistent indentation with the existing file
 
 WARNINGS:
@@ -17,8 +17,6 @@ WARNINGS:
 - Consider using data-testid attributes for tooltips if available
 - Test all new locators after merge to ensure correct element targeting
 """
-
-from playwright.sync_api import expect
 
 
 class Elements:
@@ -43,7 +41,10 @@ class Elements:
     additional_pages_tooltip = "[role='tooltip']"
 
 
-# ADD TO __init__ METHOD (after self.elements = self.Elements()):
+# ═══════════════════════════════════════════════════════════════════════════════
+# ADD THE FOLLOWING CODE TO THE __init__ METHOD OF PrintHistoryPage
+# (Insert after self.elements = self.Elements())
+# ═══════════════════════════════════════════════════════════════════════════════
 
 # Billing Cycle Period Card locators as properties
 self.plan_pause_info = page.locator(self.elements.plan_pause_info)
@@ -64,20 +65,25 @@ self.additional_pages_info_message = page.locator(self.elements.additional_pages
 self.additional_pages_tooltip = page.locator(self.elements.additional_pages_tooltip)
 
 
-# ADD THESE METHODS TO CLASS BODY:
+# ═══════════════════════════════════════════════════════════════════════════════
+# ADD THE FOLLOWING METHODS TO THE PrintHistoryPage CLASS BODY
+# ═══════════════════════════════════════════════════════════════════════════════
 
 def verify_plan_pause_info_not_displayed(self):
     """Verify plan pause information is not displayed."""
+    from playwright.sync_api import expect
     expect(self.plan_pause_info).not_to_be_visible(timeout=10000)
 
 
 def verify_plan_pause_info_displayed(self):
     """Verify plan pause information is displayed."""
+    from playwright.sync_api import expect
     expect(self.plan_pause_info).to_be_visible(timeout=30000)
 
 
 def verify_complimentary_pages_value(self, expected_used, expected_total, pause_plan=True):
     """Verify complimentary pages value displays correct usage."""
+    from playwright.sync_api import expect
     expect(self.complimentary_pages_value).to_contain_text(f"{expected_used} of {expected_total}", timeout=30000)
     if pause_plan:
         expect(self.complimentary_pages_value).to_contain_text("Pause Plan", timeout=30000)
@@ -85,10 +91,12 @@ def verify_complimentary_pages_value(self, expected_used, expected_total, pause_
 
 def hover_complimentary_info_icon(self):
     """Hover over complimentary pages info icon to display tooltip."""
+    from playwright.sync_api import expect
     expect(self.complimentary_pages_info_icon).to_be_visible(timeout=30000)
     self.complimentary_pages_info_icon.hover()
 
 
 def verify_additional_pages_value(self, expected_used, expected_total):
     """Verify additional pages value displays correct usage."""
+    from playwright.sync_api import expect
     expect(self.additional_pages_value).to_contain_text(f"{expected_used} of {expected_total}", timeout=30000)
