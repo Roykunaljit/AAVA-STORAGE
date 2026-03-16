@@ -1,0 +1,919 @@
+{
+  "mapping_metadata": {
+    "mapping_batch_id": 2,
+    "total_mapping_batches": 18,
+    "remaining_after_this": 16,
+    "codebase_batch_report_path": "codebase_batches/batch_2_report.json",
+    "test_case_source": "test_case_analysis/test_case_analysis.json",
+    "storage_repo": "AAVA-STORAGE",
+    "analyzed_at": "2025-01-15T14:45:00Z",
+    "analyzer": "Senior Test Automation Mapping Specialist Agent",
+    "mapping_dimensions": [
+      "preconditions",
+      "step_actions",
+      "expected_results",
+      "test_data",
+      "overall_flow"
+    ],
+    "files_in_this_batch": [
+      "AURA-main (1) 1/AURA-main/AI_YAML/metadata/instantink/Enroll.json",
+      "AURA-main (1) 1/AURA-main/AI_YAML/metadata/instantink/Home.json",
+      "AURA-main (1) 1/AURA-main/AI_YAML/scripts/config.yaml",
+      "AURA-main (1) 1/AURA-main/AI_YAML/scripts/config_loader.py",
+      "AURA-main (1) 1/AURA-main/AI_YAML/scripts/conftest.py"
+    ],
+    "summary": {
+      "total_test_cases_evaluated": 1,
+      "test_cases_with_relevant_components": 1,
+      "test_cases_without_relevant_components": 0,
+      "total_page_objects_matched": 0,
+      "total_locators_matched": 0,
+      "total_methods_matched": 3,
+      "total_helpers_matched": 2,
+      "total_constants_matched": 5,
+      "total_precondition_methods_matched": 1,
+      "total_verification_methods_matched": 0,
+      "total_test_data_components_matched": 7
+    }
+  },
+  "test_case_mappings": [
+    {
+      "test_case_id": "C44873414",
+      "test_case_title": "Billing Cycle Period card",
+      "test_case_description": "Test case to verify the Billing Cycle Period card display and behavior on Print and Payment History page when a subscription plan is paused, including verification of complimentary pages progress bar, additional pages tracking, tooltips, and page usage information display across different printing scenarios.",
+      "module": "HP Instant Ink",
+      "has_relevant_components_in_this_batch": true,
+      "precondition_mapping": [
+        {
+          "precondition_text": "Enroll the Ink printer with 50 pages plan or higher.",
+          "precondition_index": 0,
+          "components_found_in_this_batch": [
+            {
+              "component_type": "method",
+              "method_name": "get_printers_by_description",
+              "method_signature": "def get_printers_by_description(config, description)",
+              "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/config_loader.py",
+              "source_class": null,
+              "what_it_does": "Filters and returns printers from the configuration that match the specified description/state. Searches for printers in the 'pie' environment section and returns a list of dictionaries containing model and serial_number for all printers where the description matches the specified value. Enables data-driven testing by allowing test scripts to dynamically select printers based on their subscription state.",
+              "how_to_import": "from config_loader import get_printers_by_description",
+              "usage_example": "config = load_config('config.yaml')\nsubscribed_printers = get_printers_by_description(config, 'subscribed')",
+              "relevance_reason": "This precondition requires a printer enrolled with 50+ pages plan. The config.yaml contains printer inventory with various subscription states. This method can filter printers by state to select an appropriate enrolled printer for the test. The config includes printers with 'subscribed' state which would have active plans."
+            },
+            {
+              "component_type": "constant",
+              "constant_name": "printers.pie_environment",
+              "constant_value": "List of 5 printers with various states including subscribed printers",
+              "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/config.yaml",
+              "how_to_import": "from config_loader import load_config\nconfig = load_config('config.yaml')\nprinters = config['printers']['pie_environment']",
+              "usage_example": "config = load_config('config.yaml')\nprinters = config['printers']['pie_environment']\nsubscribed_printer = [p for p in printers if p['description'] == 'subscribed'][0]",
+              "relevant_to_preconditions": [
+                0
+              ],
+              "relevant_to_steps": [],
+              "relevant_to_test_data": true,
+              "mapping_dimension": "test_data",
+              "relevance_reason": "Provides printer inventory data including subscribed printers that can be used to fulfill the precondition of having an enrolled printer with an active plan."
+            }
+          ],
+          "precondition_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "Found configuration data and helper method to select printers by state, but no actual enrollment API methods or page objects for enrollment flow. The enrollment page metadata (Enroll.json) contains UI elements for the enrollment review page but not the actual enrollment action methods. Full enrollment automation would require page objects and API helpers from other batches."
+        },
+        {
+          "precondition_text": "Make sure the Subscription has no free months info.",
+          "precondition_index": 1,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "No API helpers, verification methods, or subscription state checking utilities found in this batch. The config.yaml contains printer data but no subscription detail verification methods. Subscription verification methods likely exist in API helper or backend utility files in other batches."
+        },
+        {
+          "precondition_text": "Make sure the subscription is \"subscribed\" status.",
+          "precondition_index": 2,
+          "components_found_in_this_batch": [
+            {
+              "component_type": "method",
+              "method_name": "get_printers_by_description",
+              "method_signature": "def get_printers_by_description(config, description)",
+              "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/config_loader.py",
+              "source_class": null,
+              "what_it_does": "Filters printers by description/state. Can be used to select printers with 'subscribed' status from the configuration.",
+              "how_to_import": "from config_loader import get_printers_by_description",
+              "usage_example": "config = load_config('config.yaml')\nsubscribed_printers = get_printers_by_description(config, 'subscribed')",
+              "relevance_reason": "This precondition requires subscription to be in 'subscribed' status. This method can filter the printer inventory to find printers with 'subscribed' state, helping to select appropriate test data for this precondition."
+            }
+          ],
+          "precondition_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "Found method to filter printers by 'subscribed' state for test data selection, but no API methods to verify or set subscription status. The config contains printers with 'subscribed' description but no runtime subscription status verification utilities."
+        },
+        {
+          "precondition_text": "Click the Pause Plan button on CIT modal or \"Pause Instant Ink\" link to trigger the pause plan.",
+          "precondition_index": 3,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "No page objects, locators, or action methods for pause plan functionality found in this batch. The Home.json metadata file contains elements for cancellation flow (cancel-your-plan, confirm-cancellation) but not for pause plan. The close-pause-plan-button locator exists but no pause plan trigger button. Pause plan page objects and methods likely exist in other batches containing dashboard or subscription management page objects."
+        }
+      ],
+      "matched_page_objects": [],
+      "matched_locators": [],
+      "matched_methods": [
+        {
+          "method_name": "load_config",
+          "method_signature": "def load_config(path=\"config.yaml\")",
+          "method_type": "utility",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/config_loader.py",
+          "source_class": null,
+          "what_it_does": "Loads and parses a YAML configuration file from the specified path. Opens the file in read mode with UTF-8 encoding, uses yaml.safe_load() to parse the YAML content into a Python dictionary, and returns the parsed configuration dictionary.",
+          "how_to_import": "from config_loader import load_config",
+          "usage_example": "config = load_config('config.yaml')",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            0,
+            2
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Provides access to configuration data including printer inventory, URLs, credentials, and test settings needed for precondition setup and test execution."
+        },
+        {
+          "method_name": "get_printers_by_description",
+          "method_signature": "def get_printers_by_description(config, description)",
+          "method_type": "data_provider",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/config_loader.py",
+          "source_class": null,
+          "what_it_does": "Filters and returns printers from the configuration that match the specified description/state. Enables data-driven testing by allowing test scripts to dynamically select printers based on their subscription state.",
+          "how_to_import": "from config_loader import get_printers_by_description",
+          "usage_example": "config = load_config('config.yaml')\nsubscribed_printers = get_printers_by_description(config, 'subscribed')\nprinter = subscribed_printers[0] if subscribed_printers else None",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            0,
+            2
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Helps fulfill preconditions by selecting appropriate printers with specific subscription states (subscribed, enrolled) from the test data inventory."
+        },
+        {
+          "method_name": "configure_logging",
+          "method_signature": "@pytest.fixture(autouse=True, scope=\"session\")\ndef configure_logging()",
+          "method_type": "setup",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/conftest.py",
+          "source_class": null,
+          "what_it_does": "Session-scoped pytest fixture that configures logging for the entire test session. Sets up both file and console logging handlers with INFO level and timestamp formatting.",
+          "how_to_import": "# This is a pytest fixture - automatically available in test files",
+          "usage_example": "# Fixture runs automatically due to autouse=True\n# Logs will be written to file specified in config['log_file'] and console",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Provides logging infrastructure for test execution which would be useful for debugging this complex multi-step test with time manipulation and print simulation."
+        }
+      ],
+      "matched_helpers": [
+        {
+          "helper_name": "config_loader",
+          "helper_signature": "module with load_config() and get_printers_by_description() functions",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/config_loader.py",
+          "what_it_does": "Configuration loader utility module providing functions to load YAML configuration files and filter printer configurations by description. Serves as the interface between the config.yaml file and test scripts.",
+          "how_to_import": "from config_loader import load_config, get_printers_by_description",
+          "usage_example": "config = load_config('config.yaml')\nsubscribed_printers = get_printers_by_description(config, 'subscribed')",
+          "relevant_to_preconditions": [
+            0,
+            2
+          ],
+          "relevant_to_steps": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Provides utilities to load configuration and select appropriate test data (printers with specific states) for precondition setup."
+        },
+        {
+          "helper_name": "conftest",
+          "helper_signature": "pytest configuration module with fixtures and YAML test data loading",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/conftest.py",
+          "what_it_does": "Pytest configuration file providing test fixtures, command-line options, and YAML test data loading functionality. Configures logging, defines custom pytest options for YAML-driven testing, and provides fixtures for accessing YAML test data.",
+          "how_to_import": "# Fixtures are automatically available in pytest test files",
+          "usage_example": "def test_billing_cycle(yaml_data, yaml_file_path):\n    steps = yaml_data['flow']['steps']\n    # execute test steps",
+          "relevant_to_preconditions": [],
+          "relevant_to_steps": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Provides pytest infrastructure for YAML-driven testing and logging which could be used to structure this complex test case if it were defined in YAML format."
+        }
+      ],
+      "matched_constants": [
+        {
+          "constant_name": "login.url",
+          "constant_value": "https://instantink-stage1.hpconnectedstage.com/",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/config.yaml",
+          "how_to_import": "from config_loader import load_config\nconfig = load_config('config.yaml')\nlogin_url = config['login']['url']",
+          "usage_example": "config = load_config('config.yaml')\npage.goto(config['login']['url'])",
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_steps": [
+            1,
+            4
+          ],
+          "relevant_to_test_data": true,
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Provides the base URL for the HP Instant Ink application which is needed for navigation to Print and Payment History page."
+        },
+        {
+          "constant_name": "login.username",
+          "constant_value": "USERNAME TO BE ADDED",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/config.yaml",
+          "how_to_import": "from config_loader import load_config\nconfig = load_config('config.yaml')\nusername = config['login']['username']",
+          "usage_example": "config = load_config('config.yaml')\nlogin_page.enter_username(config['login']['username'])",
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_steps": [],
+          "relevant_to_test_data": true,
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Provides login credentials needed for authentication before accessing subscription pages. Note: This is a placeholder value that needs to be populated."
+        },
+        {
+          "constant_name": "login.password",
+          "constant_value": "PASSWORD TO BE ADDED",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/config.yaml",
+          "how_to_import": "from config_loader import load_config\nconfig = load_config('config.yaml')\npassword = config['login']['password']",
+          "usage_example": "config = load_config('config.yaml')\nlogin_page.enter_password(config['login']['password'])",
+          "relevant_to_preconditions": [
+            0
+          ],
+          "relevant_to_steps": [],
+          "relevant_to_test_data": true,
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Provides login password needed for authentication. Note: This is a placeholder value that needs to be populated."
+        },
+        {
+          "constant_name": "printers.pie_environment",
+          "constant_value": "List of 5 printers with states: subscribed, out_of_trial_period, unsubscribed, initiate_unsubscribe, subscribed_no_pens",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/config.yaml",
+          "how_to_import": "from config_loader import load_config\nconfig = load_config('config.yaml')\nprinters = config['printers']['pie_environment']",
+          "usage_example": "config = load_config('config.yaml')\nsubscribed_printers = [p for p in config['printers']['pie_environment'] if p['description'] == 'subscribed']",
+          "relevant_to_preconditions": [
+            0,
+            2
+          ],
+          "relevant_to_steps": [],
+          "relevant_to_test_data": true,
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Provides printer inventory with various subscription states. Can be used to select a printer with 'subscribed' status and appropriate plan tier for test execution."
+        },
+        {
+          "constant_name": "output.screenshot_dir",
+          "constant_value": "./screenshots",
+          "source_file": "AURA-main (1) 1/AURA-main/AI_YAML/scripts/config.yaml",
+          "how_to_import": "from config_loader import load_config\nconfig = load_config('config.yaml')\nscreenshot_dir = config['output']['screenshot_dir']",
+          "usage_example": "config = load_config('config.yaml')\nscreenshot_path = os.path.join(config['output']['screenshot_dir'], 'billing_card.png')\npage.screenshot(path=screenshot_path)",
+          "relevant_to_preconditions": [],
+          "relevant_to_steps": [
+            20
+          ],
+          "relevant_to_test_data": true,
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Provides the directory path for saving screenshots which is needed for step 20 (visual verification of Billing Cycle Period card)."
+        }
+      ],
+      "step_level_mapping": [
+        {
+          "step_number": 1,
+          "step_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "step_test_data": null,
+          "step_expected_result": null,
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "No page objects, navigation methods, or locators for Print and Payment History page found in this batch. The Home.json metadata contains navigation elements for 'Account Dashboard' and 'HP Instant Ink' but not for Print and Payment History page specifically. Navigation methods and page objects for Print and Payment History likely exist in other batches."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No page load verification methods found in this batch. Page load verification utilities likely exist in base page or utility files in other batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [
+              {
+                "name": "login.url",
+                "value": "https://instantink-stage1.hpconnectedstage.com/",
+                "import": "from config_loader import load_config; config = load_config('config.yaml'); url = config['login']['url']",
+                "usage": "page.goto(config['login']['url'] + '/print-payment-history')"
+              }
+            ],
+            "generators": [],
+            "notes": "Found base URL constant but no specific Print and Payment History page URL. The full URL would need to be constructed or may be defined in other configuration files."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "PARTIALLY_COVERED",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 2,
+          "step_action": "Check the Billing Cycle Period card.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the plan pause information is not displayed.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "No locators or methods for Billing Cycle Period card found in this batch. The metadata files (Enroll.json, Home.json) contain elements for enrollment and home pages but not for Print and Payment History page or billing cycle card."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No verification methods or locators for plan pause information found in this batch. Verification utilities for billing cycle card likely exist in page objects or helper files in other batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 3,
+          "step_action": "Even shift 32 days and trigger billing charge.",
+          "step_test_data": "32 days",
+          "step_expected_result": null,
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "No time manipulation API methods or billing trigger methods found in this batch. This is a backend operation requiring special test utilities or API access. Time shift and billing trigger methods likely exist in API helper or backend utility files in other batches."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No API response verification methods found in this batch. API verification utilities likely exist in API helper files in other batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "The test data (32 days) is hardcoded in the test case. No configuration constant needed."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 4,
+          "step_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "step_test_data": null,
+          "step_expected_result": null,
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Same as step 1 - no navigation methods or page objects for Print and Payment History page found in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Same as step 1 - no page load verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [
+              {
+                "name": "login.url",
+                "value": "https://instantink-stage1.hpconnectedstage.com/",
+                "import": "from config_loader import load_config; config = load_config('config.yaml'); url = config['login']['url']",
+                "usage": "page.goto(config['login']['url'] + '/print-payment-history')"
+              }
+            ],
+            "generators": [],
+            "notes": "Same as step 1 - found base URL constant."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "PARTIALLY_COVERED",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 5,
+          "step_action": "Check the Billing Cycle Period card.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the plan pause information is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "No components found - same as step 2."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No components found - same as step 2."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 6,
+          "step_action": "Check the progress bar.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the Complimentary pages progress bar is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "No locators or methods for complimentary pages progress bar found in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No verification methods for progress bar found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 7,
+          "step_action": "For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify a tooltip with correct message is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "No locators for complimentary pages info icon or hover/click methods found in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No tooltip verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Device type would come from test configuration but no device-specific constants found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 8,
+          "step_action": "Check the Complimentary pages value.",
+          "step_test_data": "0 of 10(Pause Plan) used",
+          "step_expected_result": "Verify the value is displayed as \"0 of 10(Pause Plan) used\".",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "No locators or getter methods for complimentary pages value text found in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No text verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value is hardcoded in test case."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 9,
+          "step_action": "Check the message below \"Complimentary pages\".",
+          "step_test_data": null,
+          "step_expected_result": "Verify the information with correct plan info is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "No locators or methods for complimentary pages info message found in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 10,
+          "step_action": "Print some pages(less than the plan, such as 6 pages).",
+          "step_test_data": "6 pages",
+          "step_expected_result": null,
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "No print simulation API methods found in this batch. Print job registration methods likely exist in API helper files in other batches."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No API response verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Pages to print (6) is hardcoded in test case."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 11,
+          "step_action": "Refresh the dashboard page.",
+          "step_test_data": "6 of 10 used",
+          "step_expected_result": "Verify the \"Complimentary pages\" progress bar is filled with the black color and the value is displayed as correct (such as \"6 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "No page refresh methods found in this batch. Browser refresh utilities likely exist in base page or utility files in other batches."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No progress bar color verification or text verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value is hardcoded in test case."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 12,
+          "step_action": "Continue to print some pages(more than the plan, such as 15 pages).",
+          "step_test_data": "15 pages total",
+          "step_expected_result": null,
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Same as step 10 - no print simulation methods found in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Same as step 10 - no API verification methods found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Total pages (15) is hardcoded in test case."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 13,
+          "step_action": "Refresh the dashboard page.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the progress bars for \"Complimentary pages\" and \"Additional pages\" are displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Same as step 11 - no refresh methods found."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No verification methods for both progress bars found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 14,
+          "step_action": "Check the \"Additional pages\" progress bar.",
+          "step_test_data": "5 of 10 used",
+          "step_expected_result": "Verify the progress bar is filled with the Yellow color and the value is displayed correctly(such as \"5 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "No locators or methods for additional pages progress bar found in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No color verification or text verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value is hardcoded in test case."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 15,
+          "step_action": "Check the icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the info icon is displayed well behind the string \"Additional pages\".",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "No locators for additional pages info icon found in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No icon visibility verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 16,
+          "step_action": "For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify a tooltip with correct message is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Same as step 7 - no hover/click methods for additional pages info icon found."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Same as step 7 - no tooltip verification methods found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No device type constants found."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 17,
+          "step_action": "Check the message below \"Additional pages\".",
+          "step_test_data": null,
+          "step_expected_result": "Verify a message with the amount of blocks already bought is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "No locators or methods for additional pages info message found in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 18,
+          "step_action": "Check the Complimentary pages progress bar.",
+          "step_test_data": "10 of 10 used",
+          "step_expected_result": "Verify the \"Complimentary pages\" progress bar is full filled with the black color and the value is displayed correctly (such as \"10 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Same as step 6 - no components found."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Same as step 11 - no verification methods found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value is hardcoded in test case."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 19,
+          "step_action": "Check total pages printed info.",
+          "step_test_data": "15 pages",
+          "step_expected_result": "Verify correct number(such as 15 pages) displayed according to the printed pages.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "No locators or getter methods for total pages printed text found in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value is hardcoded in test case."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 20,
+          "step_action": "Verify screenshot matches expected design",
+          "step_test_data": null,
+          "step_expected_result": "Visual verification of Billing Cycle Period card layout and styling",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "No screenshot capture methods found in this batch. Screenshot utilities likely exist in base page or utility files in other batches."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No visual comparison methods found in this batch. Visual testing utilities likely exist in other batches or require external tools like Applitools."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [
+              {
+                "name": "output.screenshot_dir",
+                "value": "./screenshots",
+                "import": "from config_loader import load_config; config = load_config('config.yaml'); screenshot_dir = config['output']['screenshot_dir']",
+                "usage": "screenshot_path = os.path.join(config['output']['screenshot_dir'], 'billing_card.png')"
+              }
+            ],
+            "generators": [],
+            "notes": "Found screenshot directory configuration constant."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "PARTIALLY_COVERED",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 21,
+          "step_action": "Verify all UI elements are properly styled and responsive",
+          "step_test_data": null,
+          "step_expected_result": "All elements display correctly on Desktop, Mobile, and Tablet",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "No responsive testing methods or viewport resizing utilities found in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No responsive layout verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No viewport size configuration found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        }
+      ],
+      "files_checked_in_this_batch": [
+        "AURA-main (1) 1/AURA-main/AI_YAML/metadata/instantink/Enroll.json",
+        "AURA-main (1) 1/AURA-main/AI_YAML/metadata/instantink/Home.json",
+        "AURA-main (1) 1/AURA-main/AI_YAML/scripts/config.yaml",
+        "AURA-main (1) 1/AURA-main/AI_YAML/scripts/config_loader.py",
+        "AURA-main (1) 1/AURA-main/AI_YAML/scripts/conftest.py"
+      ],
+      "batch_analysis_summary": "This batch contains configuration files, test infrastructure, and UI metadata for enrollment and home pages, but NO components for the Print and Payment History page which is the focus of test case C44873414. The batch provides valuable test data infrastructure (printer inventory, configuration loading, logging setup) but lacks the page objects, locators, action methods, and verification methods needed to automate the actual test steps. Key findings: (1) Configuration utilities (load_config, get_printers_by_description) can help with precondition setup by selecting appropriate test printers, (2) Base URL and credentials are available in config.yaml for navigation and authentication, (3) Printer inventory with various subscription states enables data-driven testing, (4) Screenshot directory configuration supports visual testing in step 20, (5) Pytest fixtures provide test infrastructure but no page-specific automation. All 21 test steps require page objects, locators, and methods that are NOT in this batch. The Print and Payment History page objects, billing cycle card locators, progress bar verification methods, tooltip interaction methods, print simulation APIs, and time manipulation utilities must exist in other batches containing page objects, API helpers, and UI automation utilities."
+    }
+  ]
+}
