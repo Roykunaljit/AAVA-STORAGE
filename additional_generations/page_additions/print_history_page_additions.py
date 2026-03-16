@@ -18,8 +18,6 @@ complimentary_pages_progress_bar = "[data-testid='complimentary-pages-progress-b
 complimentary_pages_value = "[data-testid='complimentary-pages-value']"
 complimentary_pages_info_icon = "[data-testid='complimentary-pages-info-icon']"
 complimentary_pages_info_message = "[data-testid='complimentary-pages-info-message']"
-# Note: Using role='tooltip' selector. If data-testid available, prefer:
-# complimentary_pages_tooltip = "[data-testid='complimentary-pages-tooltip']"
 # Note: This selector may need refinement to be more specific
 # if multiple tooltips exist on the page simultaneously
 complimentary_pages_tooltip = "[role='tooltip']"
@@ -44,6 +42,8 @@ self.complimentary_pages_progress_bar = page.locator(self.elements.complimentary
 self.complimentary_pages_value = page.locator(self.elements.complimentary_pages_value)
 self.complimentary_pages_info_icon = page.locator(self.elements.complimentary_pages_info_icon)
 self.complimentary_pages_info_message = page.locator(self.elements.complimentary_pages_info_message)
+# Note: Using role='tooltip' selector. If data-testid available, prefer:
+# complimentary_pages_tooltip = "[data-testid='complimentary-pages-tooltip']"
 self.complimentary_pages_tooltip = page.locator(self.elements.complimentary_pages_tooltip)
 
 # Additional Pages locators as properties
@@ -51,6 +51,8 @@ self.additional_pages_progress_bar = page.locator(self.elements.additional_pages
 self.additional_pages_value = page.locator(self.elements.additional_pages_value)
 self.additional_pages_info_icon = page.locator(self.elements.additional_pages_info_icon)
 self.additional_pages_info_message = page.locator(self.elements.additional_pages_info_message)
+# Note: Using role='tooltip' selector. If data-testid available, prefer:
+# additional_pages_tooltip = "[data-testid='additional-pages-tooltip']"
 self.additional_pages_tooltip = page.locator(self.elements.additional_pages_tooltip)
 
 # ADD THESE METHODS TO CLASS BODY:
