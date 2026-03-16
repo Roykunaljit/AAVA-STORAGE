@@ -1,86 +1,47 @@
-"""
-Additional locators for PrintHistoryPage
+# Additional locators and methods for PrintHistoryPage
+# Merge into: pages/print_history_page.py
+# Test Case: C44873414 - Billing Cycle Period card
 
-Target File: pages/print_history_page.py
-Target Class: PrintHistoryPage
-Target Section: __init__ method
+# ADD TO __init__ METHOD:
 
-Merge Instructions:
-1. Open pages/print_history_page.py in the AURA-FRAMEWORK repository
-2. Locate the PrintHistoryPage class
-3. Find the __init__ method
-4. Add all locator definitions below as direct properties (self.locator_name = page.locator('selector'))
-5. Maintain alphabetical order within the __init__ method
-6. Ensure no duplicate locator names
-7. Test the page object after merging to verify all locators work
+# Billing Cycle Period Card locators
+self.plan_pause_info = page.locator("[data-testid='plan-pause-info']")
+self.billing_cycle_period_card = page.locator("[data-testid='billing-cycle-period-card']")
 
-Test Case: C44873414 - Billing Cycle Period card
-Purpose: These locators enable verification of the Billing Cycle Period card,
-         including plan pause information, complimentary pages progress bar,
-         additional pages progress bar, tooltips, and page usage tracking.
+# Complimentary Pages locators
+self.complimentary_pages_progress_bar = page.locator("[data-testid='complimentary-pages-progress-bar']")
+self.complimentary_pages_value = page.locator("[data-testid='complimentary-pages-value']")
+self.complimentary_pages_info_icon = page.locator("[data-testid='complimentary-pages-info-icon']")
+self.complimentary_pages_info_message = page.locator("[data-testid='complimentary-pages-info-message']")
 
-NOTE: These are NEW locators being added to PrintHistoryPage for test case C44873414.
-They do not exist in the current codebase and should be added to the page object.
-"""
+# Additional Pages locators
+self.additional_pages_progress_bar = page.locator("[data-testid='additional-pages-progress-bar']")
+self.additional_pages_value = page.locator("[data-testid='additional-pages-value']")
+self.additional_pages_info_icon = page.locator("[data-testid='additional-pages-info-icon']")
+self.additional_pages_info_message = page.locator("[data-testid='additional-pages-info-message']")
 
-# ══════════════════════════════════════════════════════════════════════════════
-# ADD TO __init__ METHOD IN PrintHistoryPage
-# ══════════════════════════════════════════════════════════════════════════════
+# ADD THESE METHODS TO CLASS BODY:
 
-# Example of how these should be added to the __init__ method:
-# def __init__(self, page):
-#     super().__init__(page)
-#     # ... existing locators ...
-#     
-#     # Billing Cycle Period Card - Main Container
-#     self.billing_cycle_period_card = page.locator("[data-testid='billing-cycle-card']")
-#     self.billing_cycle_period_title = page.locator("[data-testid='billing-cycle-title']")
-#     
-#     # Plan Pause Information
-#     self.plan_pause_info_text = page.locator("[data-testid='plan-pause-info'], .pause-plan-info, .plan-paused-message")
-#     
-#     # Complimentary Pages Section
-#     self.complimentary_pages_progress_bar = page.locator("[data-testid='complimentary-pages-bar'], .complimentary-progress-bar")
-#     self.complimentary_pages_value_text = page.locator("[data-testid='complimentary-pages-value']")
-#     self.complimentary_pages_info_icon = page.locator("[data-testid='complimentary-pages-info-icon']")
-#     self.complimentary_pages_tooltip = page.locator("[role='tooltip'][data-testid='complimentary-pages-tooltip']")
-#     self.complimentary_pages_info_message = page.locator("[data-testid='complimentary-pages-info-message']")
-#     
-#     # Additional Pages Section
-#     self.additional_pages_progress_bar = page.locator("[data-testid='additional-pages-progress-bar']")
-#     self.additional_pages_value_text = page.locator("[data-testid='additional-pages-value']")
-#     self.additional_pages_info_icon = page.locator("[data-testid='additional-pages-info-icon']")
-#     self.additional_pages_tooltip = page.locator("[role='tooltip'][data-testid='additional-pages-tooltip']")
-#     self.additional_pages_info_message = page.locator("[data-testid='additional-pages-info-message']")
-#     
-#     # Total Pages Printed
-#     self.total_printed_pages = page.locator("[data-testid='total-printed-pages']")
+def verify_plan_pause_info_not_displayed(self):
+    from playwright.sync_api import expect
+    if self.plan_pause_info.count() > 0:
+        expect(self.plan_pause_info).not_to_be_visible(timeout=10000)
 
+def verify_plan_pause_info_displayed(self):
+    from playwright.sync_api import expect
+    expect(self.plan_pause_info).to_be_visible(timeout=30000)
 
-# ══════════════════════════════════════════════════════════════════════════════
-# LOCATOR DEFINITIONS (for reference)
-# ══════════════════════════════════════════════════════════════════════════════
+def verify_complimentary_pages_value(self, expected_used, expected_total, pause_plan=True):
+    from playwright.sync_api import expect
+    expect(self.complimentary_pages_value).to_contain_text(f"{expected_used} of {expected_total}", timeout=30000)
+    if pause_plan:
+        expect(self.complimentary_pages_value).to_contain_text("Pause Plan", timeout=30000)
 
-# Billing Cycle Period Card - Main Container
-billing_cycle_period_card = "[data-testid='billing-cycle-card']"
-billing_cycle_period_title = "[data-testid='billing-cycle-title']"
+def hover_complimentary_info_icon(self):
+    from playwright.sync_api import expect
+    expect(self.complimentary_pages_info_icon).to_be_visible(timeout=30000)
+    self.complimentary_pages_info_icon.hover()
 
-# Plan Pause Information (with fallback selectors)
-plan_pause_info_text = "[data-testid='plan-pause-info'], .pause-plan-info, .plan-paused-message"
-
-# Complimentary Pages Section (with fallback selectors)
-complimentary_pages_progress_bar = "[data-testid='complimentary-pages-bar'], .complimentary-progress-bar"
-complimentary_pages_value_text = "[data-testid='complimentary-pages-value']"
-complimentary_pages_info_icon = "[data-testid='complimentary-pages-info-icon']"
-complimentary_pages_tooltip = "[role='tooltip'][data-testid='complimentary-pages-tooltip']"
-complimentary_pages_info_message = "[data-testid='complimentary-pages-info-message']"
-
-# Additional Pages Section
-additional_pages_progress_bar = "[data-testid='additional-pages-progress-bar']"
-additional_pages_value_text = "[data-testid='additional-pages-value']"
-additional_pages_info_icon = "[data-testid='additional-pages-info-icon']"
-additional_pages_tooltip = "[role='tooltip'][data-testid='additional-pages-tooltip']"
-additional_pages_info_message = "[data-testid='additional-pages-info-message']"
-
-# Total Pages Printed
-total_printed_pages = "[data-testid='total-printed-pages']"
+def verify_additional_pages_value(self, expected_used, expected_total):
+    from playwright.sync_api import expect
+    expect(self.additional_pages_value).to_contain_text(f"{expected_used} of {expected_total}", timeout=30000)
