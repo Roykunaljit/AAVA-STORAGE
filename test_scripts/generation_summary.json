@@ -1,13 +1,13 @@
 {
   "generation_metadata": {
-    "generated_at": "2025-01-15T14:30:00Z",
+    "generated_at": "2025-01-15T15:45:00Z",
     "generator": "Test_Script_Generator_GitHub",
     "test_case_source": "test_case_analysis/test_case_analysis.json",
     "mapping_source": "final_reports/final_mapping_report.json",
     "storage_repo": "Roykunaljit/AAVA-STORAGE",
     "total_test_cases_processed": 1,
     "total_test_scripts_generated": 1,
-    "total_page_additions_generated": 2,
+    "total_page_additions_generated": 1,
     "total_helper_additions_generated": 0,
     "total_new_page_objects_generated": 0,
     "total_new_helpers_generated": 0,
@@ -37,23 +37,20 @@
         "preconditions_handled": 4,
         "imports_used": {
           "existing_page_objects": [
-            "DashboardSideMenuPage",
-            "OverviewPage",
-            "PrintHistoryPage"
+            "PrintHistoryPage",
+            "DashboardSideMenuPage"
           ],
           "existing_helpers": [
             "DashboardHelper",
-            "EnrollmentHelper",
             "GeminiRAHelper"
           ],
           "new_page_additions_referenced": [
-            "print_history_page_additions.py",
-            "overview_page_additions.py"
+            "print_history_page_additions.py"
           ],
           "new_helpers_referenced": []
         },
         "write_status": "SUCCESS",
-        "generation_notes": "This is a highly complex test case requiring printer enrollment, subscription state management, time shifting via Gemini Rails Admin, print job simulation via RTP device status, and comprehensive UI verification of progress bars, tooltips, and page usage tracking. The test uses existing framework components for enrollment, Gemini RA operations, and print simulation. New locators were created for Billing Cycle Period card elements including plan pause information, complimentary pages progress bar with tooltip, additional pages progress bar with tooltip, and info icons. The test follows all framework conventions including proper error handling, logging, and Playwright expect() assertions. Print job simulation uses send_rtp_devicestatus() from test_flows_common. Time shifting uses GeminiRAHelper.event_shift(). All preconditions are properly handled including account creation, printer enrollment with 50+ pages plan, subscription state verification, and plan pause activation."
+        "generation_notes": "Complex test case involving time manipulation, print simulation, progress bar verification with color checks, tooltip interactions, and responsive testing. Most components exist in codebase but many billing cycle card locators are missing. Generated page additions for PrintHistoryPage with new locators for plan pause info, complimentary pages progress bar, additional pages progress bar, info icons, tooltips, and related elements. Test uses existing helpers for dashboard access and Gemini RA operations. Print simulation uses common.send_rtp_devicestatus(). Time shift uses GeminiRAHelper.event_shift(). Some steps (visual verification, responsive testing) are logged but not fully implemented as they require specialized tools."
       }
     ],
     "page_additions": [
@@ -61,110 +58,81 @@
         "github_file_path": "additional_generations/page_additions/print_history_page_additions.py",
         "target_page_file": "pages/print_history_page.py",
         "target_class_name": "PrintHistoryPage",
-        "reason": "TC C44873414 requires locators for Billing Cycle Period card elements that are not in the existing PrintHistoryPage",
+        "reason": "TC C44873414 requires locators for billing cycle period card elements not in existing PrintHistoryPage",
         "new_locators": [
           {
+            "name": "plan_pause_info",
+            "selector": "[data-testid='plan-pause-info']",
+            "description": "Plan pause information text element"
+          },
+          {
             "name": "billing_cycle_period_card",
-            "selector": "[data-testid='billing-cycle-card']",
-            "description": "Main container for Billing Cycle Period card"
-          },
-          {
-            "name": "billing_cycle_period_title",
-            "selector": "[data-testid='billing-cycle-title']",
-            "description": "Title element of Billing Cycle Period card"
-          },
-          {
-            "name": "plan_pause_info_text",
-            "selector": "[data-testid='plan-pause-info'], .pause-plan-info, .plan-paused-message",
-            "description": "Text element showing plan pause information"
+            "selector": "[data-testid='billing-cycle-period-card']",
+            "description": "Billing cycle period card container"
           },
           {
             "name": "complimentary_pages_progress_bar",
-            "selector": "[data-testid='complimentary-pages-bar'], .complimentary-progress-bar",
-            "description": "Progress bar for complimentary pages usage"
+            "selector": "[data-testid='complimentary-pages-progress-bar']",
+            "description": "Complimentary pages progress bar element"
           },
           {
-            "name": "complimentary_pages_value_text",
-            "selector": "[data-testid='complimentary-pages-value'], .complimentary-pages-text",
-            "description": "Text showing complimentary pages value like '6 of 10 used'"
+            "name": "complimentary_pages_value",
+            "selector": "[data-testid='complimentary-pages-value']",
+            "description": "Complimentary pages usage value text"
           },
           {
             "name": "complimentary_pages_info_icon",
-            "selector": "[data-testid='complimentary-info-icon'], .complimentary-pages-info",
-            "description": "Info icon next to Complimentary pages label"
-          },
-          {
-            "name": "complimentary_pages_tooltip",
-            "selector": "[role='tooltip'], [data-testid='complimentary-tooltip']",
-            "description": "Tooltip that appears on hover of complimentary pages info icon"
+            "selector": "[data-testid='complimentary-pages-info-icon']",
+            "description": "Info icon for complimentary pages"
           },
           {
             "name": "complimentary_pages_info_message",
-            "selector": "[data-testid='complimentary-message'], .complimentary-info-text",
-            "description": "Informational message below Complimentary pages section"
+            "selector": "[data-testid='complimentary-pages-info-message']",
+            "description": "Informational message below complimentary pages"
           },
           {
             "name": "additional_pages_progress_bar",
-            "selector": "[data-testid='additional-pages-bar'], .additional-progress-bar",
-            "description": "Progress bar for additional pages usage"
+            "selector": "[data-testid='additional-pages-progress-bar']",
+            "description": "Additional pages progress bar element"
           },
           {
-            "name": "additional_pages_value_text",
-            "selector": "[data-testid='additional-pages-value'], .additional-pages-text",
-            "description": "Text showing additional pages value like '5 of 10 used'"
+            "name": "additional_pages_value",
+            "selector": "[data-testid='additional-pages-value']",
+            "description": "Additional pages usage value text"
           },
           {
             "name": "additional_pages_info_icon",
-            "selector": "[data-testid='additional-info-icon'], .additional-pages-info",
-            "description": "Info icon next to Additional pages label"
-          },
-          {
-            "name": "additional_pages_tooltip",
-            "selector": "[role='tooltip'][data-additional='true'], [data-testid='additional-tooltip']",
-            "description": "Tooltip that appears on hover of additional pages info icon"
+            "selector": "[data-testid='additional-pages-info-icon']",
+            "description": "Info icon for additional pages"
           },
           {
             "name": "additional_pages_info_message",
-            "selector": "[data-testid='additional-message'], .additional-info-text",
-            "description": "Informational message below Additional pages section showing blocks bought"
+            "selector": "[data-testid='additional-pages-info-message']",
+            "description": "Informational message below additional pages"
           }
         ],
-        "new_methods": [],
-        "write_status": "SUCCESS"
-      },
-      {
-        "github_file_path": "additional_generations/page_additions/overview_page_additions.py",
-        "target_page_file": "pages/overview_page.py",
-        "target_class_name": "OverviewPage",
-        "reason": "TC C44873414 precondition requires pause plan functionality locators for OverviewPage",
-        "new_locators": [
+        "new_methods": [
           {
-            "name": "pause_plan_link",
-            "selector": "[data-testid='pause-plan-link'], a:has-text('Pause')",
-            "description": "Link to initiate plan pause"
+            "name": "verify_plan_pause_info_not_displayed",
+            "description": "Verifies plan pause information is not visible"
           },
           {
-            "name": "pause_plan_modal",
-            "selector": "[data-testid='pause-plan-modal'], [role='dialog']:has-text('Pause')",
-            "description": "Modal dialog for pause plan confirmation"
+            "name": "verify_plan_pause_info_displayed",
+            "description": "Verifies plan pause information is visible"
           },
           {
-            "name": "pause_plan_dropdown",
-            "selector": "[data-testid='pause-duration'], select[name='pause-duration']",
-            "description": "Dropdown to select pause duration"
+            "name": "verify_complimentary_pages_value",
+            "description": "Verifies complimentary pages value text with expected used/total"
           },
           {
-            "name": "confirm_pause_plan",
-            "selector": "[data-testid='confirm-pause'], button:has-text('Confirm')",
-            "description": "Button to confirm plan pause"
+            "name": "hover_complimentary_info_icon",
+            "description": "Hovers over complimentary pages info icon"
           },
           {
-            "name": "plan_paused_banner",
-            "selector": "[data-testid='plan-paused-banner'], .alert:has-text('paused')",
-            "description": "Banner confirming plan has been paused"
+            "name": "verify_additional_pages_value",
+            "description": "Verifies additional pages value text with expected used/total"
           }
         ],
-        "new_methods": [],
         "write_status": "SUCCESS"
       }
     ],
@@ -181,90 +149,32 @@
       "not_covered": []
     },
     "all_existing_imports_used": [
-      "from playwright.sync_api import expect",
-      "from core.playwright_manager import PlaywrightManager",
-      "from core.settings import framework_logger",
-      "from pages.dashboard_side_menu_page import DashboardSideMenuPage",
-      "from pages.overview_page import OverviewPage",
       "from pages.print_history_page import PrintHistoryPage",
+      "from pages.dashboard_side_menu_page import DashboardSideMenuPage",
       "from helper.dashboard_helper import DashboardHelper",
-      "from helper.enrollment_helper import EnrollmentHelper",
       "from helper.gemini_ra_helper import GeminiRAHelper",
-      "import test_flows_common.test_flows_common as common",
-      "import urllib3"
+      "import test_flows_common.test_flows_common as common"
     ],
-    "all_new_files_created_in_repo": [
-      "test_scripts/billing_cycle_period_card.py",
-      "additional_generations/page_additions/print_history_page_additions.py",
-      "additional_generations/page_additions/overview_page_additions.py"
+    "all_new_files_created": [
+      "additional_generations/page_additions/print_history_page_additions.py"
     ],
-    "all_existing_files_to_update_in_framework": [
-      "pages/print_history_page.py (merge print_history_page_additions.py - add 13 new locators to Elements class)",
-      "pages/overview_page.py (merge overview_page_additions.py - add 5 new locators to Elements class)"
+    "all_existing_files_to_update": [
+      "pages/print_history_page.py (merge print_history_page_additions.py)"
     ],
     "integration_instructions": [
-      "1. Clone the AAVA-STORAGE repository: git clone https://github.com/Roykunaljit/AAVA-STORAGE.git",
-      "2. Navigate to test_scripts/ folder and locate billing_cycle_period_card.py",
-      "3. In AURA-FRAMEWORK repository, create folder: test_flows/BillingCyclePeriodCard/",
-      "4. Copy billing_cycle_period_card.py to test_flows/BillingCyclePeriodCard/",
-      "5. Open pages/print_history_page.py in AURA-FRAMEWORK",
-      "6. Locate the Elements class inside PrintHistoryPage",
-      "7. Add all 13 new locators from print_history_page_additions.py to the Elements class",
-      "8. Open pages/overview_page.py in AURA-FRAMEWORK",
-      "9. Locate the Elements class inside OverviewPage",
-      "10. Add all 5 new locators from overview_page_additions.py to the Elements class",
-      "11. Verify all imports are available in AURA-FRAMEWORK",
-      "12. Run the test: pytest test_flows/BillingCyclePeriodCard/billing_cycle_period_card.py",
-      "13. IMPORTANT: This test requires backend infrastructure including:",
-      "    - Virtual printer creation via G2 simulator API",
-      "    - Gemini Rails Admin access for time shifting and subscription management",
-      "    - RTP device status API for print job simulation",
-      "    - Enrollment flow completion",
-      "14. Ensure test environment has all required API endpoints configured",
-      "15. Test execution time: Approximately 10-15 minutes due to enrollment and time shifting operations",
-      "16. The test creates a fresh account, enrolls a printer with 50 pages plan, pauses the plan, shifts time by 32 days, simulates printing, and verifies all UI elements on the Billing Cycle Period card"
+      "1. Clone the AAVA-STORAGE repository",
+      "2. For the test script in test_scripts/:",
+      "   a. Create folder test_flows/BillingCyclePeriodCard/ in AURA-FRAMEWORK",
+      "   b. Copy billing_cycle_period_card.py into that folder",
+      "3. For print_history_page_additions.py:",
+      "   a. Open pages/print_history_page.py in AURA-FRAMEWORK",
+      "   b. Add the new locators to the __init__ method",
+      "   c. Add the new methods to the class body",
+      "4. Update locator selectors if actual data-testid values differ",
+      "5. Implement visual verification (Step 20) using visual testing tool if needed",
+      "6. Implement responsive testing (Step 21) with viewport resizing if needed",
+      "7. Verify print simulation works correctly with send_rtp_devicestatus",
+      "8. Run the test to verify all steps execute correctly"
     ]
-  },
-  "test_case_complexity_notes": {
-    "C44873414": {
-      "complexity_level": "very_high",
-      "reasons": [
-        "Requires complete printer enrollment flow with 50+ pages plan selection",
-        "Requires Gemini Rails Admin access for subscription state management and time shifting",
-        "Requires print job simulation via RTP device status API",
-        "Requires plan pause functionality",
-        "Requires time shifting by 32 days to trigger billing cycle",
-        "Requires verification of multiple progress bars with specific colors (black for complimentary, yellow for additional)",
-        "Requires tooltip interactions with hover/click based on device type",
-        "Requires verification of dynamic page usage values that change after printing",
-        "Involves 21 test steps with complex state dependencies",
-        "Requires visual verification of progress bar fill colors",
-        "Requires responsive testing considerations (desktop vs mobile/tablet interactions)"
-      ],
-      "estimated_execution_time_minutes": 12,
-      "prerequisites": [
-        "G2 simulator API access for virtual printer creation",
-        "Gemini Rails Admin access for subscription management",
-        "RTP device status API for print simulation",
-        "Enrollment flow infrastructure",
-        "Time shifting capability in test environment"
-      ],
-      "special_considerations": [
-        "Print job simulation uses send_rtp_devicestatus() which updates impression counts in binary payload",
-        "Time shifting uses GeminiRAHelper.event_shift() with force_billing=True",
-        "Progress bar color verification may require CSS property checking or visual comparison",
-        "Tooltip interactions are device-specific (hover for desktop, click for mobile/tablet)",
-        "Page refresh is required after print simulation to see updated values",
-        "Test creates real subscription data that may need cleanup"
-      ],
-      "automation_challenges": [
-        "Backend time manipulation is not standard UI automation",
-        "Print job simulation requires special API access",
-        "Progress bar color verification (black vs yellow) may be fragile",
-        "Tooltip timing can be flaky",
-        "Multiple page refreshes with data synchronization waits",
-        "Complex precondition setup with multiple dependencies"
-      ]
-    }
   }
 }
