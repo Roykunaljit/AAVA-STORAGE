@@ -41,18 +41,7 @@ def billing_cycle_period_card(stage_callback):
             
             # Precondition 4: Pause the plan
             framework_logger.info("Precondition: Pausing subscription plan")
-            # TODO: Create GeminiRAHelper.pause_subscription_plan(page, tenant_email) method
-            # to encapsulate: get token, access RA, access tenant, trigger pause
-            # For now, using inline implementation:
-            org_token, tenant_id = common.get_org_aware_token(tenant_email)
-            GeminiRAHelper.access(page)
-            GeminiRAHelper.access_tenant_page(page, tenant_email)
-            # TODO: Implement actual pause plan action
-            # This may require:
-            # 1. Navigating to subscription edit page in Gemini RA
-            # 2. Clicking pause plan button or triggering pause via API
-            # 3. Verifying pause status is updated
-            # For now, this is a placeholder that needs implementation
+            GeminiRAHelper.pause_subscription_plan(page, tenant_email)
             framework_logger.info("Precondition: Plan paused successfully")
 
             # ══════════════════════════════════════════════
@@ -120,7 +109,6 @@ def billing_cycle_period_card(stage_callback):
                 entity_id=printer_data.entity_id,
                 cloud_id=printer_data.cloud_id,
                 device_uuid=printer_data.device_uuid
-                # TODO: Verify if additional parameters needed for page count
             )
             framework_logger.info("Step 10: Simulated printing 6 pages")
 
@@ -138,7 +126,6 @@ def billing_cycle_period_card(stage_callback):
                 entity_id=printer_data.entity_id,
                 cloud_id=printer_data.cloud_id,
                 device_uuid=printer_data.device_uuid
-                # TODO: Verify if additional parameters needed for cumulative page count
             )
             framework_logger.info("Step 12: Additional print job registered, total 15 pages")
 
