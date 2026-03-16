@@ -1,0 +1,972 @@
+{
+  "mapping_metadata": {
+    "mapping_batch_id": 9,
+    "total_mapping_batches": 18,
+    "remaining_after_this": 8,
+    "codebase_batch_report_path": "codebase_batches/batch_9_report.json",
+    "test_case_source": "test_case_analysis/test_case_analysis.json",
+    "analyzed_at": "2025-01-15T14:45:00Z",
+    "analyzer": "Senior Test Automation Mapping Specialist Agent",
+    "mapping_dimensions": [
+      "preconditions",
+      "step_actions",
+      "expected_results",
+      "test_data",
+      "overall_flow"
+    ],
+    "files_in_this_batch": [
+      "AURA-main (1) 1/AURA-main/helper/hpid_helper.py",
+      "AURA-main (1) 1/AURA-main/helper/landing_page_helper.py",
+      "AURA-main (1) 1/AURA-main/helper/oss_emulator_helper.py",
+      "AURA-main (1) 1/AURA-main/helper/overview_helper.py",
+      "AURA-main (1) 1/AURA-main/helper/print_history_helper.py"
+    ],
+    "summary": {
+      "total_test_cases_evaluated": 1,
+      "test_cases_with_relevant_components": 1,
+      "test_cases_without_relevant_components": 0,
+      "total_page_objects_matched": 0,
+      "total_locators_matched": 0,
+      "total_methods_matched": 8,
+      "total_helpers_matched": 1,
+      "total_constants_matched": 0,
+      "total_precondition_methods_matched": 0,
+      "total_verification_methods_matched": 8,
+      "total_test_data_components_matched": 0
+    }
+  },
+  "test_case_mappings": [
+    {
+      "test_case_id": "C44873414",
+      "test_case_title": "Billing Cycle Period card",
+      "test_case_description": "Test case to verify the Billing Cycle Period card display and behavior on Print and Payment History page when a subscription plan is paused, including verification of complimentary pages progress bar, additional pages tracking, tooltips, and page usage information display across different printing scenarios.",
+      "module": "HP Instant Ink",
+      "has_relevant_components_in_this_batch": true,
+      "precondition_mapping": [
+        {
+          "precondition_text": "Enroll the Ink printer with 50 pages plan or higher.",
+          "precondition_index": 0,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "No printer enrollment methods found in this batch. This batch contains helper modules for HPID authentication, landing page, OSS emulator, overview page, and print history page operations. Printer enrollment methods likely exist in enrollment helper or printer setup helper files in different batches."
+        },
+        {
+          "precondition_text": "Make sure the Subscription has no free months info.",
+          "precondition_index": 1,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "No subscription state verification methods found in this batch. Methods to verify or set subscription free months status likely exist in subscription helper or API helper files in different batches."
+        },
+        {
+          "precondition_text": "Make sure the subscription is \"subscribed\" status.",
+          "precondition_index": 2,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "No subscription status verification methods found in this batch. Methods to verify or set subscription status likely exist in subscription helper or API helper files in different batches."
+        },
+        {
+          "precondition_text": "Click the Pause Plan button on CIT modal or \"Pause Instant Ink\" link to trigger the pause plan.",
+          "precondition_index": 3,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "No pause plan methods found in this batch. Methods to pause a plan via CIT modal or Pause Instant Ink link likely exist in plan management helper or overview page helper files in different batches. The overview_helper.py in this batch does not contain pause plan methods."
+        }
+      ],
+      "matched_page_objects": [],
+      "matched_locators": [],
+      "matched_methods": [
+        {
+          "method_name": "verify_previous_billing_cycle_period",
+          "method_signature": "@staticmethod\ndef verify_previous_billing_cycle_period(page)",
+          "method_type": "verification",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+          "source_class": "PrintHistoryHelper",
+          "what_it_does": "Verifies that selecting a previous billing cycle changes the period title to not contain 'Current'. Creates a PrintHistoryPage instance. Clicks the billing_cycle_option dropdown to open it. Clicks the select_1_option to select the first previous billing cycle. Uses expect().not_to_contain_text() to verify that the billing_cycle_period_title does not contain the text 'Current', confirming that a previous period was selected.",
+          "how_to_import": "from helper.print_history_helper import PrintHistoryHelper",
+          "usage_example": "PrintHistoryHelper.verify_previous_billing_cycle_period(page)",
+          "relevant_to_steps": [
+            2,
+            5
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            2,
+            5
+          ],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "Steps 2 and 5 verify the Billing Cycle Period card display. This method verifies billing cycle period selection and title changes, which is relevant to verifying the billing cycle period card state before and after the 32-day time shift."
+        },
+        {
+          "method_name": "get_billing_cycle_option",
+          "method_signature": "@staticmethod\ndef get_billing_cycle_option(page, period_index: int)",
+          "method_type": "action",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+          "source_class": "PrintHistoryHelper",
+          "what_it_does": "Selects a specific billing cycle period by index from the dropdown. Creates a PrintHistoryPage instance. Clicks the billing_cycle_option dropdown to open it. Uses conditional logic to click the appropriate option based on period_index: if 1, clicks select_1_option; if 2, clicks select_2_option; if 3, clicks select_3_option. Uses expect() to verify the print_history_table_button is visible with a 10-second timeout, confirming the table updated.",
+          "how_to_import": "from helper.print_history_helper import PrintHistoryHelper",
+          "usage_example": "PrintHistoryHelper.get_billing_cycle_option(page, period_index=1)",
+          "relevant_to_steps": [
+            2,
+            5
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "step_action",
+          "relevance_reason": "Steps 2 and 5 involve checking the Billing Cycle Period card. This method allows selecting specific billing cycle periods, which may be needed to navigate to the correct billing period for verification."
+        },
+        {
+          "method_name": "verify_billing_table_data",
+          "method_signature": "@staticmethod\ndef verify_billing_table_data(page, total_pages_printed)",
+          "method_type": "verification",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+          "source_class": "PrintHistoryHelper",
+          "what_it_does": "Verifies that the billing table displays the expected total pages printed. Creates a PrintHistoryPage instance. Gets the inner text of the total_pages_printed element. Extracts numbers from the text using common.extract_numbers_from_text(). Asserts that the first extracted number matches the expected total_pages_printed parameter.",
+          "how_to_import": "from helper.print_history_helper import PrintHistoryHelper",
+          "usage_example": "PrintHistoryHelper.verify_billing_table_data(page, total_pages_printed=15)",
+          "relevant_to_steps": [
+            19
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            19
+          ],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "Step 19 verifies the total pages printed info displays the correct number (15 pages in the example). This method directly validates the total pages printed value displayed in the billing table."
+        },
+        {
+          "method_name": "verify_correct_billing_section",
+          "method_signature": "@staticmethod\ndef verify_correct_billing_section(page, expected_values: dict)",
+          "method_type": "verification",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+          "source_class": "PrintHistoryHelper",
+          "what_it_does": "Verifies all billing section fields against expected values from a dictionary. Creates a PrintHistoryPage instance. For each field in the expected_values dictionary (total_pages_printed, pages, rollover, additional, plan_price, overage_price, previous, charges, tax, total), performs validation by extracting numbers or validating currency values. This comprehensive method validates all billing section details in a single call.",
+          "how_to_import": "from helper.print_history_helper import PrintHistoryHelper",
+          "usage_example": "PrintHistoryHelper.verify_correct_billing_section(page, {'total_pages_printed': 15, 'pages': 10, 'additional': 5})",
+          "relevant_to_steps": [
+            8,
+            11,
+            14,
+            18,
+            19
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            8,
+            11,
+            14,
+            18,
+            19
+          ],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "Steps 8, 11, 14, 18, and 19 verify various page count values (complimentary pages, additional pages, total pages). This comprehensive method can verify all billing section fields including page counts, which is highly relevant for validating the billing cycle period card data."
+        },
+        {
+          "method_name": "validate_faq_on_print_and_payment_history",
+          "method_signature": "@staticmethod\ndef validate_faq_on_print_and_payment_history(page)",
+          "method_type": "verification",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+          "source_class": "PrintHistoryHelper",
+          "what_it_does": "Validates all FAQ questions and links on the print and payment history page by clicking questions, verifying answers, and testing navigation links. Creates instances of PrintHistoryPage, OverviewPage, UpdatePlanPage, and DashboardSideMenuPage. Tests all FAQ interactions and navigation flows.",
+          "how_to_import": "from helper.print_history_helper import PrintHistoryHelper",
+          "usage_example": "PrintHistoryHelper.validate_faq_on_print_and_payment_history(page)",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "overall_flow",
+          "relevance_reason": "While this test case does not explicitly test FAQs, this method validates the Print and Payment History page structure and navigation, which provides context for the page where the billing cycle period card is located."
+        },
+        {
+          "method_name": "see_notification_on_print_history",
+          "method_signature": "@staticmethod\ndef see_notification_on_print_history(page, notifications_text: str)",
+          "method_type": "verification",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+          "source_class": "PrintHistoryHelper",
+          "what_it_does": "Verifies that a specific notification text appears in the print history table. Creates a PrintHistoryPage instance. Checks if the print_history_table is hidden and expands it if needed. Gets the inner text of the print_history_table and asserts that the notifications_text parameter is contained in the table content.",
+          "how_to_import": "from helper.print_history_helper import PrintHistoryHelper",
+          "usage_example": "PrintHistoryHelper.see_notification_on_print_history(page, 'Plan paused')",
+          "relevant_to_steps": [
+            5,
+            9
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            5,
+            9
+          ],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "Steps 5 and 9 verify that plan pause information and complimentary pages information messages are displayed. This method can verify notification text in the print history table, which may include pause plan information."
+        },
+        {
+          "method_name": "verify_plan_info",
+          "method_signature": "@staticmethod\ndef verify_plan_info(page, plan_value: str, plan_pages: str)",
+          "method_type": "verification",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+          "source_class": "PrintHistoryHelper",
+          "what_it_does": "Verifies that the plan information on the print history page shows the expected price and page count. Creates a PrintHistoryPage instance. Uses expect() to verify the print_history_card is visible. Gets the text content of the plan_price_text element. Extracts numbers and asserts that the first number matches plan_value and the second matches plan_pages.",
+          "how_to_import": "from helper.print_history_helper import PrintHistoryHelper",
+          "usage_example": "PrintHistoryHelper.verify_plan_info(page, plan_value='999', plan_pages='10')",
+          "relevant_to_steps": [
+            8,
+            9
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            8,
+            9
+          ],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "Steps 8 and 9 verify complimentary pages value and information message which include plan details. This method verifies plan information including page counts, which is relevant for validating the pause plan page allocation (10 complimentary pages)."
+        },
+        {
+          "method_name": "verify_current_total",
+          "method_signature": "@staticmethod\ndef verify_current_total(page, total_value: str)",
+          "method_type": "verification",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+          "source_class": "PrintHistoryHelper",
+          "what_it_does": "Verifies that the current total value on the print history page matches the expected value. Creates a PrintHistoryPage instance. Uses expect() to verify the print_history_card is visible. Gets the text content of the first current_total_text element. Extracts numbers and asserts that the first number matches the expected total_value.",
+          "how_to_import": "from helper.print_history_helper import PrintHistoryHelper",
+          "usage_example": "PrintHistoryHelper.verify_current_total(page, total_value='1499')",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "While not explicitly mentioned in the test steps, verifying the current total is part of billing cycle period card validation and may be useful for comprehensive billing data verification."
+        }
+      ],
+      "matched_helpers": [
+        {
+          "helper_name": "PrintHistoryHelper",
+          "helper_signature": "class PrintHistoryHelper (static methods)",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+          "what_it_does": "Comprehensive helper module for print history page operations including verifying billing cycle periods, selecting billing cycle options, verifying billing table data, normalizing and validating currency values, verifying billing section details with expected values, validating all billing cycles data, validating FAQ links and navigation, validating no-pens print history page, downloading all invoices, verifying notifications, verifying plan information, and verifying current total values.",
+          "how_to_import": "from helper.print_history_helper import PrintHistoryHelper",
+          "usage_example": "PrintHistoryHelper.verify_billing_table_data(page, total_pages_printed=15)",
+          "relevant_to_preconditions": [],
+          "relevant_to_steps": [
+            1,
+            2,
+            4,
+            5,
+            8,
+            9,
+            11,
+            13,
+            14,
+            18,
+            19
+          ],
+          "relevant_to_expected_results": [
+            2,
+            5,
+            8,
+            9,
+            11,
+            14,
+            18,
+            19
+          ],
+          "mapping_dimension": "overall_flow",
+          "relevance_reason": "This helper provides comprehensive methods for Print and Payment History page operations, which is the primary page being tested in this test case. It includes methods for verifying billing cycle periods, billing table data, page counts, and plan information - all of which are core to testing the Billing Cycle Period card."
+        }
+      ],
+      "matched_constants": [],
+      "step_level_mapping": [
+        {
+          "step_number": 1,
+          "step_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "step_test_data": null,
+          "step_expected_result": "Page loaded successfully",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No navigation methods to Print and Payment History page found in this batch. Navigation methods likely exist in dashboard navigation helper or side menu helper files in different batches. The print_history_helper.py assumes the page is already loaded."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No URL constants for Print and Payment History page found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 2,
+          "step_action": "Check the Billing Cycle Period card.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the plan pause information is not displayed.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "get_billing_cycle_option",
+                "usage": "PrintHistoryHelper.get_billing_cycle_option(page, period_index=1)",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py"
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "verify_previous_billing_cycle_period",
+                "usage": "PrintHistoryHelper.verify_previous_billing_cycle_period(page)",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+                "relevance": "Verifies billing cycle period title changes, which can be used to verify the billing cycle period card state"
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "The verify_previous_billing_cycle_period method verifies that the billing cycle period title does not contain 'Current', which is related to verifying the billing cycle period card state. However, this test case requires verifying that plan pause information is NOT displayed initially, which is a more specific check. The exact locator and method for verifying plan pause information visibility may exist in page object files in different batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 3,
+          "step_action": "Even shift 32 days and trigger billing charge.",
+          "step_test_data": "32 days",
+          "step_expected_result": "Time shift and billing charge successful",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No time manipulation or billing charge trigger methods found in this batch. These are backend API operations that likely exist in test utilities, API helper, or time manipulation helper files in different batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No time shift constants found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 4,
+          "step_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "step_test_data": null,
+          "step_expected_result": "Page loaded with updated data",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No navigation or page refresh methods found in this batch. Navigation methods likely exist in dashboard navigation helper files in different batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No URL constants found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 5,
+          "step_action": "Check the Billing Cycle Period card.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the plan pause information is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "get_billing_cycle_option",
+                "usage": "PrintHistoryHelper.get_billing_cycle_option(page, period_index=1)",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py"
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "verify_previous_billing_cycle_period",
+                "usage": "PrintHistoryHelper.verify_previous_billing_cycle_period(page)",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+                "relevance": "Verifies billing cycle period title changes"
+              },
+              {
+                "name": "see_notification_on_print_history",
+                "usage": "PrintHistoryHelper.see_notification_on_print_history(page, 'pause plan')",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+                "relevance": "Verifies notification text in print history table, which may include pause plan information"
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "The see_notification_on_print_history method can verify notification text in the print history table, which may include pause plan information. However, the exact locator for the plan pause information element on the billing cycle period card may exist in page object files in different batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 6,
+          "step_action": "Check the progress bar.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the Complimentary pages progress bar is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No progress bar verification methods found in this batch. Progress bar locators and verification methods likely exist in page object files in different batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 7,
+          "step_action": "For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify a tooltip with correct message is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No tooltip interaction or verification methods found in this batch. Tooltip locators and interaction methods likely exist in page object files in different batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No device type configuration found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 8,
+          "step_action": "Check the Complimentary pages value.",
+          "step_test_data": "0 of 10(Pause Plan) used",
+          "step_expected_result": "Verify the value is displayed as \"0 of 10(Pause Plan) used\".",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "verify_correct_billing_section",
+                "usage": "PrintHistoryHelper.verify_correct_billing_section(page, {'pages': 10})",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+                "relevance": "Verifies billing section fields including page counts"
+              },
+              {
+                "name": "verify_plan_info",
+                "usage": "PrintHistoryHelper.verify_plan_info(page, plan_value='999', plan_pages='10')",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+                "relevance": "Verifies plan information including page counts"
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "The verify_correct_billing_section and verify_plan_info methods can verify page count values, but they may not verify the exact format '0 of 10(Pause Plan) used'. The exact locator for the complimentary pages value text element may exist in page object files in different batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value '0 of 10(Pause Plan) used' is provided in test case."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 9,
+          "step_action": "Check the message below \"Complimentary pages\".",
+          "step_test_data": null,
+          "step_expected_result": "Verify the information with correct plan info is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "see_notification_on_print_history",
+                "usage": "PrintHistoryHelper.see_notification_on_print_history(page, 'plan info text')",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+                "relevance": "Verifies notification text in print history table"
+              },
+              {
+                "name": "verify_plan_info",
+                "usage": "PrintHistoryHelper.verify_plan_info(page, plan_value='999', plan_pages='10')",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+                "relevance": "Verifies plan information including page counts"
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "The see_notification_on_print_history and verify_plan_info methods can verify plan information text, but the exact locator for the complimentary pages info message element may exist in page object files in different batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 10,
+          "step_action": "Print some pages(less than the plan, such as 6 pages).",
+          "step_test_data": "6 pages",
+          "step_expected_result": "Print job registered successfully",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No print job simulation methods found in this batch. Print job registration methods likely exist in printer simulation helper or API helper files in different batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Pages to print value (6) is provided in test case."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 11,
+          "step_action": "Refresh the dashboard page.",
+          "step_test_data": "6 of 10 used",
+          "step_expected_result": "Verify the \"Complimentary pages\" progress bar is filled with the black color and the value is displayed as correct (such as \"6 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "verify_correct_billing_section",
+                "usage": "PrintHistoryHelper.verify_correct_billing_section(page, {'pages': 10})",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+                "relevance": "Verifies billing section fields including page counts"
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "The verify_correct_billing_section method can verify page count values, but it does not verify progress bar color (black). Progress bar color verification methods and locators likely exist in page object files in different batches. Page refresh methods also not found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value '6 of 10 used' is provided in test case."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 12,
+          "step_action": "Continue to print some pages(more than the plan, such as 15 pages).",
+          "step_test_data": "15 pages total",
+          "step_expected_result": "Print job registered successfully",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No print job simulation methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Total pages value (15) is provided in test case."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 13,
+          "step_action": "Refresh the dashboard page.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the progress bars for \"Complimentary pages\" and \"Additional pages\" are displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No progress bar verification methods found in this batch. Page refresh methods also not found."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 14,
+          "step_action": "Check the \"Additional pages\" progress bar.",
+          "step_test_data": "5 of 10 used",
+          "step_expected_result": "Verify the progress bar is filled with the Yellow color and the value is displayed correctly(such as \"5 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "verify_correct_billing_section",
+                "usage": "PrintHistoryHelper.verify_correct_billing_section(page, {'additional': 5})",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+                "relevance": "Verifies billing section fields including additional pages count"
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "The verify_correct_billing_section method can verify additional pages count, but it does not verify progress bar color (yellow). Progress bar color verification methods and locators likely exist in page object files in different batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value '5 of 10 used' is provided in test case."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 15,
+          "step_action": "Check the icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the info icon is displayed well behind the string \"Additional pages\".",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No info icon verification methods found in this batch. Info icon locators likely exist in page object files in different batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 16,
+          "step_action": "For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify a tooltip with correct message is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No tooltip interaction or verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No device type configuration found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 17,
+          "step_action": "Check the message below \"Additional pages\".",
+          "step_test_data": null,
+          "step_expected_result": "Verify a message with the amount of blocks already bought is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "see_notification_on_print_history",
+                "usage": "PrintHistoryHelper.see_notification_on_print_history(page, 'blocks bought text')",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+                "relevance": "Verifies notification text in print history table"
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "The see_notification_on_print_history method can verify notification text, but the exact locator for the additional pages info message element may exist in page object files in different batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 18,
+          "step_action": "Check the Complimentary pages progress bar.",
+          "step_test_data": "10 of 10 used",
+          "step_expected_result": "Verify the \"Complimentary pages\" progress bar is full filled with the black color and the value is displayed correctly (such as \"10 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "verify_correct_billing_section",
+                "usage": "PrintHistoryHelper.verify_correct_billing_section(page, {'pages': 10})",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+                "relevance": "Verifies billing section fields including page counts"
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "The verify_correct_billing_section method can verify page count values, but it does not verify progress bar full fill state or color. Progress bar state verification methods likely exist in page object files in different batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value '10 of 10 used' is provided in test case."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 19,
+          "step_action": "Check total pages printed info.",
+          "step_test_data": "15 pages",
+          "step_expected_result": "Verify correct number(such as 15 pages) displayed according to the printed pages.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "verify_billing_table_data",
+                "usage": "PrintHistoryHelper.verify_billing_table_data(page, total_pages_printed=15)",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+                "relevance": "Directly verifies the total pages printed value displayed in the billing table"
+              },
+              {
+                "name": "verify_correct_billing_section",
+                "usage": "PrintHistoryHelper.verify_correct_billing_section(page, {'total_pages_printed': 15})",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/print_history_helper.py",
+                "relevance": "Verifies billing section fields including total pages printed"
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Both verify_billing_table_data and verify_correct_billing_section methods can verify the total pages printed value. These methods directly address the expected result of this step."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value (15 pages) is provided in test case."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "COVERED",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 20,
+          "step_action": "Verify screenshot matches expected design",
+          "step_test_data": null,
+          "step_expected_result": "Visual verification of Billing Cycle Period card layout and styling",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No visual regression testing methods found in this batch. Visual testing utilities likely exist in visual testing helper or screenshot comparison utility files in different batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No baseline image path found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 21,
+          "step_action": "Verify all UI elements are properly styled and responsive",
+          "step_test_data": null,
+          "step_expected_result": "All elements display correctly on Desktop, Mobile, and Tablet",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No responsive testing methods found in this batch. Responsive testing utilities likely exist in viewport management helper or responsive testing utility files in different batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No viewport size configurations found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        }
+      ],
+      "files_checked_in_this_batch": [
+        "AURA-main (1) 1/AURA-main/helper/hpid_helper.py",
+        "AURA-main (1) 1/AURA-main/helper/landing_page_helper.py",
+        "AURA-main (1) 1/AURA-main/helper/oss_emulator_helper.py",
+        "AURA-main (1) 1/AURA-main/helper/overview_helper.py",
+        "AURA-main (1) 1/AURA-main/helper/print_history_helper.py"
+      ],
+      "batch_coverage_summary": "This batch contains helper modules for HPID authentication, landing page operations, OSS emulator operations, overview page operations, and print history page operations. The most relevant file for this test case is print_history_helper.py, which provides methods for verifying billing cycle periods, billing table data, page counts, and plan information. However, this batch does NOT contain: (1) Page object files with locators for billing cycle period card elements (progress bars, tooltips, info icons, page count text elements), (2) Navigation methods to Print and Payment History page, (3) Printer enrollment methods, (4) Subscription state setup methods, (5) Pause plan methods, (6) Time manipulation methods, (7) Print job simulation methods, (8) Page refresh methods, (9) Progress bar color verification methods, (10) Tooltip interaction methods, (11) Visual regression testing methods, (12) Responsive testing methods. These components likely exist in other batches containing page object files, dashboard navigation helpers, enrollment helpers, subscription helpers, plan management helpers, test utilities, API helpers, and visual testing utilities."
+    }
+  ]
+}
