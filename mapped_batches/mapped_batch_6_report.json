@@ -1,0 +1,920 @@
+{
+  "mapping_metadata": {
+    "mapping_batch_id": 6,
+    "total_mapping_batches": 18,
+    "remaining_after_this": 11,
+    "codebase_batch_report_path": "codebase_batches/batch_6_report.json",
+    "test_case_source": "test_case_analysis/test_case_analysis.json",
+    "analyzed_at": "2025-01-21T11:00:00Z",
+    "analyzer": "Senior Test Automation Mapping Specialist Agent",
+    "mapping_dimensions": [
+      "preconditions",
+      "step_actions",
+      "expected_results",
+      "test_data",
+      "overall_flow"
+    ],
+    "files_in_this_batch": [
+      "AURA-main (1) 1/AURA-main/core/__init__.py",
+      "AURA-main (1) 1/AURA-main/core/playwright_manager.py",
+      "AURA-main (1) 1/AURA-main/core/reports_manager.py",
+      "AURA-main (1) 1/AURA-main/core/scraper.py",
+      "AURA-main (1) 1/AURA-main/core/settings.py"
+    ],
+    "summary": {
+      "total_test_cases_evaluated": 1,
+      "test_cases_with_relevant_components": 1,
+      "test_cases_without_relevant_components": 0,
+      "total_page_objects_matched": 0,
+      "total_locators_matched": 0,
+      "total_methods_matched": 3,
+      "total_helpers_matched": 2,
+      "total_constants_matched": 2,
+      "total_precondition_methods_matched": 2,
+      "total_verification_methods_matched": 0,
+      "total_test_data_components_matched": 2
+    }
+  },
+  "test_case_mappings": [
+    {
+      "test_case_id": "C44873414",
+      "test_case_title": "Billing Cycle Period card",
+      "test_case_description": "Test case to verify the Billing Cycle Period card display and behavior on Print and Payment History page when a subscription plan is paused, including verification of complimentary pages progress bar, additional pages tracking, tooltips, and page usage information display across different printing scenarios.",
+      "module": "HP Instant Ink",
+      "has_relevant_components_in_this_batch": true,
+      "precondition_mapping": [
+        {
+          "precondition_text": "Enroll the Ink printer with 50 pages plan or higher.",
+          "precondition_index": 0,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "This precondition requires printer enrollment methods or API helpers. Batch 6 contains only core infrastructure (browser manager, reporting, scraper, settings). Printer enrollment methods likely exist in helper or API utility modules in other batches."
+        },
+        {
+          "precondition_text": "Make sure the Subscription has no free months info.",
+          "precondition_index": 1,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "This precondition requires subscription verification methods or API helpers. Not found in this core infrastructure batch."
+        },
+        {
+          "precondition_text": "Make sure the subscription is \"subscribed\" status.",
+          "precondition_index": 2,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "This precondition requires subscription status verification methods or API helpers. Not found in this core infrastructure batch."
+        },
+        {
+          "precondition_text": "Click the Pause Plan button on CIT modal or \"Pause Instant Ink\" link to trigger the pause plan.",
+          "precondition_index": 3,
+          "components_found_in_this_batch": [
+            {
+              "component_type": "class",
+              "class_name": "PlaywrightManager",
+              "source_file": "AURA-main (1) 1/AURA-main/core/playwright_manager.py",
+              "source_class": null,
+              "what_it_does": "Manages the complete lifecycle of Playwright browser automation including browser launch, context creation, page initialization, and cleanup. This is the foundational class that provides the browser and page objects needed to perform any UI interactions including clicking buttons and links.",
+              "how_to_import": "from core.playwright_manager import PlaywrightManager",
+              "how_to_instantiate": "playwright_manager = PlaywrightManager()\npage = playwright_manager.setup()",
+              "usage_example": "with PlaywrightManager() as page:\n    # page object is now available for interactions\n    page.goto('https://app.hpinstantink.com')",
+              "relevance_reason": "This precondition requires clicking UI elements (Pause Plan button or Pause Instant Ink link). PlaywrightManager provides the browser and page setup needed to perform these clicks. While it doesn't provide the specific page objects or locators for these elements, it provides the foundational browser infrastructure that all UI interactions depend on."
+            },
+            {
+              "component_type": "method",
+              "method_name": "setup",
+              "method_signature": "def setup(self) -> Page:",
+              "source_file": "AURA-main (1) 1/AURA-main/core/playwright_manager.py",
+              "source_class": "PlaywrightManager",
+              "what_it_does": "Performs complete Playwright browser setup and returns a ready-to-use Page object. Starts Playwright, determines browser type based on target platform, launches browser with configured settings (headless mode, viewport, locale, HAR logging, video recording, proxy), creates browser context, and creates a new page. Returns the page object for use in test flows.",
+              "how_to_import": "from core.playwright_manager import PlaywrightManager",
+              "usage_example": "manager = PlaywrightManager()\npage = manager.setup()\n# page is now ready for navigation and interactions",
+              "relevance_reason": "This method provides the Page object that is required to perform the click actions described in this precondition. It's the setup method that must be called before any UI interactions can occur."
+            },
+            {
+              "component_type": "method",
+              "method_name": "close",
+              "method_signature": "def close(self):",
+              "source_file": "AURA-main (1) 1/AURA-main/core/playwright_manager.py",
+              "source_class": "PlaywrightManager",
+              "what_it_does": "Performs complete cleanup of all Playwright resources in the correct order: page, context, browser, and playwright instance. Verifies that HAR and video files were saved if logging is enabled. All exceptions during cleanup are caught and logged to prevent cleanup failures from crashing the test.",
+              "how_to_import": "from core.playwright_manager import PlaywrightManager",
+              "usage_example": "manager.close()",
+              "relevance_reason": "This method is needed for test teardown after the precondition setup is complete. It ensures proper cleanup of browser resources."
+            }
+          ],
+          "precondition_coverage_in_this_batch": "PARTIALLY_COVERED"
+        }
+      ],
+      "matched_page_objects": [],
+      "matched_locators": [],
+      "matched_methods": [
+        {
+          "method_name": "setup",
+          "method_signature": "def setup(self) -> Page:",
+          "method_type": "setup",
+          "source_file": "AURA-main (1) 1/AURA-main/core/playwright_manager.py",
+          "source_class": "PlaywrightManager",
+          "what_it_does": "Performs complete Playwright browser setup and returns a ready-to-use Page object. Configures browser type (chromium/firefox/webkit), viewport dimensions, locale, HAR logging, video recording, and proxy settings based on GlobalState configuration.",
+          "how_to_import": "from core.playwright_manager import PlaywrightManager",
+          "usage_example": "manager = PlaywrightManager()\npage = manager.setup()",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            3
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Provides the browser and page infrastructure needed to perform UI interactions for precondition 3 (clicking pause plan button/link). This is foundational setup required before any test steps can execute."
+        },
+        {
+          "method_name": "close",
+          "method_signature": "def close(self):",
+          "method_type": "teardown",
+          "source_file": "AURA-main (1) 1/AURA-main/core/playwright_manager.py",
+          "source_class": "PlaywrightManager",
+          "what_it_does": "Performs complete cleanup of all Playwright resources including page, context, browser, and playwright instance. Verifies HAR and video files were saved if logging is enabled.",
+          "how_to_import": "from core.playwright_manager import PlaywrightManager",
+          "usage_example": "manager.close()",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "test_teardown",
+          "relevance_reason": "Provides cleanup functionality needed after test execution completes. This is part of the overall test infrastructure for proper resource management."
+        },
+        {
+          "method_name": "init",
+          "method_signature": "@classmethod\ndef init(cls, **kwargs):",
+          "method_type": "setup",
+          "source_file": "AURA-main (1) 1/AURA-main/core/settings.py",
+          "source_class": "Config",
+          "what_it_does": "Initializes the framework configuration by resetting GlobalState and populating it with provided values and loaded data from locale_map.json, address_data.json, and printer_profiles.json. Sets up locale, language, region, country, printer profile, and other runtime configuration.",
+          "how_to_import": "from core.settings import Config",
+          "usage_example": "Config.init(stack='prod', locale='US', language='en', headless=True, mode='validate', flow_name='instant_ink_billing')",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Provides configuration initialization needed before test execution. This sets up environment-specific settings, locale information, and printer profiles that are required for the test preconditions."
+        }
+      ],
+      "matched_helpers": [
+        {
+          "helper_name": "PlaywrightManager",
+          "helper_signature": "class PlaywrightManager",
+          "source_file": "AURA-main (1) 1/AURA-main/core/playwright_manager.py",
+          "what_it_does": "Manages the complete lifecycle of Playwright browser automation including browser launch, context creation, page initialization, and cleanup. Implements context manager protocol for automatic resource management.",
+          "how_to_import": "from core.playwright_manager import PlaywrightManager",
+          "usage_example": "with PlaywrightManager() as page:\n    page.goto('https://app.hpinstantink.com')\n    # perform test actions",
+          "relevant_to_preconditions": [
+            3
+          ],
+          "relevant_to_steps": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Provides the browser infrastructure needed for all UI interactions in the test. This is the foundational helper that enables navigation, clicking, and all other browser-based actions."
+        },
+        {
+          "helper_name": "Config",
+          "helper_signature": "class Config",
+          "source_file": "AURA-main (1) 1/AURA-main/core/settings.py",
+          "what_it_does": "Configuration initialization class that populates GlobalState from command-line arguments and loads supporting data from JSON files including locale information, address data, and printer profiles.",
+          "how_to_import": "from core.settings import Config",
+          "usage_example": "Config.init(locale='US', language='en', printer_profile='OfficeJet', headless=True)",
+          "relevant_to_preconditions": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "relevant_to_steps": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Provides configuration management needed to set up test environment, locale settings, and printer profiles required by the test preconditions."
+        }
+      ],
+      "matched_constants": [
+        {
+          "constant_name": "DEFAULT_TIMEOUT",
+          "constant_value": "30000",
+          "source_file": "AURA-main (1) 1/AURA-main/core/settings.py",
+          "how_to_import": "from core.settings import Constants",
+          "usage_example": "page.wait_for_selector('.billing-cycle-card', timeout=Constants.DEFAULT_TIMEOUT)",
+          "relevant_to_preconditions": [],
+          "relevant_to_steps": [
+            1,
+            2,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            11,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ],
+          "relevant_to_test_data": true,
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Provides the default timeout value (30 seconds) that should be used for wait operations throughout the test. Many steps involve waiting for elements to be visible or for page loads to complete."
+        },
+        {
+          "constant_name": "MAX_RETRIES",
+          "constant_value": "2",
+          "source_file": "AURA-main (1) 1/AURA-main/core/settings.py",
+          "how_to_import": "from core.settings import Constants",
+          "usage_example": "for attempt in range(Constants.MAX_RETRIES + 1):\n    try:\n        # perform action\n        break\n    except Exception:\n        if attempt == Constants.MAX_RETRIES:\n            raise",
+          "relevant_to_preconditions": [],
+          "relevant_to_steps": [
+            1,
+            3,
+            4,
+            10,
+            11,
+            12,
+            13
+          ],
+          "relevant_to_test_data": true,
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Provides the maximum retry count for operations that may fail transiently (page loads, API calls, element interactions). Useful for implementing retry logic in steps that involve navigation, time shifting, or print simulation."
+        }
+      ],
+      "step_level_mapping": [
+        {
+          "step_number": 1,
+          "step_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "step_test_data": null,
+          "step_expected_result": null,
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Navigation to Print and Payment History page requires page objects (InstantInkDashboardPage or PrintAndPaymentHistoryPage) with navigation methods and locators for the navigation link. These components are not in this core infrastructure batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Page load verification requires page object methods like verify_page_loaded() or is_page_visible(). These are not in this core infrastructure batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [
+              {
+                "name": "DEFAULT_TIMEOUT",
+                "value": "30000",
+                "import": "from core.settings import Constants",
+                "usage": "page.wait_for_load_state('networkidle', timeout=Constants.DEFAULT_TIMEOUT)"
+              }
+            ],
+            "generators": [],
+            "notes": "DEFAULT_TIMEOUT constant is useful for page load waits. The actual URL for the Print and Payment History page is not in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "PARTIALLY_COVERED",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 2,
+          "step_action": "Check the Billing Cycle Period card.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the plan pause information is not displayed.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Checking the billing cycle card requires locators for the card element and verification methods. Not found in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Verifying that plan pause information is NOT displayed requires verification methods like is_element_visible() or verify_element_not_present(). Not found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 3,
+          "step_action": "Even shift 32 days and trigger billing charge.",
+          "step_test_data": "32 days",
+          "step_expected_result": null,
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Time shifting and billing charge triggering require backend API helpers or test utility methods. Not found in this core infrastructure batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Verifying time shift and billing charge success requires API response verification methods. Not found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [
+              {
+                "name": "MAX_RETRIES",
+                "value": "2",
+                "import": "from core.settings import Constants",
+                "usage": "# Retry logic for API calls\nfor attempt in range(Constants.MAX_RETRIES + 1):\n    try:\n        shift_time_api(days=32)\n        break\n    except Exception:\n        if attempt == Constants.MAX_RETRIES:\n            raise"
+              }
+            ],
+            "generators": [],
+            "notes": "MAX_RETRIES constant is useful for implementing retry logic for the time shift and billing charge API calls. The actual API helper methods are not in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "PARTIALLY_COVERED",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 4,
+          "step_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "step_test_data": null,
+          "step_expected_result": null,
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Same as step 1 - navigation requires page objects and navigation methods not in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Same as step 1 - page load verification requires page object methods not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [
+              {
+                "name": "DEFAULT_TIMEOUT",
+                "value": "30000",
+                "import": "from core.settings import Constants",
+                "usage": "page.wait_for_load_state('networkidle', timeout=Constants.DEFAULT_TIMEOUT)"
+              }
+            ],
+            "generators": [],
+            "notes": "DEFAULT_TIMEOUT constant is useful for page load waits."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "PARTIALLY_COVERED",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 5,
+          "step_action": "Check the Billing Cycle Period card.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the plan pause information is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Checking the card requires locators and verification methods not in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Verifying plan pause information IS displayed requires verification methods not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 6,
+          "step_action": "Check the progress bar.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the Complimentary pages progress bar is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Checking progress bar requires locators for the progress bar element and verification methods. Not in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Verifying progress bar display requires verification methods not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 7,
+          "step_action": "For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify a tooltip with correct message is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Hovering or clicking info icon requires locators for the icon and action methods for hover/click. Not in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Verifying tooltip display and message requires verification methods and tooltip locators. Not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Device type configuration might be in GlobalState but the actual device-specific interaction logic is not in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 8,
+          "step_action": "Check the Complimentary pages value.",
+          "step_test_data": "0 of 10(Pause Plan) used",
+          "step_expected_result": "Verify the value is displayed as \"0 of 10(Pause Plan) used\".",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Checking the value requires locators for the value text element and getter methods. Not in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Verifying the exact text value requires getter methods and text comparison. Not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "The expected value '0 of 10(Pause Plan) used' is provided in the test case but no constants for it exist in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 9,
+          "step_action": "Check the message below \"Complimentary pages\".",
+          "step_test_data": null,
+          "step_expected_result": "Verify the information with correct plan info is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Checking the message requires locators and getter methods. Not in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Verifying message content requires getter and verification methods. Not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data components for this step in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 10,
+          "step_action": "Print some pages(less than the plan, such as 6 pages).",
+          "step_test_data": "6 pages",
+          "step_expected_result": null,
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Print simulation requires API helpers or backend methods. Not in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Verifying print job registration requires API response verification. Not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [
+              {
+                "name": "MAX_RETRIES",
+                "value": "2",
+                "import": "from core.settings import Constants",
+                "usage": "# Retry logic for print API\nfor attempt in range(Constants.MAX_RETRIES + 1):\n    try:\n        register_print_job(pages=6)\n        break\n    except Exception:\n        if attempt == Constants.MAX_RETRIES:\n            raise"
+              }
+            ],
+            "generators": [],
+            "notes": "MAX_RETRIES constant is useful for retry logic. The actual print simulation API is not in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "PARTIALLY_COVERED",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 11,
+          "step_action": "Refresh the dashboard page.",
+          "step_test_data": "6 of 10 used",
+          "step_expected_result": "Verify the \"Complimentary pages\" progress bar is filled with the black color and the value is displayed as correct (such as \"6 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Page refresh can be done with page.reload() but verification of updated progress bar requires locators and verification methods not in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Verifying progress bar color and value requires CSS property checking and text verification methods. Not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [
+              {
+                "name": "DEFAULT_TIMEOUT",
+                "value": "30000",
+                "import": "from core.settings import Constants",
+                "usage": "page.wait_for_load_state('networkidle', timeout=Constants.DEFAULT_TIMEOUT)"
+              }
+            ],
+            "generators": [],
+            "notes": "DEFAULT_TIMEOUT useful for waiting after refresh. Expected value '6 of 10 used' is in test case but no constant for it in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "PARTIALLY_COVERED",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 12,
+          "step_action": "Continue to print some pages(more than the plan, such as 15 pages).",
+          "step_test_data": "15 pages total",
+          "step_expected_result": null,
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Print simulation requires API helpers not in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Verifying print job registration requires API verification methods not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [
+              {
+                "name": "MAX_RETRIES",
+                "value": "2",
+                "import": "from core.settings import Constants",
+                "usage": "# Retry logic for additional print API\nfor attempt in range(Constants.MAX_RETRIES + 1):\n    try:\n        register_print_job(pages=9)  # 15 total - 6 already printed\n        break\n    except Exception:\n        if attempt == Constants.MAX_RETRIES:\n            raise"
+              }
+            ],
+            "generators": [],
+            "notes": "MAX_RETRIES constant useful for retry logic. Print API not in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "PARTIALLY_COVERED",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 13,
+          "step_action": "Refresh the dashboard page.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the progress bars for \"Complimentary pages\" and \"Additional pages\" are displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Page refresh can be done with page.reload() but verification requires locators and methods not in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Verifying both progress bars requires verification methods and locators not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [
+              {
+                "name": "DEFAULT_TIMEOUT",
+                "value": "30000",
+                "import": "from core.settings import Constants",
+                "usage": "page.wait_for_load_state('networkidle', timeout=Constants.DEFAULT_TIMEOUT)"
+              }
+            ],
+            "generators": [],
+            "notes": "DEFAULT_TIMEOUT useful for waiting after refresh."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "PARTIALLY_COVERED",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 14,
+          "step_action": "Check the \"Additional pages\" progress bar.",
+          "step_test_data": "5 of 10 used",
+          "step_expected_result": "Verify the progress bar is filled with the Yellow color and the value is displayed correctly(such as \"5 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Checking progress bar requires locators and verification methods not in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Verifying color and value requires CSS property checking and text verification not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value '5 of 10 used' is in test case but no constant for it in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 15,
+          "step_action": "Check the icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the info icon is displayed well behind the string \"Additional pages\".",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Checking icon requires locators and verification methods not in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Verifying icon display requires verification methods not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 16,
+          "step_action": "For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify a tooltip with correct message is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Hover/click interaction requires locators and action methods not in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Tooltip verification requires verification methods and locators not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Device type configuration might be in GlobalState but interaction logic not in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 17,
+          "step_action": "Check the message below \"Additional pages\".",
+          "step_test_data": null,
+          "step_expected_result": "Verify a message with the amount of blocks already bought is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Checking message requires locators and getter methods not in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Verifying message content requires verification methods not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data components for this step in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 18,
+          "step_action": "Check the Complimentary pages progress bar.",
+          "step_test_data": "10 of 10 used",
+          "step_expected_result": "Verify the \"Complimentary pages\" progress bar is full filled with the black color and the value is displayed correctly (such as \"10 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Checking progress bar requires locators and verification methods not in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Verifying full progress bar and value requires CSS and text verification not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value '10 of 10 used' is in test case but no constant for it in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 19,
+          "step_action": "Check total pages printed info.",
+          "step_test_data": "15 pages",
+          "step_expected_result": "Verify correct number(such as 15 pages) displayed according to the printed pages.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Checking total pages requires locators and getter methods not in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Verifying total pages count requires verification methods not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value '15 pages' is in test case but no constant for it in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 20,
+          "step_action": "Verify screenshot matches expected design",
+          "step_test_data": null,
+          "step_expected_result": "Visual verification of Billing Cycle Period card layout and styling",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Visual verification requires screenshot capture and comparison methods. The scraper.py module in this batch has screenshot capabilities but is designed for baseline creation, not validation. Visual comparison methods are not in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Visual regression testing requires visual comparison methods and baseline image management. Not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Baseline image path would be needed but is not in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 21,
+          "step_action": "Verify all UI elements are properly styled and responsive",
+          "step_test_data": null,
+          "step_expected_result": "All elements display correctly on Desktop, Mobile, and Tablet",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": [],
+            "notes": "Responsive testing requires viewport resizing and verification methods not in this batch."
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Responsive layout verification requires verification methods not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Viewport sizes configuration might be in GlobalState but responsive testing logic is not in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        }
+      ],
+      "files_checked_in_this_batch": [
+        "AURA-main (1) 1/AURA-main/core/__init__.py",
+        "AURA-main (1) 1/AURA-main/core/playwright_manager.py",
+        "AURA-main (1) 1/AURA-main/core/reports_manager.py",
+        "AURA-main (1) 1/AURA-main/core/scraper.py",
+        "AURA-main (1) 1/AURA-main/core/settings.py"
+      ],
+      "batch_analysis_summary": "Batch 6 contains core infrastructure modules for the AURA framework: PlaywrightManager for browser lifecycle management, ReportsManager for test execution reporting, scraper for UI element extraction and baseline creation, and settings for configuration management. This batch provides foundational infrastructure components but does NOT contain the page objects, locators, action methods, or verification methods specific to HP Instant Ink pages that are required by test case C44873414. The test case requires PrintAndPaymentHistoryPage and InstantInkDashboardPage page objects with their associated locators and methods for interacting with billing cycle cards, progress bars, tooltips, and info icons. It also requires API helpers for time manipulation and print job simulation. These components are not in this core infrastructure batch and likely exist in other batches containing page objects and helper modules. The only relevant components found in this batch are: (1) PlaywrightManager for browser setup/teardown infrastructure, (2) Config/GlobalState for configuration management, and (3) Constants for timeout and retry values. These are useful for test infrastructure and configuration but do not directly implement the test case logic."
+    }
+  ]
+}
