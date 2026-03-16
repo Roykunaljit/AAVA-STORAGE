@@ -1,0 +1,846 @@
+{
+  "mapping_metadata": {
+    "mapping_batch_id": 12,
+    "total_mapping_batches": 18,
+    "remaining_after_this": 5,
+    "codebase_batch_report_path": "codebase_batches/batch_12_report.json",
+    "test_case_source": "test_case_analysis/test_case_analysis.json",
+    "storage_repo": "AAVA-STORAGE",
+    "analyzed_at": "2025-01-15T14:45:00Z",
+    "analyzer": "Senior Test Automation Mapping Specialist Agent",
+    "mapping_dimensions": [
+      "preconditions",
+      "step_actions",
+      "expected_results",
+      "test_data",
+      "overall_flow"
+    ],
+    "files_in_this_batch": [
+      "AURA-main (1) 1/AURA-main/pages/dashboard_hp_smart_page.py",
+      "AURA-main (1) 1/AURA-main/pages/dashboard_side_menu_page.py",
+      "AURA-main (1) 1/AURA-main/pages/gemini_admin_page.py",
+      "AURA-main (1) 1/AURA-main/pages/hpid_page.py",
+      "AURA-main (1) 1/AURA-main/pages/landing_page.py"
+    ],
+    "summary": {
+      "total_test_cases_evaluated": 1,
+      "test_cases_with_relevant_components": 1,
+      "test_cases_without_relevant_components": 0,
+      "total_page_objects_matched": 2,
+      "total_locators_matched": 2,
+      "total_methods_matched": 3,
+      "total_helpers_matched": 0,
+      "total_constants_matched": 0,
+      "total_precondition_methods_matched": 0,
+      "total_verification_methods_matched": 0,
+      "total_test_data_components_matched": 0
+    }
+  },
+  "test_case_mappings": [
+    {
+      "test_case_id": "C44873414",
+      "test_case_title": "Billing Cycle Period card",
+      "test_case_description": "Test case to verify the Billing Cycle Period card display and behavior on Print and Payment History page when a subscription plan is paused, including verification of complimentary pages progress bar, additional pages tracking, tooltips, and page usage information display across different printing scenarios.",
+      "module": "HP Instant Ink",
+      "has_relevant_components_in_this_batch": true,
+      "precondition_mapping": [
+        {
+          "precondition_text": "Enroll the Ink printer with 50 pages plan or higher.",
+          "precondition_index": 0,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "No printer enrollment methods, API helpers, or enrollment page objects found in this batch. Batch contains dashboard pages, side menu, admin page, HPID page, and landing page - none of which handle printer enrollment. Enrollment functionality likely exists in other batches containing enrollment flow pages or API helper modules."
+        },
+        {
+          "precondition_text": "Make sure the Subscription has no free months info.",
+          "precondition_index": 1,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "No API helpers or verification methods found in this batch for checking subscription free months status. The DashboardHPSmartPage has a subscription_state locator but no methods to verify free months. API helpers for subscription verification likely exist in other batches."
+        },
+        {
+          "precondition_text": "Make sure the subscription is \"subscribed\" status.",
+          "precondition_index": 2,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "No API helpers or verification methods found in this batch for checking subscription status. The DashboardHPSmartPage has a subscription_state locator that could potentially be used to verify status visually, but no methods exist to query or verify the status programmatically. API helpers for subscription status verification likely exist in other batches."
+        },
+        {
+          "precondition_text": "Click the Pause Plan button on CIT modal or \"Pause Instant Ink\" link to trigger the pause plan.",
+          "precondition_index": 3,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "No pause plan buttons, CIT modal page objects, or pause plan action methods found in this batch. The DashboardSideMenuPage has an update_plan_menu_link but no pause plan functionality. Pause plan UI elements and methods likely exist in other batches containing plan management pages."
+        }
+      ],
+      "matched_page_objects": [
+        {
+          "class_name": "DashboardSideMenuPage",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/dashboard_side_menu_page.py",
+          "file_category": "page_object",
+          "parent_classes": [
+            "BasePageObject"
+          ],
+          "class_purpose": "Page object for the Dashboard Side Menu navigation component. Contains locators for all menu items and submenu items in the dashboard side navigation panel, and provides interaction methods for clicking menu items with automatic expansion handling for parent menus and mobile responsive layouts.",
+          "how_to_import": "from pages.dashboard_side_menu_page import DashboardSideMenuPage",
+          "how_to_instantiate": "dashboard_side_menu = DashboardSideMenuPage(page)",
+          "relevant_to_preconditions": [],
+          "relevant_to_steps": [
+            1,
+            4
+          ],
+          "relevant_to_expected_results": [],
+          "relevance_reason": "This page object is CRITICAL for test case navigation. Steps 1 and 4 require navigating to the Print and Payment History page, and this page object contains the print_history_menu_link locator and click_print_history() method that perform exactly that navigation. The page object handles complex menu expansion logic including mobile responsive layouts and parent menu expansion, which is essential for reliable navigation."
+        },
+        {
+          "class_name": "DashboardHPSmartPage",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/dashboard_hp_smart_page.py",
+          "file_category": "page_object",
+          "parent_classes": [
+            "BasePageObject"
+          ],
+          "class_purpose": "Page object for the HP Smart Dashboard page. Contains all UI element locators for the promotional page, footer links, subscription management, printer options, and enrollment features.",
+          "how_to_import": "from pages.dashboard_hp_smart_page import DashboardHPSmartPage",
+          "how_to_instantiate": "dashboard_hp_smart_page = DashboardHPSmartPage(page)",
+          "relevant_to_preconditions": [],
+          "relevant_to_steps": [],
+          "relevant_to_expected_results": [],
+          "relevance_reason": "This page object has a subscription_state locator that could potentially be used to verify subscription status as part of precondition validation. However, it lacks methods to interact with or verify subscription details programmatically. The page object is minimally relevant to this test case as the test focuses on the Print and Payment History page, not the main dashboard."
+        }
+      ],
+      "matched_locators": [
+        {
+          "locator_name": "print_history_menu_link",
+          "locator_value": "[data-testid='jarvis-react-consumer-layout__side-menu-item-Print and Payment History']",
+          "locator_type": "data-testid",
+          "ui_element_description": "Print and Payment History submenu item under HP Instant Ink that navigates to the history page showing past print jobs and payment transactions.",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/dashboard_side_menu_page.py",
+          "source_class": "DashboardSideMenuPage",
+          "defined_in_method": "__init__",
+          "access_pattern": "dashboard_side_menu.elements.print_history_menu_link",
+          "relevant_to_steps": [
+            1,
+            4
+          ],
+          "relevant_to_expected_results": [],
+          "relevance_reason": "This locator is ESSENTIAL for steps 1 and 4 which both require navigating to the Print and Payment History page. The locator targets the exact menu item needed for navigation. The data-testid selector is reliable and the element name matches the test requirement perfectly."
+        },
+        {
+          "locator_name": "subscription_state",
+          "locator_value": "[data-testid=\"subscription-state\"], [data-testid=\"ii-enrollment-status-printers-pp\"]",
+          "locator_type": "composite",
+          "ui_element_description": "Subscription state indicator element that displays the current status of the HP Instant Ink subscription. Uses multiple selector options to match different page variations.",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/dashboard_hp_smart_page.py",
+          "source_class": "DashboardHPSmartPage",
+          "defined_in_method": "__init__",
+          "access_pattern": "dashboard_hp_smart_page.elements.subscription_state",
+          "relevant_to_steps": [],
+          "relevant_to_expected_results": [],
+          "relevance_reason": "This locator could potentially be used to verify subscription status as part of precondition 2 and 3 validation (checking subscription is in 'subscribed' status without free months). However, it's on the dashboard page, not the Print and Payment History page where the test executes, so its utility is limited. It may be useful for initial precondition setup verification before navigating to the test page."
+        }
+      ],
+      "matched_methods": [
+        {
+          "method_name": "click_print_history",
+          "method_signature": "def click_print_history(self)",
+          "method_type": "action",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/dashboard_side_menu_page.py",
+          "source_class": "DashboardSideMenuPage",
+          "what_it_does": "Clicks the Print and Payment History menu item in the side navigation to navigate to the print and payment history page. Calls _click_with_instant_ink_expansion with print_history_menu_link to handle mobile menu expansion and parent HP Instant Ink menu expansion if needed. This method provides a simple interface for test scripts to navigate to the history page.",
+          "how_to_import": "from pages.dashboard_side_menu_page import DashboardSideMenuPage",
+          "usage_example": "dashboard_side_menu = DashboardSideMenuPage(page)\ndashboard_side_menu.click_print_history()",
+          "relevant_to_steps": [
+            1,
+            4
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "step_action",
+          "relevance_reason": "This method is CRITICAL for steps 1 and 4. Both steps require navigating to the Print and Payment History page, and this method performs exactly that action. It handles complex menu expansion logic automatically, including mobile responsive layouts and parent menu expansion, making it the ideal method for reliable navigation to the target page."
+        },
+        {
+          "method_name": "expand_instant_ink_menu",
+          "method_signature": "def expand_instant_ink_menu(self)",
+          "method_type": "action",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/dashboard_side_menu_page.py",
+          "source_class": "DashboardSideMenuPage",
+          "what_it_does": "Expands the HP Instant Ink parent menu in the side navigation to reveal its submenu items. First checks if the overview_menu_link (a submenu item) is already visible. If not visible, it attempts to expand the mobile menu toggle if it is visible by clicking expand_side_menu_in_mobile_layout with a 30000ms timeout, wrapped in a try-except block to handle cases where mobile menu is not present. Then clicks the instant_ink_menu_link to expand the parent menu. This method is useful when you need to verify submenu items are present without clicking them.",
+          "how_to_import": "from pages.dashboard_side_menu_page import DashboardSideMenuPage",
+          "usage_example": "dashboard_side_menu = DashboardSideMenuPage(page)\ndashboard_side_menu.expand_instant_ink_menu()",
+          "relevant_to_steps": [
+            1,
+            4
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "step_action",
+          "relevance_reason": "This method could be used as an alternative or supplementary approach for steps 1 and 4 navigation. If the test needs to verify the Print and Payment History menu item is visible before clicking it, this method would expand the parent Instant Ink menu to reveal the submenu. However, click_print_history() already handles expansion internally, so this method is optional."
+        },
+        {
+          "method_name": "visible_instant_ink_menu_link",
+          "method_signature": "def visible_instant_ink_menu_link(self)",
+          "method_type": "waiter",
+          "source_file": "AURA-main (1) 1/AURA-main/pages/dashboard_side_menu_page.py",
+          "source_class": "DashboardSideMenuPage",
+          "what_it_does": "Waits for the HP Instant Ink menu link to become visible on the page with a very long timeout of 120000 milliseconds (2 minutes). Uses page.wait_for_selector with the instant_ink_menu_link selector string from self.elements and state='visible'. Returns the element locator once it becomes visible. This method is useful for ensuring the side menu has fully loaded before attempting to interact with menu items, particularly useful after page navigation or login.",
+          "how_to_import": "from pages.dashboard_side_menu_page import DashboardSideMenuPage",
+          "usage_example": "dashboard_side_menu = DashboardSideMenuPage(page)\ndashboard_side_menu.visible_instant_ink_menu_link()",
+          "relevant_to_steps": [
+            1,
+            4
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "step_action",
+          "relevance_reason": "This wait method could be used before steps 1 and 4 to ensure the side menu has fully loaded before attempting navigation. Since the test involves page navigation and refresh operations, ensuring the menu is visible before clicking is good practice. This method provides a robust wait with a 2-minute timeout, which is appropriate for dashboard page loads."
+        }
+      ],
+      "matched_helpers": [],
+      "matched_constants": [],
+      "step_level_mapping": [
+        {
+          "step_number": 1,
+          "step_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "step_test_data": null,
+          "step_expected_result": null,
+          "action_components_found_in_this_batch": {
+            "page_objects": [
+              {
+                "class_name": "DashboardSideMenuPage",
+                "how_to_import": "from pages.dashboard_side_menu_page import DashboardSideMenuPage",
+                "how_to_instantiate": "dashboard_side_menu = DashboardSideMenuPage(page)"
+              }
+            ],
+            "locators": [
+              {
+                "name": "print_history_menu_link",
+                "access": "dashboard_side_menu.elements.print_history_menu_link",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/dashboard_side_menu_page.py"
+              }
+            ],
+            "methods": [
+              {
+                "name": "click_print_history",
+                "usage": "dashboard_side_menu = DashboardSideMenuPage(page)\ndashboard_side_menu.click_print_history()",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/dashboard_side_menu_page.py"
+              },
+              {
+                "name": "visible_instant_ink_menu_link",
+                "usage": "dashboard_side_menu.visible_instant_ink_menu_link()",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/dashboard_side_menu_page.py"
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Step 1 expected result is implicit - successful page load. The actual Print and Payment History page object with page load verification methods is not in this batch. Page load verification components likely exist in other batches containing the PrintAndPaymentHistoryPage page object."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Step 1 requires the URL for Print and Payment History page, but no URL constants found in this batch. URL configuration likely exists in other batches containing config or settings files."
+          },
+          "step_action_coverage": "COVERED",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 2,
+          "step_action": "Check the Billing Cycle Period card.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the plan pause information is not displayed.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No components found for step 2. This step requires locators for the Billing Cycle Period card and plan pause information elements, plus verification methods to check visibility. These components are not in this batch. The PrintAndPaymentHistoryPage page object with billing cycle card locators likely exists in other batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 3,
+          "step_action": "Even shift 32 days and trigger billing charge.",
+          "step_test_data": "32 days",
+          "step_expected_result": null,
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No verification components needed for this backend operation step."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No time shift constants or billing charge test data found in this batch. This is a backend API operation requiring special test utilities not present in these page object files."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_APPLICABLE",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 4,
+          "step_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "step_test_data": null,
+          "step_expected_result": null,
+          "action_components_found_in_this_batch": {
+            "page_objects": [
+              {
+                "class_name": "DashboardSideMenuPage",
+                "how_to_import": "from pages.dashboard_side_menu_page import DashboardSideMenuPage",
+                "how_to_instantiate": "dashboard_side_menu = DashboardSideMenuPage(page)"
+              }
+            ],
+            "locators": [
+              {
+                "name": "print_history_menu_link",
+                "access": "dashboard_side_menu.elements.print_history_menu_link",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/dashboard_side_menu_page.py"
+              }
+            ],
+            "methods": [
+              {
+                "name": "click_print_history",
+                "usage": "dashboard_side_menu = DashboardSideMenuPage(page)\ndashboard_side_menu.click_print_history()",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/dashboard_side_menu_page.py"
+              },
+              {
+                "name": "visible_instant_ink_menu_link",
+                "usage": "dashboard_side_menu.visible_instant_ink_menu_link()",
+                "from_file": "AURA-main (1) 1/AURA-main/pages/dashboard_side_menu_page.py"
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Step 4 expected result is implicit - successful page reload. The actual Print and Payment History page object with page load verification methods is not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Step 4 requires the URL for Print and Payment History page, but no URL constants found in this batch."
+          },
+          "step_action_coverage": "COVERED",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 5,
+          "step_action": "Check the Billing Cycle Period card.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the plan pause information is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No components found for step 5. This step requires billing cycle card locators and plan pause information verification methods not present in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 6,
+          "step_action": "Check the progress bar.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the Complimentary pages progress bar is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No progress bar locators or verification methods found in this batch. These components are specific to the Print and Payment History page."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 7,
+          "step_action": "For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify a tooltip with correct message is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No tooltip locators, hover methods, or tooltip verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No device type configuration found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 8,
+          "step_action": "Check the Complimentary pages value.",
+          "step_test_data": "0 of 10(Pause Plan) used",
+          "step_expected_result": "Verify the value is displayed as \"0 of 10(Pause Plan) used\".",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No complimentary pages value locators or text verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data constants for expected complimentary pages value found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 9,
+          "step_action": "Check the message below \"Complimentary pages\".",
+          "step_test_data": null,
+          "step_expected_result": "Verify the information with correct plan info is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No info message locators or verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 10,
+          "step_action": "Print some pages(less than the plan, such as 6 pages).",
+          "step_test_data": "6 pages",
+          "step_expected_result": null,
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No verification components needed for this backend operation step."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No print simulation API helpers or test data constants found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_APPLICABLE",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 11,
+          "step_action": "Refresh the dashboard page.",
+          "step_test_data": "6 of 10 used",
+          "step_expected_result": "Verify the \"Complimentary pages\" progress bar is filled with the black color and the value is displayed as correct (such as \"6 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No progress bar locators, color verification methods, or value verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data constants for expected page usage values found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 12,
+          "step_action": "Continue to print some pages(more than the plan, such as 15 pages).",
+          "step_test_data": "15 pages total",
+          "step_expected_result": null,
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No verification components needed for this backend operation step."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No print simulation API helpers or test data constants found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_APPLICABLE",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 13,
+          "step_action": "Refresh the dashboard page.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the progress bars for \"Complimentary pages\" and \"Additional pages\" are displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No progress bar locators or verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 14,
+          "step_action": "Check the \"Additional pages\" progress bar.",
+          "step_test_data": "5 of 10 used",
+          "step_expected_result": "Verify the progress bar is filled with the Yellow color and the value is displayed correctly(such as \"5 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No additional pages progress bar locators, color verification methods, or value verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data constants for expected additional pages values found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 15,
+          "step_action": "Check the icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the info icon is displayed well behind the string \"Additional pages\".",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No additional pages info icon locators or verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 16,
+          "step_action": "For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify a tooltip with correct message is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No additional pages tooltip locators or verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No device type configuration found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 17,
+          "step_action": "Check the message below \"Additional pages\".",
+          "step_test_data": null,
+          "step_expected_result": "Verify a message with the amount of blocks already bought is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No additional pages info message locators or verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 18,
+          "step_action": "Check the Complimentary pages progress bar.",
+          "step_test_data": "10 of 10 used",
+          "step_expected_result": "Verify the \"Complimentary pages\" progress bar is full filled with the black color and the value is displayed correctly (such as \"10 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No progress bar locators or verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data constants for expected full usage values found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 19,
+          "step_action": "Check total pages printed info.",
+          "step_test_data": "15 pages",
+          "step_expected_result": "Verify correct number(such as 15 pages) displayed according to the printed pages.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No total pages printed locators or verification methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data constants for expected total pages values found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 20,
+          "step_action": "Verify screenshot matches expected design",
+          "step_test_data": null,
+          "step_expected_result": "Visual verification of Billing Cycle Period card layout and styling",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No visual testing utilities or screenshot comparison methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No baseline image paths or visual testing configuration found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 21,
+          "step_action": "Verify all UI elements are properly styled and responsive",
+          "step_test_data": null,
+          "step_expected_result": "All elements display correctly on Desktop, Mobile, and Tablet",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No responsive testing utilities or viewport management methods found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No viewport size configuration or device type constants found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        }
+      ],
+      "files_checked_in_this_batch": [
+        "AURA-main (1) 1/AURA-main/pages/dashboard_hp_smart_page.py",
+        "AURA-main (1) 1/AURA-main/pages/dashboard_side_menu_page.py",
+        "AURA-main (1) 1/AURA-main/pages/gemini_admin_page.py",
+        "AURA-main (1) 1/AURA-main/pages/hpid_page.py",
+        "AURA-main (1) 1/AURA-main/pages/landing_page.py"
+      ],
+      "overall_test_case_assessment": "This test case has MINIMAL coverage in batch 12. Only 2 out of 21 steps (steps 1 and 4) have action components found, and these are limited to navigation only. The batch contains dashboard navigation pages but lacks the critical PrintAndPaymentHistoryPage page object that is the focus of this test. All billing cycle card locators, progress bar elements, tooltip interactions, page usage tracking components, time manipulation utilities, print simulation APIs, and verification methods are missing from this batch. The test case requires extensive components that are specific to the Print and Payment History page functionality, none of which are present in this batch of general dashboard and authentication pages. The matched components (DashboardSideMenuPage navigation) are essential for getting TO the test page but provide no coverage for the actual test operations ON that page."
+    }
+  ]
+}
