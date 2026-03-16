@@ -48,8 +48,7 @@ self.additional_pages_tooltip = page.locator(self.elements.additional_pages_tool
 def verify_plan_pause_info_not_displayed(self):
     """Verify plan pause information is not displayed."""
     from playwright.sync_api import expect
-    if self.plan_pause_info.count() > 0:
-        expect(self.plan_pause_info).not_to_be_visible(timeout=10000)
+    expect(self.plan_pause_info).not_to_be_visible(timeout=10000)
 
 def verify_plan_pause_info_displayed(self):
     """Verify plan pause information is displayed."""
