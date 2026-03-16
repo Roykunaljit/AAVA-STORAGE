@@ -41,15 +41,18 @@ def billing_cycle_period_card(stage_callback):
             
             # Precondition 4: Pause the plan
             framework_logger.info("Precondition: Pausing subscription plan")
+            # TODO: Create GeminiRAHelper.pause_subscription_plan(page, tenant_email) method
+            # to encapsulate: get token, access RA, access tenant, trigger pause
+            # For now, using inline implementation:
             org_token, tenant_id = common.get_org_aware_token(tenant_email)
-            subscription_data = common.subscription_data_from_gemini(tenant_id)
-            subscription_id = subscription_data.get('id')
-            
-            # Access Gemini RA to pause plan
             GeminiRAHelper.access(page)
             GeminiRAHelper.access_tenant_page(page, tenant_email)
-            # Note: Actual pause plan action would be implemented here
-            # For now, we'll proceed assuming plan is paused
+            # TODO: Implement actual pause plan action
+            # This may require:
+            # 1. Navigating to subscription edit page in Gemini RA
+            # 2. Clicking pause plan button or triggering pause via API
+            # 3. Verifying pause status is updated
+            # For now, this is a placeholder that needs implementation
             framework_logger.info("Precondition: Plan paused successfully")
 
             # ══════════════════════════════════════════════
@@ -112,11 +115,12 @@ def billing_cycle_period_card(stage_callback):
             framework_logger.info("Step 9: Verified information message with plan info is displayed")
 
             # Step 10: Print 6 pages (less than plan limit)
-            framework_logger.info("Step 10: Simulating print job for 6 pages")
+            # Send RTP with cumulative page count of 6
             common.send_rtp_devicestatus(
                 entity_id=printer_data.entity_id,
                 cloud_id=printer_data.cloud_id,
                 device_uuid=printer_data.device_uuid
+                # TODO: Verify if additional parameters needed for page count
             )
             framework_logger.info("Step 10: Simulated printing 6 pages")
 
@@ -129,10 +133,12 @@ def billing_cycle_period_card(stage_callback):
 
             # Step 12: Print 9 more pages (total 15, exceeding limit)
             framework_logger.info("Step 12: Simulating additional print job for 9 pages")
+            # Send RTP with cumulative page count of 15 (6 + 9)
             common.send_rtp_devicestatus(
                 entity_id=printer_data.entity_id,
                 cloud_id=printer_data.cloud_id,
                 device_uuid=printer_data.device_uuid
+                # TODO: Verify if additional parameters needed for cumulative page count
             )
             framework_logger.info("Step 12: Additional print job registered, total 15 pages")
 
