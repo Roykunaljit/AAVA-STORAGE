@@ -2,46 +2,74 @@
 # Merge into: pages/print_history_page.py
 # Test Case: C44873414 - Billing Cycle Period card
 
-# ADD TO __init__ METHOD:
+# ADD TO Elements CLASS:
 
-# Billing Cycle Period Card locators
-self.plan_pause_info = page.locator("[data-testid='plan-pause-info']")
-self.billing_cycle_period_card = page.locator("[data-testid='billing-cycle-period-card']")
+class Elements:
+    # Billing Cycle Period Card locators
+    plan_pause_info = "[data-testid='plan-pause-info']"
+    billing_cycle_period_card = "[data-testid='billing-cycle-period-card']"
+    
+    # Complimentary Pages locators
+    complimentary_pages_progress_bar = "[data-testid='complimentary-pages-progress-bar']"
+    complimentary_pages_value = "[data-testid='complimentary-pages-value']"
+    complimentary_pages_info_icon = "[data-testid='complimentary-pages-info-icon']"
+    complimentary_pages_info_message = "[data-testid='complimentary-pages-info-message']"
+    complimentary_pages_tooltip = "[role='tooltip']"
+    
+    # Additional Pages locators
+    additional_pages_progress_bar = "[data-testid='additional-pages-progress-bar']"
+    additional_pages_value = "[data-testid='additional-pages-value']"
+    additional_pages_info_icon = "[data-testid='additional-pages-info-icon']"
+    additional_pages_info_message = "[data-testid='additional-pages-info-message']"
+    additional_pages_tooltip = "[role='tooltip']"
 
-# Complimentary Pages locators
-self.complimentary_pages_progress_bar = page.locator("[data-testid='complimentary-pages-progress-bar']")
-self.complimentary_pages_value = page.locator("[data-testid='complimentary-pages-value']")
-self.complimentary_pages_info_icon = page.locator("[data-testid='complimentary-pages-info-icon']")
-self.complimentary_pages_info_message = page.locator("[data-testid='complimentary-pages-info-message']")
+# ADD TO __init__ METHOD (after self.elements = self.Elements()):
 
-# Additional Pages locators
-self.additional_pages_progress_bar = page.locator("[data-testid='additional-pages-progress-bar']")
-self.additional_pages_value = page.locator("[data-testid='additional-pages-value']")
-self.additional_pages_info_icon = page.locator("[data-testid='additional-pages-info-icon']")
-self.additional_pages_info_message = page.locator("[data-testid='additional-pages-info-message']")
+# Billing Cycle Period Card locators as properties
+self.plan_pause_info = page.locator(self.elements.plan_pause_info)
+self.billing_cycle_period_card = page.locator(self.elements.billing_cycle_period_card)
+
+# Complimentary Pages locators as properties
+self.complimentary_pages_progress_bar = page.locator(self.elements.complimentary_pages_progress_bar)
+self.complimentary_pages_value = page.locator(self.elements.complimentary_pages_value)
+self.complimentary_pages_info_icon = page.locator(self.elements.complimentary_pages_info_icon)
+self.complimentary_pages_info_message = page.locator(self.elements.complimentary_pages_info_message)
+self.complimentary_pages_tooltip = page.locator(self.elements.complimentary_pages_tooltip)
+
+# Additional Pages locators as properties
+self.additional_pages_progress_bar = page.locator(self.elements.additional_pages_progress_bar)
+self.additional_pages_value = page.locator(self.elements.additional_pages_value)
+self.additional_pages_info_icon = page.locator(self.elements.additional_pages_info_icon)
+self.additional_pages_info_message = page.locator(self.elements.additional_pages_info_message)
+self.additional_pages_tooltip = page.locator(self.elements.additional_pages_tooltip)
 
 # ADD THESE METHODS TO CLASS BODY:
 
 def verify_plan_pause_info_not_displayed(self):
+    """Verify plan pause information is not displayed."""
     from playwright.sync_api import expect
     if self.plan_pause_info.count() > 0:
         expect(self.plan_pause_info).not_to_be_visible(timeout=10000)
 
 def verify_plan_pause_info_displayed(self):
+    """Verify plan pause information is displayed."""
     from playwright.sync_api import expect
     expect(self.plan_pause_info).to_be_visible(timeout=30000)
 
 def verify_complimentary_pages_value(self, expected_used, expected_total, pause_plan=True):
+    """Verify complimentary pages value displays correct usage."""
     from playwright.sync_api import expect
     expect(self.complimentary_pages_value).to_contain_text(f"{expected_used} of {expected_total}", timeout=30000)
     if pause_plan:
         expect(self.complimentary_pages_value).to_contain_text("Pause Plan", timeout=30000)
 
 def hover_complimentary_info_icon(self):
+    """Hover over complimentary pages info icon to display tooltip."""
     from playwright.sync_api import expect
     expect(self.complimentary_pages_info_icon).to_be_visible(timeout=30000)
     self.complimentary_pages_info_icon.hover()
 
 def verify_additional_pages_value(self, expected_used, expected_total):
+    """Verify additional pages value displays correct usage."""
     from playwright.sync_api import expect
     expect(self.additional_pages_value).to_contain_text(f"{expected_used} of {expected_total}", timeout=30000)
