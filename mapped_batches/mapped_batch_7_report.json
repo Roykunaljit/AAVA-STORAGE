@@ -1,0 +1,1303 @@
+{
+  "mapping_metadata": {
+    "mapping_batch_id": 7,
+    "total_mapping_batches": 18,
+    "remaining_after_this": 10,
+    "codebase_batch_report_path": "codebase_batches/batch_7_report.json",
+    "test_case_source": "test_case_analysis/test_case_analysis.json",
+    "storage_repo": "AAVA-STORAGE",
+    "analyzed_at": "2025-01-15T16:45:00Z",
+    "analyzer": "Senior Test Automation Mapping Specialist Agent",
+    "mapping_dimensions": [
+      "preconditions",
+      "step_actions",
+      "expected_results",
+      "test_data",
+      "overall_flow"
+    ],
+    "files_in_this_batch": [
+      "AURA-main (1) 1/AURA-main/core/utils.py",
+      "AURA-main (1) 1/AURA-main/core/validator.py",
+      "AURA-main (1) 1/AURA-main/help.html",
+      "AURA-main (1) 1/AURA-main/helper/cancellation_plan_helper.py",
+      "AURA-main (1) 1/AURA-main/helper/dashboard_helper.py"
+    ],
+    "summary": {
+      "total_test_cases_evaluated": 1,
+      "test_cases_with_relevant_components": 1,
+      "test_cases_without_relevant_components": 0,
+      "total_page_objects_matched": 0,
+      "total_locators_matched": 0,
+      "total_methods_matched": 12,
+      "total_helpers_matched": 2,
+      "total_constants_matched": 1,
+      "total_precondition_methods_matched": 1,
+      "total_verification_methods_matched": 6,
+      "total_test_data_components_matched": 1
+    }
+  },
+  "test_case_mappings": [
+    {
+      "test_case_id": "C44873414",
+      "test_case_title": "Billing Cycle Period card",
+      "test_case_description": "Test case to verify the Billing Cycle Period card display and behavior on Print and Payment History page when a subscription plan is paused, including verification of complimentary pages progress bar, additional pages tracking, tooltips, and page usage information display across different printing scenarios.",
+      "module": "HP Instant Ink",
+      "has_relevant_components_in_this_batch": true,
+      "precondition_mapping": [
+        {
+          "precondition_text": "Enroll the Ink printer with 50 pages plan or higher.",
+          "precondition_index": 0,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "No printer enrollment methods found in this batch. Batch 7 contains core utilities, validation, and dashboard helpers, but no printer enrollment or subscription setup APIs. These components likely exist in enrollment helper modules or API helper modules in other batches."
+        },
+        {
+          "precondition_text": "Make sure the Subscription has no free months info.",
+          "precondition_index": 1,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "No subscription state verification methods found in this batch. Methods to check or set subscription properties (like free months) would be in subscription management or API helper modules in other batches."
+        },
+        {
+          "precondition_text": "Make sure the subscription is \"subscribed\" status.",
+          "precondition_index": 2,
+          "components_found_in_this_batch": [],
+          "precondition_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH",
+          "notes": "No subscription status verification methods found in this batch. Status checking methods would be in subscription API helpers or state management modules in other batches."
+        },
+        {
+          "precondition_text": "Click the Pause Plan button on CIT modal or \"Pause Instant Ink\" link to trigger the pause plan.",
+          "precondition_index": 3,
+          "components_found_in_this_batch": [
+            {
+              "component_type": "method",
+              "method_name": "access",
+              "method_signature": "def access(page, tenant_email: str = None)",
+              "source_file": "AURA-main (1) 1/AURA-main/helper/dashboard_helper.py",
+              "source_class": "DashboardHelper",
+              "what_it_does": "Navigates to the dashboard portal and handles login if needed. This is the entry point for accessing the dashboard where pause plan functionality would be available.",
+              "how_to_import": "from helper.dashboard_helper import DashboardHelper",
+              "usage_example": "DashboardHelper.access(page, 'testuser@example.com')",
+              "relevance_reason": "This method provides navigation to the dashboard where the Pause Instant Ink link would be located. It's the first step needed to access pause plan functionality, though the actual pause plan clicking would require additional page object methods not in this batch."
+            }
+          ],
+          "precondition_coverage_in_this_batch": "PARTIALLY_COVERED",
+          "notes": "Found dashboard access method which is needed to reach the pause plan functionality, but the actual pause plan button/link clicking methods are not in this batch. The CancellationPlanHelper in this batch is for cancellation flows, not pause plan. Pause plan page objects and action methods likely exist in other batches."
+        }
+      ],
+      "matched_page_objects": [],
+      "matched_locators": [],
+      "matched_methods": [
+        {
+          "method_name": "access",
+          "method_signature": "def access(page, tenant_email: str = None)",
+          "method_type": "navigation",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/dashboard_helper.py",
+          "source_class": "DashboardHelper",
+          "what_it_does": "Navigates to the dashboard portal and handles login if needed. Waits for page load, navigates to portal shell URL, handles login if on login page, and verifies dashboard access by checking Instant Ink menu link visibility.",
+          "how_to_import": "from helper.dashboard_helper import DashboardHelper",
+          "usage_example": "DashboardHelper.access(page, 'testuser@example.com')",
+          "relevant_to_steps": [
+            1,
+            4
+          ],
+          "relevant_to_preconditions": [
+            3
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "step_action",
+          "relevance_reason": "Steps 1 and 4 require navigating to Print and Payment History page, which is under HP Instant Ink section. This method provides the dashboard access needed before navigating to specific pages. Also relevant to precondition 3 for accessing dashboard to trigger pause plan."
+        },
+        {
+          "method_name": "validate_context",
+          "method_signature": "def validate_context(flow_name, context_name, page, excel_path, output_folder, validation_workbook_path=None, screenshot_only=False, sub_context=None, lang_code=None, animations=False, target_dir=None)",
+          "method_type": "validation",
+          "source_file": "AURA-main (1) 1/AURA-main/core/validator.py",
+          "source_class": null,
+          "what_it_does": "Main validation function that compares live page state against baseline scraped data with comprehensive element, text, screenshot, and animation validation. Handles screenshot-only mode, full element validation, image comparison with exclusions, and animation validation.",
+          "how_to_import": "from core.validator import validate_context",
+          "usage_example": "validate_context('BillingCycleFlow', 'PrintPaymentHistoryPage', page, 'baseline.xlsx', 'output', screenshot_only=False, animations=False)",
+          "relevant_to_steps": [
+            2,
+            5,
+            6,
+            8,
+            9,
+            11,
+            13,
+            14,
+            18,
+            19
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            2,
+            5,
+            6,
+            8,
+            9,
+            11,
+            13,
+            14,
+            18,
+            19
+          ],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "Multiple steps require verification of UI elements, text values, progress bars, and page state. This is the core validation function that can be used at each checkpoint to verify expected results by comparing against baseline data."
+        },
+        {
+          "method_name": "compare_images_detect_then_filter",
+          "method_signature": "def compare_images_detect_then_filter(img1_path, img2_path, exclusions, color_tolerance=COLOR_TOLERANCE, original_exclude_str=None)",
+          "method_type": "verification",
+          "source_file": "AURA-main (1) 1/AURA-main/core/validator.py",
+          "source_class": null,
+          "what_it_does": "Performs pixel-by-pixel image comparison with exclusion region filtering and bounding box generation for failures. Compares two images, filters out pixels in exclusion regions, generates suggested exclusion boxes for failures, and returns pass/fail status with detailed failure information.",
+          "how_to_import": "from core.validator import compare_images_detect_then_filter",
+          "usage_example": "is_pass, diff, boxes, failed_pixels = compare_images_detect_then_filter('baseline.png', 'validation.png', [(10, 10, 50, 50)], 35)",
+          "relevant_to_steps": [
+            11,
+            13
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            11,
+            13
+          ],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "Steps 11 and 13 require verifying progress bar visual state (color fill, updated values) after page refresh. This method can compare screenshots of the progress bars before and after to verify visual changes."
+        },
+        {
+          "method_name": "save_full_page_screenshot",
+          "method_signature": "def save_full_page_screenshot(page: Page, flow_name: str, context_name: str, output_dir: str = None) -> str",
+          "method_type": "action",
+          "source_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+          "source_class": null,
+          "what_it_does": "Captures a full-page screenshot and saves it with a timestamped filename. Creates output directory if needed, generates sanitized filename with timestamp, captures full scrollable page, and returns the filename.",
+          "how_to_import": "from core.utils import save_full_page_screenshot",
+          "usage_example": "filename = save_full_page_screenshot(page, 'BillingCycleFlow', 'PrintPaymentHistoryPage', 'output/screenshots')",
+          "relevant_to_steps": [
+            1,
+            4,
+            11,
+            13,
+            20
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            1,
+            4,
+            20
+          ],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "Steps 1 and 4 require verifying page loads successfully. Step 20 explicitly requires visual verification via screenshot. This method captures full-page screenshots for validation checkpoints."
+        },
+        {
+          "method_name": "take_element_screenshot",
+          "method_signature": "def take_element_screenshot(page: Page, selector: str, output_path: str) -> bool",
+          "method_type": "action",
+          "source_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+          "source_class": null,
+          "what_it_does": "Captures a screenshot of a specific element on the page identified by a selector and saves it to the specified path. Checks element visibility, creates output directory, captures element screenshot, and returns success status.",
+          "how_to_import": "from core.utils import take_element_screenshot",
+          "usage_example": "success = take_element_screenshot(page, '[data-testid=\"billing-cycle-card\"]', 'output/billing_card.png')",
+          "relevant_to_steps": [
+            2,
+            5,
+            6,
+            8,
+            9,
+            11,
+            13,
+            14,
+            15,
+            18
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            2,
+            5,
+            6,
+            8,
+            9,
+            11,
+            13,
+            14,
+            15,
+            18
+          ],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "Multiple steps require capturing and verifying specific UI elements like billing cycle card, progress bars, tooltips, and value displays. This method captures element-specific screenshots for detailed verification."
+        },
+        {
+          "method_name": "extract_text",
+          "method_signature": "def extract_text(elem: ElementHandle) -> str",
+          "method_type": "getter",
+          "source_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+          "source_class": null,
+          "what_it_does": "Extracts the visible inner text from a Playwright element and returns it as a trimmed string. Gets user-visible text respecting CSS visibility, strips whitespace.",
+          "how_to_import": "from core.utils import extract_text",
+          "usage_example": "text = extract_text(element_handle)  # Returns 'Login' (trimmed)",
+          "relevant_to_steps": [
+            8,
+            9,
+            11,
+            14,
+            17,
+            18,
+            19
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            8,
+            9,
+            11,
+            14,
+            17,
+            18,
+            19
+          ],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "Steps 8, 9, 11, 14, 17, 18, 19 require reading and verifying text values from UI elements (complimentary pages value, additional pages value, info messages, total pages). This method extracts text for comparison."
+        },
+        {
+          "method_name": "is_element_hidden_or_disabled",
+          "method_signature": "def is_element_hidden_or_disabled(elem: ElementHandle) -> bool",
+          "method_type": "verification",
+          "source_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+          "source_class": null,
+          "what_it_does": "Checks if a Playwright element is hidden or disabled by evaluating JavaScript in the browser context. Checks offsetParent for hidden elements and disabled property for form elements.",
+          "how_to_import": "from core.utils import is_element_hidden_or_disabled",
+          "usage_example": "is_hidden = is_element_hidden_or_disabled(element_handle)  # Returns True if hidden or disabled",
+          "relevant_to_steps": [
+            2,
+            5
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            2,
+            5
+          ],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "Step 2 requires verifying plan pause information is NOT displayed (hidden). Step 5 requires verifying it IS displayed (not hidden). This method checks element visibility state."
+        },
+        {
+          "method_name": "get_element_position",
+          "method_signature": "def get_element_position(elem: ElementHandle) -> dict",
+          "method_type": "getter",
+          "source_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+          "source_class": null,
+          "what_it_does": "Retrieves the position and dimensions of a Playwright element as a dictionary. Gets bounding box with x, y, width, height, returns dict with integer values, handles invisible elements gracefully.",
+          "how_to_import": "from core.utils import get_element_position",
+          "usage_example": "pos = get_element_position(element_handle)  # Returns {'x': 100, 'y': 200, 'width': 150, 'height': 50}",
+          "relevant_to_steps": [
+            6,
+            13,
+            14
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            6,
+            13,
+            14
+          ],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "Steps 6, 13, 14 involve verifying progress bars are displayed and properly positioned. This method gets element position and dimensions for layout verification."
+        },
+        {
+          "method_name": "extract_styles",
+          "method_signature": "def extract_styles(elem: ElementHandle) -> dict",
+          "method_type": "getter",
+          "source_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+          "source_class": null,
+          "what_it_does": "Extracts computed CSS styles from a Playwright element by executing JavaScript in the browser context. Returns dict with font_family, font_size, font_weight, color, background, text_align properties.",
+          "how_to_import": "from core.utils import extract_styles",
+          "usage_example": "styles = extract_styles(element_handle)  # Returns {'font_family': 'Arial', 'font_size': '14px', 'color': 'rgb(0,0,0)', ...}",
+          "relevant_to_steps": [
+            11,
+            14
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [
+            11,
+            14
+          ],
+          "mapping_dimension": "expected_result_verification",
+          "relevance_reason": "Steps 11 and 14 require verifying progress bar colors (black for complimentary, yellow for additional). This method extracts CSS styles including background color for verification."
+        },
+        {
+          "method_name": "get_current_timestamp",
+          "method_signature": "def get_current_timestamp() -> str",
+          "method_type": "utility",
+          "source_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+          "source_class": null,
+          "what_it_does": "Generates and returns the current timestamp as a formatted string in the pattern YYYY_MM_DD_HH_MM_SS. Uses datetime.now() and strftime for formatting.",
+          "how_to_import": "from core.utils import get_current_timestamp",
+          "usage_example": "timestamp = get_current_timestamp()  # Returns '2025_06_10_14_30_45'",
+          "relevant_to_steps": [
+            3
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Step 3 involves time manipulation (32-day shift). While this method doesn't perform time shifting, it provides timestamp generation which may be useful for logging the time shift operation or generating unique identifiers for test runs."
+        },
+        {
+          "method_name": "sanitize_filename",
+          "method_signature": "def sanitize_filename(name: str) -> str",
+          "method_type": "utility",
+          "source_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+          "source_class": null,
+          "what_it_does": "Sanitizes a filename string by replacing all invalid filesystem characters with underscores. Uses regex to replace backslash, forward slash, asterisk, question mark, colon, double quote, less than, greater than, and pipe characters.",
+          "how_to_import": "from core.utils import sanitize_filename",
+          "usage_example": "safe_name = sanitize_filename('test:file*name?.txt')  # Returns 'test_file_name_.txt'",
+          "relevant_to_steps": [
+            11,
+            13,
+            20
+          ],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Steps 11, 13, 20 involve capturing screenshots with generated filenames. This utility ensures screenshot filenames are filesystem-safe by removing invalid characters."
+        },
+        {
+          "method_name": "run_flow",
+          "method_signature": "def run_flow(mode: str, flow_name: str, flow_args: Optional[Dict] = None, context_override: Optional[str] = None) -> None",
+          "method_type": "utility",
+          "source_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+          "source_class": null,
+          "what_it_does": "Main orchestration function that executes a test flow in scrape, validate, or noop mode with comprehensive setup, execution, and reporting. Dynamically imports flow modules, sets up output directories, initializes configuration, executes flow with callbacks, handles exceptions, and finalizes reports.",
+          "how_to_import": "from core.utils import run_flow",
+          "usage_example": "run_flow('validate', 'BillingCyclePeriodCard', {'tenant_country_language_code': 'en_US', 'headless': False})",
+          "relevant_to_steps": [],
+          "relevant_to_preconditions": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "overall_flow",
+          "relevance_reason": "This is the main flow execution engine for the entire framework. It would orchestrate the execution of the billing cycle period card test flow, handling setup, execution, validation, and reporting."
+        }
+      ],
+      "matched_helpers": [
+        {
+          "helper_name": "DashboardHelper",
+          "helper_signature": "class DashboardHelper (static methods)",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/dashboard_helper.py",
+          "what_it_does": "Comprehensive static helper class providing utility methods for all dashboard-related test operations including dashboard access, navigation, first-time setup, status card verification, plan management, billing operations, payment handling, printer selection, and various dashboard UI interactions.",
+          "how_to_import": "from helper.dashboard_helper import DashboardHelper",
+          "usage_example": "DashboardHelper.access(page, 'testuser@example.com')",
+          "relevant_to_preconditions": [
+            3
+          ],
+          "relevant_to_steps": [
+            1,
+            4
+          ],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "precondition_setup",
+          "relevance_reason": "Provides dashboard access methods needed to navigate to Print and Payment History page (steps 1, 4) and to access pause plan functionality (precondition 3). Contains 70+ methods for comprehensive dashboard testing."
+        },
+        {
+          "helper_name": "CancellationPlanHelper",
+          "helper_signature": "class CancellationPlanHelper (static methods)",
+          "source_file": "AURA-main (1) 1/AURA-main/helper/cancellation_plan_helper.py",
+          "what_it_does": "Static helper class providing utility methods for testing subscription cancellation flows. Contains methods for selecting cancellation feedback, verifying cancellation UI elements, validating cancellation timeline, handling plan changes, and managing subscription restoration.",
+          "how_to_import": "from helper.cancellation_plan_helper import CancellationPlanHelper",
+          "usage_example": "CancellationPlanHelper.verify_the_cancellation_timeline_page(page)",
+          "relevant_to_preconditions": [],
+          "relevant_to_steps": [],
+          "relevant_to_expected_results": [],
+          "mapping_dimension": "overall_flow",
+          "relevance_reason": "While this helper is for cancellation flows (not pause plan), it demonstrates the pattern for subscription management helpers. The actual pause plan helper would likely be in a different batch. This helper shows how subscription state changes are tested in the framework."
+        }
+      ],
+      "matched_constants": [
+        {
+          "constant_name": "COLOR_TOLERANCE",
+          "constant_value": "35",
+          "source_file": "AURA-main (1) 1/AURA-main/core/validator.py",
+          "how_to_import": "from core.validator import COLOR_TOLERANCE",
+          "usage_example": "is_pass, diff, boxes, failed = compare_images_detect_then_filter('base.png', 'val.png', [], COLOR_TOLERANCE)",
+          "relevant_to_preconditions": [],
+          "relevant_to_steps": [
+            11,
+            13,
+            14,
+            18,
+            20
+          ],
+          "relevant_to_test_data": true,
+          "mapping_dimension": "test_data",
+          "relevance_reason": "Steps 11, 13, 14, 18, 20 involve visual verification of progress bars and screenshots. This constant defines the color tolerance threshold for image comparison, allowing for minor rendering variations while detecting significant visual differences."
+        }
+      ],
+      "step_level_mapping": [
+        {
+          "step_number": 1,
+          "step_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "step_test_data": null,
+          "step_expected_result": "Print and Payment History page loads successfully",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "access",
+                "usage": "DashboardHelper.access(page, 'testuser@example.com')",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/dashboard_helper.py",
+                "relevance": "Provides dashboard access which is the starting point for navigating to Print and Payment History page under HP Instant Ink section"
+              }
+            ],
+            "helpers": [
+              {
+                "name": "DashboardHelper",
+                "usage": "DashboardHelper.access(page, 'testuser@example.com')",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/dashboard_helper.py"
+              }
+            ]
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Page load verification would require page object methods with locators for Print and Payment History page elements. The actual navigation link clicking and page load verification methods are not in this batch. Batch 7 provides dashboard access but not the specific Print and Payment History page object."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "URL for Print and Payment History page would be in configuration or page object, not found in this batch."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 2,
+          "step_action": "Check the Billing Cycle Period card.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the plan pause information is not displayed.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "is_element_hidden_or_disabled",
+                "usage": "is_hidden = is_element_hidden_or_disabled(plan_pause_info_element)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Checks if plan pause information element is hidden, which is the expected state in step 2"
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Found method to check element visibility state. However, the actual locator for plan pause information element is not in this batch. Page object with billing cycle card locators would be in a different batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification step."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 3,
+          "step_action": "Even shift 32 days and trigger billing charge.",
+          "step_test_data": "32 days",
+          "step_expected_result": "Time shift and billing charge successful",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No time manipulation or billing trigger APIs found in this batch. These would be backend test utilities or API helpers in other batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [
+              {
+                "name": "get_current_timestamp",
+                "usage": "timestamp = get_current_timestamp()",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Provides timestamp generation which could be used for logging the time shift operation"
+              }
+            ],
+            "notes": "Found timestamp generator but not the actual time shift API. The 32 days value would be hardcoded or from test data config."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "PARTIALLY_COVERED",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 4,
+          "step_action": "Go to Print and Payment History page under HP Instant Ink.",
+          "step_test_data": null,
+          "step_expected_result": "Page loads with updated data after time shift",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "access",
+                "usage": "DashboardHelper.access(page, 'testuser@example.com')",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/dashboard_helper.py"
+              }
+            ],
+            "helpers": [
+              {
+                "name": "DashboardHelper",
+                "usage": "DashboardHelper.access(page, 'testuser@example.com')",
+                "from_file": "AURA-main (1) 1/AURA-main/helper/dashboard_helper.py"
+              }
+            ]
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Same as step 1 - dashboard access found but not the specific page navigation and load verification."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed beyond what was noted in step 1."
+          },
+          "step_action_coverage": "PARTIALLY_COVERED",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 5,
+          "step_action": "Check the Billing Cycle Period card.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the plan pause information is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "is_element_hidden_or_disabled",
+                "usage": "is_visible = not is_element_hidden_or_disabled(plan_pause_info_element)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Can verify element is NOT hidden (i.e., is visible), which is the expected state in step 5"
+              }
+            ],
+            "getter_methods": [
+              {
+                "name": "extract_text",
+                "usage": "text = extract_text(plan_pause_info_element)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Extracts text from plan pause information element to verify content"
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Found methods to check visibility and extract text, but not the actual element locators."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for this verification."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 6,
+          "step_action": "Check the progress bar.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the Complimentary pages progress bar is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "is_element_hidden_or_disabled",
+                "usage": "is_visible = not is_element_hidden_or_disabled(progress_bar_element)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Verifies progress bar is visible"
+              }
+            ],
+            "getter_methods": [
+              {
+                "name": "get_element_position",
+                "usage": "pos = get_element_position(progress_bar_element)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Gets progress bar position and dimensions to verify it's properly displayed"
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Found methods to check visibility and get position, but not the progress bar locator itself."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed for visibility check."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 7,
+          "step_action": "For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify a tooltip with correct message is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [
+              {
+                "name": "extract_text",
+                "usage": "tooltip_text = extract_text(tooltip_element)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Extracts tooltip text for verification"
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Found text extraction method but not the hover/click action methods or tooltip locators. Device-specific interaction logic not in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Device type would come from test configuration, not found in this batch."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 8,
+          "step_action": "Check the Complimentary pages value.",
+          "step_test_data": "0 of 10(Pause Plan) used",
+          "step_expected_result": "Verify the value is displayed as \"0 of 10(Pause Plan) used\".",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [
+              {
+                "name": "extract_text",
+                "usage": "value_text = extract_text(complimentary_pages_value_element)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Extracts the complimentary pages value text for comparison against expected value"
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Found text extraction method but not the value element locator or text comparison assertion."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value '0 of 10(Pause Plan) used' would be hardcoded in test or from test data config."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 9,
+          "step_action": "Check the message below \"Complimentary pages\".",
+          "step_test_data": null,
+          "step_expected_result": "Verify the information with correct plan info is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [
+              {
+                "name": "extract_text",
+                "usage": "message_text = extract_text(info_message_element)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Extracts info message text for verification"
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Found text extraction but not the message element locator or content verification logic."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected message content would be in test data or baseline."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 10,
+          "step_action": "Print some pages(less than the plan, such as 6 pages).",
+          "step_test_data": "6 pages",
+          "step_expected_result": "Print job registered successfully",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No print job simulation or registration APIs found in this batch. These would be backend test utilities in other batches."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Pages to print (6) would be hardcoded or from test data config."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 11,
+          "step_action": "Refresh the dashboard page.",
+          "step_test_data": "6 of 10 used",
+          "step_expected_result": "Verify the \"Complimentary pages\" progress bar is filled with the black color and the value is displayed as correct (such as \"6 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "compare_images_detect_then_filter",
+                "usage": "is_pass, diff, boxes, failed = compare_images_detect_then_filter('baseline_progress.png', 'current_progress.png', [], COLOR_TOLERANCE)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/validator.py",
+                "relevance": "Compares progress bar screenshots to verify visual changes (color fill)"
+              }
+            ],
+            "getter_methods": [
+              {
+                "name": "extract_text",
+                "usage": "value_text = extract_text(value_element)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Extracts value text for comparison"
+              },
+              {
+                "name": "extract_styles",
+                "usage": "styles = extract_styles(progress_bar_element)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Extracts CSS styles including background color to verify black fill"
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Found methods for screenshot comparison, text extraction, and style extraction. Missing page refresh action and element locators."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [
+              {
+                "name": "COLOR_TOLERANCE",
+                "value": "35",
+                "import": "from core.validator import COLOR_TOLERANCE",
+                "usage": "Used in image comparison for progress bar verification"
+              }
+            ],
+            "generators": [
+              {
+                "name": "sanitize_filename",
+                "usage": "filename = sanitize_filename('progress_bar_6_of_10.png')",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py"
+              }
+            ],
+            "notes": "Expected value '6 of 10 used' would be from test data."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "COVERED",
+          "step_test_data_coverage": "PARTIALLY_COVERED",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 12,
+          "step_action": "Continue to print some pages(more than the plan, such as 15 pages).",
+          "step_test_data": "15 pages total",
+          "step_expected_result": "Additional print job registered successfully",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "No print job APIs found in this batch."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Total pages (15) would be from test data."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "NOT_FOUND_IN_THIS_BATCH"
+        },
+        {
+          "step_number": 13,
+          "step_action": "Refresh the dashboard page.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the progress bars for \"Complimentary pages\" and \"Additional pages\" are displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "compare_images_detect_then_filter",
+                "usage": "is_pass, diff, boxes, failed = compare_images_detect_then_filter('baseline.png', 'current.png', [], COLOR_TOLERANCE)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/validator.py",
+                "relevance": "Compares screenshots to verify both progress bars are displayed"
+              }
+            ],
+            "getter_methods": [
+              {
+                "name": "is_element_hidden_or_disabled",
+                "usage": "comp_visible = not is_element_hidden_or_disabled(comp_progress_bar)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Verifies complimentary progress bar is visible"
+              },
+              {
+                "name": "get_element_position",
+                "usage": "pos = get_element_position(progress_bar)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Gets position to verify proper display"
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Found verification methods but missing page refresh action and progress bar locators."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [
+              {
+                "name": "COLOR_TOLERANCE",
+                "value": "35",
+                "import": "from core.validator import COLOR_TOLERANCE",
+                "usage": "Used in image comparison"
+              }
+            ],
+            "generators": [
+              {
+                "name": "sanitize_filename",
+                "usage": "filename = sanitize_filename('both_progress_bars.png')",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py"
+              }
+            ],
+            "notes": "No additional test data needed."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "PARTIALLY_COVERED",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 14,
+          "step_action": "Check the \"Additional pages\" progress bar.",
+          "step_test_data": "5 of 10 used",
+          "step_expected_result": "Verify the progress bar is filled with the Yellow color and the value is displayed correctly(such as \"5 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [
+              {
+                "name": "extract_styles",
+                "usage": "styles = extract_styles(additional_progress_bar)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Extracts CSS styles to verify yellow background color"
+              },
+              {
+                "name": "extract_text",
+                "usage": "value_text = extract_text(additional_value_element)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Extracts value text for comparison"
+              },
+              {
+                "name": "get_element_position",
+                "usage": "pos = get_element_position(additional_progress_bar)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Verifies proper display"
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Found style extraction for color verification and text extraction for value verification. Missing element locators."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value '5 of 10 used' would be from test data."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 15,
+          "step_action": "Check the icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify the info icon is displayed well behind the string \"Additional pages\".",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "is_element_hidden_or_disabled",
+                "usage": "is_visible = not is_element_hidden_or_disabled(info_icon)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Verifies info icon is visible"
+              }
+            ],
+            "getter_methods": [
+              {
+                "name": "get_element_position",
+                "usage": "pos = get_element_position(info_icon)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Gets icon position to verify proper placement"
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Found visibility and position methods but not the icon locator."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "No test data needed."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_APPLICABLE",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 16,
+          "step_action": "For Desktop: Move the mouse cursor on the info icon. For Mobile/Tablet: Click on the info icon.",
+          "step_test_data": null,
+          "step_expected_result": "Verify a tooltip with correct message is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [
+              {
+                "name": "extract_text",
+                "usage": "tooltip_text = extract_text(tooltip_element)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Extracts tooltip text for verification"
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Same as step 7 - found text extraction but not interaction methods or locators."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Device type and expected tooltip message would be from test config/data."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 17,
+          "step_action": "Check the message below \"Additional pages\".",
+          "step_test_data": null,
+          "step_expected_result": "Verify a message with the amount of blocks already bought is displayed well.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [
+              {
+                "name": "extract_text",
+                "usage": "message_text = extract_text(blocks_message_element)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Extracts message text for verification"
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Found text extraction but not the message element locator."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected message content would be from test data."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 18,
+          "step_action": "Check the Complimentary pages progress bar.",
+          "step_test_data": "10 of 10 used",
+          "step_expected_result": "Verify the \"Complimentary pages\" progress bar is full filled with the black color and the value is displayed correctly (such as \"10 of 10 used\").",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [
+              {
+                "name": "extract_styles",
+                "usage": "styles = extract_styles(comp_progress_bar)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Extracts styles to verify 100% black fill"
+              },
+              {
+                "name": "extract_text",
+                "usage": "value_text = extract_text(comp_value_element)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Extracts value text for comparison"
+              },
+              {
+                "name": "get_element_position",
+                "usage": "pos = get_element_position(comp_progress_bar)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Verifies proper display"
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Found style and text extraction methods. Missing element locators and 100% fill verification logic."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected value '10 of 10 used' would be from test data."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 19,
+          "step_action": "Check total pages printed info.",
+          "step_test_data": "15 pages",
+          "step_expected_result": "Verify correct number(such as 15 pages) displayed according to the printed pages.",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [
+              {
+                "name": "extract_text",
+                "usage": "total_text = extract_text(total_pages_element)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Extracts total pages text for comparison"
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Found text extraction but not the total pages element locator."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Expected total (15) would be calculated from previous print operations."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        },
+        {
+          "step_number": 20,
+          "step_action": "Verify screenshot matches expected design",
+          "step_test_data": null,
+          "step_expected_result": "Visual verification of Billing Cycle Period card layout and styling",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [
+              {
+                "name": "save_full_page_screenshot",
+                "usage": "filename = save_full_page_screenshot(page, 'BillingCycleFlow', 'FinalState', 'output/screenshots')",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py"
+              },
+              {
+                "name": "take_element_screenshot",
+                "usage": "success = take_element_screenshot(page, '[data-testid=\"billing-cycle-card\"]', 'output/card.png')",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py"
+              }
+            ],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [
+              {
+                "name": "compare_images_detect_then_filter",
+                "usage": "is_pass, diff, boxes, failed = compare_images_detect_then_filter('baseline.png', 'current.png', [], COLOR_TOLERANCE)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/validator.py",
+                "relevance": "Compares screenshots for visual regression testing"
+              }
+            ],
+            "getter_methods": [],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Found screenshot capture and comparison methods. This covers the visual verification requirement."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [
+              {
+                "name": "COLOR_TOLERANCE",
+                "value": "35",
+                "import": "from core.validator import COLOR_TOLERANCE",
+                "usage": "Used in image comparison"
+              }
+            ],
+            "generators": [
+              {
+                "name": "sanitize_filename",
+                "usage": "filename = sanitize_filename('billing_cycle_card_final.png')",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py"
+              }
+            ],
+            "notes": "Baseline image path would be from test data config."
+          },
+          "step_action_coverage": "COVERED",
+          "step_verification_coverage": "COVERED",
+          "step_test_data_coverage": "PARTIALLY_COVERED",
+          "overall_step_coverage_in_this_batch": "COVERED"
+        },
+        {
+          "step_number": 21,
+          "step_action": "Verify all UI elements are properly styled and responsive",
+          "step_test_data": null,
+          "step_expected_result": "All elements display correctly on Desktop, Mobile, and Tablet",
+          "action_components_found_in_this_batch": {
+            "page_objects": [],
+            "locators": [],
+            "methods": [],
+            "helpers": []
+          },
+          "verification_components_found_in_this_batch": {
+            "assertion_methods": [],
+            "getter_methods": [
+              {
+                "name": "get_element_position",
+                "usage": "pos = get_element_position(element)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Gets element position for responsive layout verification"
+              },
+              {
+                "name": "extract_styles",
+                "usage": "styles = extract_styles(element)",
+                "from_file": "AURA-main (1) 1/AURA-main/core/utils.py",
+                "relevance": "Extracts CSS styles for styling verification"
+              }
+            ],
+            "wait_methods": [],
+            "verification_locators": [],
+            "notes": "Found methods to get position and styles, but not viewport resizing or responsive testing utilities."
+          },
+          "test_data_components_found_in_this_batch": {
+            "constants": [],
+            "generators": [],
+            "notes": "Viewport sizes would be from test configuration."
+          },
+          "step_action_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "step_verification_coverage": "PARTIALLY_COVERED",
+          "step_test_data_coverage": "NOT_FOUND_IN_THIS_BATCH",
+          "overall_step_coverage_in_this_batch": "PARTIALLY_COVERED"
+        }
+      ],
+      "files_checked_in_this_batch": [
+        "AURA-main (1) 1/AURA-main/core/utils.py",
+        "AURA-main (1) 1/AURA-main/core/validator.py",
+        "AURA-main (1) 1/AURA-main/help.html",
+        "AURA-main (1) 1/AURA-main/helper/cancellation_plan_helper.py",
+        "AURA-main (1) 1/AURA-main/helper/dashboard_helper.py"
+      ],
+      "batch_coverage_summary": "Batch 7 provides partial coverage for test case C44873414. Found comprehensive validation and verification utilities in core/validator.py and core/utils.py including screenshot capture, image comparison, text extraction, style extraction, and element visibility checking. Found dashboard access methods in dashboard_helper.py which provide navigation to the dashboard where Print and Payment History page would be accessed. However, this batch lacks: (1) Page objects for Print and Payment History page with specific element locators (billing cycle card, progress bars, tooltips, value displays), (2) API helpers for printer enrollment, subscription management, time manipulation, and print job simulation, (3) Navigation methods to Print and Payment History page specifically, (4) Pause plan trigger methods and page objects, (5) Device-specific interaction utilities (hover vs click), (6) Viewport resizing for responsive testing. The validation and verification methods found are highly reusable across all verification steps. The missing components are likely in other batches containing page objects, API helpers, and enrollment utilities. This batch provides the validation infrastructure but not the test-specific page objects and data setup methods."
+    }
+  ]
+}
