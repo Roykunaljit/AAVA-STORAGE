@@ -1,27 +1,37 @@
 # Additional locators and methods for PrintHistoryPage
 # Merge into: pages/print_history_page.py
 # Test Case: C44873414 - Billing Cycle Period card
+#
+# MERGE INSTRUCTIONS:
+# 1. Locate the existing Elements class in PrintHistoryPage
+# 2. Add the new locator attributes to the Elements class
+# 3. In the __init__ method, add the new property definitions after existing locators
+# 4. Add the new verification methods to the class body
+# 5. Maintain consistent indentation with the existing file
 
-# ADD TO Elements CLASS:
+# Add these attributes to the existing Elements class:
+plan_pause_info = "[data-testid='plan-pause-info']"
+billing_cycle_period_card = "[data-testid='billing-cycle-period-card']"
 
-class Elements:
-    # Billing Cycle Period Card locators
-    plan_pause_info = "[data-testid='plan-pause-info']"
-    billing_cycle_period_card = "[data-testid='billing-cycle-period-card']"
-    
-    # Complimentary Pages locators
-    complimentary_pages_progress_bar = "[data-testid='complimentary-pages-progress-bar']"
-    complimentary_pages_value = "[data-testid='complimentary-pages-value']"
-    complimentary_pages_info_icon = "[data-testid='complimentary-pages-info-icon']"
-    complimentary_pages_info_message = "[data-testid='complimentary-pages-info-message']"
-    complimentary_pages_tooltip = "[role='tooltip']"
-    
-    # Additional Pages locators
-    additional_pages_progress_bar = "[data-testid='additional-pages-progress-bar']"
-    additional_pages_value = "[data-testid='additional-pages-value']"
-    additional_pages_info_icon = "[data-testid='additional-pages-info-icon']"
-    additional_pages_info_message = "[data-testid='additional-pages-info-message']"
-    additional_pages_tooltip = "[role='tooltip']"
+# Complimentary Pages locators
+complimentary_pages_progress_bar = "[data-testid='complimentary-pages-progress-bar']"
+complimentary_pages_value = "[data-testid='complimentary-pages-value']"
+complimentary_pages_info_icon = "[data-testid='complimentary-pages-info-icon']"
+complimentary_pages_info_message = "[data-testid='complimentary-pages-info-message']"
+# Note: Using role='tooltip' selector. If data-testid available, prefer:
+# complimentary_pages_tooltip = "[data-testid='complimentary-pages-tooltip']"
+# Note: This selector may need refinement to be more specific
+# if multiple tooltips exist on the page simultaneously
+complimentary_pages_tooltip = "[role='tooltip']"
+
+# Additional Pages locators
+additional_pages_progress_bar = "[data-testid='additional-pages-progress-bar']"
+additional_pages_value = "[data-testid='additional-pages-value']"
+additional_pages_info_icon = "[data-testid='additional-pages-info-icon']"
+additional_pages_info_message = "[data-testid='additional-pages-info-message']"
+# Note: This selector may need refinement to be more specific
+# if multiple tooltips exist on the page simultaneously
+additional_pages_tooltip = "[role='tooltip']"
 
 # ADD TO __init__ METHOD (after self.elements = self.Elements()):
 
