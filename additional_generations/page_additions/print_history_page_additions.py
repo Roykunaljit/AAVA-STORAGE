@@ -11,12 +11,13 @@ MERGE INSTRUCTIONS:
 1. Open pages/print_history_page.py in your editor
 2. Locate the PrintHistoryPage class definition
 3. Find the Elements inner class (defined inside PrintHistoryPage)
-4. Add the string selector definitions below to the Elements class (after existing selectors)
-5. Locate the __init__ method in PrintHistoryPage
-6. After the line 'super().__init__(page)' and after 'self.elements = self.Elements()', add the Locator property initializations
-7. Maintain consistent 4-space indentation throughout
-8. Save the file and run the test to verify all locators work correctly
+4. Add the string selector definitions below to the Elements class as class attributes
+5. Do NOT add any __init__ property initializations - Elements-based locators are accessed via page.locator(page_obj.elements.locator_name) in test scripts
+6. Maintain consistent 4-space indentation throughout
+7. Save the file
+8. Update test scripts to access locators via page.locator(print_history_page.elements.locator_name) pattern
 9. Update tooltip selectors if actual data-testid attributes differ from the placeholders
+10. Run the test to verify all locators work correctly
 
 MERGE NOTES:
 - Tooltip selectors use role='tooltip' as a reliable fallback
@@ -29,34 +30,17 @@ MERGE NOTES:
 # ADD TO PrintHistoryPage.Elements CLASS:
 # ═══════════════════════════════════════════════════════════════════════════════
 
-plan_pause_info = "[data-testid='plan-pause-info']"
-billing_cycle_period_card = "[data-testid='billing-cycle-period-card']"
-complimentary_pages_progress_bar = "[data-testid='complimentary-pages-progress-bar']"
-complimentary_pages_value = "[data-testid='complimentary-pages-value']"
-complimentary_pages_info_icon = "[data-testid='complimentary-pages-info-icon']"
-complimentary_pages_info_message = "[data-testid='complimentary-pages-info-message']"
-complimentary_pages_tooltip = "[role='tooltip']"  # Tooltip appears on hover/click of info icon
-additional_pages_progress_bar = "[data-testid='additional-pages-progress-bar']"
-additional_pages_value = "[data-testid='additional-pages-value']"
-additional_pages_info_icon = "[data-testid='additional-pages-info-icon']"
-additional_pages_info_message = "[data-testid='additional-pages-info-message']"
-additional_pages_tooltip = "[role='tooltip']"  # Tooltip appears on hover/click of info icon
-
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# ADD TO PrintHistoryPage.__init__ METHOD:
-# (After super().__init__(page) and after self.elements = self.Elements())
-# ═══════════════════════════════════════════════════════════════════════════════
-
-self.plan_pause_info = page.locator(self.elements.plan_pause_info)
-self.billing_cycle_period_card = page.locator(self.elements.billing_cycle_period_card)
-self.complimentary_pages_progress_bar = page.locator(self.elements.complimentary_pages_progress_bar)
-self.complimentary_pages_value = page.locator(self.elements.complimentary_pages_value)
-self.complimentary_pages_info_icon = page.locator(self.elements.complimentary_pages_info_icon)
-self.complimentary_pages_info_message = page.locator(self.elements.complimentary_pages_info_message)
-self.complimentary_pages_tooltip = page.locator(self.elements.complimentary_pages_tooltip)
-self.additional_pages_progress_bar = page.locator(self.elements.additional_pages_progress_bar)
-self.additional_pages_value = page.locator(self.elements.additional_pages_value)
-self.additional_pages_info_icon = page.locator(self.elements.additional_pages_info_icon)
-self.additional_pages_info_message = page.locator(self.elements.additional_pages_info_message)
-self.additional_pages_tooltip = page.locator(self.elements.additional_pages_tooltip)
+class Elements:
+    # String selector definitions as class attributes
+    plan_pause_info = "[data-testid='plan-pause-info']"
+    billing_cycle_period_card = "[data-testid='billing-cycle-period-card']"
+    complimentary_pages_progress_bar = "[data-testid='complimentary-pages-progress-bar']"
+    complimentary_pages_value = "[data-testid='complimentary-pages-value']"
+    complimentary_pages_info_icon = "[data-testid='complimentary-pages-info-icon']"
+    complimentary_pages_info_message = "[data-testid='complimentary-pages-info-message']"
+    complimentary_pages_tooltip = "[role='tooltip']"  # Tooltip appears on hover/click of info icon
+    additional_pages_progress_bar = "[data-testid='additional-pages-progress-bar']"
+    additional_pages_value = "[data-testid='additional-pages-value']"
+    additional_pages_info_icon = "[data-testid='additional-pages-info-icon']"
+    additional_pages_info_message = "[data-testid='additional-pages-info-message']"
+    additional_pages_tooltip = "[role='tooltip']"  # Tooltip appears on hover/click of info icon
