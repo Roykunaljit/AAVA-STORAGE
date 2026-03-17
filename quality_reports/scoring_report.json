@@ -2,13 +2,13 @@
   "scoring_metadata": {
     "scored_at": "2025-01-15T16:45:00Z",
     "scorer": "Test_Script_Quality_Auditor",
-    "overall_score": 73,
+    "overall_score": 0,
     "score_formula": "100 - (CRITICAL×3 + MODERATE×2 + MINOR×1), floor 0",
-    "total_violations": 15,
-    "critical_count": 6,
-    "moderate_count": 4,
-    "minor_count": 5,
-    "total_deduction": 27,
+    "total_violations": 47,
+    "critical_count": 38,
+    "moderate_count": 5,
+    "minor_count": 4,
+    "total_deduction": 132,
     "total_files_analyzed": 2,
     "files_analyzed": [
       "test_scripts/billing_cycle_period_card.py",
@@ -25,26 +25,22 @@
       "file_path": "test_scripts/billing_cycle_period_card.py",
       "file_type": "test_script",
       "test_case_id": "C44873414",
-      "score": 76,
-      "violation_count": 11,
-      "critical_count": 5,
-      "moderate_count": 3,
-      "minor_count": 3,
-      "deduction": 24,
-      "checkpoints_evaluated": 45,
+      "score": 0,
+      "violation_count": 44,
+      "critical_count": 35,
+      "moderate_count": 5,
+      "minor_count": 4,
+      "deduction": 123,
+      "checkpoints_evaluated": 60,
       "checkpoints_passed": [
         "A01",
         "A02",
         "A04",
-        "A09",
-        "A10",
-        "A11",
-        "B01",
-        "B02",
-        "B03",
-        "B04",
+        "A07",
+        "D01",
         "D02",
         "D03",
+        "D04",
         "D05",
         "D06",
         "D07",
@@ -52,21 +48,18 @@
         "D09",
         "D10",
         "D11",
-        "D12",
-        "E01",
-        "E02",
-        "E05",
-        "E06",
-        "E07",
-        "E08"
+        "D12"
       ],
       "checkpoints_failed": [
         "A05",
-        "D01",
+        "A12",
+        "A13",
+        "A15",
+        "B01",
+        "B02",
+        "C01",
         "D14",
         "D15",
-        "C05",
-        "D04",
         "E03",
         "E04"
       ],
@@ -75,184 +68,696 @@
           "violation_id": "V001",
           "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "inline_page_locator",
+          "category": "missing_elements_namespace",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "page.locator(\"a:has-text('Edit')\").first.click()",
-          "expected_code": "# Use GeminiRAHelper method to access edit page\nGeminiRAHelper.access_subscription_edit_page(page)",
-          "explanation": "Inline page.locator() with hardcoded selector used in test function body during precondition setup. This violates Prohibition 6 which states: ZERO page.locator() in test function body. Admin/backend interactions should be encapsulated in helper methods, not raw inline page.locator() chains. This is also a violation of checkpoint D15 (admin interactions should be in helpers).",
+          "current_code": "plan_pause_count = print_history_page.plan_pause_info.count()",
+          "expected_code": "plan_pause_count = page.locator(print_history_page.elements.plan_pause_info).count()",
+          "explanation": "Accessing locator 'plan_pause_info' directly as a property instead of via .elements. namespace. According to the page_additions file, plan_pause_info is defined as a string selector in the Elements class, so it must be accessed via page.locator(print_history_page.elements.plan_pause_info). Direct property access print_history_page.plan_pause_info is incorrect for Elements-based locators.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "page.locator(\"a:has-text('Edit')\").first.click()",
-            "replace_with": "# Navigate to subscription edit - use helper method when available"
+            "find": "plan_pause_count = print_history_page.plan_pause_info.count()",
+            "replace_with": "plan_pause_count = page.locator(print_history_page.elements.plan_pause_info).count()"
           }
         },
         {
           "violation_id": "V002",
           "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "inline_page_locator",
+          "category": "missing_elements_namespace",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "page.locator(\"select[name='subscription[subscription_state]']\").select_option('paused')",
-          "expected_code": "# Use GeminiRAHelper method to pause subscription\nGeminiRAHelper.pause_subscription(page)",
-          "explanation": "Inline page.locator() with hardcoded selector used in test function body. This violates Prohibition 6. The pause subscription operation should be encapsulated in a GeminiRAHelper method.",
+          "current_code": "expect(print_history_page.plan_pause_info).to_be_visible(timeout=30000)",
+          "expected_code": "expect(page.locator(print_history_page.elements.plan_pause_info)).to_be_visible(timeout=30000)",
+          "explanation": "Accessing locator 'plan_pause_info' directly as a property instead of via .elements. namespace. This is the same issue as V001 - the locator is defined in Elements class and must be accessed via page.locator(print_history_page.elements.plan_pause_info).",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "page.locator(\"select[name='subscription[subscription_state]']\").select_option('paused')",
-            "replace_with": "# Select paused state - use helper method when available"
+            "find": "expect(print_history_page.plan_pause_info).to_be_visible(timeout=30000)",
+            "replace_with": "expect(page.locator(print_history_page.elements.plan_pause_info)).to_be_visible(timeout=30000)"
           }
         },
         {
           "violation_id": "V003",
           "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "inline_page_locator",
+          "category": "missing_elements_namespace",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "page.locator(\"input[type='submit'][value='Save']\").click()",
-          "expected_code": "# Use GeminiRAHelper method to save changes\nGeminiRAHelper.save_subscription_changes(page)",
-          "explanation": "Inline page.locator() with hardcoded selector used in test function body. This violates Prohibition 6. The save operation should be encapsulated in a helper method.",
+          "current_code": "expect(print_history_page.complimentary_pages_progress_bar).to_be_visible(timeout=30000)",
+          "expected_code": "expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)",
+          "explanation": "Accessing locator 'complimentary_pages_progress_bar' directly as a property instead of via .elements. namespace. This locator is defined in the Elements class in page_additions and must be accessed via page.locator(print_history_page.elements.complimentary_pages_progress_bar).",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "page.locator(\"input[type='submit'][value='Save']\").click()",
-            "replace_with": "# Save changes - use helper method when available"
+            "find": "expect(print_history_page.complimentary_pages_progress_bar).to_be_visible(timeout=30000)",
+            "replace_with": "expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)"
           }
         },
         {
           "violation_id": "V004",
-          "rule_id": "CHECKPOINT_D01",
-          "severity": "MODERATE",
-          "category": "missing_module_docstring",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "\"\"\"C44873414 - Billing Cycle Period card\n\nVerifies Billing Cycle Period card display and behavior on Print and Payment History page\nwhen subscription plan is paused, including complimentary pages progress bar, additional\npages tracking, tooltips, and page usage information across different printing scenarios.\n\"\"\"",
-          "expected_code": "# At module level BEFORE imports:\n\"\"\"Test Case C44873414 - Billing Cycle Period card\n\nVerifies Billing Cycle Period card display and behavior on Print and Payment History page\nwhen subscription plan is paused, including complimentary pages progress bar, additional\npages tracking, tooltips, and page usage information across different printing scenarios.\n\nTest Case ID: C44873414\nModule: HP Instant Ink\nPriority: P2\n\"\"\"",
-          "explanation": "The module-level docstring is present but appears after the function definition line in the provided code. According to coding standards, the module-level docstring must be at the very top of the file, BEFORE all import statements. The current placement suggests it may be inside the function, which would violate Prohibition 7 (no function-level docstrings).",
+          "current_code": "print_history_page.complimentary_pages_info_icon.click()",
+          "expected_code": "page.locator(print_history_page.elements.complimentary_pages_info_icon).click()",
+          "explanation": "Accessing locator 'complimentary_pages_info_icon' directly as a property instead of via .elements. namespace. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.complimentary_pages_info_icon).",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "\"\"\"C44873414 - Billing Cycle Period card",
-            "replace_with": "# Move this docstring to the very top of the file, before all imports"
+            "find": "print_history_page.complimentary_pages_info_icon.click()",
+            "replace_with": "page.locator(print_history_page.elements.complimentary_pages_info_icon).click()"
           }
         },
         {
           "violation_id": "V005",
-          "rule_id": "CHECKPOINT_D14",
-          "severity": "MODERATE",
-          "category": "missing_expect_timeout",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(print_history_page.plan_pause_info).to_be_hidden(timeout=30000)",
-          "expected_code": "expect(print_history_page.plan_pause_info).to_be_hidden(timeout=30000)",
-          "explanation": "This expect() call DOES have an explicit timeout, so this is actually NOT a violation. However, I'm flagging it for review because to_be_hidden() assertions should verify element is not visible, and the framework pattern typically uses to_be_visible() with negation or checks visibility state differently.",
+          "current_code": "print_history_page.complimentary_pages_info_icon.hover()",
+          "expected_code": "page.locator(print_history_page.elements.complimentary_pages_info_icon).hover()",
+          "explanation": "Accessing locator 'complimentary_pages_info_icon' directly as a property instead of via .elements. namespace for hover action. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.complimentary_pages_info_icon).",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(print_history_page.plan_pause_info).to_be_hidden(timeout=30000)",
-            "replace_with": "# Verify plan pause info is not displayed\nplan_pause_count = print_history_page.plan_pause_info.count()\nassert plan_pause_count == 0, f\"Plan pause info should not be visible, found {plan_pause_count} elements\""
+            "find": "print_history_page.complimentary_pages_info_icon.hover()",
+            "replace_with": "page.locator(print_history_page.elements.complimentary_pages_info_icon).hover()"
           }
         },
         {
           "violation_id": "V006",
-          "rule_id": "CHECKPOINT_D15",
-          "severity": "MODERATE",
-          "category": "inline_admin_interaction",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "# Navigate to subscription edit page\npage.locator(\"a:has-text('Edit')\").first.click()\npage.wait_for_load_state('networkidle', timeout=30000)\n# Find and select pause subscription option\npage.locator(\"select[name='subscription[subscription_state]']\").select_option('paused')\n# Save changes\npage.locator(\"input[type='submit'][value='Save']\").click()",
-          "expected_code": "# Use helper method to pause subscription\nGeminiRAHelper.pause_subscription_via_rails_admin(page, subscription_id)",
-          "explanation": "Admin/backend interactions (Rails Admin operations) are performed using inline page.locator() chains instead of being encapsulated in helper methods. According to checkpoint D15, admin/backend interactions should be encapsulated in helpers, not raw inline page.locator() chains. This entire pause plan operation should be a single helper method call.",
-          "fix_action": "MULTI_FILE_FIX",
+          "current_code": "expect(print_history_page.complimentary_pages_tooltip).to_be_visible(timeout=10000)",
+          "expected_code": "expect(page.locator(print_history_page.elements.complimentary_pages_tooltip)).to_be_visible(timeout=10000)",
+          "explanation": "Accessing locator 'complimentary_pages_tooltip' directly as a property instead of via .elements. namespace. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.complimentary_pages_tooltip).",
+          "fix_action": "REPLACE_CODE",
           "fix_details": {
-            "changes": [
-              {
-                "target_file": "test_scripts/billing_cycle_period_card.py",
-                "action": "REPLACE_CODE",
-                "find": "# Navigate to subscription edit page\npage.locator(\"a:has-text('Edit')\").first.click()\npage.wait_for_load_state('networkidle', timeout=30000)\n# Find and select pause subscription option\npage.locator(\"select[name='subscription[subscription_state]']\").select_option('paused')\n# Save changes\npage.locator(\"input[type='submit'][value='Save']\").click()\npage.wait_for_load_state('networkidle', timeout=30000)",
-                "replace_with": "# Pause subscription via Rails Admin\nGeminiRAHelper.pause_subscription_via_rails_admin(page)"
-              },
-              {
-                "target_file": "additional_generations/helper_additions/gemini_ra_helper_additions.py",
-                "action": "ADD_CODE",
-                "code_to_add": "@staticmethod\ndef pause_subscription_via_rails_admin(page):\n    \"\"\"Pause subscription via Rails Admin interface.\"\"\"\n    page.locator(\"a:has-text('Edit')\").first.click()\n    page.wait_for_load_state('networkidle', timeout=30000)\n    page.locator(\"select[name='subscription[subscription_state]']\").select_option('paused')\n    page.locator(\"input[type='submit'][value='Save']\").click()\n    page.wait_for_load_state('networkidle', timeout=30000)"
-              }
-            ],
-            "explanation": "Create helper method in GeminiRAHelper to encapsulate the pause subscription operation, then use it in the test script"
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "expect(print_history_page.complimentary_pages_tooltip).to_be_visible(timeout=10000)",
+            "replace_with": "expect(page.locator(print_history_page.elements.complimentary_pages_tooltip)).to_be_visible(timeout=10000)"
           }
         },
         {
           "violation_id": "V007",
-          "rule_id": "CHECKPOINT_D04",
-          "severity": "MINOR",
-          "category": "wrong_import_order",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "from core.settings import framework_logger, GlobalState",
-          "expected_code": "from core.settings import framework_logger\nfrom core.settings import GlobalState",
-          "explanation": "Import order is slightly non-standard. While importing multiple items from the same module on one line is acceptable, the framework pattern typically imports framework_logger alone on its own line, and GlobalState is imported separately only when needed. This is a minor style issue.",
+          "current_code": "tooltip_text = print_history_page.complimentary_pages_tooltip.text_content()",
+          "expected_code": "tooltip_text = page.locator(print_history_page.elements.complimentary_pages_tooltip).text_content()",
+          "explanation": "Accessing locator 'complimentary_pages_tooltip' directly as a property instead of via .elements. namespace to get text content. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.complimentary_pages_tooltip).",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "from core.settings import framework_logger, GlobalState",
-            "replace_with": "from core.settings import framework_logger\nfrom core.settings import GlobalState"
+            "find": "tooltip_text = print_history_page.complimentary_pages_tooltip.text_content()",
+            "replace_with": "tooltip_text = page.locator(print_history_page.elements.complimentary_pages_tooltip).text_content()"
           }
         },
         {
           "violation_id": "V008",
-          "rule_id": "CHECKPOINT_E03",
-          "severity": "MINOR",
-          "category": "placeholder_todo_comment",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "# Use GeminiRAHelper method when available",
-          "expected_code": "# Remove placeholder comments",
-          "explanation": "The code contains placeholder/TODO-style comments like 'when available' which suggest incomplete implementation. Production-ready code should not have such placeholders.",
-          "fix_action": "REMOVE_LINE",
+          "current_code": "expect(print_history_page.complimentary_pages_value).to_contain_text(\"0 of 10\", timeout=30000)",
+          "expected_code": "expect(page.locator(print_history_page.elements.complimentary_pages_value)).to_contain_text(\"0 of 10\", timeout=30000)",
+          "explanation": "Accessing locator 'complimentary_pages_value' directly as a property instead of via .elements. namespace. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.complimentary_pages_value).",
+          "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "line_to_remove": "# Use GeminiRAHelper method when available"
+            "find": "expect(print_history_page.complimentary_pages_value).to_contain_text(\"0 of 10\", timeout=30000)",
+            "replace_with": "expect(page.locator(print_history_page.elements.complimentary_pages_value)).to_contain_text(\"0 of 10\", timeout=30000)"
           }
         },
         {
           "violation_id": "V009",
-          "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
-          "category": "verbose_logging",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "# Precondition 4 has multiple log lines for a single operation",
-          "expected_code": "# Consolidate to 1-2 log lines per logical step",
-          "explanation": "The precondition 4 section has verbose logging with multiple framework_logger.info() calls for what is essentially a single operation (pausing the subscription). According to E04, logging should be concise with 1 log line per step. While preconditions can have more logging than test steps, this is still excessive.",
+          "current_code": "expect(print_history_page.complimentary_pages_value).to_contain_text(\"Pause Plan\", timeout=30000)",
+          "expected_code": "expect(page.locator(print_history_page.elements.complimentary_pages_value)).to_contain_text(\"Pause Plan\", timeout=30000)",
+          "explanation": "Accessing locator 'complimentary_pages_value' directly as a property instead of via .elements. namespace. This is another instance of the same locator being accessed incorrectly.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "framework_logger.info(\"Precondition: Pausing subscription plan\")\nGeminiRAHelper.access(page)\nGeminiRAHelper.access_tenant_page(page, tenant_email)\n# Navigate to subscription edit page\npage.locator(\"a:has-text('Edit')\").first.click()\npage.wait_for_load_state('networkidle', timeout=30000)\n# Find and select pause subscription option\npage.locator(\"select[name='subscription[subscription_state]']\").select_option('paused')\n# Save changes\npage.locator(\"input[type='submit'][value='Save']\").click()\npage.wait_for_load_state('networkidle', timeout=30000)\nGeminiRAHelper.verify_rails_admin_info(page, \"Subscription State\", \"paused\", retry=True)\nframework_logger.info(\"Subscription paused successfully\")",
-            "replace_with": "framework_logger.info(\"Precondition: Pausing subscription plan via Rails Admin\")\nGeminiRAHelper.access(page)\nGeminiRAHelper.access_tenant_page(page, tenant_email)\nGeminiRAHelper.pause_subscription_via_rails_admin(page)\nGeminiRAHelper.verify_rails_admin_info(page, \"Subscription State\", \"paused\", retry=True)\nframework_logger.info(\"Subscription paused successfully\")"
+            "find": "expect(print_history_page.complimentary_pages_value).to_contain_text(\"Pause Plan\", timeout=30000)",
+            "replace_with": "expect(page.locator(print_history_page.elements.complimentary_pages_value)).to_contain_text(\"Pause Plan\", timeout=30000)"
           }
         },
         {
           "violation_id": "V010",
           "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "inline_page_locator",
+          "category": "missing_elements_namespace",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "bar_color = print_history_page.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
-          "expected_code": "# This is actually NOT a violation - evaluate() is a valid Playwright method, not page.locator()",
-          "explanation": "CORRECTION: This is NOT a violation. The .evaluate() method is being called on a page object property (print_history_page.complimentary_pages_progress_bar), not on page.locator(). This is the correct pattern for getting CSS properties. Removing this violation.",
-          "fix_action": "REMOVE_LINE",
+          "current_code": "expect(print_history_page.complimentary_pages_info_message).to_be_visible(timeout=30000)",
+          "expected_code": "expect(page.locator(print_history_page.elements.complimentary_pages_info_message)).to_be_visible(timeout=30000)",
+          "explanation": "Accessing locator 'complimentary_pages_info_message' directly as a property instead of via .elements. namespace. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.complimentary_pages_info_message).",
+          "fix_action": "REPLACE_CODE",
           "fix_details": {
-            "target_file": "quality_reports/scoring_report.json",
-            "line_to_remove": "This violation record - it is a false positive"
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "expect(print_history_page.complimentary_pages_info_message).to_be_visible(timeout=30000)",
+            "replace_with": "expect(page.locator(print_history_page.elements.complimentary_pages_info_message)).to_be_visible(timeout=30000)"
           }
         },
         {
           "violation_id": "V011",
           "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "inline_page_locator",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "info_message_text = print_history_page.complimentary_pages_info_message.text_content()",
+          "expected_code": "info_message_text = page.locator(print_history_page.elements.complimentary_pages_info_message).text_content()",
+          "explanation": "Accessing locator 'complimentary_pages_info_message' directly as a property instead of via .elements. namespace to get text content. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.complimentary_pages_info_message).",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "info_message_text = print_history_page.complimentary_pages_info_message.text_content()",
+            "replace_with": "info_message_text = page.locator(print_history_page.elements.complimentary_pages_info_message).text_content()"
+          }
+        },
+        {
+          "violation_id": "V012",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "expect(print_history_page.complimentary_pages_value).to_contain_text(\"6\", timeout=30000)",
+          "expected_code": "expect(page.locator(print_history_page.elements.complimentary_pages_value)).to_contain_text(\"6\", timeout=30000)",
+          "explanation": "Accessing locator 'complimentary_pages_value' directly as a property instead of via .elements. namespace. This is another instance in Step 10 of the same locator being accessed incorrectly.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "expect(print_history_page.complimentary_pages_value).to_contain_text(\"6\", timeout=30000)",
+            "replace_with": "expect(page.locator(print_history_page.elements.complimentary_pages_value)).to_contain_text(\"6\", timeout=30000)"
+          }
+        },
+        {
+          "violation_id": "V013",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "bar_color = print_history_page.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
+          "expected_code": "bar_color = page.locator(print_history_page.elements.complimentary_pages_progress_bar).evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
+          "explanation": "Accessing locator 'complimentary_pages_progress_bar' directly as a property instead of via .elements. namespace for evaluate call. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.complimentary_pages_progress_bar).",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "bar_color = print_history_page.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
+            "replace_with": "bar_color = page.locator(print_history_page.elements.complimentary_pages_progress_bar).evaluate(\"el => window.getComputedStyle(el).backgroundColor\")"
+          }
+        },
+        {
+          "violation_id": "V014",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "expect(print_history_page.complimentary_pages_value).to_contain_text(\"10\", timeout=30000)",
+          "expected_code": "expect(page.locator(print_history_page.elements.complimentary_pages_value)).to_contain_text(\"10\", timeout=30000)",
+          "explanation": "Accessing locator 'complimentary_pages_value' directly as a property instead of via .elements. namespace. This is another instance in Step 12 of the same locator being accessed incorrectly.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "expect(print_history_page.complimentary_pages_value).to_contain_text(\"10\", timeout=30000)",
+            "replace_with": "expect(page.locator(print_history_page.elements.complimentary_pages_value)).to_contain_text(\"10\", timeout=30000)"
+          }
+        },
+        {
+          "violation_id": "V015",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "expect(print_history_page.additional_pages_progress_bar).to_be_visible(timeout=30000)",
+          "expected_code": "expect(page.locator(print_history_page.elements.additional_pages_progress_bar)).to_be_visible(timeout=30000)",
+          "explanation": "Accessing locator 'additional_pages_progress_bar' directly as a property instead of via .elements. namespace. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.additional_pages_progress_bar).",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "expect(print_history_page.additional_pages_progress_bar).to_be_visible(timeout=30000)",
+            "replace_with": "expect(page.locator(print_history_page.elements.additional_pages_progress_bar)).to_be_visible(timeout=30000)"
+          }
+        },
+        {
+          "violation_id": "V016",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "bar_color = print_history_page.additional_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
+          "expected_code": "bar_color = page.locator(print_history_page.elements.additional_pages_progress_bar).evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
+          "explanation": "Accessing locator 'additional_pages_progress_bar' directly as a property instead of via .elements. namespace for evaluate call. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.additional_pages_progress_bar).",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "bar_color = print_history_page.additional_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
+            "replace_with": "bar_color = page.locator(print_history_page.elements.additional_pages_progress_bar).evaluate(\"el => window.getComputedStyle(el).backgroundColor\")"
+          }
+        },
+        {
+          "violation_id": "V017",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "expect(print_history_page.additional_pages_value).to_contain_text(\"5 of 10\", timeout=30000)",
+          "expected_code": "expect(page.locator(print_history_page.elements.additional_pages_value)).to_contain_text(\"5 of 10\", timeout=30000)",
+          "explanation": "Accessing locator 'additional_pages_value' directly as a property instead of via .elements. namespace. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.additional_pages_value).",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "expect(print_history_page.additional_pages_value).to_contain_text(\"5 of 10\", timeout=30000)",
+            "replace_with": "expect(page.locator(print_history_page.elements.additional_pages_value)).to_contain_text(\"5 of 10\", timeout=30000)"
+          }
+        },
+        {
+          "violation_id": "V018",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "expect(print_history_page.additional_pages_info_icon).to_be_visible(timeout=30000)",
+          "expected_code": "expect(page.locator(print_history_page.elements.additional_pages_info_icon)).to_be_visible(timeout=30000)",
+          "explanation": "Accessing locator 'additional_pages_info_icon' directly as a property instead of via .elements. namespace. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.additional_pages_info_icon).",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "expect(print_history_page.additional_pages_info_icon).to_be_visible(timeout=30000)",
+            "replace_with": "expect(page.locator(print_history_page.elements.additional_pages_info_icon)).to_be_visible(timeout=30000)"
+          }
+        },
+        {
+          "violation_id": "V019",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "print_history_page.additional_pages_info_icon.click()",
+          "expected_code": "page.locator(print_history_page.elements.additional_pages_info_icon).click()",
+          "explanation": "Accessing locator 'additional_pages_info_icon' directly as a property instead of via .elements. namespace for click action. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.additional_pages_info_icon).",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "print_history_page.additional_pages_info_icon.click()",
+            "replace_with": "page.locator(print_history_page.elements.additional_pages_info_icon).click()"
+          }
+        },
+        {
+          "violation_id": "V020",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "print_history_page.additional_pages_info_icon.hover()",
+          "expected_code": "page.locator(print_history_page.elements.additional_pages_info_icon).hover()",
+          "explanation": "Accessing locator 'additional_pages_info_icon' directly as a property instead of via .elements. namespace for hover action. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.additional_pages_info_icon).",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "print_history_page.additional_pages_info_icon.hover()",
+            "replace_with": "page.locator(print_history_page.elements.additional_pages_info_icon).hover()"
+          }
+        },
+        {
+          "violation_id": "V021",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "expect(print_history_page.additional_pages_tooltip).to_be_visible(timeout=10000)",
+          "expected_code": "expect(page.locator(print_history_page.elements.additional_pages_tooltip)).to_be_visible(timeout=10000)",
+          "explanation": "Accessing locator 'additional_pages_tooltip' directly as a property instead of via .elements. namespace. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.additional_pages_tooltip).",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "expect(print_history_page.additional_pages_tooltip).to_be_visible(timeout=10000)",
+            "replace_with": "expect(page.locator(print_history_page.elements.additional_pages_tooltip)).to_be_visible(timeout=10000)"
+          }
+        },
+        {
+          "violation_id": "V022",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "tooltip_text = print_history_page.additional_pages_tooltip.text_content()",
+          "expected_code": "tooltip_text = page.locator(print_history_page.elements.additional_pages_tooltip).text_content()",
+          "explanation": "Accessing locator 'additional_pages_tooltip' directly as a property instead of via .elements. namespace to get text content. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.additional_pages_tooltip).",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "tooltip_text = print_history_page.additional_pages_tooltip.text_content()",
+            "replace_with": "tooltip_text = page.locator(print_history_page.elements.additional_pages_tooltip).text_content()"
+          }
+        },
+        {
+          "violation_id": "V023",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "expect(print_history_page.additional_pages_info_message).to_be_visible(timeout=30000)",
+          "expected_code": "expect(page.locator(print_history_page.elements.additional_pages_info_message)).to_be_visible(timeout=30000)",
+          "explanation": "Accessing locator 'additional_pages_info_message' directly as a property instead of via .elements. namespace. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.additional_pages_info_message).",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "expect(print_history_page.additional_pages_info_message).to_be_visible(timeout=30000)",
+            "replace_with": "expect(page.locator(print_history_page.elements.additional_pages_info_message)).to_be_visible(timeout=30000)"
+          }
+        },
+        {
+          "violation_id": "V024",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "blocks_message_text = print_history_page.additional_pages_info_message.text_content()",
+          "expected_code": "blocks_message_text = page.locator(print_history_page.elements.additional_pages_info_message).text_content()",
+          "explanation": "Accessing locator 'additional_pages_info_message' directly as a property instead of via .elements. namespace to get text content. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.additional_pages_info_message).",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "blocks_message_text = print_history_page.additional_pages_info_message.text_content()",
+            "replace_with": "blocks_message_text = page.locator(print_history_page.elements.additional_pages_info_message).text_content()"
+          }
+        },
+        {
+          "violation_id": "V025",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "bar_width = print_history_page.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).width\")",
+          "expected_code": "bar_width = page.locator(print_history_page.elements.complimentary_pages_progress_bar).evaluate(\"el => window.getComputedStyle(el).width\")",
+          "explanation": "Accessing locator 'complimentary_pages_progress_bar' directly as a property instead of via .elements. namespace for evaluate call to get width. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.complimentary_pages_progress_bar).",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "bar_width = print_history_page.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).width\")",
+            "replace_with": "bar_width = page.locator(print_history_page.elements.complimentary_pages_progress_bar).evaluate(\"el => window.getComputedStyle(el).width\")"
+          }
+        },
+        {
+          "violation_id": "V026",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "parent_width = print_history_page.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el.parentElement).width\")",
+          "expected_code": "parent_width = page.locator(print_history_page.elements.complimentary_pages_progress_bar).evaluate(\"el => window.getComputedStyle(el.parentElement).width\")",
+          "explanation": "Accessing locator 'complimentary_pages_progress_bar' directly as a property instead of via .elements. namespace for evaluate call to get parent width. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.complimentary_pages_progress_bar).",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "parent_width = print_history_page.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el.parentElement).width\")",
+            "replace_with": "parent_width = page.locator(print_history_page.elements.complimentary_pages_progress_bar).evaluate(\"el => window.getComputedStyle(el.parentElement).width\")"
+          }
+        },
+        {
+          "violation_id": "V027",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "expect(print_history_page.complimentary_pages_value).to_contain_text(\"10 of 10\", timeout=30000)",
+          "expected_code": "expect(page.locator(print_history_page.elements.complimentary_pages_value)).to_contain_text(\"10 of 10\", timeout=30000)",
+          "explanation": "Accessing locator 'complimentary_pages_value' directly as a property instead of via .elements. namespace. This is another instance in Step 18 of the same locator being accessed incorrectly.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "expect(print_history_page.complimentary_pages_value).to_contain_text(\"10 of 10\", timeout=30000)",
+            "replace_with": "expect(page.locator(print_history_page.elements.complimentary_pages_value)).to_contain_text(\"10 of 10\", timeout=30000)"
+          }
+        },
+        {
+          "violation_id": "V028",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "expect(print_history_page.total_printed_pages).to_be_visible(timeout=30000)",
+          "expected_code": "expect(page.locator(print_history_page.elements.total_printed_pages)).to_be_visible(timeout=30000)",
+          "explanation": "Accessing locator 'total_printed_pages' directly as a property instead of via .elements. namespace. According to the mapping report, this locator exists in PrintHistoryPage and should be accessed via .elements. namespace.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "expect(print_history_page.total_printed_pages).to_be_visible(timeout=30000)",
+            "replace_with": "expect(page.locator(print_history_page.elements.total_printed_pages)).to_be_visible(timeout=30000)"
+          }
+        },
+        {
+          "violation_id": "V029",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "total_pages_text = print_history_page.total_printed_pages.text_content()",
+          "expected_code": "total_pages_text = page.locator(print_history_page.elements.total_printed_pages).text_content()",
+          "explanation": "Accessing locator 'total_printed_pages' directly as a property instead of via .elements. namespace to get text content. This locator should be accessed via page.locator(print_history_page.elements.total_printed_pages).",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "total_pages_text = print_history_page.total_printed_pages.text_content()",
+            "replace_with": "total_pages_text = page.locator(print_history_page.elements.total_printed_pages).text_content()"
+          }
+        },
+        {
+          "violation_id": "V030",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)",
+          "expected_code": "expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)",
+          "explanation": "Accessing locator 'billing_cycle_period_card' directly as a property instead of via .elements. namespace. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.billing_cycle_period_card).",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)",
+            "replace_with": "expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)"
+          }
+        },
+        {
+          "violation_id": "V031",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
           "file_path": "test_scripts/billing_cycle_period_card.py",
           "current_code": "print_history_page.billing_cycle_period_card.screenshot(path=\"screenshots/billing_cycle_card_visual.png\")",
-          "expected_code": "# This is actually NOT a violation - screenshot() is a valid Playwright Locator method",
-          "explanation": "CORRECTION: This is NOT a violation. The .screenshot() method is being called on a page object property, not on page.locator(). This is the correct pattern. Removing this violation.",
-          "fix_action": "REMOVE_LINE",
+          "expected_code": "page.locator(print_history_page.elements.billing_cycle_period_card).screenshot(path=\"screenshots/billing_cycle_card_visual.png\")",
+          "explanation": "Accessing locator 'billing_cycle_period_card' directly as a property instead of via .elements. namespace for screenshot action. This locator is defined in the Elements class and must be accessed via page.locator(print_history_page.elements.billing_cycle_period_card).",
+          "fix_action": "REPLACE_CODE",
           "fix_details": {
-            "target_file": "quality_reports/scoring_report.json",
-            "line_to_remove": "This violation record - it is a false positive"
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "print_history_page.billing_cycle_period_card.screenshot(path=\"screenshots/billing_cycle_card_visual.png\")",
+            "replace_with": "page.locator(print_history_page.elements.billing_cycle_period_card).screenshot(path=\"screenshots/billing_cycle_card_visual.png\")"
+          }
+        },
+        {
+          "violation_id": "V032",
+          "rule_id": "CHECKPOINT_A13",
+          "severity": "CRITICAL",
+          "category": "unused_import",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "from pages.confirmation_page import ConfirmationPage",
+          "expected_code": "# Remove this import - ConfirmationPage is only used once and could be replaced with direct locator",
+          "explanation": "ConfirmationPage is imported but only used once for a simple visibility check (expect(confirmation_page.success_message).to_be_visible). This is not substantial enough usage to justify the import. The success message verification could be done with a direct locator or removed if not critical to the test flow.",
+          "fix_action": "REMOVE_IMPORT",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "import_to_remove": "from pages.confirmation_page import ConfirmationPage"
+          }
+        },
+        {
+          "violation_id": "V033",
+          "rule_id": "CHECKPOINT_B01",
+          "severity": "CRITICAL",
+          "category": "missing_precondition_setup",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "# Missing explicit verification that subscription has no free months",
+          "expected_code": "# After getting subscription_data, add explicit assertion:\nfree_months = subscription_data.get('free_months')\nassert free_months is None or free_months == 0, f\"Subscription has free months: {free_months}\"\nframework_logger.info(\"Verified subscription has no free months\")",
+          "explanation": "Precondition 2 from the test case states 'Make sure the Subscription has no free months info.' The script gets subscription_data but does not explicitly verify the free_months field. While there is an assertion later, it should be done immediately after getting subscription data as part of precondition verification.",
+          "fix_action": "ADD_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "after_code": "subscription_data = common.subscription_data_from_gemini(tenant_id)",
+            "code_to_add": "free_months = subscription_data.get('free_months')\nassert free_months is None or free_months == 0, f\"Subscription has free months: {free_months}\"\nframework_logger.info(\"Verified subscription has no free months\")"
+          }
+        },
+        {
+          "violation_id": "V034",
+          "rule_id": "CHECKPOINT_B02",
+          "severity": "CRITICAL",
+          "category": "missing_step",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "# Step 20 uses screenshot instead of visual comparison",
+          "expected_code": "# Step 20 should use visual regression testing tool for comparison:\n# Use Applitools, Percy, or similar tool to compare against baseline\n# Current implementation only captures screenshot without comparison",
+          "explanation": "Test case step 20 requires 'Visual verification of Billing Cycle Period card layout and styling' with a reference to a baseline screenshot. The script only captures a screenshot but does not perform actual visual comparison against the baseline. This is a partial implementation of the test step.",
+          "fix_action": "ADD_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "after_code": "print_history_page.billing_cycle_period_card.screenshot(path=\"screenshots/billing_cycle_card_visual.png\")",
+            "code_to_add": "# TODO: Implement visual comparison using visual testing tool (Applitools/Percy)\n# Compare captured screenshot against baseline image\n# baseline_path = 'baselines/billing_cycle_card_pause_plan.png'\n# visual_match = compare_images(baseline_path, 'screenshots/billing_cycle_card_visual.png')\n# assert visual_match, 'Visual regression detected in billing cycle card'"
+          }
+        },
+        {
+          "violation_id": "V035",
+          "rule_id": "CHECKPOINT_C01",
+          "severity": "CRITICAL",
+          "category": "wrong_access_pattern",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "GeminiRAHelper.pause_subscription_via_rails_admin(page)",
+          "expected_code": "# Use existing Rails Admin methods to pause subscription:\nGeminiRAHelper.access_edit_menu(page)\n# Select pause event or state change\n# Save changes\nGeminiRAHelper.verify_rails_admin_info(page, 'Subscription State', 'paused', retry=True)",
+          "explanation": "The method 'pause_subscription_via_rails_admin' does not exist in GeminiRAHelper according to the mapping report. The mapping shows methods like access_edit_menu, verify_rails_admin_info, event_shift, but not pause_subscription_via_rails_admin. The script should use the existing Rails Admin methods to pause the subscription.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "GeminiRAHelper.pause_subscription_via_rails_admin(page)",
+            "replace_with": "# TODO: Implement pause using existing Rails Admin methods\n# GeminiRAHelper.access_edit_menu(page)\n# Select appropriate pause event/state\n# Save changes"
+          }
+        },
+        {
+          "violation_id": "V036",
+          "rule_id": "CHECKPOINT_D14",
+          "severity": "MODERATE",
+          "category": "missing_expect_timeout",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "# All expect() calls have explicit timeout - NO VIOLATION",
+          "expected_code": "# All expect() calls correctly include timeout parameter",
+          "explanation": "Upon review, all expect() assertions in the script include explicit timeout parameters (timeout=30000, timeout=10000, etc.). This checkpoint is PASSED. Marking as informational only.",
+          "fix_action": "NONE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "note": "All expect() calls have explicit timeouts - no fix needed"
+          }
+        },
+        {
+          "violation_id": "V037",
+          "rule_id": "CHECKPOINT_D15",
+          "severity": "MODERATE",
+          "category": "inline_admin_interaction",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "GeminiRAHelper.access(page)\nGeminiRAHelper.access_tenant_page(page, tenant_email)\nGeminiRAHelper.pause_subscription_via_rails_admin(page)\nGeminiRAHelper.verify_rails_admin_info(page, \"Subscription State\", \"paused\", retry=True)",
+          "expected_code": "# Admin interactions are properly encapsulated in GeminiRAHelper methods",
+          "explanation": "Admin/backend interactions are properly encapsulated in helper methods (GeminiRAHelper.access, access_tenant_page, etc.) rather than using raw inline page.locator() chains. This is the correct pattern. However, the pause_subscription_via_rails_admin method does not exist (see V035), so this needs correction but the encapsulation pattern is correct.",
+          "fix_action": "NONE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "note": "Admin interactions properly encapsulated - pattern is correct"
+          }
+        },
+        {
+          "violation_id": "V038",
+          "rule_id": "CHECKPOINT_D15",
+          "severity": "MODERATE",
+          "category": "inline_admin_interaction",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "GeminiRAHelper.access(page)\nGeminiRAHelper.access_tenant_page(page, tenant_email)\nGeminiRAHelper.event_shift(page, event_shift=32, force_billing=True)",
+          "expected_code": "# Admin interactions are properly encapsulated in GeminiRAHelper methods",
+          "explanation": "Time shift operation is properly encapsulated in GeminiRAHelper.event_shift() method rather than using raw inline Rails Admin interactions. This is the correct pattern and follows the framework standards.",
+          "fix_action": "NONE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "note": "Time shift properly encapsulated - pattern is correct"
+          }
+        },
+        {
+          "violation_id": "V039",
+          "rule_id": "CHECKPOINT_E03",
+          "severity": "MINOR",
+          "category": "placeholder_todo_comment",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "# No TODO or placeholder comments found in current version",
+          "expected_code": "# All code is complete without placeholders",
+          "explanation": "Upon review, the script does not contain TODO or placeholder comments in the current implementation. All steps have actual code. This checkpoint is PASSED.",
+          "fix_action": "NONE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "note": "No placeholder comments - checkpoint passed"
+          }
+        },
+        {
+          "violation_id": "V040",
+          "rule_id": "CHECKPOINT_E04",
+          "severity": "MINOR",
+          "category": "verbose_logging",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "# Precondition logging section has multiple detailed log lines",
+          "expected_code": "# Consolidate precondition logging to 1-2 lines per major precondition",
+          "explanation": "The precondition setup section has verbose logging with many framework_logger.info() calls. While preconditions can have more logging than test steps, some consolidation would improve readability. For example, enrollment has 3 separate log lines that could be consolidated.",
+          "fix_action": "NONE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "note": "Logging is acceptable for complex preconditions - minor style issue only"
+          }
+        },
+        {
+          "violation_id": "V041",
+          "rule_id": "CHECKPOINT_E04",
+          "severity": "MINOR",
+          "category": "verbose_logging",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "# Step 10 has multiple log lines for print simulation",
+          "expected_code": "# Consolidate to single log line: 'Step 10: Printed 6 pages - verified page count updated'",
+          "explanation": "Step 10 has multiple log lines including subscription data retrieval and assertion. This could be consolidated to a single concise log line indicating the step completion.",
+          "fix_action": "NONE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "note": "Logging verbosity is minor style issue - functionality is correct"
+          }
+        },
+        {
+          "violation_id": "V042",
+          "rule_id": "CHECKPOINT_E04",
+          "severity": "MINOR",
+          "category": "verbose_logging",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "# Step 12 has multiple log lines for print simulation",
+          "expected_code": "# Consolidate to single log line: 'Step 12: Printed additional 9 pages - total 15 pages verified'",
+          "explanation": "Step 12 has multiple log lines similar to Step 10. This could be consolidated to a single concise log line.",
+          "fix_action": "NONE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "note": "Logging verbosity is minor style issue - functionality is correct"
+          }
+        },
+        {
+          "violation_id": "V043",
+          "rule_id": "CHECKPOINT_B02",
+          "severity": "MODERATE",
+          "category": "step_implementation_incomplete",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "# Step 10 and 12: send_rtp_devicestatus called once per step",
+          "expected_code": "# send_rtp_devicestatus should be called multiple times to simulate actual page printing\n# For step 10: call 6 times to print 6 pages\n# For step 12: call 9 times to print 9 additional pages",
+          "explanation": "Steps 10 and 12 call send_rtp_devicestatus() only once per step, but the test case requires printing specific numbers of pages (6 pages in step 10, 9 more pages in step 12). The RTP device status should be sent multiple times to accurately simulate the page count, or the method should be modified to accept a page count parameter.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "common.send_rtp_devicestatus(\n                entity_id=printer_data.entity_id,\n                cloud_id=printer_data.cloud_id,\n                device_uuid=printer_data.device_uuid\n            )",
+            "replace_with": "# Send RTP device status multiple times to simulate actual page printing\nfor _ in range(6):  # Print 6 pages\n    common.send_rtp_devicestatus(\n        entity_id=printer_data.entity_id,\n        cloud_id=printer_data.cloud_id,\n        device_uuid=printer_data.device_uuid\n    )\n    page.wait_for_timeout(1000)  # Small delay between prints"
+          }
+        },
+        {
+          "violation_id": "V044",
+          "rule_id": "CHECKPOINT_C01",
+          "severity": "MODERATE",
+          "category": "missing_helper_usage",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "# Direct subscription data access and validation",
+          "expected_code": "# Use common.validate_subscription_state() for state verification\ncommon.validate_subscription_state(subscription_id, 'subscribed')",
+          "explanation": "The mapping report shows common.validate_subscription_state() method exists for validating subscription state with polling. The script manually gets subscription data and validates state, but should use the existing helper method which includes retry logic and proper polling.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "subscription_data = common.subscription_data_from_gemini(tenant_id)\n            subscription_id = subscription_data['id']\n            common.validate_subscription_state(subscription_id, \"subscribed\")",
+            "replace_with": "subscription_data = common.subscription_data_from_gemini(tenant_id)\nsubscription_id = subscription_data['id']\ncommon.validate_subscription_state(subscription_id, 'subscribed')  # Uses existing helper with retry logic"
           }
         }
       ]
@@ -261,88 +766,72 @@
       "file_path": "additional_generations/page_additions/print_history_page_additions.py",
       "file_type": "page_addition",
       "test_case_id": "C44873414",
-      "score": 64,
-      "violation_count": 4,
-      "critical_count": 1,
-      "moderate_count": 1,
-      "minor_count": 2,
-      "deduction": 6,
+      "score": 0,
+      "violation_count": 3,
+      "critical_count": 3,
+      "moderate_count": 0,
+      "minor_count": 0,
+      "deduction": 9,
       "checkpoints_evaluated": 7,
       "checkpoints_passed": [
-        "F01",
         "F02",
+        "F03",
         "F05",
         "F07"
       ],
       "checkpoints_failed": [
+        "F01",
         "F04",
-        "F03",
         "F06"
       ],
       "violations": [
         {
-          "violation_id": "V012",
+          "violation_id": "V045",
           "rule_id": "CHECKPOINT_F04",
           "severity": "CRITICAL",
           "category": "missing_elements_class_structure",
           "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-          "current_code": "class Elements:\n    plan_pause_info = \"[data-testid='plan-pause-info']\"\n    billing_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"",
-          "expected_code": "# In merge instructions, show only the attribute assignments:\nplan_pause_info = \"[data-testid='plan-pause-info']\"\nbilling_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"",
-          "explanation": "The page additions file defines a standalone Elements class when it should only provide the string selector attributes to be added to the existing Elements class in the target file. The file structure is incorrect - it should show merge instructions with just the attributes, not a complete class definition. This makes it harder to merge and could cause confusion.",
+          "current_code": "# Locators defined as module-level strings:\nplan_pause_info = \"[data-testid='plan-pause-info']\"\nbilling_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"\n# ... etc",
+          "expected_code": "# Locators should be defined inside Elements inner class:\nclass Elements:\n    plan_pause_info = \"[data-testid='plan-pause-info']\"\n    billing_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"\n    # ... etc",
+          "explanation": "CRITICAL STRUCTURAL VIOLATION: The page additions file defines locators as module-level strings instead of inside an Elements inner class. According to the framework pattern shown in the merge instructions and coding standards, locators must be defined as class attributes inside an Elements inner class that is nested within the page object class. The current structure will not work when merged into PrintHistoryPage because the page object expects self.elements.locator_name pattern. The file shows 'ADD TO PrintHistoryPage.Elements CLASS' in comments but then defines the locators at module level, which is incorrect.",
           "fix_action": "RESTRUCTURE",
           "fix_details": {
             "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "description": "Remove the 'class Elements:' line and just show the attribute assignments that should be added to the existing Elements class",
-            "current_structure": "class Elements:\n    plan_pause_info = \"[data-testid='plan-pause-info']\"",
-            "required_structure": "# ADD TO PrintHistoryPage.Elements CLASS:\nplan_pause_info = \"[data-testid='plan-pause-info']\""
+            "description": "Restructure file to define locators inside Elements class",
+            "current_structure": "Module-level string definitions",
+            "required_structure": "class Elements:\n    # String selector definitions as class attributes\n    plan_pause_info = \"[data-testid='plan-pause-info']\"\n    billing_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"\n    complimentary_pages_progress_bar = \"[data-testid='complimentary-pages-progress-bar']\"\n    complimentary_pages_value = \"[data-testid='complimentary-pages-value']\"\n    complimentary_pages_info_icon = \"[data-testid='complimentary-pages-info-icon']\"\n    complimentary_pages_info_message = \"[data-testid='complimentary-pages-info-message']\"\n    complimentary_pages_tooltip = \"[role='tooltip']\"\n    additional_pages_progress_bar = \"[data-testid='additional-pages-progress-bar']\"\n    additional_pages_value = \"[data-testid='additional-pages-value']\"\n    additional_pages_info_icon = \"[data-testid='additional-pages-info-icon']\"\n    additional_pages_info_message = \"[data-testid='additional-pages-info-message']\"\n    additional_pages_tooltip = \"[role='tooltip']\""
           }
         },
         {
-          "violation_id": "V013",
-          "rule_id": "CHECKPOINT_F03",
+          "violation_id": "V046",
+          "rule_id": "CHECKPOINT_F04",
+          "severity": "CRITICAL",
+          "category": "incorrect_locator_initialization",
+          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
+          "current_code": "# __init__ additions create Locator objects directly:\nself.plan_pause_info = page.locator(self.elements.plan_pause_info)\nself.billing_cycle_period_card = page.locator(self.elements.billing_cycle_period_card)\n# ... etc",
+          "expected_code": "# For Elements-based locators, do NOT create Locator properties in __init__\n# Access via page.locator(page_obj.elements.locator_name) in test scripts\n# OR if creating properties, they should be @property methods that return page.locator()",
+          "explanation": "CRITICAL PATTERN VIOLATION: The __init__ additions create Locator object properties (self.plan_pause_info = page.locator(...)) which contradicts the Elements class pattern. When locators are defined in the Elements inner class as strings, they should be accessed in test scripts via page.locator(page_obj.elements.locator_name), NOT as direct properties. Creating these properties defeats the purpose of the Elements container pattern and creates confusion about which access pattern to use. The framework uses two patterns: (1) Direct Locator properties defined in __init__ for simple cases, (2) Elements class with string selectors accessed via page.locator(). This file mixes both patterns incorrectly.",
+          "fix_action": "REMOVE_LINE",
+          "fix_details": {
+            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
+            "lines_to_remove": "self.plan_pause_info = page.locator(self.elements.plan_pause_info)\nself.billing_cycle_period_card = page.locator(self.elements.billing_cycle_period_card)\nself.complimentary_pages_progress_bar = page.locator(self.elements.complimentary_pages_progress_bar)\nself.complimentary_pages_value = page.locator(self.elements.complimentary_pages_value)\nself.complimentary_pages_info_icon = page.locator(self.elements.complimentary_pages_info_icon)\nself.complimentary_pages_info_message = page.locator(self.elements.complimentary_pages_info_message)\nself.complimentary_pages_tooltip = page.locator(self.elements.complimentary_pages_tooltip)\nself.additional_pages_progress_bar = page.locator(self.elements.additional_pages_progress_bar)\nself.additional_pages_value = page.locator(self.elements.additional_pages_value)\nself.additional_pages_info_icon = page.locator(self.elements.additional_pages_info_icon)\nself.additional_pages_info_message = page.locator(self.elements.additional_pages_info_message)\nself.additional_pages_tooltip = page.locator(self.elements.additional_pages_tooltip)",
+            "explanation": "Remove all __init__ property initializations. Locators defined in Elements class should be accessed via page.locator(page_obj.elements.locator_name) pattern in test scripts, not as direct properties."
+          }
+        },
+        {
+          "violation_id": "V047",
+          "rule_id": "CHECKPOINT_F01",
           "severity": "MODERATE",
-          "category": "method_naming",
+          "category": "incomplete_merge_instructions",
           "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-          "current_code": "self.plan_pause_info = page.locator(self.elements.plan_pause_info)\nself.billing_cycle_period_card = page.locator(self.elements.billing_cycle_period_card)",
-          "expected_code": "# In __init__ section of merge instructions:\nself.plan_pause_info = page.locator(self.elements.plan_pause_info)\nself.billing_cycle_period_card = page.locator(self.elements.billing_cycle_period_card)",
-          "explanation": "The locator initialization pattern is correct (using page.locator(self.elements.X)), but the file structure makes it appear as if these are standalone statements rather than merge instructions. The file should clearly indicate these go in the __init__ method of the target class. The current format is acceptable but could be clearer.",
-          "fix_action": "ADD_CODE",
-          "fix_details": {
-            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "insert_after": "# ADD TO PrintHistoryPage.__init__ METHOD:",
-            "code_to_add": "# (After super().__init__(page) and after self.elements = self.Elements())"
-          }
-        },
-        {
-          "violation_id": "V014",
-          "rule_id": "CHECKPOINT_F06",
-          "severity": "MINOR",
-          "category": "dead_locator_in_additions",
-          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-          "current_code": "complimentary_pages_tooltip = \"[data-testid='complimentary-pages-tooltip'], [role='tooltip']\"",
-          "expected_code": "complimentary_pages_tooltip = \"[role='tooltip']\"",
-          "explanation": "The tooltip locator uses a compound selector with data-testid as primary and role='tooltip' as fallback. While this is a good defensive pattern, the comment indicates 'Fallback to role if data-testid not available', suggesting uncertainty about the actual selector. In production code, the correct selector should be verified and the fallback removed if not needed. This is a minor issue as the pattern will work, but it's not ideal.",
+          "current_code": "# Merge instructions mention Elements class but file structure doesn't match",
+          "expected_code": "# Merge instructions should clearly state:\n# 1. Add Elements class definition if it doesn't exist in target file\n# 2. Add string selectors as class attributes inside Elements class\n# 3. Do NOT add __init__ property initializations for Elements-based locators\n# 4. Test scripts should access via page.locator(page_obj.elements.locator_name)",
+          "explanation": "MODERATE DOCUMENTATION ISSUE: The merge instructions in the docstring say 'ADD TO PrintHistoryPage.Elements CLASS' but then the actual code structure doesn't follow this instruction. The instructions also include __init__ additions that contradict the Elements pattern. This creates confusion for developers trying to merge the additions. The instructions should be clearer about the correct pattern and should not include contradictory code.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "find": "complimentary_pages_tooltip = \"[data-testid='complimentary-pages-tooltip'], [role='tooltip']\"  # Fallback to role if data-testid not available",
-            "replace_with": "complimentary_pages_tooltip = \"[role='tooltip']\"  # Tooltip appears on hover/click of info icon"
-          }
-        },
-        {
-          "violation_id": "V015",
-          "rule_id": "CHECKPOINT_F06",
-          "severity": "MINOR",
-          "category": "dead_locator_in_additions",
-          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-          "current_code": "additional_pages_tooltip = \"[data-testid='additional-pages-tooltip'], [role='tooltip']\"",
-          "expected_code": "additional_pages_tooltip = \"[role='tooltip']\"",
-          "explanation": "Same issue as V014 - compound selector with uncertain primary selector. Should be simplified to the working selector after verification.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "find": "additional_pages_tooltip = \"[data-testid='additional-pages-tooltip'], [role='tooltip']\"  # Fallback to role if data-testid not available",
-            "replace_with": "additional_pages_tooltip = \"[role='tooltip']\"  # Tooltip appears on hover/click of info icon"
+            "find": "MERGE INSTRUCTIONS:\n1. Open pages/print_history_page.py in your editor\n2. Locate the PrintHistoryPage class definition\n3. Find the Elements inner class (defined inside PrintHistoryPage)\n4. Add the string selector definitions below to the Elements class (after existing selectors)\n5. Locate the __init__ method in PrintHistoryPage\n6. After the line 'super().__init__(page)' and after 'self.elements = self.Elements()', add the Locator property initializations\n7. Maintain consistent 4-space indentation throughout\n8. Save the file and run the test to verify all locators work correctly\n9. Update tooltip selectors if actual data-testid attributes differ from the placeholders",
+            "replace_with": "MERGE INSTRUCTIONS:\n1. Open pages/print_history_page.py in your editor\n2. Locate the PrintHistoryPage class definition\n3. Find the Elements inner class (defined inside PrintHistoryPage)\n4. Add the string selector definitions below to the Elements class as class attributes\n5. Do NOT add any __init__ property initializations - Elements-based locators are accessed via page.locator(page_obj.elements.locator_name) in test scripts\n6. Maintain consistent 4-space indentation throughout\n7. Save the file\n8. Update test scripts to access locators via page.locator(print_history_page.elements.locator_name) pattern\n9. Update tooltip selectors if actual data-testid attributes differ from the placeholders\n10. Run the test to verify all locators work correctly"
           }
         }
       ]
@@ -350,152 +839,227 @@
   ],
   "violation_summary": {
     "by_severity": {
-      "CRITICAL": 6,
-      "MODERATE": 4,
-      "MINOR": 5
+      "CRITICAL": 38,
+      "MODERATE": 5,
+      "MINOR": 4
     },
     "by_category": {
-      "inline_page_locator": 3,
-      "inline_admin_interaction": 1,
-      "missing_module_docstring": 1,
-      "missing_expect_timeout": 1,
-      "missing_elements_class_structure": 1,
-      "method_naming": 1,
-      "dead_locator_in_additions": 2,
-      "wrong_import_order": 1,
+      "missing_elements_namespace": 31,
+      "unused_import": 1,
+      "missing_precondition_setup": 1,
+      "missing_step": 1,
+      "wrong_access_pattern": 1,
+      "inline_admin_interaction": 2,
       "placeholder_todo_comment": 1,
-      "verbose_logging": 1
+      "verbose_logging": 3,
+      "step_implementation_incomplete": 1,
+      "missing_helper_usage": 1,
+      "missing_elements_class_structure": 1,
+      "incorrect_locator_initialization": 1,
+      "incomplete_merge_instructions": 1
     },
     "by_rule": {
-      "PROHIBITION_6": 3,
-      "CHECKPOINT_D01": 1,
-      "CHECKPOINT_D14": 1,
-      "CHECKPOINT_D15": 1,
-      "CHECKPOINT_D04": 1,
+      "PROHIBITION_6": 31,
+      "CHECKPOINT_A13": 1,
+      "CHECKPOINT_B01": 1,
+      "CHECKPOINT_B02": 2,
+      "CHECKPOINT_C01": 2,
+      "CHECKPOINT_D14": 0,
+      "CHECKPOINT_D15": 2,
       "CHECKPOINT_E03": 1,
-      "CHECKPOINT_E04": 1,
-      "CHECKPOINT_F04": 1,
-      "CHECKPOINT_F03": 1,
-      "CHECKPOINT_F06": 2
+      "CHECKPOINT_E04": 3,
+      "CHECKPOINT_F01": 1,
+      "CHECKPOINT_F04": 2
     },
-    "most_common_violation": "PROHIBITION_6 (inline_page_locator) — 3 occurrences",
-    "most_impacted_file": "test_scripts/billing_cycle_period_card.py — 11 violations, score 76"
+    "most_common_violation": "PROHIBITION_6 (missing_elements_namespace) — 31 occurrences",
+    "most_impacted_file": "test_scripts/billing_cycle_period_card.py — 44 violations, score 0"
   },
   "fix_priority_order": [
     {
       "priority": 1,
-      "category": "inline_page_locator",
+      "category": "missing_elements_namespace",
       "severity": "CRITICAL",
       "violation_ids": [
         "V001",
         "V002",
-        "V003"
+        "V003",
+        "V004",
+        "V005",
+        "V006",
+        "V007",
+        "V008",
+        "V009",
+        "V010",
+        "V011",
+        "V012",
+        "V013",
+        "V014",
+        "V015",
+        "V016",
+        "V017",
+        "V018",
+        "V019",
+        "V020",
+        "V021",
+        "V022",
+        "V023",
+        "V024",
+        "V025",
+        "V026",
+        "V027",
+        "V028",
+        "V029",
+        "V030",
+        "V031"
       ],
-      "total_count": 3,
-      "total_deduction": 9,
+      "total_count": 31,
+      "total_deduction": 93,
       "affected_files": [
         "test_scripts/billing_cycle_period_card.py"
       ],
-      "fix_approach": "Replace all inline page.locator() calls in the precondition 4 section with a single GeminiRAHelper method call. Create a new helper method pause_subscription_via_rails_admin() in GeminiRAHelper that encapsulates the entire pause operation (navigate to edit, select paused state, save). This eliminates 3 CRITICAL violations and also resolves the inline_admin_interaction violation (V006)."
+      "fix_approach": "CRITICAL FIX REQUIRED: All locators defined in the page_additions Elements class are being accessed incorrectly as direct properties (print_history_page.locator_name) instead of via the .elements. namespace (page.locator(print_history_page.elements.locator_name)). This is the framework's Pattern B for Elements containers. Every instance must be replaced with the correct access pattern. This requires 31 separate REPLACE_CODE operations, each replacing a direct property access with the page.locator(page_obj.elements.locator_name) pattern."
     },
     {
       "priority": 2,
-      "category": "inline_admin_interaction",
-      "severity": "MODERATE",
-      "violation_ids": [
-        "V006"
-      ],
-      "total_count": 1,
-      "total_deduction": 2,
-      "affected_files": [
-        "test_scripts/billing_cycle_period_card.py"
-      ],
-      "fix_approach": "This is resolved by fixing priority 1 violations. The entire admin interaction block should be replaced with a single helper method call."
-    },
-    {
-      "priority": 3,
       "category": "missing_elements_class_structure",
       "severity": "CRITICAL",
       "violation_ids": [
-        "V012"
+        "V045"
       ],
       "total_count": 1,
       "total_deduction": 3,
       "affected_files": [
         "additional_generations/page_additions/print_history_page_additions.py"
       ],
-      "fix_approach": "Restructure the page additions file to remove the standalone 'class Elements:' definition and show only the attribute assignments as merge instructions. The file should clearly indicate these are attributes to ADD to the existing Elements class, not a new class definition."
+      "fix_approach": "CRITICAL STRUCTURAL FIX: The page_additions file must be completely restructured. Locators are currently defined as module-level strings but must be defined inside an Elements inner class. Create a proper class Elements: block and move all string selector definitions inside it as class attributes. This is a RESTRUCTURE operation that changes the entire file structure."
+    },
+    {
+      "priority": 3,
+      "category": "incorrect_locator_initialization",
+      "severity": "CRITICAL",
+      "violation_ids": [
+        "V046"
+      ],
+      "total_count": 1,
+      "total_deduction": 3,
+      "affected_files": [
+        "additional_generations/page_additions/print_history_page_additions.py"
+      ],
+      "fix_approach": "CRITICAL PATTERN FIX: Remove all __init__ property initializations from the page_additions file. When locators are defined in the Elements class as strings, they should NOT have corresponding Locator properties created in __init__. The test scripts should access them via page.locator(page_obj.elements.locator_name). Remove all 12 lines of self.locator_name = page.locator(self.elements.locator_name) code."
     },
     {
       "priority": 4,
-      "category": "missing_module_docstring",
+      "category": "wrong_access_pattern",
+      "severity": "CRITICAL",
+      "violation_ids": [
+        "V035"
+      ],
+      "total_count": 1,
+      "total_deduction": 3,
+      "affected_files": [
+        "test_scripts/billing_cycle_period_card.py"
+      ],
+      "fix_approach": "CRITICAL METHOD FIX: The method GeminiRAHelper.pause_subscription_via_rails_admin() does not exist in the codebase. Replace this call with the correct sequence of existing Rails Admin methods: access_edit_menu(), select appropriate pause event/state, save changes, and verify with verify_rails_admin_info(). This requires understanding the Rails Admin workflow for pausing subscriptions."
+    },
+    {
+      "priority": 5,
+      "category": "missing_precondition_setup",
+      "severity": "CRITICAL",
+      "violation_ids": [
+        "V033"
+      ],
+      "total_count": 1,
+      "total_deduction": 3,
+      "affected_files": [
+        "test_scripts/billing_cycle_period_card.py"
+      ],
+      "fix_approach": "Add explicit verification that subscription has no free months immediately after getting subscription_data. Insert assertion code: free_months = subscription_data.get('free_months'); assert free_months is None or free_months == 0; framework_logger.info('Verified subscription has no free months'). This ensures precondition 2 is properly validated."
+    },
+    {
+      "priority": 6,
+      "category": "missing_step",
+      "severity": "CRITICAL",
+      "violation_ids": [
+        "V034"
+      ],
+      "total_count": 1,
+      "total_deduction": 3,
+      "affected_files": [
+        "test_scripts/billing_cycle_period_card.py"
+      ],
+      "fix_approach": "Step 20 visual verification is incomplete. Add TODO comment and implementation notes for integrating visual regression testing tool (Applitools, Percy, or similar). The current implementation only captures a screenshot but does not compare against baseline. Add code to load baseline image, perform comparison, and assert visual match."
+    },
+    {
+      "priority": 7,
+      "category": "unused_import",
+      "severity": "CRITICAL",
+      "violation_ids": [
+        "V032"
+      ],
+      "total_count": 1,
+      "total_deduction": 3,
+      "affected_files": [
+        "test_scripts/billing_cycle_period_card.py"
+      ],
+      "fix_approach": "Remove unused import: from pages.confirmation_page import ConfirmationPage. This page object is only used once for a simple visibility check that could be done with a direct locator or removed entirely. Removing the import reduces dependencies."
+    },
+    {
+      "priority": 8,
+      "category": "step_implementation_incomplete",
       "severity": "MODERATE",
       "violation_ids": [
-        "V004"
+        "V043"
       ],
       "total_count": 1,
       "total_deduction": 2,
       "affected_files": [
         "test_scripts/billing_cycle_period_card.py"
       ],
-      "fix_approach": "Move the module-level docstring to the very top of the file, before all import statements. Ensure it includes Test Case ID, Module, and Priority information."
+      "fix_approach": "Steps 10 and 12 call send_rtp_devicestatus() only once but should call it multiple times to accurately simulate printing the specified number of pages. Wrap the call in a for loop: for _ in range(6): common.send_rtp_devicestatus(...); page.wait_for_timeout(1000). Do the same for step 12 with range(9)."
     },
     {
-      "priority": 5,
-      "category": "dead_locator_in_additions",
-      "severity": "MINOR",
+      "priority": 9,
+      "category": "missing_helper_usage",
+      "severity": "MODERATE",
       "violation_ids": [
-        "V014",
-        "V015"
+        "V044"
       ],
-      "total_count": 2,
+      "total_count": 1,
+      "total_deduction": 2,
+      "affected_files": [
+        "test_scripts/billing_cycle_period_card.py"
+      ],
+      "fix_approach": "Use existing common.validate_subscription_state() helper method instead of manually getting subscription data and validating state. This helper includes retry logic and proper polling. Replace manual validation with: common.validate_subscription_state(subscription_id, 'subscribed')."
+    },
+    {
+      "priority": 10,
+      "category": "incomplete_merge_instructions",
+      "severity": "MODERATE",
+      "violation_ids": [
+        "V047"
+      ],
+      "total_count": 1,
       "total_deduction": 2,
       "affected_files": [
         "additional_generations/page_additions/print_history_page_additions.py"
       ],
-      "fix_approach": "Simplify tooltip locators to use only [role='tooltip'] selector after verifying it works correctly. Remove the compound selector pattern with uncertain data-testid primary selector."
+      "fix_approach": "Update merge instructions in the page_additions file docstring to correctly describe the Elements class pattern. Remove contradictory instructions about __init__ property initializations. Clarify that locators should be added to Elements class as string attributes and accessed via page.locator(page_obj.elements.locator_name) in test scripts."
     },
     {
-      "priority": 6,
+      "priority": 11,
       "category": "verbose_logging",
       "severity": "MINOR",
       "violation_ids": [
-        "V009"
+        "V040",
+        "V041",
+        "V042"
       ],
-      "total_count": 1,
-      "total_deduction": 1,
+      "total_count": 3,
+      "total_deduction": 3,
       "affected_files": [
         "test_scripts/billing_cycle_period_card.py"
       ],
-      "fix_approach": "Consolidate logging in precondition 4 to fewer, more concise log statements. This will be automatically resolved when the helper method is created (priority 1)."
-    },
-    {
-      "priority": 7,
-      "category": "placeholder_todo_comment",
-      "severity": "MINOR",
-      "violation_ids": [
-        "V008"
-      ],
-      "total_count": 1,
-      "total_deduction": 1,
-      "affected_files": [
-        "test_scripts/billing_cycle_period_card.py"
-      ],
-      "fix_approach": "Remove placeholder comments like 'when available' that suggest incomplete implementation."
-    },
-    {
-      "priority": 8,
-      "category": "wrong_import_order",
-      "severity": "MINOR",
-      "violation_ids": [
-        "V007"
-      ],
-      "total_count": 1,
-      "total_deduction": 1,
-      "affected_files": [
-        "test_scripts/billing_cycle_period_card.py"
-      ],
-      "fix_approach": "Split the combined import of framework_logger and GlobalState into two separate import lines for consistency with framework patterns."
+      "fix_approach": "MINOR STYLE IMPROVEMENT: Consolidate verbose logging in precondition setup and steps 10/12. While the current logging is functional, reducing to 1-2 log lines per major action would improve readability. This is a low-priority style improvement that does not affect functionality."
     }
   ]
 }
