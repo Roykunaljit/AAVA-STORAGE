@@ -154,7 +154,6 @@ def billing_cycle_period_card(stage_callback):
             page.wait_for_timeout(5000)
             sub_data = common.subscription_data_from_gemini(tenant_id)
             assert 'pages_printed' in sub_data or 'page_count' in sub_data, "Page count not in subscription data"
-            framework_logger.info(f"Verified total pages: {sub_data.get('pages_printed', sub_data.get('page_count'))}")
             framework_logger.info(f"Step 12: Additional print job registered - Total pages: {sub_data.get('pages_printed', sub_data.get('page_count'))}")
 
             # Step 13: Refresh and verify both progress bars displayed
@@ -166,8 +165,6 @@ def billing_cycle_period_card(stage_callback):
 
             # Step 14: Check Additional pages progress bar color and value
             expect(print_history_page.additional_pages_progress_bar).to_be_visible(timeout=30000)
-            # TODO: Create PrintHistoryHelper.verify_progress_bar_color() method
-            # For now, inline verification:
             bar_color = print_history_page.additional_pages_progress_bar.evaluate("el => window.getComputedStyle(el).backgroundColor")
             assert "rgb(255, 255, 0)" in bar_color or "yellow" in bar_color.lower(), f"Expected yellow color, got {bar_color}"
             expect(print_history_page.additional_pages_value).to_contain_text("5 of 10", timeout=30000)
@@ -193,12 +190,10 @@ def billing_cycle_period_card(stage_callback):
 
             # Step 18: Verify Complimentary pages progress bar is full
             expect(print_history_page.complimentary_pages_progress_bar).to_be_visible(timeout=30000)
-            # TODO: Create PrintHistoryHelper.verify_progress_bar_color() method
+            # TODO: Create PrintHistoryHelper.verify_progress_bar_full() method
             # For now, inline verification:
             bar_color = print_history_page.complimentary_pages_progress_bar.evaluate("el => window.getComputedStyle(el).backgroundColor")
             assert "rgb(0, 0, 0)" in bar_color or "black" in bar_color.lower(), f"Expected black color, got {bar_color}"
-            # TODO: Create PrintHistoryHelper.verify_progress_bar_full() method
-            # For now, inline verification:
             bar_width = print_history_page.complimentary_pages_progress_bar.evaluate("el => window.getComputedStyle(el).width")
             parent_width = print_history_page.complimentary_pages_progress_bar.evaluate("el => window.getComputedStyle(el.parentElement).width")
             assert bar_width == parent_width, f"Progress bar not full: {bar_width} vs {parent_width}"
