@@ -20,27 +20,25 @@ MERGE INSTRUCTIONS:
 10. Run the test to verify all locators work correctly
 
 MERGE NOTES:
-- Tooltip selectors use role='tooltip' as a reliable fallback
+- Tooltip selectors use :near() pseudo-selector to distinguish between complimentary and additional pages tooltips
 - Verify all locators target correct elements after merge
 - Test tooltip interactions on both desktop (hover) and mobile (click)
 """
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# ADD TO PrintHistoryPage.Elements CLASS:
+# ADD THESE ATTRIBUTES TO THE EXISTING PrintHistoryPage.Elements CLASS:
 # ═══════════════════════════════════════════════════════════════════════════════
 
-class Elements:
-    # String selector definitions as class attributes
-    plan_pause_info = "[data-testid='plan-pause-info']"
-    billing_cycle_period_card = "[data-testid='billing-cycle-period-card']"
-    complimentary_pages_progress_bar = "[data-testid='complimentary-pages-progress-bar']"
-    complimentary_pages_value = "[data-testid='complimentary-pages-value']"
-    complimentary_pages_info_icon = "[data-testid='complimentary-pages-info-icon']"
-    complimentary_pages_info_message = "[data-testid='complimentary-pages-info-message']"
-    complimentary_pages_tooltip = "[role='tooltip']"  # Tooltip appears on hover/click of info icon
-    additional_pages_progress_bar = "[data-testid='additional-pages-progress-bar']"
-    additional_pages_value = "[data-testid='additional-pages-value']"
-    additional_pages_info_icon = "[data-testid='additional-pages-info-icon']"
-    additional_pages_info_message = "[data-testid='additional-pages-info-message']"
-    additional_pages_tooltip = "[role='tooltip']"  # Tooltip appears on hover/click of info icon
+plan_pause_info = "[data-testid='plan-pause-info']"
+billing_cycle_period_card = "[data-testid='billing-cycle-period-card']"
+complimentary_pages_progress_bar = "[data-testid='complimentary-pages-progress-bar']"
+complimentary_pages_value = "[data-testid='complimentary-pages-value']"
+complimentary_pages_info_icon = "[data-testid='complimentary-pages-info-icon']"
+complimentary_pages_info_message = "[data-testid='complimentary-pages-info-message']"
+complimentary_pages_tooltip = "[role='tooltip']:near([data-testid='complimentary-pages-info-icon'])"
+additional_pages_progress_bar = "[data-testid='additional-pages-progress-bar']"
+additional_pages_value = "[data-testid='additional-pages-value']"
+additional_pages_info_icon = "[data-testid='additional-pages-info-icon']"
+additional_pages_info_message = "[data-testid='additional-pages-info-message']"
+additional_pages_tooltip = "[role='tooltip']:near([data-testid='additional-pages-info-icon'])"
