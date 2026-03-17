@@ -214,8 +214,8 @@ def billing_cycle_period_card(stage_callback):
             framework_logger.info(f"Step 19: Verified total pages printed: {total_pages_text}")
 
             # Step 20: Visual verification - screenshot captured
-            expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)
-            print_history_page.billing_cycle_period_card.screenshot(path="screenshots/billing_cycle_card_visual.png")
+            expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)
+            page.locator(print_history_page.elements.billing_cycle_period_card).screenshot(path="screenshots/billing_cycle_card_visual.png")
             framework_logger.info("Step 20: Visual verification - screenshot captured at screenshots/billing_cycle_card_visual.png")
 
             # Step 21: Responsive verification across viewports
@@ -224,7 +224,7 @@ def billing_cycle_period_card(stage_callback):
             for width, height in viewport_sizes:
                 page.set_viewport_size({"width": width, "height": height})
                 page.wait_for_load_state("networkidle", timeout=10000)
-                expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)
+                expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)
                 framework_logger.info(f"Verified layout at {width}x{height}")
             framework_logger.info(f"Step 21: Verified responsive layout at all viewports: {viewport_sizes}")
 
