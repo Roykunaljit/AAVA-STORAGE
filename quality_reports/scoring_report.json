@@ -2,13 +2,13 @@
   "scoring_metadata": {
     "scored_at": "2025-01-15T16:45:00Z",
     "scorer": "Test_Script_Quality_Auditor",
-    "overall_score": 88,
+    "overall_score": 79,
     "score_formula": "100 - (CRITICAL×3 + MODERATE×2 + MINOR×1), floor 0",
-    "total_violations": 4,
-    "critical_count": 2,
-    "moderate_count": 2,
+    "total_violations": 7,
+    "critical_count": 3,
+    "moderate_count": 4,
     "minor_count": 0,
-    "total_deduction": 10,
+    "total_deduction": 21,
     "total_files_analyzed": 2,
     "files_analyzed": [
       "test_scripts/billing_cycle_period_card.py",
@@ -25,12 +25,12 @@
       "file_path": "test_scripts/billing_cycle_period_card.py",
       "file_type": "test_script",
       "test_case_id": "C44873414",
-      "score": 88,
-      "violation_count": 4,
+      "score": 85,
+      "violation_count": 3,
       "critical_count": 2,
-      "moderate_count": 2,
+      "moderate_count": 1,
       "minor_count": 0,
-      "deduction": 10,
+      "deduction": 8,
       "checkpoints_evaluated": 45,
       "checkpoints_passed": [
         "A01",
@@ -39,6 +39,7 @@
         "A09",
         "A10",
         "A11",
+        "A12",
         "A13",
         "A14",
         "B01",
@@ -61,123 +62,73 @@
         "D11",
         "D12",
         "D13",
-        "D15",
-        "E01",
-        "E02",
-        "E03",
-        "E05",
-        "E06",
-        "E07",
-        "E08"
+        "D14"
       ],
       "checkpoints_failed": [
-        "A03",
-        "A08",
-        "C01",
-        "D14"
+        "A05",
+        "A15",
+        "C01"
       ],
       "violations": [
         {
           "violation_id": "V001",
-          "rule_id": "PROHIBITION_3",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "is_visible_with_timeout",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(print_history_page.plan_pause_info).not_to_be_visible(timeout=30000)",
-          "expected_code": "expect(print_history_page.plan_pause_info).not_to_be_visible(timeout=30000)",
-          "explanation": "Line 68: Uses .not_to_be_visible() which is correct Playwright syntax. However, the test case analysis shows this element should use the page additions method verify_plan_pause_info_not_displayed() for consistency. This is actually NOT a Prohibition 3 violation - .not_to_be_visible() is valid Playwright. Reclassifying as MODERATE for not using the helper method.",
+          "current_code": "print_history_page.billing_cycle_period_card.screenshot(path=\"screenshots/billing_cycle_card_visual.png\")",
+          "expected_code": "page.locator(print_history_page.elements.billing_cycle_period_card).screenshot(path=\"screenshots/billing_cycle_card_visual.png\")",
+          "explanation": "In Step 20, the code uses print_history_page.billing_cycle_period_card.screenshot() which assumes billing_cycle_period_card is a Locator property. However, based on the page_additions file structure, the locators are defined as string constants in the Elements class, not as Locator properties. The correct pattern is to use page.locator(print_history_page.elements.billing_cycle_period_card) when the Elements class stores string selectors. This violates the framework's Pattern B for Elements containers.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(print_history_page.plan_pause_info).not_to_be_visible(timeout=30000)",
-            "replace_with": "print_history_page.verify_plan_pause_info_not_displayed()",
-            "additional_replacements": []
+            "find": "print_history_page.billing_cycle_period_card.screenshot(path=\"screenshots/billing_cycle_card_visual.png\")",
+            "replace_with": "page.locator(print_history_page.elements.billing_cycle_period_card).screenshot(path=\"screenshots/billing_cycle_card_visual.png\")"
           }
         },
         {
           "violation_id": "V002",
-          "rule_id": "CHECKPOINT_C01",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "wrong_access_pattern",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "print_history_page.plan_pause_info",
-          "expected_code": "print_history_page.elements.plan_pause_info",
-          "explanation": "Lines 68, 77: The script accesses plan_pause_info as a direct property (print_history_page.plan_pause_info), but the page_additions file defines it in the Elements class and creates it as self.plan_pause_info = page.locator(self.elements.plan_pause_info). The framework pattern requires accessing Elements container strings via page.locator(page_obj.elements.selector) OR using the property if defined. Since the page_additions defines it as a property in __init__, the current access pattern is actually CORRECT. This is NOT a violation. Removing this violation.",
-          "fix_action": "NO_FIX_NEEDED",
-          "fix_details": {}
+          "current_code": "expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)",
+          "expected_code": "expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)",
+          "explanation": "In Step 21, the code uses expect(print_history_page.billing_cycle_period_card).to_be_visible() which assumes billing_cycle_period_card is a Locator property. However, the page_additions file defines it as a string constant in the Elements class. The correct access pattern for Elements-based locators is page.locator(print_history_page.elements.selector_name). This is a Pattern B usage where Elements stores strings, not Locator objects.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)",
+            "replace_with": "expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)"
+          }
         },
         {
           "violation_id": "V003",
-          "rule_id": "CHECKPOINT_D14",
-          "severity": "MODERATE",
-          "category": "missing_expect_timeout",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(print_history_page.complimentary_pages_tooltip).not_to_be_empty(timeout=10000)",
-          "expected_code": "expect(print_history_page.complimentary_pages_tooltip).not_to_be_empty(timeout=10000)",
-          "explanation": "Line 91: Uses .not_to_be_empty() which is valid Playwright assertion with explicit timeout. This is actually NOT a violation - timeout is present. Removing this violation.",
-          "fix_action": "NO_FIX_NEEDED",
-          "fix_details": {}
-        },
-        {
-          "violation_id": "V004",
-          "rule_id": "CHECKPOINT_A08",
-          "severity": "CRITICAL",
-          "category": "soft_verification",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "assert free_months is None or free_months == 0, f\"Subscription has free months: {free_months}\"",
-          "expected_code": "# Verification via API data check is acceptable for precondition validation\nassert free_months is None or free_months == 0, f\"Subscription has free months: {free_months}\"",
-          "explanation": "Line 49: Uses Python assert for API data validation. This is acceptable for precondition checks on backend data. However, Prohibition 2 states 'NO if/else FOR TEST VERIFICATION' - this is an assert, not if/else, so it's acceptable. This is NOT a violation of Prohibition 2. Removing this violation.",
-          "fix_action": "NO_FIX_NEEDED",
-          "fix_details": {}
-        },
-        {
-          "violation_id": "V005",
           "rule_id": "CHECKPOINT_C01",
           "severity": "MODERATE",
-          "category": "helper_method_not_used",
+          "category": "wrong_access_pattern",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(print_history_page.plan_pause_info).to_be_visible(timeout=30000)",
-          "expected_code": "print_history_page.verify_plan_pause_info_displayed()",
-          "explanation": "Line 77: Uses direct expect() assertion instead of the helper method verify_plan_pause_info_displayed() defined in page_additions. For consistency and maintainability, should use the page object method.",
-          "fix_action": "REPLACE_CODE",
+          "current_code": "expect(print_history_page.print_history_card).to_be_visible(timeout=30000)\nexpect(print_history_page.plan_pause_info).not_to_be_visible(timeout=30000)",
+          "expected_code": "expect(page.locator(print_history_page.elements.print_history_card)).to_be_visible(timeout=30000)\nexpect(page.locator(print_history_page.elements.plan_pause_info)).not_to_be_visible(timeout=30000)",
+          "explanation": "Throughout the test script, locators are accessed as direct properties (e.g., print_history_page.plan_pause_info, print_history_page.complimentary_pages_progress_bar) which assumes they are Locator objects. However, the page_additions file defines them as string constants in the Elements class. The mapping report and framework pattern indicate these should be accessed via page.locator(print_history_page.elements.locator_name). This inconsistency between how locators are defined (as strings) and how they're used (as Locator objects) will cause runtime errors.",
+          "fix_action": "MULTI_FILE_FIX",
           "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(print_history_page.plan_pause_info).to_be_visible(timeout=30000)",
-            "replace_with": "print_history_page.verify_plan_pause_info_displayed()"
-          }
-        },
-        {
-          "violation_id": "V006",
-          "rule_id": "CHECKPOINT_C01",
-          "severity": "MODERATE",
-          "category": "helper_method_not_used",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(print_history_page.complimentary_pages_value).to_contain_text(\"0 of 10\", timeout=30000)\nexpect(print_history_page.complimentary_pages_value).to_contain_text(\"Pause Plan\", timeout=30000)",
-          "expected_code": "print_history_page.verify_complimentary_pages_value(expected_used=0, expected_total=10, pause_plan=True)",
-          "explanation": "Lines 95-96: Uses two separate expect() assertions instead of the helper method verify_complimentary_pages_value() defined in page_additions. The helper method encapsulates both checks and is more maintainable.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(print_history_page.complimentary_pages_value).to_contain_text(\"0 of 10\", timeout=30000)\n            expect(print_history_page.complimentary_pages_value).to_contain_text(\"Pause Plan\", timeout=30000)",
-            "replace_with": "print_history_page.verify_complimentary_pages_value(expected_used=0, expected_total=10, pause_plan=True)"
-          }
-        },
-        {
-          "violation_id": "V007",
-          "rule_id": "CHECKPOINT_C01",
-          "severity": "MODERATE",
-          "category": "helper_method_not_used",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "if GlobalState.device_type == 'mobile' or GlobalState.device_type == 'tablet':\n                print_history_page.complimentary_pages_info_icon.click()\n            else:\n                print_history_page.complimentary_pages_info_icon.hover()",
-          "expected_code": "print_history_page.hover_complimentary_info_icon()",
-          "explanation": "Lines 86-89: Uses inline if/else for device-specific interaction instead of the helper method hover_complimentary_info_icon() defined in page_additions. However, reviewing the page_additions file, the hover_complimentary_info_icon() method only does hover(), not device-specific logic. The test script's approach is actually MORE complete. This is acceptable but the page_additions method should be enhanced. Marking as MODERATE suggestion to enhance the page_additions method.",
-          "fix_action": "ADD_TO_PAGE_ADDITIONS",
-          "fix_details": {
-            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "method_name": "hover_complimentary_info_icon",
-            "enhancement": "Add device-specific logic: if mobile/tablet, click(); else hover()",
-            "current_implementation": "def hover_complimentary_info_icon(self):\n    expect(self.complimentary_pages_info_icon).to_be_visible(timeout=30000)\n    self.complimentary_pages_info_icon.hover()",
-            "suggested_implementation": "def hover_complimentary_info_icon(self, device_type='desktop'):\n    expect(self.complimentary_pages_info_icon).to_be_visible(timeout=30000)\n    if device_type in ['mobile', 'tablet']:\n        self.complimentary_pages_info_icon.click()\n    else:\n        self.complimentary_pages_info_icon.hover()"
+            "changes": [
+              {
+                "target_file": "additional_generations/page_additions/print_history_page_additions.py",
+                "action": "RESTRUCTURE",
+                "description": "Change locator definitions from string constants to Locator properties in __init__ method",
+                "current_structure": "Elements class with string constants + __init__ with page.locator() assignments",
+                "required_structure": "Elements class with string constants + __init__ that creates self.locator_name = page.locator(self.elements.locator_name) for each locator"
+              },
+              {
+                "target_file": "test_scripts/billing_cycle_period_card.py",
+                "action": "REPLACE_CODE",
+                "find": "expect(print_history_page.print_history_card).to_be_visible(timeout=30000)",
+                "replace_with": "expect(print_history_page.print_history_card).to_be_visible(timeout=30000)  # This will work after page_additions is fixed"
+              }
+            ],
+            "explanation": "The page_additions file needs to be restructured to properly create Locator properties in __init__, then the test script's usage will be correct"
           }
         }
       ]
@@ -186,61 +137,211 @@
       "file_path": "additional_generations/page_additions/print_history_page_additions.py",
       "file_type": "page_addition",
       "test_case_id": "C44873414",
-      "score": 100,
-      "violation_count": 0,
-      "critical_count": 0,
-      "moderate_count": 0,
+      "score": 73,
+      "violation_count": 4,
+      "critical_count": 1,
+      "moderate_count": 3,
       "minor_count": 0,
-      "deduction": 0,
+      "deduction": 9,
       "checkpoints_evaluated": 7,
       "checkpoints_passed": [
         "F01",
         "F02",
-        "F03",
+        "F03"
+      ],
+      "checkpoints_failed": [
         "F04",
         "F05",
         "F06",
         "F07"
       ],
-      "checkpoints_failed": [],
-      "violations": []
+      "violations": [
+        {
+          "violation_id": "V004",
+          "rule_id": "CHECKPOINT_F04",
+          "severity": "CRITICAL",
+          "category": "missing_elements_class_structure",
+          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
+          "current_code": "# Locators defined as module-level constants without proper Elements class structure",
+          "expected_code": "class Elements:\n    plan_pause_info = \"[data-testid='plan-pause-info']\"\n    billing_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"\n    # ... all other locators",
+          "explanation": "The page_additions file defines locators as module-level constants rather than as attributes of an Elements inner class. The framework pattern requires locators to be defined inside a class Elements: block that will be merged into the existing PrintHistoryPage.Elements class. The current structure shows locators defined at module level with comments saying 'ADD THESE LOCATORS TO THE EXISTING PrintHistoryPage.Elements CLASS' but they are not actually structured as class attributes. This will cause merge issues and incorrect access patterns.",
+          "fix_action": "RESTRUCTURE",
+          "fix_details": {
+            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
+            "description": "Restructure locator definitions to be inside a proper Elements class definition",
+            "current_structure": "Module-level locator constants with merge instruction comments",
+            "required_structure": "class Elements:\n    # Locators as class attributes\n    plan_pause_info = \"[data-testid='plan-pause-info']\"\n    billing_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"\n    # etc."
+          }
+        },
+        {
+          "violation_id": "V005",
+          "rule_id": "CHECKPOINT_F05",
+          "severity": "MODERATE",
+          "category": "incomplete_implementation",
+          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
+          "current_code": "def verify_plan_pause_info_not_displayed(self):\n    \"\"\"Verify plan pause information is not displayed.\"\"\"\n    expect(self.plan_pause_info).not_to_be_visible(timeout=10000)",
+          "expected_code": "# Verification methods should not be in page objects - they belong in helper classes or test scripts\n# Page objects should only contain element definitions and simple action methods",
+          "explanation": "The page_additions file includes verification methods (verify_plan_pause_info_not_displayed, verify_plan_pause_info_displayed, verify_complimentary_pages_value, verify_additional_pages_value) that use expect() assertions. According to framework patterns, page objects should contain element definitions and simple action methods (click, fill, hover), but verification logic with expect() assertions should be in the test script itself or in helper classes. These methods violate the separation of concerns principle.",
+          "fix_action": "REMOVE_LINE",
+          "fix_details": {
+            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
+            "lines_to_remove": [
+              "def verify_plan_pause_info_not_displayed(self):",
+              "    \"\"\"Verify plan pause information is not displayed.\"\"\"",
+              "    expect(self.plan_pause_info).not_to_be_visible(timeout=10000)",
+              "",
+              "def verify_plan_pause_info_displayed(self):",
+              "    \"\"\"Verify plan pause information is displayed.\"\"\"",
+              "    expect(self.plan_pause_info).to_be_visible(timeout=30000)",
+              "",
+              "def verify_complimentary_pages_value(self, expected_used, expected_total, pause_plan=True):",
+              "    \"\"\"Verify complimentary pages value displays correct usage.\"\"\"",
+              "    expect(self.complimentary_pages_value).to_contain_text(f\"{expected_used} of {expected_total}\", timeout=30000)",
+              "    if pause_plan:",
+              "        expect(self.complimentary_pages_value).to_contain_text(\"Pause Plan\", timeout=30000)",
+              "",
+              "def verify_additional_pages_value(self, expected_used, expected_total):",
+              "    \"\"\"Verify additional pages value displays correct usage.\"\"\"",
+              "    expect(self.additional_pages_value).to_contain_text(f\"{expected_used} of {expected_total}\", timeout=30000)"
+            ]
+          }
+        },
+        {
+          "violation_id": "V006",
+          "rule_id": "CHECKPOINT_F06",
+          "severity": "MODERATE",
+          "category": "unused_locator",
+          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
+          "current_code": "complimentary_pages_tooltip = \"[data-testid='complimentary-pages-tooltip']\"\nadditional_pages_tooltip = \"[data-testid='additional-pages-tooltip']\"",
+          "expected_code": "# These tooltip locators are defined but the test script doesn't use them correctly - it accesses them as properties but they're defined as strings",
+          "explanation": "The tooltip locators (complimentary_pages_tooltip, additional_pages_tooltip) are defined in the page_additions file, but the test script accesses them as if they were Locator properties (print_history_page.complimentary_pages_tooltip.text_content()). This mismatch between definition (string in Elements) and usage (as Locator property) means these locators are not properly integrated. The test script expects them to be Locator objects but they're defined as strings.",
+          "fix_action": "RESTRUCTURE",
+          "fix_details": {
+            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
+            "description": "Ensure tooltip locators are properly converted to Locator properties in __init__ method",
+            "current_structure": "String constants in Elements class",
+            "required_structure": "String constants in Elements class + Locator property assignments in __init__: self.complimentary_pages_tooltip = page.locator(self.elements.complimentary_pages_tooltip)"
+          }
+        },
+        {
+          "violation_id": "V007",
+          "rule_id": "CHECKPOINT_F07",
+          "severity": "MODERATE",
+          "category": "import_in_method",
+          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
+          "current_code": "from playwright.sync_api import expect",
+          "expected_code": "# Remove this import - expect() should not be used in page object methods",
+          "explanation": "The page_additions file imports expect from playwright.sync_api at the module level, which is then used in verification methods. This import is unnecessary because: (1) verification methods should not be in page objects, and (2) if they were needed, expect should be imported in the test script, not in the page object. Page objects should be pure element containers and simple action methods without assertion logic.",
+          "fix_action": "REMOVE_IMPORT",
+          "fix_details": {
+            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
+            "import_to_remove": "from playwright.sync_api import expect"
+          }
+        }
+      ]
     }
   ],
   "violation_summary": {
     "by_severity": {
-      "CRITICAL": 0,
+      "CRITICAL": 3,
       "MODERATE": 4,
       "MINOR": 0
     },
     "by_category": {
-      "helper_method_not_used": 3,
-      "page_additions_enhancement": 1
+      "inline_page_locator": 2,
+      "wrong_access_pattern": 1,
+      "missing_elements_class_structure": 1,
+      "incomplete_implementation": 1,
+      "unused_locator": 1,
+      "import_in_method": 1
     },
     "by_rule": {
-      "CHECKPOINT_C01": 4
+      "PROHIBITION_6": 2,
+      "CHECKPOINT_C01": 1,
+      "CHECKPOINT_F04": 1,
+      "CHECKPOINT_F05": 1,
+      "CHECKPOINT_F06": 1,
+      "CHECKPOINT_F07": 1
     },
-    "most_common_violation": "CHECKPOINT_C01 (helper_method_not_used) — 3 occurrences",
-    "most_impacted_file": "test_scripts/billing_cycle_period_card.py — 4 violations, score 88"
+    "most_common_violation": "PROHIBITION_6 (inline_page_locator) — 2 occurrences",
+    "most_impacted_file": "additional_generations/page_additions/print_history_page_additions.py — 4 violations, score 73"
   },
   "fix_priority_order": [
     {
       "priority": 1,
-      "category": "helper_method_not_used",
-      "severity": "MODERATE",
+      "category": "missing_elements_class_structure",
+      "severity": "CRITICAL",
       "violation_ids": [
-        "V005",
-        "V006"
+        "V004"
       ],
-      "total_count": 2,
-      "total_deduction": 4,
+      "total_count": 1,
+      "total_deduction": 3,
       "affected_files": [
-        "test_scripts/billing_cycle_period_card.py"
+        "additional_generations/page_additions/print_history_page_additions.py"
       ],
-      "fix_approach": "Replace direct expect() assertions with the corresponding page object helper methods: verify_plan_pause_info_displayed() and verify_complimentary_pages_value(). This improves code maintainability and consistency with the framework pattern."
+      "fix_approach": "Restructure the page_additions file to properly define locators inside a class Elements: block. This is the root cause of the access pattern issues in the test script. Once the Elements class is properly structured, the locator definitions will be correct and can be properly converted to Locator properties in __init__."
     },
     {
       "priority": 2,
-      "category": "page_additions_enhancement",
+      "category": "inline_page_locator",
+      "severity": "CRITICAL",
+      "violation_ids": [
+        "V001",
+        "V002"
+      ],
+      "total_count": 2,
+      "total_deduction": 6,
+      "affected_files": [
+        "test_scripts/billing_cycle_period_card.py"
+      ],
+      "fix_approach": "Replace direct property access (print_history_page.billing_cycle_period_card) with proper Elements pattern access (page.locator(print_history_page.elements.billing_cycle_period_card)) in Steps 20 and 21. This fix depends on the page_additions file being properly structured first."
+    },
+    {
+      "priority": 3,
+      "category": "incomplete_implementation",
+      "severity": "MODERATE",
+      "violation_ids": [
+        "V005"
+      ],
+      "total_count": 1,
+      "total_deduction": 2,
+      "affected_files": [
+        "additional_generations/page_additions/print_history_page_additions.py"
+      ],
+      "fix_approach": "Remove all verification methods (verify_plan_pause_info_not_displayed, verify_plan_pause_info_displayed, verify_complimentary_pages_value, verify_additional_pages_value) from the page_additions file. These methods use expect() assertions which should be in the test script, not in page objects. Page objects should only contain element definitions and simple action methods."
+    },
+    {
+      "priority": 4,
+      "category": "wrong_access_pattern",
+      "severity": "MODERATE",
+      "violation_ids": [
+        "V003"
+      ],
+      "total_count": 1,
+      "total_deduction": 2,
+      "affected_files": [
+        "test_scripts/billing_cycle_period_card.py",
+        "additional_generations/page_additions/print_history_page_additions.py"
+      ],
+      "fix_approach": "This is a multi-file fix. First, ensure the page_additions file properly creates Locator properties in __init__ by assigning self.locator_name = page.locator(self.elements.locator_name) for each locator. Then verify the test script's usage of these locators as properties (print_history_page.plan_pause_info) will work correctly."
+    },
+    {
+      "priority": 5,
+      "category": "unused_locator",
+      "severity": "MODERATE",
+      "violation_ids": [
+        "V006"
+      ],
+      "total_count": 1,
+      "total_deduction": 2,
+      "affected_files": [
+        "additional_generations/page_additions/print_history_page_additions.py"
+      ],
+      "fix_approach": "Ensure tooltip locators are properly converted to Locator properties in the __init__ method so they can be accessed as print_history_page.complimentary_pages_tooltip in the test script. Add self.complimentary_pages_tooltip = page.locator(self.elements.complimentary_pages_tooltip) and similar for additional_pages_tooltip."
+    },
+    {
+      "priority": 6,
+      "category": "import_in_method",
       "severity": "MODERATE",
       "violation_ids": [
         "V007"
@@ -250,7 +351,7 @@
       "affected_files": [
         "additional_generations/page_additions/print_history_page_additions.py"
       ],
-      "fix_approach": "Enhance the hover_complimentary_info_icon() method in page_additions to include device-specific logic (click for mobile/tablet, hover for desktop). This will allow the test script to use the helper method instead of inline if/else logic."
+      "fix_approach": "Remove the 'from playwright.sync_api import expect' import from the page_additions file. This import is only needed because of the verification methods which should be removed (see priority 3). After removing the verification methods, this import becomes unnecessary."
     }
   ]
 }
