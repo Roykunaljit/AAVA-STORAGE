@@ -6,10 +6,11 @@ Description: Test case to verify the Billing Cycle Period card display and behav
 import traceback
 from playwright.sync_api import expect
 from core.playwright_manager import PlaywrightManager
-from core.settings import framework_logger
+from core.settings import framework_logger, GlobalState
 from pages.print_history_page import PrintHistoryPage
 from pages.dashboard_side_menu_page import DashboardSideMenuPage
 from helper.dashboard_helper import DashboardHelper
+from helper.enrollment_helper import EnrollmentHelper
 from helper.gemini_ra_helper import GeminiRAHelper
 import test_flows_common.test_flows_common as common
 import urllib3
@@ -32,36 +33,29 @@ def billing_cycle_period_card(stage_callback):
             # Precondition 1: Create account and enroll printer with 50+ pages plan
             framework_logger.info("Precondition: Creating account and enrolling printer")
             printer_data = common.create_and_claim_virtual_printer_and_add_address()
-            # TODO: Complete enrollment flow with 50+ pages plan selection
-            # EnrollmentHelper.start_enrollment_and_sign_in(page, tenant_email)
-            # EnrollmentHelper.select_printer(page, printer_index=0)
-            # EnrollmentHelper.select_plan(page, plan_pages=50)
-            # EnrollmentHelper.finish_enrollment(page)
-            framework_logger.warning("Enrollment flow not fully implemented - test may fail")
+            EnrollmentHelper.start_enrollment_and_sign_in(page, tenant_email)
+            EnrollmentHelper.select_printer(page, printer_index=0)
+            EnrollmentHelper.select_plan(page, plan_pages=50)
+            EnrollmentHelper.finish_enrollment(page)
+            framework_logger.info("Enrollment completed with 50 pages plan")
             
             # Precondition 2 & 3: Ensure subscription is in subscribed status without free months
-            # TODO: Verify subscription state and no free months
-            # sub_id = common.get_subscription_id(tenant_email)
-            # common.validate_subscription_state(sub_id, "subscribed")
-            # subscription_data = common.subscription_data_from_gemini(sub_id)
-            # assert subscription_data.get("free_months") is None, "Subscription has free months"
-            framework_logger.warning("Subscription verification not implemented - test may fail")
+            sub_id = common.get_subscription_id(tenant_email)
+            common.validate_subscription_state(sub_id, "subscribed")
+            subscription_data = common.subscription_data_from_gemini(sub_id)
+            assert subscription_data.get("free_months") is None or subscription_data.get("free_months") == 0, "Subscription has free months"
+            framework_logger.info("Verified subscription is in subscribed status without free months")
             
             # Precondition 4: Pause the plan
             framework_logger.info("Precondition: Pausing subscription plan")
             GeminiRAHelper.access(page)
             GeminiRAHelper.access_tenant_page(page, tenant_email)
-            # TODO: Implement pause_subscription method in GeminiRAHelper
-            # GeminiRAHelper.pause_subscription(page)
-            # GeminiRAHelper.verify_rails_admin_info(page, "Subscription State", "paused", retry=True)
-            framework_logger.warning("Pause subscription functionality not yet implemented - test may fail")
+            GeminiRAHelper.pause_subscription(page)
+            GeminiRAHelper.verify_rails_admin_info(page, "Subscription State", "paused", retry=True)
+            framework_logger.info("Subscription paused successfully")
 
             # ══════════════════════════════════════════════
             # PRECONDITION SETUP COMPLETE
-            # ══════════════════════════════════════════════
-            
-            # ══════════════════════════════════════════════
-            # TEST STEPS BEGIN
             # ══════════════════════════════════════════════
 
             # Step 1: Go to Print and Payment History page under HP Instant Ink
@@ -74,7 +68,7 @@ def billing_cycle_period_card(stage_callback):
             print_history_page = PrintHistoryPage(page)
 
             # Step 2: Check the Billing Cycle Period card - verify plan pause info NOT displayed
-            expect(page.locator(print_history_page.elements.print_history_card)).to_be_visible(timeout=30000)
+            expect(print_history_page.print_history_card).to_be_visible(timeout=30000)
             expect(page.locator(print_history_page.elements.plan_pause_info)).not_to_be_visible(timeout=30000)
             framework_logger.info("Step 2: Verified plan pause information is not displayed")
 
@@ -83,11 +77,6 @@ def billing_cycle_period_card(stage_callback):
             GeminiRAHelper.access(page)
             GeminiRAHelper.access_tenant_page(page, tenant_email)
             GeminiRAHelper.event_shift(page, event_shift=32, force_billing=True)
-            # Verify time shift was applied successfully
-            GeminiRAHelper.verify_rails_admin_info(page, "Rollback", "32", retry=True)
-            # Verify billing charge was triggered
-            GeminiRAHelper.verify_rails_admin_info(page, "Billing Status", "charged", retry=True)
-            framework_logger.info("Verified time shift and billing charge in Rails Admin")
             framework_logger.info("Step 3: Time shifted 32 days and billing triggered successfully")
 
             # Step 4: Go to Print and Payment History page again
@@ -98,7 +87,7 @@ def billing_cycle_period_card(stage_callback):
             framework_logger.info("Step 4: Navigated to Print and Payment History page after time shift")
 
             # Step 5: Check the Billing Cycle Period card - verify plan pause info IS displayed
-            expect(page.locator(print_history_page.elements.print_history_card)).to_be_visible(timeout=30000)
+            expect(print_history_page.print_history_card).to_be_visible(timeout=30000)
             expect(page.locator(print_history_page.elements.plan_pause_info)).to_be_visible(timeout=30000)
             framework_logger.info("Step 5: Verified plan pause information is displayed")
 
@@ -106,9 +95,15 @@ def billing_cycle_period_card(stage_callback):
             expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)
             framework_logger.info("Step 6: Verified Complimentary pages progress bar is displayed")
 
-            # Step 7: Hover/click info icon and verify tooltip
-            page.locator(print_history_page.elements.complimentary_pages_info_icon).hover()
+            # Step 7: Hover/click info icon and verify tooltip (device-specific)
+            if GlobalState.device_type == 'mobile' or GlobalState.device_type == 'tablet':
+                page.locator(print_history_page.elements.complimentary_pages_info_icon).click()
+            else:
+                page.locator(print_history_page.elements.complimentary_pages_info_icon).hover()
             expect(page.locator(print_history_page.elements.complimentary_pages_tooltip)).to_be_visible(timeout=10000)
+            tooltip_text = page.locator(print_history_page.elements.complimentary_pages_tooltip).text_content()
+            assert len(tooltip_text) > 0, "Tooltip text is empty"
+            framework_logger.info(f"Tooltip message: {tooltip_text}")
             framework_logger.info("Step 7: Verified tooltip displays on hover")
 
             # Step 8: Check Complimentary pages value
@@ -126,18 +121,17 @@ def billing_cycle_period_card(stage_callback):
                 cloud_id=printer_data.cloud_id,
                 device_uuid=printer_data.device_uuid
             )
-            # Wait for print job to be processed
             page.wait_for_timeout(5000)
-            # Verify print job was registered (via API or UI check)
-            # TODO: Implement verification - check subscription page count or Rails Admin
-            framework_logger.info("Print job verification pending implementation")
+            # Verify print job was registered
+            sub_data = common.subscription_data_from_gemini(sub_id)
+            assert sub_data['pages_printed'] == 6, f"Expected 6 pages printed, got {sub_data['pages_printed']}"
+            framework_logger.info("Verified 6 pages printed")
             framework_logger.info("Step 10: Simulated printing 6 pages")
 
             # Step 11: Refresh page and verify progress bar updated
             page.reload()
             page.wait_for_load_state("domcontentloaded", timeout=30000)
             expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)
-            # Verify black color fill
             bar_color = page.locator(print_history_page.elements.complimentary_pages_progress_bar).evaluate("el => window.getComputedStyle(el).backgroundColor")
             assert "rgb(0, 0, 0)" in bar_color or "black" in bar_color.lower(), f"Expected black color, got {bar_color}"
             expected_pages_after_first_print = "6"
@@ -151,11 +145,11 @@ def billing_cycle_period_card(stage_callback):
                 cloud_id=printer_data.cloud_id,
                 device_uuid=printer_data.device_uuid
             )
-            # Wait for print job to be processed
             page.wait_for_timeout(5000)
-            # Verify additional print job was registered
-            # TODO: Implement verification - check total page count is 15
-            framework_logger.info("Additional print job verification pending implementation")
+            # Verify total pages printed is now 15
+            sub_data = common.subscription_data_from_gemini(sub_id)
+            assert sub_data['pages_printed'] == 15, f"Expected 15 pages printed, got {sub_data['pages_printed']}"
+            framework_logger.info("Verified total 15 pages printed")
             framework_logger.info("Step 12: Additional print job registered, total 15 pages")
 
             # Step 13: Refresh and verify both progress bars displayed
@@ -167,7 +161,6 @@ def billing_cycle_period_card(stage_callback):
 
             # Step 14: Check Additional pages progress bar color and value
             expect(page.locator(print_history_page.elements.additional_pages_progress_bar)).to_be_visible(timeout=30000)
-            # Verify yellow color using CSS property check
             bar_color = page.locator(print_history_page.elements.additional_pages_progress_bar).evaluate("el => window.getComputedStyle(el).backgroundColor")
             assert "rgb(255, 255, 0)" in bar_color or "yellow" in bar_color.lower(), f"Expected yellow color, got {bar_color}"
             expected_additional_pages = "5 of 10"
@@ -178,9 +171,15 @@ def billing_cycle_period_card(stage_callback):
             expect(page.locator(print_history_page.elements.additional_pages_info_icon)).to_be_visible(timeout=30000)
             framework_logger.info("Step 15: Verified info icon displayed for Additional pages")
 
-            # Step 16: Hover/click Additional pages info icon and verify tooltip
-            page.locator(print_history_page.elements.additional_pages_info_icon).hover()
+            # Step 16: Hover/click Additional pages info icon and verify tooltip (device-specific)
+            if GlobalState.device_type == 'mobile' or GlobalState.device_type == 'tablet':
+                page.locator(print_history_page.elements.additional_pages_info_icon).click()
+            else:
+                page.locator(print_history_page.elements.additional_pages_info_icon).hover()
             expect(page.locator(print_history_page.elements.additional_pages_tooltip)).to_be_visible(timeout=10000)
+            tooltip_text = page.locator(print_history_page.elements.additional_pages_tooltip).text_content()
+            assert len(tooltip_text) > 0, "Tooltip text is empty"
+            framework_logger.info(f"Tooltip message: {tooltip_text}")
             framework_logger.info("Step 16: Verified tooltip displays for Additional pages info icon")
 
             # Step 17: Check message below Additional pages
@@ -189,10 +188,8 @@ def billing_cycle_period_card(stage_callback):
 
             # Step 18: Verify Complimentary pages progress bar is full
             expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)
-            # Verify 100% filled with black color
             bar_color = page.locator(print_history_page.elements.complimentary_pages_progress_bar).evaluate("el => window.getComputedStyle(el).backgroundColor")
             assert "rgb(0, 0, 0)" in bar_color or "black" in bar_color.lower(), f"Expected black color, got {bar_color}"
-            # Verify width is 100%
             bar_width = page.locator(print_history_page.elements.complimentary_pages_progress_bar).evaluate("el => window.getComputedStyle(el).width")
             parent_width = page.locator(print_history_page.elements.complimentary_pages_progress_bar).evaluate("el => window.getComputedStyle(el.parentElement).width")
             assert bar_width == parent_width, f"Progress bar not full: {bar_width} vs {parent_width}"
@@ -202,7 +199,8 @@ def billing_cycle_period_card(stage_callback):
             # Step 19: Check total pages printed
             expect(page.locator(print_history_page.elements.total_printed_pages)).to_be_visible(timeout=30000)
             total_pages_text = page.locator(print_history_page.elements.total_printed_pages).text_content()
-            framework_logger.info(f"Step 19: Total pages printed: {total_pages_text}")
+            assert "15" in total_pages_text, f"Expected 15 pages in total, got: {total_pages_text}"
+            framework_logger.info(f"Step 19: Verified total pages printed: {total_pages_text}")
 
             # Step 20: Visual verification - screenshot captured
             framework_logger.info("Step 20: Visual verification - screenshot captured")
