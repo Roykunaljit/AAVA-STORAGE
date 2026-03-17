@@ -2,13 +2,13 @@
   "scoring_metadata": {
     "scored_at": "2025-01-15T16:30:00Z",
     "scorer": "Test_Script_Quality_Auditor",
-    "overall_score": 91,
+    "overall_score": 73,
     "score_formula": "100 - (CRITICAL×3 + MODERATE×2 + MINOR×1), floor 0",
-    "total_violations": 3,
-    "critical_count": 2,
-    "moderate_count": 1,
+    "total_violations": 9,
+    "critical_count": 6,
+    "moderate_count": 3,
     "minor_count": 0,
-    "total_deduction": 9,
+    "total_deduction": 27,
     "total_files_analyzed": 2,
     "files_analyzed": [
       "test_scripts/billing_cycle_period_card.py",
@@ -25,26 +25,21 @@
       "file_path": "test_scripts/billing_cycle_period_card.py",
       "file_type": "test_script",
       "test_case_id": "C44873414",
-      "score": 100,
-      "violation_count": 0,
-      "critical_count": 0,
-      "moderate_count": 0,
+      "score": 85,
+      "violation_count": 5,
+      "critical_count": 3,
+      "moderate_count": 2,
       "minor_count": 0,
-      "deduction": 0,
+      "deduction": 15,
       "checkpoints_evaluated": 45,
       "checkpoints_passed": [
         "A01",
         "A02",
         "A03",
         "A04",
-        "A05",
-        "A06",
-        "A07",
-        "A08",
         "A09",
         "A10",
         "A11",
-        "A12",
         "A13",
         "A14",
         "A15",
@@ -53,16 +48,11 @@
         "B03",
         "B04",
         "B05",
-        "C01",
         "C02",
-        "C03",
-        "C04",
         "C05",
-        "C06",
         "D01",
         "D02",
         "D03",
-        "D04",
         "D05",
         "D06",
         "D07",
@@ -73,90 +63,190 @@
         "D12",
         "D13",
         "D14",
-        "D15",
         "E01",
         "E02",
         "E03",
-        "E04",
         "E05",
         "E06",
         "E07",
         "E08"
       ],
-      "checkpoints_failed": [],
-      "violations": []
+      "checkpoints_failed": [
+        "A12",
+        "D04",
+        "D15",
+        "E04"
+      ],
+      "violations": [
+        {
+          "violation_id": "V001",
+          "rule_id": "CHECKPOINT_A12",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "expect(print_history_page.plan_pause_info).not_to_be_visible(timeout=30000)",
+          "expected_code": "expect(print_history_page.elements.plan_pause_info).not_to_be_visible(timeout=30000)",
+          "explanation": "Locator access is missing .elements. namespace. The framework pattern requires accessing locators via page_obj.elements.locator_name when using the Elements inner class pattern. The page_additions file defines plan_pause_info as a selector string in the Elements class, so it must be accessed via print_history_page.elements.plan_pause_info.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "expect(print_history_page.plan_pause_info).not_to_be_visible(timeout=30000)",
+            "replace_with": "expect(print_history_page.elements.plan_pause_info).not_to_be_visible(timeout=30000)"
+          }
+        },
+        {
+          "violation_id": "V002",
+          "rule_id": "CHECKPOINT_A12",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "expect(print_history_page.plan_pause_info).to_be_visible(timeout=30000)",
+          "expected_code": "expect(print_history_page.elements.plan_pause_info).to_be_visible(timeout=30000)",
+          "explanation": "Locator access is missing .elements. namespace. Same issue as V001 - must use .elements. to access the locator defined in the Elements inner class.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "expect(print_history_page.plan_pause_info).to_be_visible(timeout=30000)",
+            "replace_with": "expect(print_history_page.elements.plan_pause_info).to_be_visible(timeout=30000)"
+          }
+        },
+        {
+          "violation_id": "V003",
+          "rule_id": "CHECKPOINT_A12",
+          "severity": "CRITICAL",
+          "category": "missing_elements_namespace",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "billing_card = print_history_page.billing_cycle_period_card",
+          "expected_code": "billing_card = print_history_page.elements.billing_cycle_period_card",
+          "explanation": "Locator access is missing .elements. namespace. The billing_cycle_period_card locator is defined in the Elements class and must be accessed via .elements. namespace.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "billing_card = print_history_page.billing_cycle_period_card",
+            "replace_with": "billing_card = print_history_page.elements.billing_cycle_period_card"
+          }
+        },
+        {
+          "violation_id": "V004",
+          "rule_id": "CHECKPOINT_D04",
+          "severity": "MODERATE",
+          "category": "wrong_import_order",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "from pages.dashboard_side_menu_page import DashboardSideMenuPage\nfrom pages.print_history_page import PrintHistoryPage\n\nfrom helper.dashboard_helper import DashboardHelper",
+          "expected_code": "from pages.dashboard_side_menu_page import DashboardSideMenuPage\nfrom pages.print_history_page import PrintHistoryPage\n\nfrom helper.dashboard_helper import DashboardHelper\nfrom helper.enrollment_helper import EnrollmentHelper\nfrom helper.gemini_ra_helper import GeminiRAHelper\n\nimport test_flows_common.test_flows_common as common",
+          "explanation": "Import order does not follow framework standards. The correct order is: stdlib → third-party → core → pages → helpers → common. The 'import test_flows_common.test_flows_common as common' should come after all helper imports, separated by a blank line.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "from helper.dashboard_helper import DashboardHelper\nfrom helper.enrollment_helper import EnrollmentHelper\nfrom helper.gemini_ra_helper import GeminiRAHelper\n\nimport test_flows_common.test_flows_common as common",
+            "replace_with": "from helper.dashboard_helper import DashboardHelper\nfrom helper.enrollment_helper import EnrollmentHelper\nfrom helper.gemini_ra_helper import GeminiRAHelper\n\nimport test_flows_common.test_flows_common as common"
+          }
+        },
+        {
+          "violation_id": "V005",
+          "rule_id": "CHECKPOINT_E04",
+          "severity": "MODERATE",
+          "category": "verbose_logging",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "# Precondition 4: Pause the plan\n            GeminiRAHelper.access(page)\n            GeminiRAHelper.access_tenant_page(page, tenant_email)\n            # Pause subscription via Rails Admin\n            subscription_page_url = f\"{GlobalState.gemini_ra_url}/subscriptions/{subscription_id}/edit\"\n            page.goto(subscription_page_url)\n            page.wait_for_load_state('networkidle', timeout=30000)\n            page.select_option(\"select#subscription_subscription_state\", \"paused\")\n            page.click(\"button[type='submit']\")\n            page.wait_for_load_state('networkidle', timeout=30000)\n            GeminiRAHelper.verify_rails_admin_info(page, \"Subscription State\", \"paused\", retry=True)\n            framework_logger.info(\"Precondition setup completed: Subscription paused via Rails Admin\")",
+          "expected_code": "# Precondition 4: Pause the plan\n            GeminiRAHelper.access(page)\n            GeminiRAHelper.access_tenant_page(page, tenant_email)\n            subscription_page_url = f\"{GlobalState.gemini_ra_url}/subscriptions/{subscription_id}/edit\"\n            page.goto(subscription_page_url)\n            page.wait_for_load_state('networkidle', timeout=30000)\n            page.select_option(\"select#subscription_subscription_state\", \"paused\")\n            page.click(\"button[type='submit']\")\n            page.wait_for_load_state('networkidle', timeout=30000)\n            GeminiRAHelper.verify_rails_admin_info(page, \"Subscription State\", \"paused\", retry=True)\n            framework_logger.info(\"Precondition 4: Subscription paused via Rails Admin\")",
+          "explanation": "Precondition section has inline comment '# Pause subscription via Rails Admin' which is redundant with the section comment and log statement. Framework standards require concise logging - one log line per major action. Remove the inline comment.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "# Precondition 4: Pause the plan\n            GeminiRAHelper.access(page)\n            GeminiRAHelper.access_tenant_page(page, tenant_email)\n            # Pause subscription via Rails Admin\n            subscription_page_url = f\"{GlobalState.gemini_ra_url}/subscriptions/{subscription_id}/edit\"",
+            "replace_with": "# Precondition 4: Pause the plan\n            GeminiRAHelper.access(page)\n            GeminiRAHelper.access_tenant_page(page, tenant_email)\n            subscription_page_url = f\"{GlobalState.gemini_ra_url}/subscriptions/{subscription_id}/edit\""
+          }
+        }
+      ]
     },
     {
       "file_path": "additional_generations/page_additions/print_history_page_additions.py",
       "file_type": "page_addition",
       "test_case_id": "C44873414",
-      "score": 91,
-      "violation_count": 3,
-      "critical_count": 2,
+      "score": 61,
+      "violation_count": 4,
+      "critical_count": 3,
       "moderate_count": 1,
       "minor_count": 0,
-      "deduction": 9,
+      "deduction": 39,
       "checkpoints_evaluated": 7,
       "checkpoints_passed": [
-        "F01",
         "F02",
         "F03",
-        "F05",
-        "F07"
+        "F05"
       ],
       "checkpoints_failed": [
+        "F01",
         "F04",
-        "F06"
+        "F06",
+        "F07"
       ],
       "violations": [
         {
-          "violation_id": "V001",
+          "violation_id": "V006",
           "rule_id": "CHECKPOINT_F04",
           "severity": "CRITICAL",
-          "category": "incorrect_elements_class_structure",
+          "category": "missing_elements_class_structure",
           "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-          "current_code": "class Elements:\n    \"\"\"Locator selectors for PrintHistoryPage elements.\"\"\"\n    plan_pause_info = \"[data-testid='plan-pause-info']\"\n    billing_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"",
-          "expected_code": "# ADD TO PrintHistoryPage.Elements INNER CLASS:\n# Inside pages/print_history_page.py, locate the existing Elements inner class and add:\n\nplan_pause_info = \"[data-testid='plan-pause-info']\"\nbilling_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"\ncomplimentary_pages_progress_bar = \"[data-testid='complimentary-pages-progress-bar']\"\ncomplimentary_pages_value = \"[data-testid='complimentary-pages-value']\"\ncomplimentary_pages_info_icon = \"[data-testid='complimentary-pages-info-icon']\"\ncomplimentary_pages_info_message = \"[data-testid='complimentary-pages-info-message']\"\ncomplimentary_pages_tooltip = \"[role='tooltip']:near([data-testid='complimentary-pages-info-icon'])\"\nadditional_pages_progress_bar = \"[data-testid='additional-pages-progress-bar']\"\nadditional_pages_value = \"[data-testid='additional-pages-value']\"\nadditional_pages_info_icon = \"[data-testid='additional-pages-info-icon']\"\nadditional_pages_info_message = \"[data-testid='additional-pages-info-message']\"\nadditional_pages_tooltip = \"[role='tooltip']:near([data-testid='additional-pages-info-icon'])\"\ntotal_printed_pages = \"[data-testid='total-printed-pages']\"",
-          "explanation": "CRITICAL VIOLATION: The page additions file defines a standalone Elements class instead of providing merge instructions for the existing PrintHistoryPage.Elements inner class. In the AURA framework, page additions should contain ONLY the string selector definitions to be added to the existing Elements inner class within the target page object. The current structure creates a new standalone Elements class which would not integrate correctly with the existing PrintHistoryPage class. The correct pattern is to provide the class attribute definitions (selector strings) that should be added to the existing Elements inner class, not define a new class.",
+          "current_code": "plan_pause_info = \"[data-testid='plan-pause-info']\"\nbilling_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"",
+          "expected_code": "class Elements:\n    plan_pause_info = \"[data-testid='plan-pause-info']\"\n    billing_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"",
+          "explanation": "Page additions file does not follow the Elements inner class pattern. Locators are defined as standalone module-level variables instead of being inside an Elements class. The framework requires locators to be defined as class attributes within an Elements inner class so they can be accessed via page_obj.elements.locator_name pattern. The entire file structure is incorrect - it's written as a documentation file with instructions rather than valid Python code.",
           "fix_action": "RESTRUCTURE",
           "fix_details": {
             "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "description": "Remove the standalone Elements class definition and replace with clear merge instructions showing the selector strings to be added to the existing PrintHistoryPage.Elements inner class",
-            "current_structure": "Standalone Elements class with all selectors defined as class attributes",
-            "required_structure": "Comment block with merge instructions followed by the selector string definitions (without class wrapper) that should be added to the existing Elements inner class in pages/print_history_page.py"
+            "description": "Complete file restructure required. The file must be rewritten as valid Python code with proper Elements class structure.",
+            "before_structure": "Standalone variable assignments with documentation comments",
+            "after_structure": "class Elements:\n    # Selector strings as class attributes\n    plan_pause_info = \"[data-testid='plan-pause-info']\"\n    # ... all other selectors\n\n# Property methods at module level for merging into PrintHistoryPage class\n@property\ndef plan_pause_info(self):\n    return self.page.locator(self.elements.plan_pause_info)"
           }
         },
         {
-          "violation_id": "V002",
-          "rule_id": "CHECKPOINT_F04",
-          "severity": "CRITICAL",
-          "category": "property_methods_outside_class",
-          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-          "current_code": "# Property methods to access Elements-based locators\n@property\ndef plan_pause_info(self):\n    return self.page.locator(self.elements.plan_pause_info)\n\n@property\ndef billing_cycle_period_card(self):\n    return self.page.locator(self.elements.billing_cycle_period_card)",
-          "expected_code": "# ADD TO PrintHistoryPage CLASS (NOT Elements class):\n# Inside pages/print_history_page.py, locate the PrintHistoryPage class body and add:\n\n@property\ndef plan_pause_info(self):\n    return self.page.locator(self.elements.plan_pause_info)\n\n@property\ndef billing_cycle_period_card(self):\n    return self.page.locator(self.elements.billing_cycle_period_card)\n\n@property\ndef complimentary_pages_progress_bar(self):\n    return self.page.locator(self.elements.complimentary_pages_progress_bar)\n\n# ... (continue for all 13 locators)",
-          "explanation": "CRITICAL VIOLATION: The property methods are defined as standalone functions outside any class, when they should be methods of the PrintHistoryPage class. In the AURA framework pattern, page additions should provide property methods that will be added to the main page object class (PrintHistoryPage), not defined as standalone functions. These property methods provide convenient access to locators via the pattern page_obj.property_name which internally calls page.locator(page_obj.elements.selector_string). The current structure has these methods floating outside any class context, which would cause them to be unusable when merged into the target file.",
-          "fix_action": "RESTRUCTURE",
-          "fix_details": {
-            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "description": "Restructure the property methods to be clearly marked as additions to the PrintHistoryPage class body, not standalone functions",
-            "current_structure": "Property methods defined as standalone functions with @property decorator but no class context",
-            "required_structure": "Clear merge instructions indicating these property methods should be added to the PrintHistoryPage class body (at the same indentation level as other methods in that class), with proper indentation showing they are class methods"
-          }
-        },
-        {
-          "violation_id": "V003",
+          "violation_id": "V007",
           "rule_id": "CHECKPOINT_F01",
           "severity": "MODERATE",
-          "category": "unclear_merge_instructions",
+          "category": "malformed_file",
           "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-          "current_code": "MERGE INSTRUCTIONS:\n1. Open pages/print_history_page.py in your editor\n2. Locate the PrintHistoryPage class definition\n3. Find the Elements inner class (defined inside PrintHistoryPage)\n4. Add the string selector definitions below to the Elements class as class attributes\n5. Do NOT add any __init__ property initializations - Elements-based locators are accessed via page.locator(page_obj.elements.locator_name) in test scripts",
-          "expected_code": "MERGE INSTRUCTIONS:\n\nPART 1 - ADD TO Elements INNER CLASS:\nOpen pages/print_history_page.py and locate the Elements inner class inside PrintHistoryPage.\nAdd these selector string definitions as class attributes:\n\n[selector definitions here]\n\nPART 2 - ADD TO PrintHistoryPage CLASS BODY:\nIn the same file, locate the PrintHistoryPage class body (outside the Elements class).\nAdd these property methods at the same indentation level as other class methods:\n\n[property methods here]\n\nVERIFICATION:\n- Elements class should contain string selectors as class attributes\n- PrintHistoryPage class should contain @property methods that return self.page.locator(self.elements.selector_name)\n- Test scripts access via: print_history_page.property_name (NOT page.locator(print_history_page.elements.selector_name))",
-          "explanation": "MODERATE VIOLATION: The merge instructions are incomplete and potentially misleading. They correctly explain how to add selectors to the Elements inner class, but they do not explain where to add the property methods. The instruction 'Do NOT add any __init__ property initializations' is confusing because the file then provides property methods that DO need to be added to the class. The instructions should clearly separate the two merge operations: (1) adding selector strings to Elements inner class, and (2) adding property methods to PrintHistoryPage class body. The current instructions could lead to incorrect merging where the property methods are not added at all, or added in the wrong location.",
+          "current_code": "\"\"\"Additional locators for PrintHistoryPage.\n\nThis file contains new locators for the Billing Cycle Period card functionality\nto be merged into pages/print_history_page.py.\n\nTarget File: pages/print_history_page.py\nTest Case: C44873414 - Billing Cycle Period card\nGenerated by: Test Script Generator\n\nMERGE INSTRUCTIONS:\n...",
+          "expected_code": "\"\"\"Page additions for PrintHistoryPage - Billing Cycle Period card.\n\nTarget file: pages/print_history_page.py\nTest case: C44873414\n\nMerge instructions:\n1. Add Elements class attributes to PrintHistoryPage.Elements inner class\n2. Add property methods to PrintHistoryPage class body\n3. Verify all locators work correctly\n\"\"\"",
+          "explanation": "Module-level docstring is excessively verbose with detailed merge instructions that should not be in production code. The docstring should be concise and focus on what the file contains, not how to merge it. Detailed merge instructions belong in documentation or comments, not in the module docstring.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "find": "MERGE INSTRUCTIONS:\n1. Open pages/print_history_page.py in your editor\n2. Locate the PrintHistoryPage class definition\n3. Find the Elements inner class (defined inside PrintHistoryPage)\n4. Add the string selector definitions below to the Elements class as class attributes\n5. Do NOT add any __init__ property initializations - Elements-based locators are accessed via page.locator(page_obj.elements.locator_name) in test scripts\n6. Maintain consistent 4-space indentation throughout\n7. Save the file\n8. Update test scripts to access locators via page.locator(print_history_page.elements.locator_name) pattern\n9. Update tooltip selectors if actual data-testid attributes differ from the placeholders\n10. Run the test to verify all locators work correctly",
-            "replace_with": "MERGE INSTRUCTIONS:\n\nThis file contains additions for pages/print_history_page.py in TWO parts:\n\nPART 1 - SELECTOR STRINGS FOR Elements INNER CLASS:\nOpen pages/print_history_page.py and locate the Elements inner class (defined inside PrintHistoryPage class).\nAdd the selector string definitions from the 'Elements Class Additions' section below as class attributes.\nThese are simple string assignments at the class level.\n\nPART 2 - PROPERTY METHODS FOR PrintHistoryPage CLASS:\nIn the same file, locate the PrintHistoryPage class body (the main class, NOT the Elements inner class).\nAdd the property methods from the 'Property Methods' section below at the same indentation level as other class methods.\nThese provide convenient access to locators via print_history_page.property_name pattern.\n\nVERIFICATION:\n- Elements inner class should contain string selectors as class attributes (e.g., plan_pause_info = \"[data-testid='plan-pause-info']\")\n- PrintHistoryPage class body should contain @property methods that return self.page.locator(self.elements.selector_name)\n- Test scripts access via: print_history_page.property_name (e.g., print_history_page.plan_pause_info)\n- Update tooltip selectors if actual data-testid attributes differ\n- Run test to verify all locators work correctly"
+            "find": "\"\"\"Additional locators for PrintHistoryPage.\n\nThis file contains new locators for the Billing Cycle Period card functionality\nto be merged into pages/print_history_page.py.\n\nTarget File: pages/print_history_page.py\nTest Case: C44873414 - Billing Cycle Period card\nGenerated by: Test Script Generator\n\nMERGE INSTRUCTIONS:\n\nThis file contains additions for pages/print_history_page.py in TWO parts:\n\nPART 1 - SELECTOR STRINGS FOR Elements INNER CLASS:\nOpen pages/print_history_page.py and locate the Elements inner class (defined inside PrintHistoryPage class).\nAdd the selector string definitions from the 'Elements Class Additions' section below as class attributes.\nThese are simple string assignments at the class level.\n\nPART 2 - PROPERTY METHODS FOR PrintHistoryPage CLASS:\nIn the same file, locate the PrintHistoryPage class body (the main class, NOT the Elements inner class).\nAdd the property methods from the 'Property Methods' section below at the same indentation level as other class methods.\nThese provide convenient access to locators via print_history_page.property_name pattern.\n\nVERIFICATION:\n- Elements inner class should contain string selectors as class attributes (e.g., plan_pause_info = \"[data-testid='plan-pause-info']\")\n- PrintHistoryPage class body should contain @property methods that return self.page.locator(self.elements.selector_name)\n- Test scripts access via: print_history_page.property_name (e.g., print_history_page.plan_pause_info)\n- Update tooltip selectors if actual data-testid attributes differ\n- Run test to verify all locators work correctly\n\nMERGE NOTES:\n- Tooltip selectors use :near() pseudo-selector to distinguish between complimentary and additional pages tooltips\n- Test tooltip interactions on both desktop (hover) and mobile (click)\n- NOTE: total_printed_pages may already exist in PrintHistoryPage - verify before merging to avoid duplicates\n\"\"\"",
+            "replace_with": "\"\"\"Page additions for PrintHistoryPage - Billing Cycle Period card.\n\nTarget file: pages/print_history_page.py\nTest case: C44873414\n\nMerge instructions:\n1. Add Elements class attributes to PrintHistoryPage.Elements inner class\n2. Add property methods to PrintHistoryPage class body\n3. Verify all locators work correctly\n\"\"\""
+          }
+        },
+        {
+          "violation_id": "V008",
+          "rule_id": "CHECKPOINT_F07",
+          "severity": "CRITICAL",
+          "category": "invalid_python_structure",
+          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
+          "current_code": "# ═══════════════════════════════════════════════════════════════════════════════\n# PART 1: Elements Class Additions\n# ═══════════════════════════════════════════════════════════════════════════════\n# ADD THESE SELECTOR STRINGS TO THE Elements INNER CLASS IN pages/print_history_page.py\n# These should be added as class attributes inside the existing Elements class\n\nplan_pause_info = \"[data-testid='plan-pause-info']\"",
+          "expected_code": "class Elements:\n    \"\"\"Locator selectors for PrintHistoryPage.\"\"\"\n    plan_pause_info = \"[data-testid='plan-pause-info']\"",
+          "explanation": "File contains instructional comments and section headers that make it invalid Python for direct import. The file is structured as a documentation/instruction file rather than executable Python code. Comments like '# ADD THESE SELECTOR STRINGS TO...' and section dividers with equals signs are not appropriate for production code. The file cannot be imported or executed as-is.",
+          "fix_action": "RESTRUCTURE",
+          "fix_details": {
+            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
+            "description": "Remove all instructional comments and section dividers. Structure as valid Python with proper class definitions.",
+            "before_structure": "Instructional comments + standalone assignments + property methods with incorrect indentation",
+            "after_structure": "Valid Python with Elements class containing selectors and properly indented property methods"
+          }
+        },
+        {
+          "violation_id": "V009",
+          "rule_id": "CHECKPOINT_F04",
+          "severity": "CRITICAL",
+          "category": "incorrect_property_indentation",
+          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
+          "current_code": "    @property\n    def plan_pause_info(self):\n        return self.page.locator(self.elements.plan_pause_info)",
+          "expected_code": "@property\ndef plan_pause_info(self):\n    return self.page.locator(self.elements.plan_pause_info)",
+          "explanation": "Property methods have incorrect indentation. They are indented as if they are inside a class, but they are at module level in this file. Since this is a page additions file meant to be merged, the property methods should be at module level (no indentation) with a comment indicating they should be added to the PrintHistoryPage class body. The current indentation makes them invalid Python at module level.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
+            "find": "    @property\n    def plan_pause_info(self):\n        return self.page.locator(self.elements.plan_pause_info)",
+            "replace_with": "# Property method to add to PrintHistoryPage class:\n@property\ndef plan_pause_info(self):\n    return self.page.locator(self.elements.plan_pause_info)"
           }
         }
       ]
@@ -164,64 +254,117 @@
   ],
   "violation_summary": {
     "by_severity": {
-      "CRITICAL": 2,
-      "MODERATE": 1,
+      "CRITICAL": 6,
+      "MODERATE": 3,
       "MINOR": 0
     },
     "by_category": {
-      "incorrect_elements_class_structure": 1,
-      "property_methods_outside_class": 1,
-      "unclear_merge_instructions": 1
+      "missing_elements_namespace": 3,
+      "wrong_import_order": 1,
+      "verbose_logging": 1,
+      "missing_elements_class_structure": 1,
+      "malformed_file": 1,
+      "invalid_python_structure": 1,
+      "incorrect_property_indentation": 1
     },
     "by_rule": {
+      "CHECKPOINT_A12": 3,
+      "CHECKPOINT_D04": 1,
+      "CHECKPOINT_E04": 1,
       "CHECKPOINT_F04": 2,
-      "CHECKPOINT_F01": 1
+      "CHECKPOINT_F01": 1,
+      "CHECKPOINT_F07": 1
     },
-    "most_common_violation": "CHECKPOINT_F04 (incorrect_elements_class_structure, property_methods_outside_class) — 2 occurrences",
-    "most_impacted_file": "additional_generations/page_additions/print_history_page_additions.py — 3 violations, score 91"
+    "most_common_violation": "CHECKPOINT_A12 (missing_elements_namespace) — 3 occurrences",
+    "most_impacted_file": "additional_generations/page_additions/print_history_page_additions.py — 4 violations, score 61"
   },
   "fix_priority_order": [
     {
       "priority": 1,
-      "category": "incorrect_elements_class_structure",
+      "category": "missing_elements_class_structure",
       "severity": "CRITICAL",
       "violation_ids": [
-        "V001"
+        "V006",
+        "V009"
       ],
-      "total_count": 1,
-      "total_deduction": 3,
+      "total_count": 2,
+      "total_deduction": 6,
       "affected_files": [
         "additional_generations/page_additions/print_history_page_additions.py"
       ],
-      "fix_approach": "Restructure the page additions file to remove the standalone Elements class definition and replace it with clear merge instructions showing that the selector strings should be added to the existing PrintHistoryPage.Elements inner class in pages/print_history_page.py. The file should provide the selector string definitions without wrapping them in a class definition, making it clear these are additions to an existing class."
+      "fix_approach": "Restructure the page additions file to follow proper Elements inner class pattern. Remove all instructional comments and section dividers. Create a proper Elements class with selector strings as class attributes. Ensure property methods are at module level with no indentation and include comments indicating they should be merged into PrintHistoryPage class body."
     },
     {
       "priority": 2,
-      "category": "property_methods_outside_class",
+      "category": "missing_elements_namespace",
       "severity": "CRITICAL",
       "violation_ids": [
-        "V002"
+        "V001",
+        "V002",
+        "V003"
+      ],
+      "total_count": 3,
+      "total_deduction": 9,
+      "affected_files": [
+        "test_scripts/billing_cycle_period_card.py"
+      ],
+      "fix_approach": "Add .elements. namespace to all locator accesses in the test script. Replace print_history_page.locator_name with print_history_page.elements.locator_name for all locators defined in the Elements class (plan_pause_info, billing_cycle_period_card, etc.)."
+    },
+    {
+      "priority": 3,
+      "category": "invalid_python_structure",
+      "severity": "CRITICAL",
+      "violation_ids": [
+        "V008"
       ],
       "total_count": 1,
       "total_deduction": 3,
       "affected_files": [
         "additional_generations/page_additions/print_history_page_additions.py"
       ],
-      "fix_approach": "Restructure the property methods section to clearly indicate these methods should be added to the PrintHistoryPage class body (not the Elements inner class, and not as standalone functions). Add clear section headers separating the Elements class additions from the PrintHistoryPage class method additions. Show proper indentation to indicate these are class methods."
+      "fix_approach": "Remove all instructional comments, section headers with equals signs, and 'ADD THESE...' style comments. The file should contain only valid Python code with standard docstrings and inline comments."
     },
     {
-      "priority": 3,
-      "category": "unclear_merge_instructions",
+      "priority": 4,
+      "category": "wrong_import_order",
       "severity": "MODERATE",
       "violation_ids": [
-        "V003"
+        "V004"
+      ],
+      "total_count": 1,
+      "total_deduction": 2,
+      "affected_files": [
+        "test_scripts/billing_cycle_period_card.py"
+      ],
+      "fix_approach": "Ensure import order follows framework standards: stdlib → third-party → core → pages → helpers → common. The common import should be last, after all helper imports, separated by a blank line."
+    },
+    {
+      "priority": 5,
+      "category": "malformed_file",
+      "severity": "MODERATE",
+      "violation_ids": [
+        "V007"
       ],
       "total_count": 1,
       "total_deduction": 2,
       "affected_files": [
         "additional_generations/page_additions/print_history_page_additions.py"
       ],
-      "fix_approach": "Rewrite the merge instructions to clearly separate the two merge operations: (1) adding selector strings to Elements inner class, and (2) adding property methods to PrintHistoryPage class body. Remove the confusing instruction about not adding __init__ property initializations. Provide clear verification steps to ensure both parts are merged correctly."
+      "fix_approach": "Simplify module docstring to be concise. Remove detailed merge instructions from docstring - keep only essential information about target file and test case."
+    },
+    {
+      "priority": 6,
+      "category": "verbose_logging",
+      "severity": "MODERATE",
+      "violation_ids": [
+        "V005"
+      ],
+      "total_count": 1,
+      "total_deduction": 2,
+      "affected_files": [
+        "test_scripts/billing_cycle_period_card.py"
+      ],
+      "fix_approach": "Remove redundant inline comment '# Pause subscription via Rails Admin' from precondition section. The section comment and log statement already provide sufficient context."
     }
   ]
 }
