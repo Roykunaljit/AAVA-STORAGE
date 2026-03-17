@@ -113,7 +113,7 @@ def billing_cycle_period_card(stage_callback):
             expect(print_history_page.complimentary_pages_tooltip).to_be_visible(timeout=10000)
             expect(print_history_page.complimentary_pages_tooltip).not_to_be_empty(timeout=10000)
             tooltip_text = print_history_page.complimentary_pages_tooltip.text_content()
-            framework_logger.info(f"Step 7: Verified tooltip displays on hover - Message: {tooltip_text}")
+            framework_logger.info("Step 7: Verified tooltip displays on hover")
 
             # Step 8: Check Complimentary pages value
             expect(print_history_page.complimentary_pages_value).to_contain_text("0 of 10", timeout=30000)
@@ -188,7 +188,7 @@ def billing_cycle_period_card(stage_callback):
             expect(print_history_page.additional_pages_tooltip).to_be_visible(timeout=10000)
             tooltip_text = print_history_page.additional_pages_tooltip.text_content()
             assert len(tooltip_text) > 0, "Tooltip text is empty"
-            framework_logger.info(f"Step 16: Verified tooltip displays for Additional pages info icon - Message: {tooltip_text}")
+            framework_logger.info(f"Step 16: Verified tooltip displays for Additional pages info icon")
 
             # Step 17: Check message below Additional pages
             expect(print_history_page.additional_pages_info_message).to_be_visible(timeout=30000)
