@@ -64,9 +64,7 @@ def billing_cycle_period_card(stage_callback):
             framework_logger.info("Precondition: Pausing subscription plan")
             GeminiRAHelper.access(page)
             GeminiRAHelper.access_tenant_page(page, tenant_email)
-            GeminiRAHelper.access_edit_subscription(page)
-            GeminiRAHelper.set_subscription_state(page, 'paused')
-            GeminiRAHelper.save_subscription_changes(page)
+            GeminiRAHelper.pause_subscription(page)
             GeminiRAHelper.verify_rails_admin_info(page, "Subscription State", "paused", retry=True)
             framework_logger.info("Subscription paused successfully")
 
@@ -143,6 +141,7 @@ def billing_cycle_period_card(stage_callback):
             pages_printed = subscription_data_step10.get('pages_printed', subscription_data_step10.get('page_count', 0))
             assert pages_printed >= 6, f"Expected at least 6 pages printed, got {pages_printed}"
             expect(print_history_page.complimentary_pages_value).to_contain_text("6", timeout=30000)
+            framework_logger.info("Step 10: Simulated printing 6 pages")
             framework_logger.info("Step 10: Verified 6 pages printed and displayed")
 
             # Step 11: Refresh page and verify progress bar updated
@@ -165,6 +164,7 @@ def billing_cycle_period_card(stage_callback):
             pages_printed = subscription_data_step12.get('pages_printed', subscription_data_step12.get('page_count', 0))
             assert pages_printed >= 15, f"Expected at least 15 pages printed, got {pages_printed}"
             expect(print_history_page.complimentary_pages_value).to_contain_text("10", timeout=30000)
+            framework_logger.info("Step 12: Additional print job registered")
             framework_logger.info("Step 12: Verified 15 pages printed total")
 
             # Step 13: Refresh and verify both progress bars displayed
