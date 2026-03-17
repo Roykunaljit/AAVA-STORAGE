@@ -128,7 +128,6 @@ def billing_cycle_period_card(stage_callback):
             )
             page.wait_for_timeout(5000)
             sub_data = common.subscription_data_from_gemini(tenant_id)
-            # Verify 6 pages were recorded
             assert 'pages_printed' in sub_data or 'page_count' in sub_data, "Page count not in subscription data"
             framework_logger.info(f"Verified pages recorded: {sub_data.get('pages_printed', sub_data.get('page_count'))}")
             framework_logger.info("Step 10: Simulated printing 6 pages")
@@ -151,7 +150,6 @@ def billing_cycle_period_card(stage_callback):
             )
             page.wait_for_timeout(5000)
             sub_data = common.subscription_data_from_gemini(tenant_id)
-            # Verify total 15 pages recorded
             assert 'pages_printed' in sub_data or 'page_count' in sub_data, "Page count not in subscription data"
             framework_logger.info(f"Verified total pages: {sub_data.get('pages_printed', sub_data.get('page_count'))}")
             framework_logger.info(f"Step 12: Additional print job registered - Total pages: {sub_data.get('pages_printed', sub_data.get('page_count'))}")
