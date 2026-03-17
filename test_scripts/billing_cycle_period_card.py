@@ -64,7 +64,6 @@ def billing_cycle_period_card(stage_callback):
             # Precondition 4: Pause the plan
             GeminiRAHelper.access(page)
             GeminiRAHelper.access_tenant_page(page, tenant_email)
-            # Pause subscription via Rails Admin
             subscription_page_url = f"{GlobalState.gemini_ra_url}/subscriptions/{subscription_id}/edit"
             page.goto(subscription_page_url)
             page.wait_for_load_state('networkidle', timeout=30000)
@@ -72,7 +71,7 @@ def billing_cycle_period_card(stage_callback):
             page.click("button[type='submit']")
             page.wait_for_load_state('networkidle', timeout=30000)
             GeminiRAHelper.verify_rails_admin_info(page, "Subscription State", "paused", retry=True)
-            framework_logger.info("Precondition setup completed: Subscription paused via Rails Admin")
+            framework_logger.info("Precondition 4: Subscription paused via Rails Admin")
 
             # ══════════════════════════════════════════════
             # PRECONDITION SETUP COMPLETE - TEST STEPS BEGIN
@@ -89,7 +88,7 @@ def billing_cycle_period_card(stage_callback):
 
             # Step 2: Check the Billing Cycle Period card - verify plan pause info NOT displayed
             expect(print_history_page.print_history_card).to_be_visible(timeout=30000)
-            expect(print_history_page.plan_pause_info).not_to_be_visible(timeout=30000)
+            expect(print_history_page.elements.plan_pause_info).not_to_be_visible(timeout=30000)
             framework_logger.info("Step 2: Verified plan pause information is not displayed")
 
             # Step 3: Event shift 32 days and trigger billing charge
@@ -111,7 +110,7 @@ def billing_cycle_period_card(stage_callback):
 
             # Step 5: Check the Billing Cycle Period card - verify plan pause info IS displayed
             expect(print_history_page.print_history_card).to_be_visible(timeout=30000)
-            expect(print_history_page.plan_pause_info).to_be_visible(timeout=30000)
+            expect(print_history_page.elements.plan_pause_info).to_be_visible(timeout=30000)
             framework_logger.info("Step 5: Verified plan pause information is displayed")
 
             # Step 6: Check the progress bar - verify Complimentary pages progress bar displayed
@@ -217,6 +216,7 @@ def billing_cycle_period_card(stage_callback):
             framework_logger.info("Step 18: Complimentary pages progress bar full (10 of 10)")
 
             # Step 19: Check total pages printed
+            billing_card = print_history_page.elements.billing_cycle_period_card
             total_pages_element = print_history_page.total_printed_pages
             expect(total_pages_element).to_be_visible(timeout=30000)
             total_pages_text = total_pages_element.text_content()
@@ -224,7 +224,6 @@ def billing_cycle_period_card(stage_callback):
             framework_logger.info("Step 19: Verified total pages printed")
 
             # Step 20: Visual verification - screenshot captured
-            billing_card = print_history_page.billing_cycle_period_card
             expect(billing_card).to_be_visible(timeout=30000)
             billing_card.screenshot(path="screenshots/billing_cycle_card_visual.png")
             # Verify key visual elements are present and positioned correctly
@@ -239,7 +238,6 @@ def billing_cycle_period_card(stage_callback):
             for width, height in viewport_sizes:
                 page.set_viewport_size({"width": width, "height": height})
                 page.wait_for_load_state("networkidle", timeout=10000)
-                billing_card = print_history_page.billing_cycle_period_card
                 expect(billing_card).to_be_visible(timeout=30000)
             framework_logger.info("Step 21: Verified responsive layout at all viewports")
 
