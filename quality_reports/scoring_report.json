@@ -2,13 +2,13 @@
   "scoring_metadata": {
     "scored_at": "2025-01-15T16:45:00Z",
     "scorer": "Test_Script_Quality_Auditor",
-    "overall_score": 100,
+    "overall_score": 79,
     "score_formula": "100 - (CRITICAL×3 + MODERATE×2 + MINOR×1), floor 0",
-    "total_violations": 0,
-    "critical_count": 0,
-    "moderate_count": 0,
-    "minor_count": 0,
-    "total_deduction": 0,
+    "total_violations": 7,
+    "critical_count": 3,
+    "moderate_count": 3,
+    "minor_count": 1,
+    "total_deduction": 21,
     "total_files_analyzed": 2,
     "files_analyzed": [
       "test_scripts/billing_cycle_period_card.py",
@@ -25,40 +25,30 @@
       "file_path": "test_scripts/billing_cycle_period_card.py",
       "file_type": "test_script",
       "test_case_id": "C44873414",
-      "score": 100,
-      "violation_count": 0,
-      "critical_count": 0,
-      "moderate_count": 0,
-      "minor_count": 0,
-      "deduction": 0,
+      "score": 82,
+      "violation_count": 5,
+      "critical_count": 2,
+      "moderate_count": 2,
+      "minor_count": 1,
+      "deduction": 18,
       "checkpoints_evaluated": 45,
       "checkpoints_passed": [
         "A01",
         "A02",
-        "A03",
         "A04",
-        "A05",
         "A06",
         "A07",
-        "A08",
         "A09",
         "A10",
         "A11",
-        "A12",
         "A13",
-        "A14",
         "A15",
         "B01",
         "B02",
-        "B03",
         "B04",
-        "B05",
         "C01",
         "C02",
-        "C03",
-        "C04",
         "C05",
-        "C06",
         "D01",
         "D02",
         "D03",
@@ -73,53 +63,292 @@
         "D12",
         "D13",
         "D14",
-        "D15",
         "E01",
         "E02",
         "E03",
-        "E04",
         "E05",
         "E06",
         "E07",
         "E08"
       ],
-      "checkpoints_failed": [],
-      "violations": []
+      "checkpoints_failed": [
+        "A14",
+        "B03",
+        "C03",
+        "D15",
+        "E04"
+      ],
+      "violations": [
+        {
+          "violation_id": "V001",
+          "rule_id": "PROHIBITION_5",
+          "severity": "CRITICAL",
+          "category": "missing_import",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "GeminiRAHelper.pause_subscription(page)",
+          "expected_code": "# Use existing method or implement pause via Rails Admin UI interaction\n# Option 1: Navigate to subscription edit page and click pause button\n# Option 2: Use GeminiRAHelper.access_edit_menu() then interact with pause controls",
+          "explanation": "The script calls GeminiRAHelper.pause_subscription(page) in the precondition setup, but this method does not exist in the codebase according to the mapping report. The mapping report shows GeminiRAHelper has methods like subscription_to_subscribed, event_shift, access_tenant_page, verify_rails_admin_info, but NOT pause_subscription. This violates Prohibition 5 Rule B - using a method that doesn't exist in the mapped components. The script must either use existing Rails Admin helper methods to navigate and pause manually, or this method needs to be added to helper_additions.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "GeminiRAHelper.pause_subscription(page)",
+            "replace_with": "# Navigate to subscription edit and pause manually\nGeminiRAHelper.access_edit_menu(page)\npage.locator(\"text=Pause\").click()\npage.locator(\"button:has-text('Save')\").click()",
+            "additional_note": "Alternatively, add pause_subscription method to GeminiRAHelper additions file"
+          }
+        },
+        {
+          "violation_id": "V002",
+          "rule_id": "CHECKPOINT_B03",
+          "severity": "CRITICAL",
+          "category": "missing_assertion",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "# Step 10: Print 6 pages (less than plan limit)\ncommon.send_rtp_devicestatus(\n    entity_id=printer_data.entity_id,\n    cloud_id=printer_data.cloud_id,\n    device_uuid=printer_data.device_uuid\n)\npage.wait_for_timeout(5000)\nsubscription_data_step10 = common.subscription_data_from_gemini(tenant_id)\npages_printed = subscription_data_step10.get('pages_printed', subscription_data_step10.get('page_count', 0))\nassert pages_printed >= 6, f\"Expected at least 6 pages printed, got {pages_printed}\"\nexpect(print_history_page.complimentary_pages_value).to_contain_text(\"6\", timeout=30000)\nframework_logger.info(\"Step 10: Simulated printing 6 pages\")\nframework_logger.info(\"Step 10: Verified 6 pages printed and displayed\")",
+          "expected_code": "# Step 10: Print 6 pages (less than plan limit)\ncommon.send_rtp_devicestatus(\n    entity_id=printer_data.entity_id,\n    cloud_id=printer_data.cloud_id,\n    device_uuid=printer_data.device_uuid\n)\npage.wait_for_timeout(5000)\nsubscription_data_step10 = common.subscription_data_from_gemini(tenant_id)\npages_printed = subscription_data_step10.get('pages_printed', subscription_data_step10.get('page_count', 0))\nassert pages_printed >= 6, f\"Expected at least 6 pages printed, got {pages_printed}\"\n# Refresh page to see updated values\npage.reload()\npage.wait_for_load_state(\"domcontentloaded\", timeout=30000)\nexpect(print_history_page.complimentary_pages_value).to_contain_text(\"6\", timeout=30000)\nframework_logger.info(\"Step 10: Simulated printing 6 pages and verified display\")",
+          "explanation": "Step 10 prints pages and immediately checks the UI for updated values, but does not refresh the page first. The test case analysis shows Step 10 is 'Print some pages' and Step 11 is 'Refresh the dashboard page' followed by verification. The script combines these into Step 10 without the refresh, which means the UI may not show updated values yet. The expected result for Step 10 is 'Print job registered successfully' - which is verified via API. The UI verification should happen in Step 11 after refresh. This violates Checkpoint B03 - every expected result must have proper verification at the correct step.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "expect(print_history_page.complimentary_pages_value).to_contain_text(\"6\", timeout=30000)\nframework_logger.info(\"Step 10: Simulated printing 6 pages\")\nframework_logger.info(\"Step 10: Verified 6 pages printed and displayed\")",
+            "replace_with": "framework_logger.info(\"Step 10: Simulated printing 6 pages - print job registered successfully\")"
+          }
+        },
+        {
+          "violation_id": "V003",
+          "rule_id": "CHECKPOINT_C03",
+          "severity": "MODERATE",
+          "category": "unused_verification_component",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "# Step 20: Visual verification - screenshot captured\nexpect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)\nprint_history_page.billing_cycle_period_card.screenshot(path=\"screenshots/billing_cycle_card_visual.png\")\nframework_logger.info(\"Step 20: Screenshot captured for visual verification\")",
+          "expected_code": "# Step 20: Visual verification with baseline comparison\nexpect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)\nfrom core.validator import compare_images_detect_then_filter\nprint_history_page.billing_cycle_period_card.screenshot(path=\"screenshots/billing_cycle_card_actual.png\")\nbaseline_path = \"test_data/visual_baselines/billing_cycle_card_pause_plan.png\"\ncomparison_result = compare_images_detect_then_filter(\n    baseline_path,\n    \"screenshots/billing_cycle_card_actual.png\",\n    exclusions=[],\n    color_tolerance=35\n)\nassert comparison_result['pass'], f\"Visual verification failed: {comparison_result['failure_info']}\"\nframework_logger.info(\"Step 20: Visual verification passed - matches baseline\")",
+          "explanation": "Step 20 in the test case analysis requires visual verification with screenshot comparison against a baseline. The test case includes a screenshot reference (attachment 35447537) that should be used as the baseline. The mapping report shows compare_images_detect_then_filter is available in core.validator for image comparison. The current implementation only captures a screenshot but does not compare it to any baseline, which means visual regressions would not be detected. This violates Checkpoint C03 - verification_components from mapping should be used for assertions.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "# Step 20: Visual verification - screenshot captured\nexpect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)\nprint_history_page.billing_cycle_period_card.screenshot(path=\"screenshots/billing_cycle_card_visual.png\")\nframework_logger.info(\"Step 20: Screenshot captured for visual verification\")",
+            "replace_with": "# Step 20: Visual verification with baseline comparison\nexpect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)\nfrom core.validator import compare_images_detect_then_filter\nprint_history_page.billing_cycle_period_card.screenshot(path=\"screenshots/billing_cycle_card_actual.png\")\nbaseline_path = \"test_data/visual_baselines/billing_cycle_card_pause_plan.png\"\ncomparison_result = compare_images_detect_then_filter(\n    baseline_path,\n    \"screenshots/billing_cycle_card_actual.png\",\n    exclusions=[],\n    color_tolerance=35\n)\nassert comparison_result['pass'], f\"Visual verification failed: {comparison_result['failure_info']}\"\nframework_logger.info(\"Step 20: Visual verification passed - matches baseline\")"
+          }
+        },
+        {
+          "violation_id": "V004",
+          "rule_id": "CHECKPOINT_D15",
+          "severity": "MODERATE",
+          "category": "inline_admin_interaction",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "# Precondition 4: Pause the plan\nframework_logger.info(\"Precondition: Pausing subscription plan\")\nGeminiRAHelper.access(page)\nGeminiRAHelper.access_tenant_page(page, tenant_email)\nGeminiRAHelper.pause_subscription(page)\nGeminiRAHelper.verify_rails_admin_info(page, \"Subscription State\", \"paused\", retry=True)\nframework_logger.info(\"Subscription paused successfully\")",
+          "expected_code": "# Precondition 4: Pause the plan\nframework_logger.info(\"Precondition: Pausing subscription plan\")\nGeminiRAHelper.access(page)\nGeminiRAHelper.access_tenant_page(page, tenant_email)\n# Use helper method to encapsulate pause logic\nGeminiRAHelper.pause_subscription(page)  # This method should be in helper_additions\nGeminiRAHelper.verify_rails_admin_info(page, \"Subscription State\", \"paused\", retry=True)\nframework_logger.info(\"Subscription paused successfully\")",
+          "explanation": "The precondition setup for pausing the plan calls GeminiRAHelper.pause_subscription(page), which is the correct pattern of encapsulating admin interactions in helper methods. However, this method does not exist in the codebase. While the pattern is correct (using a helper rather than inline page.locator() chains), the method itself is missing. This is a moderate violation because the intent is correct but the implementation is incomplete. The method should be added to a gemini_ra_helper_additions.py file.",
+          "fix_action": "ADD_TO_HELPER_ADDITIONS",
+          "fix_details": {
+            "target_file": "additional_generations/helper_additions/gemini_ra_helper_additions.py",
+            "method_name": "pause_subscription",
+            "method_signature": "@staticmethod\ndef pause_subscription(page):",
+            "method_implementation": "@staticmethod\ndef pause_subscription(page):\n    \"\"\"Pauses a subscription via Rails Admin interface.\"\"\"\n    RABaseHelper.access_edit_menu(page)\n    page.locator(\"text=Pause\").click()\n    page.locator(\"button:has-text('Save')\").click()\n    page.wait_for_load_state(\"networkidle\", timeout=30000)",
+            "note": "Create this file if it doesn't exist and add this method"
+          }
+        },
+        {
+          "violation_id": "V005",
+          "rule_id": "CHECKPOINT_E04",
+          "severity": "MINOR",
+          "category": "verbose_logging",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "framework_logger.info(\"Step 10: Simulated printing 6 pages\")\nframework_logger.info(\"Step 10: Verified 6 pages printed and displayed\")",
+          "expected_code": "framework_logger.info(\"Step 10: Simulated printing 6 pages and verified display\")",
+          "explanation": "Step 10 has two separate log lines for the same step. The coding standards specify that logging should be concise with 1 log line per step. Multiple log lines for a single step make logs harder to read and violate Checkpoint E04. The two messages should be combined into one concise log statement.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "framework_logger.info(\"Step 10: Simulated printing 6 pages\")\nframework_logger.info(\"Step 10: Verified 6 pages printed and displayed\")",
+            "replace_with": "framework_logger.info(\"Step 10: Simulated printing 6 pages and verified display\")"
+          }
+        }
+      ]
     },
     {
       "file_path": "additional_generations/page_additions/print_history_page_additions.py",
       "file_type": "page_addition",
       "test_case_id": "C44873414",
-      "score": 100,
-      "violation_count": 0,
-      "critical_count": 0,
-      "moderate_count": 0,
+      "score": 73,
+      "violation_count": 2,
+      "critical_count": 1,
+      "moderate_count": 1,
       "minor_count": 0,
-      "deduction": 0,
+      "deduction": 27,
       "checkpoints_evaluated": 7,
       "checkpoints_passed": [
         "F01",
         "F02",
         "F03",
-        "F04",
         "F05",
-        "F06",
         "F07"
       ],
-      "checkpoints_failed": [],
-      "violations": []
+      "checkpoints_failed": [
+        "F04",
+        "F06"
+      ],
+      "violations": [
+        {
+          "violation_id": "V006",
+          "rule_id": "CHECKPOINT_F04",
+          "severity": "CRITICAL",
+          "category": "missing_elements_class_structure",
+          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
+          "current_code": "class Elements:\n    plan_pause_info = \"[data-testid='plan-pause-info']\"\n    billing_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"\n    # ... more selectors\n\n# Then later:\nself.plan_pause_info = page.locator(self.elements.plan_pause_info)\nself.billing_cycle_period_card = page.locator(self.elements.billing_cycle_period_card)",
+          "expected_code": "# ═══════════════════════════════════════════════════════════════════════════════\n# ADD TO PrintHistoryPage.Elements CLASS (as string attributes):\n# ═══════════════════════════════════════════════════════════════════════════════\n\n# Add these lines inside the existing Elements class in PrintHistoryPage:\nplan_pause_info = \"[data-testid='plan-pause-info']\"\nbilling_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"\ncomplimentary_pages_progress_bar = \"[data-testid='complimentary-pages-progress-bar']\"\n# ... etc\n\n# ═══════════════════════════════════════════════════════════════════════════════\n# ADD TO PrintHistoryPage.__init__ METHOD:\n# ═══════════════════════════════════════════════════════════════════════════════\n\n# Add these lines after self.elements = self.Elements():\nself.plan_pause_info = page.locator(self.elements.plan_pause_info)\nself.billing_cycle_period_card = page.locator(self.elements.billing_cycle_period_card)\n# ... etc",
+          "explanation": "The page additions file defines a standalone 'class Elements:' which is incorrect. This is a page additions file meant to provide merge instructions, not a complete class definition. The Elements class already exists in PrintHistoryPage - this file should provide the string selector attributes to ADD to that existing class, not define a new class. The current structure would cause confusion during merge because it looks like a complete class definition rather than additions. The file should clearly show that these are string attributes to be added to the existing Elements inner class. This violates Checkpoint F04 - locators must be defined following the Elements inner class pattern correctly.",
+          "fix_action": "RESTRUCTURE",
+          "fix_details": {
+            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
+            "description": "Restructure to show these are additions to existing Elements class, not a new class definition",
+            "current_structure": "class Elements:\n    plan_pause_info = \"[data-testid='plan-pause-info']\"\n    # ...",
+            "required_structure": "# ADD TO EXISTING PrintHistoryPage.Elements CLASS:\n# (Add these as string attributes inside the existing Elements class)\n\nplan_pause_info = \"[data-testid='plan-pause-info']\"\nbilling_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"\n# ..."
+          }
+        },
+        {
+          "violation_id": "V007",
+          "rule_id": "CHECKPOINT_F06",
+          "severity": "MODERATE",
+          "category": "duplicate_tooltip_locator",
+          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
+          "current_code": "complimentary_pages_tooltip = \"[role='tooltip']\"  # Update with specific data-testid when available\nadditional_pages_tooltip = \"[role='tooltip']\"  # Update with specific data-testid when available",
+          "expected_code": "complimentary_pages_tooltip = \"[data-testid='complimentary-pages-tooltip'], [role='tooltip']:has-text('complimentary')\"\nadditional_pages_tooltip = \"[data-testid='additional-pages-tooltip'], [role='tooltip']:has-text('additional')\"",
+          "explanation": "Both tooltip locators use the same selector '[role=tooltip]', which will cause both to match the same element when multiple tooltips exist on the page. When the complimentary pages info icon is hovered and its tooltip appears, both locators will match that same tooltip. This violates Checkpoint F06 - locators must be unique and specific. The selectors should either use unique data-testid attributes or add additional specificity like text content matching to differentiate between the two tooltips. The comment acknowledges this is a placeholder, but the placeholder itself is problematic because it will cause test failures.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
+            "find": "complimentary_pages_tooltip = \"[role='tooltip']\"  # Update with specific data-testid when available\nadditional_pages_tooltip = \"[role='tooltip']\"  # Update with specific data-testid when available",
+            "replace_with": "complimentary_pages_tooltip = \"[data-testid='complimentary-pages-tooltip'], [role='tooltip']:has-text('complimentary')\"\nadditional_pages_tooltip = \"[data-testid='additional-pages-tooltip'], [role='tooltip']:has-text('additional')\"",
+            "note": "Uses fallback pattern with text matching to differentiate tooltips until specific data-testid attributes are available"
+          }
+        }
+      ]
     }
   ],
   "violation_summary": {
     "by_severity": {
-      "CRITICAL": 0,
-      "MODERATE": 0,
-      "MINOR": 0
+      "CRITICAL": 3,
+      "MODERATE": 3,
+      "MINOR": 1
     },
-    "by_category": {},
-    "by_rule": {},
-    "most_common_violation": "NONE — all checkpoints passed",
-    "most_impacted_file": "NONE — all files scored 100"
+    "by_category": {
+      "missing_import": 1,
+      "missing_assertion": 1,
+      "unused_verification_component": 1,
+      "inline_admin_interaction": 1,
+      "verbose_logging": 1,
+      "missing_elements_class_structure": 1,
+      "duplicate_tooltip_locator": 1
+    },
+    "by_rule": {
+      "PROHIBITION_5": 1,
+      "CHECKPOINT_B03": 1,
+      "CHECKPOINT_C03": 1,
+      "CHECKPOINT_D15": 1,
+      "CHECKPOINT_E04": 1,
+      "CHECKPOINT_F04": 1,
+      "CHECKPOINT_F06": 1
+    },
+    "most_common_violation": "Each rule violated once - no pattern",
+    "most_impacted_file": "test_scripts/billing_cycle_period_card.py - 5 violations, score 82"
   },
-  "fix_priority_order": []
+  "fix_priority_order": [
+    {
+      "priority": 1,
+      "category": "missing_import",
+      "severity": "CRITICAL",
+      "violation_ids": [
+        "V001"
+      ],
+      "total_count": 1,
+      "total_deduction": 3,
+      "affected_files": [
+        "test_scripts/billing_cycle_period_card.py"
+      ],
+      "fix_approach": "Add GeminiRAHelper.pause_subscription() method to helper_additions or replace with existing Rails Admin navigation methods. The method should encapsulate the pause logic: access edit menu, click pause button, save changes."
+    },
+    {
+      "priority": 2,
+      "category": "missing_elements_class_structure",
+      "severity": "CRITICAL",
+      "violation_ids": [
+        "V006"
+      ],
+      "total_count": 1,
+      "total_deduction": 3,
+      "affected_files": [
+        "additional_generations/page_additions/print_history_page_additions.py"
+      ],
+      "fix_approach": "Restructure page additions file to clearly show these are string attributes to ADD to the existing Elements class, not a new class definition. Remove 'class Elements:' header and replace with clear merge instructions."
+    },
+    {
+      "priority": 3,
+      "category": "missing_assertion",
+      "severity": "CRITICAL",
+      "violation_ids": [
+        "V002"
+      ],
+      "total_count": 1,
+      "total_deduction": 3,
+      "affected_files": [
+        "test_scripts/billing_cycle_period_card.py"
+      ],
+      "fix_approach": "Separate Step 10 (print pages) from Step 11 (refresh and verify). Step 10 should only verify print job registration via API. Step 11 should refresh page and verify UI updates."
+    },
+    {
+      "priority": 4,
+      "category": "unused_verification_component",
+      "severity": "MODERATE",
+      "violation_ids": [
+        "V003"
+      ],
+      "total_count": 1,
+      "total_deduction": 2,
+      "affected_files": [
+        "test_scripts/billing_cycle_period_card.py"
+      ],
+      "fix_approach": "Add visual comparison using compare_images_detect_then_filter from core.validator. Compare captured screenshot against baseline image and assert comparison passes."
+    },
+    {
+      "priority": 5,
+      "category": "duplicate_tooltip_locator",
+      "severity": "MODERATE",
+      "violation_ids": [
+        "V007"
+      ],
+      "total_count": 1,
+      "total_deduction": 2,
+      "affected_files": [
+        "additional_generations/page_additions/print_history_page_additions.py"
+      ],
+      "fix_approach": "Make tooltip locators unique by adding text content matching or using specific data-testid attributes. Use fallback pattern: [data-testid='specific-tooltip'], [role='tooltip']:has-text('keyword')"
+    },
+    {
+      "priority": 6,
+      "category": "inline_admin_interaction",
+      "severity": "MODERATE",
+      "violation_ids": [
+        "V004"
+      ],
+      "total_count": 1,
+      "total_deduction": 2,
+      "affected_files": [
+        "test_scripts/billing_cycle_period_card.py"
+      ],
+      "fix_approach": "Create gemini_ra_helper_additions.py with pause_subscription method implementation. Method should use RABaseHelper.access_edit_menu() and interact with pause controls."
+    },
+    {
+      "priority": 7,
+      "category": "verbose_logging",
+      "severity": "MINOR",
+      "violation_ids": [
+        "V005"
+      ],
+      "total_count": 1,
+      "total_deduction": 1,
+      "affected_files": [
+        "test_scripts/billing_cycle_period_card.py"
+      ],
+      "fix_approach": "Combine multiple log lines for Step 10 into single concise log statement."
+    }
+  ]
 }
