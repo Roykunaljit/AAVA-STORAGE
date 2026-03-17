@@ -51,7 +51,7 @@ def billing_cycle_period_card(stage_callback):
             common.validate_subscription_state(sub_id, "subscribed")
             free_months = subscription_data.get("free_months")
             assert free_months is None or free_months == 0, f"Subscription has free months: {free_months}"
-            framework_logger.info(f"Verified subscription is in subscribed status without free months: {subscription_data.get('free_months')}")
+            framework_logger.info("Verified subscription is in subscribed status without free months")
             
             # Precondition 4: Pause the plan
             framework_logger.info("Precondition: Pausing subscription plan")
@@ -117,7 +117,7 @@ def billing_cycle_period_card(stage_callback):
             expect(print_history_page.complimentary_pages_tooltip).to_be_visible(timeout=10000)
             tooltip_text = print_history_page.complimentary_pages_tooltip.text_content()
             assert len(tooltip_text) > 0 and "complimentary" in tooltip_text.lower(), f"Tooltip text invalid: {tooltip_text}"
-            framework_logger.info(f"Step 7: Verified tooltip displays with message: {tooltip_text}")
+            framework_logger.info("Step 7: Verified tooltip displays with message")
 
             # Step 8: Check Complimentary pages value
             expect(print_history_page.complimentary_pages_value).to_contain_text("0 of 10", timeout=30000)
@@ -128,7 +128,7 @@ def billing_cycle_period_card(stage_callback):
             expect(print_history_page.complimentary_pages_info_message).to_be_visible(timeout=30000)
             info_message_text = print_history_page.complimentary_pages_info_message.text_content()
             assert len(info_message_text) > 0, "Info message is empty"
-            framework_logger.info(f"Step 9: Verified information message with plan info: {info_message_text}")
+            framework_logger.info("Step 9: Verified information message with plan info")
 
             # Step 10: Print 6 pages (less than plan limit)
             common.send_rtp_devicestatus(
@@ -141,7 +141,7 @@ def billing_cycle_period_card(stage_callback):
             pages_printed = sub_data.get('pages_printed', sub_data.get('page_count', 0))
             assert pages_printed >= 6, f"Expected at least 6 pages printed, got {pages_printed}"
             expect(print_history_page.complimentary_pages_value).to_contain_text("6", timeout=30000)
-            framework_logger.info(f"Step 10: Simulated printing 6 pages")
+            framework_logger.info("Step 10: Simulated printing 6 pages")
 
             # Step 11: Refresh page and verify progress bar updated
             page.reload()
@@ -162,7 +162,7 @@ def billing_cycle_period_card(stage_callback):
             sub_data = common.subscription_data_from_gemini(tenant_id)
             pages_printed = sub_data.get('pages_printed', sub_data.get('page_count', 0))
             assert pages_printed >= 15, f"Expected at least 15 pages printed, got {pages_printed}"
-            framework_logger.info(f"Step 12: Additional print job registered - Total pages: {pages_printed}")
+            framework_logger.info("Step 12: Additional print job registered")
 
             # Step 13: Refresh and verify both progress bars displayed
             page.reload()
@@ -196,7 +196,7 @@ def billing_cycle_period_card(stage_callback):
             expect(print_history_page.additional_pages_info_message).to_be_visible(timeout=30000)
             blocks_message_text = print_history_page.additional_pages_info_message.text_content()
             assert "block" in blocks_message_text.lower() or "bought" in blocks_message_text.lower(), f"Expected blocks bought info, got: {blocks_message_text}"
-            framework_logger.info(f"Step 17: Verified message with blocks bought information: {blocks_message_text}")
+            framework_logger.info("Step 17: Verified message with blocks bought information")
 
             # Step 18: Verify Complimentary pages progress bar is full
             expect(print_history_page.complimentary_pages_progress_bar).to_be_visible(timeout=30000)
@@ -212,12 +212,12 @@ def billing_cycle_period_card(stage_callback):
             expect(print_history_page.total_printed_pages).to_be_visible(timeout=30000)
             total_pages_text = print_history_page.total_printed_pages.text_content()
             assert "15" in total_pages_text, f"Expected 15 pages in total, got: {total_pages_text}"
-            framework_logger.info(f"Step 19: Verified total pages printed: {total_pages_text}")
+            framework_logger.info("Step 19: Verified total pages printed")
 
             # Step 20: Visual verification - screenshot captured
             expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)
             print_history_page.billing_cycle_period_card.screenshot(path="screenshots/billing_cycle_card_visual.png")
-            framework_logger.info("Step 20: Screenshot captured for visual verification. Manual baseline comparison required.")
+            framework_logger.info("Step 20: Screenshot captured for visual verification")
 
             # Step 21: Responsive verification across viewports
             viewport_sizes = [(1920, 1080), (768, 1024), (375, 667)]
@@ -225,7 +225,7 @@ def billing_cycle_period_card(stage_callback):
                 page.set_viewport_size({"width": width, "height": height})
                 page.wait_for_load_state("networkidle", timeout=10000)
                 expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)
-            framework_logger.info(f"Step 21: Verified responsive layout at all viewports: {viewport_sizes}")
+            framework_logger.info("Step 21: Verified responsive layout at all viewports")
 
             framework_logger.info("=== C44873414 - Billing Cycle Period card flow finished successfully ===")
 
