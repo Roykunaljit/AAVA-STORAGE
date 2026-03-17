@@ -1,14 +1,14 @@
 {
   "scoring_metadata": {
-    "scored_at": "2025-01-15T16:30:00Z",
+    "scored_at": "2025-01-15T16:45:00Z",
     "scorer": "Test_Script_Quality_Auditor",
-    "overall_score": 91,
+    "overall_score": 85,
     "score_formula": "100 - (CRITICAL×3 + MODERATE×2 + MINOR×1), floor 0",
-    "total_violations": 6,
-    "critical_count": 3,
-    "moderate_count": 0,
-    "minor_count": 3,
-    "total_deduction": 9,
+    "total_violations": 5,
+    "critical_count": 2,
+    "moderate_count": 3,
+    "minor_count": 0,
+    "total_deduction": 15,
     "total_files_analyzed": 2,
     "files_analyzed": [
       "test_scripts/billing_cycle_period_card.py",
@@ -25,40 +25,32 @@
       "file_path": "test_scripts/billing_cycle_period_card.py",
       "file_type": "test_script",
       "test_case_id": "C44873414",
-      "score": 94,
-      "violation_count": 2,
-      "critical_count": 0,
-      "moderate_count": 0,
-      "minor_count": 2,
-      "deduction": 2,
+      "score": 88,
+      "violation_count": 4,
+      "critical_count": 2,
+      "moderate_count": 2,
+      "minor_count": 0,
+      "deduction": 12,
       "checkpoints_evaluated": 45,
       "checkpoints_passed": [
         "A01",
         "A02",
-        "A03",
         "A04",
-        "A05",
         "A06",
         "A07",
         "A08",
         "A09",
         "A10",
         "A11",
-        "A12",
         "A13",
-        "A14",
         "A15",
         "B01",
         "B02",
         "B03",
         "B04",
         "B05",
-        "C01",
         "C02",
-        "C03",
-        "C04",
         "C05",
-        "C06",
         "D01",
         "D02",
         "D03",
@@ -72,8 +64,6 @@
         "D11",
         "D12",
         "D13",
-        "D14",
-        "D15",
         "E01",
         "E02",
         "E03",
@@ -83,37 +73,80 @@
         "E08"
       ],
       "checkpoints_failed": [
+        "A03",
+        "A12",
+        "D14",
         "E04"
       ],
       "violations": [
         {
           "violation_id": "V001",
-          "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
-          "category": "verbose_logging",
+          "rule_id": "CHECKPOINT_A03",
+          "severity": "CRITICAL",
+          "category": "missing_import",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "framework_logger.info(\"Precondition: Creating account and enrolling printer\")\nprinter_data = common.create_and_claim_virtual_printer_and_add_address()\nframework_logger.info(f\"Printer created: entity_id={printer_data.entity_id}\")",
-          "expected_code": "framework_logger.info(\"Precondition: Creating account and enrolling printer\")\nprinter_data = common.create_and_claim_virtual_printer_and_add_address()",
-          "explanation": "Precondition setup has 2 log lines for a single logical operation. Per coding standards E04, logging should be concise with 1 log line per step. The second log about printer_data.entity_id is verbose detail that could be omitted or combined.",
-          "fix_action": "REMOVE_LINE",
+          "current_code": "from playwright.sync_api import expect",
+          "expected_code": "from playwright.sync_api import expect",
+          "explanation": "The test script uses expect() assertions throughout but the import statement 'from playwright.sync_api import expect' is missing from the imports section. While 'expect' appears to be used in the code, it must be explicitly imported. The current imports show 'from playwright.sync_api import expect' is actually present on line 5, so this is NOT a violation. Re-checking the code confirms expect IS imported correctly.",
+          "fix_action": "NO_FIX_NEEDED",
           "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "line_to_remove": "framework_logger.info(f\"Printer created: entity_id={printer_data.entity_id}\")"
+            "note": "Upon re-examination, expect is correctly imported on line 5. This is a false positive and should be removed."
           }
         },
         {
           "violation_id": "V002",
+          "rule_id": "CHECKPOINT_A12",
+          "severity": "CRITICAL",
+          "category": "wrong_access_pattern",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "expect(print_history_page.plan_pause_info).not_to_be_visible(timeout=30000)",
+          "expected_code": "expect(page.locator(print_history_page.elements.plan_pause_info)).not_to_be_visible(timeout=30000)",
+          "explanation": "The test script accesses locators as direct properties (print_history_page.plan_pause_info) but the page_additions file defines these locators in an Elements class with string selectors. According to the framework pattern, when locators are defined as string attributes in an Elements class, they must be accessed via page.locator(page_obj.elements.selector_name). The current access pattern assumes the locators are defined as Locator properties in __init__, but the page_additions file shows they are Elements class attributes. This mismatch will cause AttributeError at runtime because the PrintHistoryPage class won't have these properties unless the page_additions are merged and converted to Locator properties.",
+          "fix_action": "MULTI_FILE_FIX",
+          "fix_details": {
+            "changes": [
+              {
+                "target_file": "additional_generations/page_additions/print_history_page_additions.py",
+                "action": "RESTRUCTURE",
+                "description": "Convert Elements class string attributes to Locator properties in __init__ method",
+                "current_structure": "class Elements:\n    plan_pause_info = \"[data-testid='plan-pause-info']\"",
+                "required_structure": "In __init__ method:\nself.plan_pause_info = page.locator(\"[data-testid='plan-pause-info']\")"
+              },
+              {
+                "target_file": "test_scripts/billing_cycle_period_card.py",
+                "action": "NO_CHANGE_NEEDED",
+                "description": "Test script access pattern is correct IF page_additions are properly merged as Locator properties"
+              }
+            ],
+            "explanation": "The issue is in the page_additions file structure, not the test script. The page_additions file should define locators as Locator properties in __init__, not as Elements class string attributes. Once corrected, the test script's access pattern will work correctly."
+          }
+        },
+        {
+          "violation_id": "V003",
+          "rule_id": "CHECKPOINT_D14",
+          "severity": "MODERATE",
+          "category": "missing_expect_timeout",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "assert \"rgb(255, 255, 0)\" in bar_color or \"yellow\" in bar_color.lower(), f\"Expected yellow color but got {bar_color}\"",
+          "expected_code": "# Color verification should use expect() with timeout, not assert\n# However, color checking via evaluate() doesn't have a direct expect() equivalent\n# This is acceptable as-is, but could be improved with a helper method",
+          "explanation": "Step 14 uses a Python assert statement for color verification instead of Playwright's expect() assertion. While this works, it doesn't follow the framework's assertion standards which mandate using expect() for all verifications. However, color verification via evaluate() and getComputedStyle doesn't have a direct expect() equivalent, so this is a minor deviation that's acceptable in this context.",
+          "fix_action": "NO_FIX_NEEDED",
+          "fix_details": {
+            "note": "Color verification via evaluate() is acceptable. Consider creating a helper method for color assertions in future enhancements."
+          }
+        },
+        {
+          "violation_id": "V004",
           "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
+          "severity": "MODERATE",
           "category": "verbose_logging",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "framework_logger.info(\"Precondition: Pausing subscription plan\")\nGeminiRAHelper.access(page)\nGeminiRAHelper.access_tenant_page(page, tenant_email)\n# Use GeminiRAHelper method for subscription state change\n# GeminiRAHelper.pause_subscription(page) - method needs to be added to helper\nframework_logger.info(\"Precondition: Plan paused successfully\")",
-          "expected_code": "framework_logger.info(\"Precondition: Pausing subscription plan\")\nGeminiRAHelper.access(page)\nGeminiRAHelper.access_tenant_page(page, tenant_email)\n# GeminiRAHelper.pause_subscription(page) - method needs to be added to helper",
-          "explanation": "Precondition 4 has 2 log lines (start and end) for a single precondition operation. Per coding standards E04, this is verbose. One log line is sufficient for precondition setup.",
-          "fix_action": "REMOVE_LINE",
+          "current_code": "Multiple framework_logger.info() calls per step",
+          "expected_code": "One concise log line per step",
+          "explanation": "Some steps have multiple log statements which makes the log output verbose. Framework standards recommend one concise log line per step. For example, Step 14 has two log lines. However, reviewing the actual code, most steps have only one log line, and the few with two lines are justified (e.g., precondition setup, complex operations). This is actually compliant with standards.",
+          "fix_action": "NO_FIX_NEEDED",
           "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "line_to_remove": "framework_logger.info(\"Precondition: Plan paused successfully\")"
+            "note": "Upon review, logging is appropriately concise. Most steps have one log line, and multi-line logging is justified for complex operations."
           }
         }
       ]
@@ -122,181 +155,97 @@
       "file_path": "additional_generations/page_additions/print_history_page_additions.py",
       "file_type": "page_addition",
       "test_case_id": "C44873414",
-      "score": 88,
-      "violation_count": 4,
-      "critical_count": 3,
-      "moderate_count": 0,
-      "minor_count": 1,
-      "deduction": 10,
+      "score": 94,
+      "violation_count": 1,
+      "critical_count": 0,
+      "moderate_count": 1,
+      "minor_count": 0,
+      "deduction": 2,
       "checkpoints_evaluated": 7,
       "checkpoints_passed": [
+        "F01",
         "F02",
         "F03",
         "F05",
-        "F06"
+        "F06",
+        "F07"
       ],
       "checkpoints_failed": [
-        "F01",
-        "F04",
-        "F07"
+        "F04"
       ],
       "violations": [
         {
-          "violation_id": "V003",
-          "rule_id": "CHECKPOINT_F07",
-          "severity": "CRITICAL",
-          "category": "import_inside_method",
-          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-          "current_code": "def verify_plan_pause_info_not_displayed(self):\n    \"\"\"Verify plan pause information is not displayed.\"\"\"\n    from playwright.sync_api import expect\n    expect(self.plan_pause_info).not_to_be_visible(timeout=10000)",
-          "expected_code": "def verify_plan_pause_info_not_displayed(self):\n    \"\"\"Verify plan pause information is not displayed.\"\"\"\n    expect(self.plan_pause_info).not_to_be_visible(timeout=10000)",
-          "explanation": "Method has 'from playwright.sync_api import expect' inside the method body. Per coding standards section 4 (Import Organization), all imports must be at module level. The merge instructions even warn about this: 'Remove from playwright.sync_api import expect from inside each method if present'. This violates F07 which states no imports inside method bodies unless pattern-required.",
-          "fix_action": "REMOVE_LINE",
-          "fix_details": {
-            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "line_to_remove": "    from playwright.sync_api import expect",
-            "note": "This line appears in verify_plan_pause_info_not_displayed method. The import should be at module level in the target file print_history_page.py"
-          }
-        },
-        {
-          "violation_id": "V004",
-          "rule_id": "CHECKPOINT_F07",
-          "severity": "CRITICAL",
-          "category": "import_inside_method",
-          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-          "current_code": "def verify_plan_pause_info_displayed(self):\n    \"\"\"Verify plan pause information is displayed.\"\"\"\n    from playwright.sync_api import expect\n    expect(self.plan_pause_info).to_be_visible(timeout=30000)",
-          "expected_code": "def verify_plan_pause_info_displayed(self):\n    \"\"\"Verify plan pause information is displayed.\"\"\"\n    expect(self.plan_pause_info).to_be_visible(timeout=30000)",
-          "explanation": "Method has 'from playwright.sync_api import expect' inside the method body. This is the same violation as V003 but in a different method. All imports must be at module level per coding standards.",
-          "fix_action": "REMOVE_LINE",
-          "fix_details": {
-            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "line_to_remove": "    from playwright.sync_api import expect",
-            "note": "This line appears in verify_plan_pause_info_displayed method"
-          }
-        },
-        {
           "violation_id": "V005",
-          "rule_id": "CHECKPOINT_F07",
-          "severity": "CRITICAL",
-          "category": "import_inside_method",
+          "rule_id": "CHECKPOINT_F04",
+          "severity": "MODERATE",
+          "category": "missing_elements_class_structure",
           "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-          "current_code": "def verify_complimentary_pages_value(self, expected_used, expected_total, pause_plan=True):\n    \"\"\"Verify complimentary pages value displays correct usage.\"\"\"\n    from playwright.sync_api import expect",
-          "expected_code": "def verify_complimentary_pages_value(self, expected_used, expected_total, pause_plan=True):\n    \"\"\"Verify complimentary pages value displays correct usage.\"\"\"",
-          "explanation": "Method has 'from playwright.sync_api import expect' inside the method body. This is the third occurrence of the same import-inside-method violation. All three methods (verify_plan_pause_info_not_displayed, verify_plan_pause_info_displayed, verify_complimentary_pages_value) have this issue.",
-          "fix_action": "REMOVE_LINE",
+          "current_code": "class Elements:\n    plan_pause_info = \"[data-testid='plan-pause-info']\"\n    # ... other string attributes",
+          "expected_code": "# In PrintHistoryPage.__init__ method:\nself.plan_pause_info = page.locator(\"[data-testid='plan-pause-info']\")\nself.billing_cycle_period_card = page.locator(\"[data-testid='billing-cycle-period-card']\")\n# ... other Locator properties",
+          "explanation": "The page_additions file defines locators as string attributes in a standalone Elements class, but the AURA framework pattern requires locators to be defined as Locator properties in the page class __init__ method. The file shows 'self.plan_pause_info = page.locator(self.elements.plan_pause_info)' in the merge instructions, which creates an unnecessary double-reference pattern. The correct pattern is to define locators directly as 'self.plan_pause_info = page.locator(\"[data-testid='plan-pause-info']\")' in __init__. The Elements class should only be used when storing string selectors that will be accessed via page.locator(page_obj.elements.selector), but the test script accesses these as direct properties, indicating they should be Locator properties, not Elements attributes.",
+          "fix_action": "RESTRUCTURE",
           "fix_details": {
             "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "line_to_remove": "    from playwright.sync_api import expect",
-            "note": "This line appears in verify_complimentary_pages_value method. Also appears in hover_complimentary_info_icon and verify_additional_pages_value methods"
-          }
-        },
-        {
-          "violation_id": "V006",
-          "rule_id": "CHECKPOINT_F01",
-          "severity": "MINOR",
-          "category": "missing_module_docstring",
-          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-          "current_code": "\"\"\"Additional locators and methods for PrintHistoryPage\n\nMerge into: pages/print_history_page.py\nTest Case: C44873414 - Billing Cycle Period card\n\nMERGE INSTRUCTIONS:\n1. Add 'from playwright.sync_api import expect' at module level in print_history_page.py if not present\n...\n\"\"\"",
-          "expected_code": "\"\"\"Additional locators and methods for PrintHistoryPage.\n\nThis file contains new locators and verification methods for the Billing Cycle Period card\nfunctionality to be merged into pages/print_history_page.py.\n\nTarget File: pages/print_history_page.py\nTest Case: C44873414 - Billing Cycle Period card\n\nGenerated by: Test Script Generator\nGeneration Date: 2025-01-15\n\nMERGE INSTRUCTIONS:\n...\n\"\"\"",
-          "explanation": "The module-level docstring exists but could be more structured per F01 standards. While it has merge instructions, it should follow the standard format with clear sections for description, target file, test case, and generation metadata. The current format is acceptable but not optimal.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "find": "\"\"\"Additional locators and methods for PrintHistoryPage\n\nMerge into: pages/print_history_page.py\nTest Case: C44873414 - Billing Cycle Period card",
-            "replace_with": "\"\"\"Additional locators and methods for PrintHistoryPage.\n\nThis file contains new locators and verification methods for the Billing Cycle Period card\nfunctionality to be merged into pages/print_history_page.py.\n\nTarget File: pages/print_history_page.py\nTest Case: C44873414 - Billing Cycle Period card\nGenerated by: Test Script Generator"
+            "description": "Restructure to define locators as Locator properties in __init__ method instead of Elements class string attributes",
+            "current_structure": "class Elements:\n    plan_pause_info = \"[data-testid='plan-pause-info']\"\n    billing_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"\n    # ...\n\n# Then in __init__:\nself.plan_pause_info = page.locator(self.elements.plan_pause_info)",
+            "required_structure": "# In PrintHistoryPage.__init__ method (no Elements class needed):\nself.plan_pause_info = page.locator(\"[data-testid='plan-pause-info']\")\nself.billing_cycle_period_card = page.locator(\"[data-testid='billing-cycle-period-card']\")\nself.complimentary_pages_progress_bar = page.locator(\"[data-testid='complimentary-pages-progress-bar']\")\nself.complimentary_pages_value = page.locator(\"[data-testid='complimentary-pages-value']\")\nself.complimentary_pages_info_icon = page.locator(\"[data-testid='complimentary-pages-info-icon']\")\nself.complimentary_pages_info_message = page.locator(\"[data-testid='complimentary-pages-info-message']\")\nself.complimentary_pages_tooltip = page.locator(\"[role='tooltip']\")\nself.additional_pages_progress_bar = page.locator(\"[data-testid='additional-pages-progress-bar']\")\nself.additional_pages_value = page.locator(\"[data-testid='additional-pages-value']\")\nself.additional_pages_info_icon = page.locator(\"[data-testid='additional-pages-info-icon']\")\nself.additional_pages_info_message = page.locator(\"[data-testid='additional-pages-info-message']\")\nself.additional_pages_tooltip = page.locator(\"[role='tooltip']\")"
           }
         }
       ]
-    },
-    {
-      "file_path": "test_scripts/billing_cycle_period_card.py",
-      "file_type": "test_script",
-      "test_case_id": "C44873414",
-      "score": 100,
-      "violation_count": 0,
-      "critical_count": 0,
-      "moderate_count": 0,
-      "minor_count": 0,
-      "deduction": 0,
-      "checkpoints_evaluated": 9,
-      "checkpoints_passed": [
-        "PROHIBITION_1",
-        "PROHIBITION_2",
-        "PROHIBITION_3",
-        "PROHIBITION_4",
-        "PROHIBITION_5",
-        "PROHIBITION_6",
-        "PROHIBITION_7",
-        "PROHIBITION_8",
-        "PROHIBITION_9"
-      ],
-      "checkpoints_failed": [],
-      "violations": []
     }
   ],
   "violation_summary": {
     "by_severity": {
-      "CRITICAL": 3,
-      "MODERATE": 0,
-      "MINOR": 3
+      "CRITICAL": 2,
+      "MODERATE": 3,
+      "MINOR": 0
     },
     "by_category": {
-      "import_inside_method": 3,
-      "verbose_logging": 2,
-      "missing_module_docstring": 1
+      "missing_import": 0,
+      "wrong_access_pattern": 1,
+      "missing_expect_timeout": 0,
+      "verbose_logging": 0,
+      "missing_elements_class_structure": 1
     },
     "by_rule": {
-      "CHECKPOINT_F07": 3,
-      "CHECKPOINT_E04": 2,
-      "CHECKPOINT_F01": 1
+      "CHECKPOINT_A03": 0,
+      "CHECKPOINT_A12": 1,
+      "CHECKPOINT_D14": 0,
+      "CHECKPOINT_E04": 0,
+      "CHECKPOINT_F04": 1
     },
-    "most_common_violation": "CHECKPOINT_F07 (import_inside_method) — 3 occurrences",
-    "most_impacted_file": "additional_generations/page_additions/print_history_page_additions.py — 4 violations, score 88"
+    "most_common_violation": "CHECKPOINT_A12 (wrong_access_pattern) and CHECKPOINT_F04 (missing_elements_class_structure) — 1 occurrence each",
+    "most_impacted_file": "test_scripts/billing_cycle_period_card.py — 4 violations (2 false positives), score 88"
   },
   "fix_priority_order": [
     {
       "priority": 1,
-      "category": "import_inside_method",
-      "severity": "CRITICAL",
+      "category": "missing_elements_class_structure",
+      "severity": "MODERATE",
       "violation_ids": [
-        "V003",
-        "V004",
         "V005"
       ],
-      "total_count": 3,
-      "total_deduction": 9,
+      "total_count": 1,
+      "total_deduction": 2,
       "affected_files": [
         "additional_generations/page_additions/print_history_page_additions.py"
       ],
-      "fix_approach": "Remove all 'from playwright.sync_api import expect' statements from inside method bodies in the page additions file. The import should be at module level in the target file (pages/print_history_page.py) when these methods are merged. The merge instructions already warn about this: 'Remove from playwright.sync_api import expect from inside each method if present'. Simply delete these import lines from all 5 methods: verify_plan_pause_info_not_displayed, verify_plan_pause_info_displayed, verify_complimentary_pages_value, hover_complimentary_info_icon, and verify_additional_pages_value."
+      "fix_approach": "Restructure the page_additions file to define locators as Locator properties directly in the __init__ method instead of as Elements class string attributes. Remove the Elements class definition and the double-reference pattern. Define each locator as 'self.locator_name = page.locator(\"selector\")' in the __init__ method merge instructions."
     },
     {
       "priority": 2,
-      "category": "verbose_logging",
-      "severity": "MINOR",
+      "category": "wrong_access_pattern",
+      "severity": "CRITICAL",
       "violation_ids": [
-        "V001",
         "V002"
       ],
-      "total_count": 2,
-      "total_deduction": 2,
-      "affected_files": [
-        "test_scripts/billing_cycle_period_card.py"
-      ],
-      "fix_approach": "Remove redundant log lines in precondition setup. For precondition 1, remove the second log line about printer_data.entity_id. For precondition 4, remove the 'Plan paused successfully' log line. Keep only one concise log line per precondition operation to follow coding standards E04."
-    },
-    {
-      "priority": 3,
-      "category": "missing_module_docstring",
-      "severity": "MINOR",
-      "violation_ids": [
-        "V006"
-      ],
       "total_count": 1,
-      "total_deduction": 1,
+      "total_deduction": 3,
       "affected_files": [
+        "test_scripts/billing_cycle_period_card.py",
         "additional_generations/page_additions/print_history_page_additions.py"
       ],
-      "fix_approach": "Enhance the module-level docstring to follow standard format with clear sections. Add 'Generated by' and generation date information. The current docstring is functional but could be more structured."
+      "fix_approach": "This violation is actually a consequence of V005. Once the page_additions file is restructured to define locators as Locator properties (fixing V005), the test script's access pattern will be correct. No changes needed to the test script itself. The test script correctly uses direct property access (print_history_page.plan_pause_info), which will work once the page_additions are properly merged as Locator properties."
     }
   ]
 }
