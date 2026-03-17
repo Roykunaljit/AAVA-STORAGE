@@ -51,8 +51,7 @@ def billing_cycle_period_card(stage_callback):
             common.validate_subscription_state(sub_id, "subscribed")
             free_months = subscription_data.get("free_months")
             assert free_months is None or free_months == 0, f"Subscription has free months: {free_months}"
-            framework_logger.info(f"Verified no free months: {subscription_data.get('free_months')}")
-            framework_logger.info("Verified subscription is in subscribed status without free months")
+            framework_logger.info(f"Verified subscription is in subscribed status without free months: {subscription_data.get('free_months')}")
             
             # Precondition 4: Pause the plan
             framework_logger.info("Precondition: Pausing subscription plan")
@@ -148,7 +147,6 @@ def billing_cycle_period_card(stage_callback):
             page.reload()
             page.wait_for_load_state("domcontentloaded", timeout=30000)
             expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)
-            # Verify progress bar color is black
             bar_color = page.locator(print_history_page.elements.complimentary_pages_progress_bar).evaluate("el => window.getComputedStyle(el).backgroundColor")
             assert "rgb(0, 0, 0)" in bar_color or "black" in bar_color.lower(), f"Expected black color, got {bar_color}"
             expect(page.locator(print_history_page.elements.complimentary_pages_value)).to_contain_text("6", timeout=30000)
@@ -175,11 +173,10 @@ def billing_cycle_period_card(stage_callback):
 
             # Step 14: Check Additional pages progress bar color and value
             expect(page.locator(print_history_page.elements.additional_pages_progress_bar)).to_be_visible(timeout=30000)
-            # Verify progress bar color is yellow
             bar_color = page.locator(print_history_page.elements.additional_pages_progress_bar).evaluate("el => window.getComputedStyle(el).backgroundColor")
             assert "rgb(255, 255, 0)" in bar_color or "yellow" in bar_color.lower(), f"Expected yellow color, got {bar_color}"
             expect(page.locator(print_history_page.elements.additional_pages_value)).to_contain_text("5 of 10", timeout=30000)
-            framework_logger.info("Step 14: Additional pages progress bar color verified as yellow and value verified: 5 of 10 used")
+            framework_logger.info("Step 14: Additional pages progress bar verified as yellow with value 5 of 10 used")
 
             # Step 15: Check info icon for Additional pages
             expect(page.locator(print_history_page.elements.additional_pages_info_icon)).to_be_visible(timeout=30000)
@@ -193,7 +190,7 @@ def billing_cycle_period_card(stage_callback):
             expect(page.locator(print_history_page.elements.additional_pages_tooltip)).to_be_visible(timeout=10000)
             tooltip_text = page.locator(print_history_page.elements.additional_pages_tooltip).text_content()
             assert len(tooltip_text) > 0, "Tooltip text is empty"
-            framework_logger.info(f"Step 16: Additional pages tooltip verified")
+            framework_logger.info("Step 16: Additional pages tooltip verified")
 
             # Step 17: Check message below Additional pages
             expect(page.locator(print_history_page.elements.additional_pages_info_message)).to_be_visible(timeout=30000)
@@ -203,7 +200,6 @@ def billing_cycle_period_card(stage_callback):
 
             # Step 18: Verify Complimentary pages progress bar is full
             expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)
-            # Verify progress bar is 100% filled with black color
             bar_color = page.locator(print_history_page.elements.complimentary_pages_progress_bar).evaluate("el => window.getComputedStyle(el).backgroundColor")
             assert "rgb(0, 0, 0)" in bar_color or "black" in bar_color.lower(), f"Expected black color, got {bar_color}"
             bar_width = page.locator(print_history_page.elements.complimentary_pages_progress_bar).evaluate("el => window.getComputedStyle(el).width")
@@ -224,14 +220,12 @@ def billing_cycle_period_card(stage_callback):
             framework_logger.info("Step 20: Screenshot captured for visual verification. Manual baseline comparison required.")
 
             # Step 21: Responsive verification across viewports
-            framework_logger.info("Step 21: Responsive layout verification across viewports")
             viewport_sizes = [(1920, 1080), (768, 1024), (375, 667)]
             for width, height in viewport_sizes:
                 page.set_viewport_size({"width": width, "height": height})
                 page.wait_for_load_state("networkidle", timeout=10000)
                 expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)
-                framework_logger.info(f"Verified layout at {width}x{height}")
-            framework_logger.info(f"Step 21: Verified responsive layout at all viewports")
+            framework_logger.info(f"Step 21: Verified responsive layout at all viewports: {viewport_sizes}")
 
             framework_logger.info("=== C44873414 - Billing Cycle Period card flow finished successfully ===")
 
