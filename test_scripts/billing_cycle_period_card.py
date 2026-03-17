@@ -1,8 +1,12 @@
-"""C44873414 - Billing Cycle Period card
+"""Test Case C44873414 - Billing Cycle Period card
 
 Verifies Billing Cycle Period card display and behavior on Print and Payment History page
 when subscription plan is paused, including complimentary pages progress bar, additional
 pages tracking, tooltips, and page usage information across different printing scenarios.
+
+Test Case ID: C44873414
+Module: HP Instant Ink
+Priority: P2
 """
 
 import traceback
@@ -12,7 +16,8 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 from core.playwright_manager import PlaywrightManager
-from core.settings import framework_logger, GlobalState
+from core.settings import framework_logger
+from core.settings import GlobalState
 
 from pages.confirmation_page import ConfirmationPage
 from pages.dashboard_side_menu_page import DashboardSideMenuPage
@@ -61,17 +66,10 @@ def billing_cycle_period_card(stage_callback):
             framework_logger.info("Verified subscription is in subscribed status without free months")
             
             # Precondition 4: Pause the plan
-            framework_logger.info("Precondition: Pausing subscription plan")
+            framework_logger.info("Precondition: Pausing subscription plan via Rails Admin")
             GeminiRAHelper.access(page)
             GeminiRAHelper.access_tenant_page(page, tenant_email)
-            # Navigate to subscription edit page
-            page.locator("a:has-text('Edit')").first.click()
-            page.wait_for_load_state('networkidle', timeout=30000)
-            # Find and select pause subscription option
-            page.locator("select[name='subscription[subscription_state]']").select_option('paused')
-            # Save changes
-            page.locator("input[type='submit'][value='Save']").click()
-            page.wait_for_load_state('networkidle', timeout=30000)
+            GeminiRAHelper.pause_subscription_via_rails_admin(page)
             GeminiRAHelper.verify_rails_admin_info(page, "Subscription State", "paused", retry=True)
             framework_logger.info("Subscription paused successfully")
 
@@ -90,7 +88,8 @@ def billing_cycle_period_card(stage_callback):
 
             # Step 2: Check the Billing Cycle Period card - verify plan pause info NOT displayed
             expect(print_history_page.print_history_card).to_be_visible(timeout=30000)
-            expect(print_history_page.plan_pause_info).to_be_hidden(timeout=30000)
+            plan_pause_count = print_history_page.plan_pause_info.count()
+            assert plan_pause_count == 0, f"Plan pause info should not be visible, found {plan_pause_count} elements"
             framework_logger.info("Step 2: Verified plan pause information is not displayed")
 
             # Step 3: Event shift 32 days and trigger billing charge
@@ -148,7 +147,7 @@ def billing_cycle_period_card(stage_callback):
             pages_printed = subscription_data_step10.get('pages_printed', subscription_data_step10.get('page_count', 0))
             assert pages_printed >= 6, f"Expected at least 6 pages printed, got {pages_printed}"
             expect(print_history_page.complimentary_pages_value).to_contain_text("6", timeout=30000)
-            framework_logger.info("Step 10: Simulated printing 6 pages and verified display")
+            framework_logger.info("Step 10: Simulated printing 6 pages")
 
             # Step 11: Refresh page and verify progress bar updated
             page.reload()
