@@ -108,8 +108,7 @@ def billing_cycle_period_card(stage_callback):
             framework_logger.info("Step 7: Verified tooltip displays on hover")
 
             # Step 8: Check Complimentary pages value
-            expected_complimentary_initial = "0 of 10(Pause Plan) used"
-            expect(print_history_page.complimentary_pages_value).to_contain_text(expected_complimentary_initial, timeout=30000)
+            print_history_page.verify_complimentary_pages_value(expected_used=0, expected_total=10, pause_plan=True)
             framework_logger.info("Step 8: Verified Complimentary pages value: 0 of 10(Pause Plan) used")
 
             # Step 9: Check message below Complimentary pages
@@ -168,8 +167,7 @@ def billing_cycle_period_card(stage_callback):
             expect(print_history_page.additional_pages_progress_bar).to_be_visible(timeout=30000)
             bar_color = print_history_page.additional_pages_progress_bar.evaluate("el => window.getComputedStyle(el).backgroundColor")
             assert "rgb(255, 255, 0)" in bar_color or "yellow" in bar_color.lower(), f"Expected yellow color, got {bar_color}"
-            expected_additional_pages = "5 of 10"
-            expect(print_history_page.additional_pages_value).to_contain_text(expected_additional_pages, timeout=30000)
+            print_history_page.verify_additional_pages_value(expected_used=5, expected_total=10)
             framework_logger.info("Step 14: Additional pages progress bar color verified as yellow and value verified: 5 of 10 used")
 
             # Step 15: Check info icon for Additional pages
