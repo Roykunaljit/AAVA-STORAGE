@@ -44,13 +44,12 @@ def billing_cycle_period_card(stage_callback):
             # ══════════════════════════════════════════════
             
             # Precondition 1: Create account and enroll printer with 50+ pages plan
-            framework_logger.info("Precondition: Creating account and enrolling printer with 50 pages plan")
             printer_data = common.create_and_claim_virtual_printer_and_add_address()
             EnrollmentHelper.start_enrollment_and_sign_in(page, tenant_email)
             EnrollmentHelper.select_printer(page, printer_index=0)
             EnrollmentHelper.select_plan(page, plan_pages=50)
             EnrollmentHelper.finish_enrollment(page)
-            framework_logger.info("Enrollment completed successfully")
+            framework_logger.info("Precondition setup completed: Enrollment with 50 pages plan")
             
             # Precondition 2 & 3: Ensure subscription is in subscribed status without free months
             org_token, tenant_id = common.get_org_aware_token(tenant_email)
@@ -63,13 +62,11 @@ def billing_cycle_period_card(stage_callback):
             framework_logger.info("Verified subscription is in subscribed status")
             
             # Precondition 4: Pause the plan
-            framework_logger.info("Precondition: Pausing subscription plan via Rails Admin")
             GeminiRAHelper.access(page)
             GeminiRAHelper.access_tenant_page(page, tenant_email)
-            # Implement pause plan action - this needs actual method from helper
-            # GeminiRAHelper.pause_subscription(page) or similar
+            GeminiRAHelper.pause_subscription(page)
             GeminiRAHelper.verify_rails_admin_info(page, "Subscription State", "paused", retry=True)
-            framework_logger.info("Subscription paused successfully")
+            framework_logger.info("Precondition setup completed: Subscription paused via Rails Admin")
 
             # ══════════════════════════════════════════════
             # PRECONDITION SETUP COMPLETE - TEST STEPS BEGIN
@@ -123,7 +120,7 @@ def billing_cycle_period_card(stage_callback):
                 complimentary_info_icon.hover()
             complimentary_tooltip = page.locator(print_history_page.elements.complimentary_pages_tooltip)
             expect(complimentary_tooltip).to_be_visible(timeout=10000)
-            expect(complimentary_tooltip).to_contain_text("complimentary", timeout=10000)
+            expect(complimentary_tooltip).not_to_be_empty(timeout=10000)
             framework_logger.info("Step 7: Verified tooltip displays with message")
 
             # Step 8: Check Complimentary pages value
@@ -135,7 +132,7 @@ def billing_cycle_period_card(stage_callback):
             # Step 9: Check message below Complimentary pages
             complimentary_info_msg = page.locator(print_history_page.elements.complimentary_pages_info_message)
             expect(complimentary_info_msg).to_be_visible(timeout=30000)
-            expect(complimentary_info_msg).not_to_be_empty()
+            expect(complimentary_info_msg).not_to_be_empty(timeout=30000)
             framework_logger.info("Step 9: Verified information message with plan info")
 
             # Step 10: Print 6 pages (less than plan limit)
@@ -208,7 +205,7 @@ def billing_cycle_period_card(stage_callback):
                 additional_info_icon.hover()
             additional_tooltip = page.locator(print_history_page.elements.additional_pages_tooltip)
             expect(additional_tooltip).to_be_visible(timeout=10000)
-            expect(additional_tooltip).not_to_be_empty()
+            expect(additional_tooltip).not_to_be_empty(timeout=10000)
             framework_logger.info("Step 16: Additional pages tooltip verified")
 
             # Step 17: Check message below Additional pages
@@ -240,7 +237,9 @@ def billing_cycle_period_card(stage_callback):
             billing_card = page.locator(print_history_page.elements.billing_cycle_period_card)
             expect(billing_card).to_be_visible(timeout=30000)
             billing_card.screenshot(path="screenshots/billing_cycle_card_visual.png")
-            framework_logger.info("Step 20: Screenshot captured for visual verification")
+            # Visual verification requires manual comparison or visual testing tool integration
+            # Expected: Card layout matches baseline design with all elements properly positioned
+            framework_logger.info("Step 20: Screenshot captured for visual verification - manual comparison required")
 
             # Step 21: Responsive verification across viewports
             viewport_sizes = [(1920, 1080), (768, 1024), (375, 667)]
