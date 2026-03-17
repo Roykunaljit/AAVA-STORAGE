@@ -66,6 +66,9 @@ def billing_cycle_period_card(stage_callback):
             framework_logger.info("Precondition: Pausing subscription plan via Rails Admin")
             GeminiRAHelper.access(page)
             GeminiRAHelper.access_tenant_page(page, tenant_email)
+            # Trigger pause plan action
+            # TODO: Add actual pause plan trigger method call here
+            # Example: GeminiRAHelper.pause_subscription(page) or DashboardHelper.pause_plan(page)
             GeminiRAHelper.verify_rails_admin_info(page, "Subscription State", "paused", retry=True)
             framework_logger.info("Subscription paused successfully")
 
@@ -121,8 +124,7 @@ def billing_cycle_period_card(stage_callback):
                 complimentary_info_icon.hover()
             complimentary_tooltip = page.locator(print_history_page.elements.complimentary_pages_tooltip)
             expect(complimentary_tooltip).to_be_visible(timeout=10000)
-            tooltip_text = complimentary_tooltip.text_content()
-            assert len(tooltip_text) > 0 and "complimentary" in tooltip_text.lower(), f"Tooltip text invalid: {tooltip_text}"
+            expect(complimentary_tooltip).to_contain_text("complimentary", timeout=10000)
             framework_logger.info("Step 7: Verified tooltip displays with message")
 
             # Step 8: Check Complimentary pages value
@@ -134,8 +136,7 @@ def billing_cycle_period_card(stage_callback):
             # Step 9: Check message below Complimentary pages
             complimentary_info_message = page.locator(print_history_page.elements.complimentary_pages_info_message)
             expect(complimentary_info_message).to_be_visible(timeout=30000)
-            info_message_text = complimentary_info_message.text_content()
-            assert len(info_message_text) > 0, "Info message is empty"
+            expect(complimentary_info_message).not_to_be_empty(timeout=30000)
             framework_logger.info("Step 9: Verified information message with plan info")
 
             # Step 10: Print 6 pages (less than plan limit)
@@ -150,9 +151,7 @@ def billing_cycle_period_card(stage_callback):
             subscription_data_step10 = common.subscription_data_from_gemini(tenant_id)
             pages_printed = subscription_data_step10.get('pages_printed', subscription_data_step10.get('page_count', 0))
             assert pages_printed >= 6, f"Expected at least 6 pages printed, got {pages_printed}"
-            complimentary_value = page.locator(print_history_page.elements.complimentary_pages_value)
-            expect(complimentary_value).to_contain_text("6", timeout=30000)
-            framework_logger.info("Step 10: Printed 6 pages and verified page count updated")
+            framework_logger.info("Step 10: Printed 6 pages successfully")
 
             # Step 11: Refresh page and verify progress bar updated
             page.reload()
@@ -160,6 +159,7 @@ def billing_cycle_period_card(stage_callback):
             complimentary_progress_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)
             expect(complimentary_progress_bar).to_be_visible(timeout=30000)
             bar_color = complimentary_progress_bar.evaluate("el => window.getComputedStyle(el).backgroundColor")
+            framework_logger.info(f"Complimentary progress bar color: {bar_color}")
             assert "rgb(0, 0, 0)" in bar_color or "black" in bar_color.lower(), f"Expected black color, got {bar_color}"
             complimentary_value = page.locator(print_history_page.elements.complimentary_pages_value)
             expect(complimentary_value).to_contain_text("6", timeout=30000)
@@ -177,8 +177,6 @@ def billing_cycle_period_card(stage_callback):
             subscription_data_step12 = common.subscription_data_from_gemini(tenant_id)
             pages_printed = subscription_data_step12.get('pages_printed', subscription_data_step12.get('page_count', 0))
             assert pages_printed >= 15, f"Expected at least 15 pages printed, got {pages_printed}"
-            complimentary_value = page.locator(print_history_page.elements.complimentary_pages_value)
-            expect(complimentary_value).to_contain_text("10", timeout=30000)
             framework_logger.info("Step 12: Printed 9 additional pages (15 total) exceeding complimentary limit")
 
             # Step 13: Refresh and verify both progress bars displayed
@@ -194,6 +192,7 @@ def billing_cycle_period_card(stage_callback):
             additional_progress_bar = page.locator(print_history_page.elements.additional_pages_progress_bar)
             expect(additional_progress_bar).to_be_visible(timeout=30000)
             bar_color = additional_progress_bar.evaluate("el => window.getComputedStyle(el).backgroundColor")
+            framework_logger.info(f"Additional progress bar color: {bar_color}")
             assert "rgb(255, 255, 0)" in bar_color or "yellow" in bar_color.lower(), f"Expected yellow color, got {bar_color}"
             additional_value = page.locator(print_history_page.elements.additional_pages_value)
             expect(additional_value).to_contain_text("5 of 10", timeout=30000)
@@ -212,15 +211,13 @@ def billing_cycle_period_card(stage_callback):
                 additional_info_icon.hover()
             additional_tooltip = page.locator(print_history_page.elements.additional_pages_tooltip)
             expect(additional_tooltip).to_be_visible(timeout=10000)
-            tooltip_text = additional_tooltip.text_content()
-            assert len(tooltip_text) > 0, "Tooltip text is empty"
+            expect(additional_tooltip).not_to_be_empty(timeout=10000)
             framework_logger.info("Step 16: Additional pages tooltip verified")
 
             # Step 17: Check message below Additional pages
             additional_info_message = page.locator(print_history_page.elements.additional_pages_info_message)
             expect(additional_info_message).to_be_visible(timeout=30000)
-            blocks_message_text = additional_info_message.text_content()
-            assert "block" in blocks_message_text.lower() or "bought" in blocks_message_text.lower(), f"Expected blocks bought info, got: {blocks_message_text}"
+            expect(additional_info_message).to_contain_text("block", timeout=30000)
             framework_logger.info("Step 17: Verified message with blocks bought information")
 
             # Step 18: Verify Complimentary pages progress bar is full
@@ -230,6 +227,7 @@ def billing_cycle_period_card(stage_callback):
             assert "rgb(0, 0, 0)" in bar_color or "black" in bar_color.lower(), f"Expected black color, got {bar_color}"
             bar_width = complimentary_progress_bar.evaluate("el => window.getComputedStyle(el).width")
             parent_width = complimentary_progress_bar.evaluate("el => window.getComputedStyle(el.parentElement).width")
+            framework_logger.info(f"Progress bar width: {bar_width}, parent width: {parent_width}")
             assert bar_width == parent_width, f"Progress bar not full: {bar_width} vs {parent_width}"
             complimentary_value = page.locator(print_history_page.elements.complimentary_pages_value)
             expect(complimentary_value).to_contain_text("10 of 10", timeout=30000)
