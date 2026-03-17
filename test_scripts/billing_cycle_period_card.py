@@ -9,6 +9,7 @@ from core.playwright_manager import PlaywrightManager
 from core.settings import framework_logger, GlobalState
 from pages.print_history_page import PrintHistoryPage
 from pages.dashboard_side_menu_page import DashboardSideMenuPage
+from pages.confirmation_page import ConfirmationPage
 from helper.dashboard_helper import DashboardHelper
 from helper.enrollment_helper import EnrollmentHelper
 from helper.gemini_ra_helper import GeminiRAHelper
@@ -37,9 +38,9 @@ def billing_cycle_period_card(stage_callback):
             EnrollmentHelper.select_printer(page, printer_index=0)
             EnrollmentHelper.select_plan(page, plan_pages=50)
             EnrollmentHelper.finish_enrollment(page)
+            confirmation_page = ConfirmationPage(page)
+            expect(confirmation_page.success_message).to_be_visible(timeout=30000)
             framework_logger.info("Enrollment completed successfully")
-            # Verify enrollment success
-            # expect(confirmation_page.success_message).to_be_visible(timeout=30000)
             
             # Precondition 2 & 3: Ensure subscription is in subscribed status without free months
             org_token, tenant_id = common.get_org_aware_token(tenant_email)
@@ -55,8 +56,7 @@ def billing_cycle_period_card(stage_callback):
             framework_logger.info("Precondition: Pausing subscription plan")
             GeminiRAHelper.access(page)
             GeminiRAHelper.access_tenant_page(page, tenant_email)
-            # Pause subscription via Rails Admin
-            # Note: This requires implementing GeminiRAHelper.pause_subscription() method
+            GeminiRAHelper.pause_subscription(page)
             GeminiRAHelper.verify_rails_admin_info(page, "Subscription State", "paused", retry=True)
             framework_logger.info("Subscription paused successfully")
 
@@ -84,9 +84,7 @@ def billing_cycle_period_card(stage_callback):
 
             # Step 3: Event shift 32 days and trigger billing charge
             framework_logger.info("Step 3: Shifting time by 32 days and triggering billing")
-            GeminiRAHelper.access(page)
-            GeminiRAHelper.access_tenant_page(page, tenant_email)
-            GeminiRAHelper.event_shift(page, event_shift=32, force_billing=True)
+            GeminiRAHelper.shift_time_and_trigger_billing(page, tenant_email, days=32)
             framework_logger.info("Step 3: Time shifted 32 days and billing triggered successfully")
 
             # Step 4: Go to Print and Payment History page again
@@ -111,9 +109,10 @@ def billing_cycle_period_card(stage_callback):
             else:
                 print_history_page.complimentary_pages_info_icon.hover()
             expect(print_history_page.complimentary_pages_tooltip).to_be_visible(timeout=10000)
-            expect(print_history_page.complimentary_pages_tooltip).not_to_be_empty(timeout=10000)
             tooltip_text = print_history_page.complimentary_pages_tooltip.text_content()
-            framework_logger.info("Step 7: Verified tooltip displays on hover")
+            assert len(tooltip_text) > 0, "Tooltip text is empty"
+            assert "complimentary" in tooltip_text.lower() or "pages" in tooltip_text.lower(), f"Tooltip does not contain expected content: {tooltip_text}"
+            framework_logger.info(f"Step 7: Verified tooltip displays with correct message: {tooltip_text}")
 
             # Step 8: Check Complimentary pages value
             expect(print_history_page.complimentary_pages_value).to_contain_text("0 of 10", timeout=30000)
@@ -136,7 +135,8 @@ def billing_cycle_period_card(stage_callback):
             sub_data = common.subscription_data_from_gemini(tenant_id)
             pages_printed = sub_data.get('pages_printed', sub_data.get('page_count', 0))
             assert pages_printed >= 6, f"Expected at least 6 pages printed, got {pages_printed}"
-            framework_logger.info(f"Step 10: Simulated printing 6 pages - Pages recorded: {pages_printed}")
+            framework_logger.info(f"Step 10: Simulated printing 6 pages")
+            expect(print_history_page.complimentary_pages_value).to_contain_text("6", timeout=30000)
 
             # Step 11: Refresh page and verify progress bar updated
             page.reload()
@@ -188,7 +188,8 @@ def billing_cycle_period_card(stage_callback):
             expect(print_history_page.additional_pages_tooltip).to_be_visible(timeout=10000)
             tooltip_text = print_history_page.additional_pages_tooltip.text_content()
             assert len(tooltip_text) > 0, "Tooltip text is empty"
-            framework_logger.info(f"Step 16: Verified tooltip displays for Additional pages info icon")
+            assert "additional" in tooltip_text.lower() or "pages" in tooltip_text.lower() or "block" in tooltip_text.lower(), f"Tooltip does not contain expected additional pages content: {tooltip_text}"
+            framework_logger.info(f"Step 16: Verified tooltip displays with correct message: {tooltip_text}")
 
             # Step 17: Check message below Additional pages
             expect(print_history_page.additional_pages_info_message).to_be_visible(timeout=30000)
@@ -201,9 +202,13 @@ def billing_cycle_period_card(stage_callback):
             # Verify progress bar is 100% filled with black color
             bar_color = print_history_page.complimentary_pages_progress_bar.evaluate("el => window.getComputedStyle(el).backgroundColor")
             assert "rgb(0, 0, 0)" in bar_color or "black" in bar_color.lower(), f"Expected black color, got {bar_color}"
+            # Verify progress bar is 100% filled using percentage or with pixel tolerance
             bar_width = print_history_page.complimentary_pages_progress_bar.evaluate("el => window.getComputedStyle(el).width")
             parent_width = print_history_page.complimentary_pages_progress_bar.evaluate("el => window.getComputedStyle(el.parentElement).width")
-            assert bar_width == parent_width, f"Progress bar not full: {bar_width} vs {parent_width}"
+            # Convert to float and allow 1px tolerance for sub-pixel rendering
+            bar_width_px = float(bar_width.replace('px', ''))
+            parent_width_px = float(parent_width.replace('px', ''))
+            assert abs(bar_width_px - parent_width_px) <= 1, f"Progress bar not full: {bar_width} vs {parent_width}"
             expect(print_history_page.complimentary_pages_value).to_contain_text("10 of 10", timeout=30000)
             framework_logger.info("Step 18: Verified Complimentary pages progress bar is 100% filled with black color and shows 10 of 10 used")
 
@@ -214,8 +219,8 @@ def billing_cycle_period_card(stage_callback):
             framework_logger.info(f"Step 19: Verified total pages printed: {total_pages_text}")
 
             # Step 20: Visual verification - screenshot captured
-            expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)
-            page.locator(print_history_page.elements.billing_cycle_period_card).screenshot(path="screenshots/billing_cycle_card_visual.png")
+            expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)
+            print_history_page.billing_cycle_period_card.screenshot(path="screenshots/billing_cycle_card_visual.png")
             framework_logger.info("Step 20: Visual verification - screenshot captured at screenshots/billing_cycle_card_visual.png")
 
             # Step 21: Responsive verification across viewports
@@ -224,7 +229,7 @@ def billing_cycle_period_card(stage_callback):
             for width, height in viewport_sizes:
                 page.set_viewport_size({"width": width, "height": height})
                 page.wait_for_load_state("networkidle", timeout=10000)
-                expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)
+                expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)
                 framework_logger.info(f"Verified layout at {width}x{height}")
             framework_logger.info(f"Step 21: Verified responsive layout at all viewports: {viewport_sizes}")
 
