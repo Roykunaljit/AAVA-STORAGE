@@ -1,14 +1,14 @@
 {
   "scoring_metadata": {
-    "scored_at": "2025-01-15T16:30:00Z",
+    "scored_at": "2025-01-15T16:45:00Z",
     "scorer": "Test_Script_Quality_Auditor",
     "overall_score": 13,
     "score_formula": "100 - (CRITICAL×3 + MODERATE×2 + MINOR×1), floor 0",
-    "total_violations": 29,
+    "total_violations": 35,
     "critical_count": 29,
     "moderate_count": 0,
-    "minor_count": 0,
-    "total_deduction": 87,
+    "minor_count": 6,
+    "total_deduction": 93,
     "total_files_analyzed": 2,
     "files_analyzed": [
       "test_scripts/billing_cycle_period_card.py",
@@ -25,19 +25,18 @@
       "file_path": "test_scripts/billing_cycle_period_card.py",
       "file_type": "test_script",
       "test_case_id": "C44873414",
-      "score": 13,
-      "violation_count": 29,
+      "score": 10,
+      "violation_count": 33,
       "critical_count": 29,
       "moderate_count": 0,
-      "minor_count": 0,
-      "deduction": 87,
-      "checkpoints_evaluated": 45,
+      "minor_count": 4,
+      "deduction": 91,
+      "checkpoints_evaluated": 60,
       "checkpoints_passed": [
         "A01",
         "A02",
         "A04",
         "A09",
-        "A13",
         "D01",
         "D02",
         "D03",
@@ -49,15 +48,27 @@
         "D09",
         "D10",
         "D11",
-        "D12"
+        "D12",
+        "E01",
+        "E02",
+        "E05",
+        "E06",
+        "E08"
       ],
       "checkpoints_failed": [
         "A05",
         "A06",
         "A11",
         "A12",
+        "A14",
+        "B01",
+        "B02",
         "B03",
-        "D14"
+        "D13",
+        "D14",
+        "E03",
+        "E04",
+        "E07"
       ],
       "violations": [
         {
@@ -66,14 +77,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "plan_pause_info_locator = page.locator(print_history_page.elements.plan_pause_info)",
-          "expected_code": "expect(print_history_page.elements.plan_pause_info).not_to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() used in test function body. The mapping report shows print_history_page.elements.plan_pause_info exists in page_additions. According to Prohibition 6, ZERO page.locator() calls are allowed in test function body. The locator should be accessed directly via the page object's elements namespace in expect() assertions without wrapping in page.locator().",
+          "current_code": "expect(print_history_page.elements.plan_pause_info).not_to_be_visible(timeout=30000)",
+          "expected_code": "plan_pause_info_locator = page.locator(print_history_page.elements.plan_pause_info)\nexpect(plan_pause_info_locator).not_to_be_visible(timeout=30000)",
+          "explanation": "Accessing .elements. attribute directly in expect() without using page.locator() wrapper. The framework pattern requires: page.locator(page_obj.elements.selector_string) for Elements-based locators. The test script uses print_history_page.elements.plan_pause_info directly in expect(), but Elements class stores string selectors that must be wrapped with page.locator().",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "plan_pause_info_locator = page.locator(print_history_page.elements.plan_pause_info)\n            expect(plan_pause_info_locator).not_to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.elements.plan_pause_info).not_to_be_visible(timeout=30000)"
+            "find": "expect(print_history_page.elements.plan_pause_info).not_to_be_visible(timeout=30000)",
+            "replace_with": "plan_pause_info_locator = page.locator(print_history_page.elements.plan_pause_info)\nexpect(plan_pause_info_locator).not_to_be_visible(timeout=30000)"
           }
         },
         {
@@ -82,14 +93,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "plan_pause_info_locator = page.locator(print_history_page.elements.plan_pause_info)",
-          "expected_code": "expect(print_history_page.elements.plan_pause_info).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() used in test function body (second occurrence in Step 5). Same violation as V001 - wrapping elements namespace reference in page.locator() is prohibited.",
+          "current_code": "expect(print_history_page.elements.plan_pause_info).to_be_visible(timeout=30000)",
+          "expected_code": "plan_pause_info_locator = page.locator(print_history_page.elements.plan_pause_info)\nexpect(plan_pause_info_locator).to_be_visible(timeout=30000)",
+          "explanation": "Same issue as V001 - accessing .elements. attribute directly without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "plan_pause_info_locator = page.locator(print_history_page.elements.plan_pause_info)\n            expect(plan_pause_info_locator).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.elements.plan_pause_info).to_be_visible(timeout=30000)"
+            "find": "expect(print_history_page.elements.plan_pause_info).to_be_visible(timeout=30000)",
+            "replace_with": "plan_pause_info_locator = page.locator(print_history_page.elements.plan_pause_info)\nexpect(plan_pause_info_locator).to_be_visible(timeout=30000)"
           }
         },
         {
@@ -98,14 +109,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_progress_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)",
-          "expected_code": "expect(print_history_page.elements.complimentary_pages_progress_bar).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() used in test function body (Step 6). Elements namespace reference should be used directly in expect() without page.locator() wrapper.",
+          "current_code": "expect(print_history_page.elements.complimentary_pages_progress_bar).to_be_visible(timeout=30000)",
+          "expected_code": "complimentary_progress_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)\nexpect(complimentary_progress_bar).to_be_visible(timeout=30000)",
+          "explanation": "Same pattern violation - Elements-based locator used directly without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_progress_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)\n            expect(complimentary_progress_bar).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.elements.complimentary_pages_progress_bar).to_be_visible(timeout=30000)"
+            "find": "expect(print_history_page.elements.complimentary_pages_progress_bar).to_be_visible(timeout=30000)",
+            "replace_with": "complimentary_progress_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)\nexpect(complimentary_progress_bar).to_be_visible(timeout=30000)"
           }
         },
         {
@@ -114,14 +125,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_info_icon = page.locator(print_history_page.elements.complimentary_pages_info_icon)",
-          "expected_code": "if GlobalState.device_type == 'mobile' or GlobalState.device_type == 'tablet':\n                print_history_page.elements.complimentary_pages_info_icon.click()\n            else:\n                print_history_page.elements.complimentary_pages_info_icon.hover()",
-          "explanation": "Inline page.locator() used in test function body (Step 7). Elements namespace reference should be used directly for click/hover actions.",
+          "current_code": "print_history_page.elements.complimentary_pages_info_icon.click()",
+          "expected_code": "complimentary_info_icon = page.locator(print_history_page.elements.complimentary_pages_info_icon)\ncomplimentary_info_icon.click()",
+          "explanation": "Calling .click() directly on Elements attribute without page.locator() wrapper. This will fail at runtime because Elements stores strings, not Locator objects.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_info_icon = page.locator(print_history_page.elements.complimentary_pages_info_icon)\n            if GlobalState.device_type == 'mobile' or GlobalState.device_type == 'tablet':\n                complimentary_info_icon.click()\n            else:\n                complimentary_info_icon.hover()",
-            "replace_with": "if GlobalState.device_type == 'mobile' or GlobalState.device_type == 'tablet':\n                print_history_page.elements.complimentary_pages_info_icon.click()\n            else:\n                print_history_page.elements.complimentary_pages_info_icon.hover()"
+            "find": "print_history_page.elements.complimentary_pages_info_icon.click()",
+            "replace_with": "complimentary_info_icon = page.locator(print_history_page.elements.complimentary_pages_info_icon)\ncomplimentary_info_icon.click()"
           }
         },
         {
@@ -130,14 +141,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_tooltip = page.locator(print_history_page.elements.complimentary_pages_tooltip)",
-          "expected_code": "expect(print_history_page.elements.complimentary_pages_tooltip).to_be_visible(timeout=10000)",
-          "explanation": "Inline page.locator() used in test function body (Step 7 tooltip verification). Elements namespace reference should be used directly in expect().",
+          "current_code": "print_history_page.elements.complimentary_pages_info_icon.hover()",
+          "expected_code": "complimentary_info_icon = page.locator(print_history_page.elements.complimentary_pages_info_icon)\ncomplimentary_info_icon.hover()",
+          "explanation": "Calling .hover() directly on Elements attribute without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_tooltip = page.locator(print_history_page.elements.complimentary_pages_tooltip)\n            expect(complimentary_tooltip).to_be_visible(timeout=10000)\n            expect(complimentary_tooltip).to_contain_text(\"complimentary\", timeout=10000)",
-            "replace_with": "expect(print_history_page.elements.complimentary_pages_tooltip).to_be_visible(timeout=10000)\n            expect(print_history_page.elements.complimentary_pages_tooltip).to_contain_text(\"complimentary\", timeout=10000)"
+            "find": "print_history_page.elements.complimentary_pages_info_icon.hover()",
+            "replace_with": "complimentary_info_icon = page.locator(print_history_page.elements.complimentary_pages_info_icon)\ncomplimentary_info_icon.hover()"
           }
         },
         {
@@ -146,14 +157,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_value = page.locator(print_history_page.elements.complimentary_pages_value)",
-          "expected_code": "expect(print_history_page.elements.complimentary_pages_value).to_contain_text(\"0 of 10\", timeout=30000)",
-          "explanation": "Inline page.locator() used in test function body (Step 8). Elements namespace reference should be used directly in expect().",
+          "current_code": "expect(print_history_page.elements.complimentary_pages_tooltip).to_be_visible(timeout=10000)",
+          "expected_code": "complimentary_tooltip = page.locator(print_history_page.elements.complimentary_pages_tooltip)\nexpect(complimentary_tooltip).to_be_visible(timeout=10000)",
+          "explanation": "Elements-based locator used directly in expect() without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_value = page.locator(print_history_page.elements.complimentary_pages_value)\n            expect(complimentary_value).to_contain_text(\"0 of 10\", timeout=30000)\n            expect(complimentary_value).to_contain_text(\"Pause Plan\", timeout=30000)",
-            "replace_with": "expect(print_history_page.elements.complimentary_pages_value).to_contain_text(\"0 of 10\", timeout=30000)\n            expect(print_history_page.elements.complimentary_pages_value).to_contain_text(\"Pause Plan\", timeout=30000)"
+            "find": "expect(print_history_page.elements.complimentary_pages_tooltip).to_be_visible(timeout=10000)",
+            "replace_with": "complimentary_tooltip = page.locator(print_history_page.elements.complimentary_pages_tooltip)\nexpect(complimentary_tooltip).to_be_visible(timeout=10000)"
           }
         },
         {
@@ -162,14 +173,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_info_message = page.locator(print_history_page.elements.complimentary_pages_info_message)",
-          "expected_code": "expect(print_history_page.elements.complimentary_pages_info_message).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() used in test function body (Step 9). Elements namespace reference should be used directly in expect().",
+          "current_code": "expect(print_history_page.elements.complimentary_pages_tooltip).to_contain_text(\"complimentary\", timeout=10000)",
+          "expected_code": "complimentary_tooltip = page.locator(print_history_page.elements.complimentary_pages_tooltip)\nexpect(complimentary_tooltip).to_contain_text(\"complimentary\", timeout=10000)",
+          "explanation": "Elements-based locator used directly in expect() without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_info_message = page.locator(print_history_page.elements.complimentary_pages_info_message)\n            expect(complimentary_info_message).to_be_visible(timeout=30000)\n            expect(complimentary_info_message).not_to_be_empty(timeout=30000)",
-            "replace_with": "expect(print_history_page.elements.complimentary_pages_info_message).to_be_visible(timeout=30000)\n            expect(print_history_page.elements.complimentary_pages_info_message).not_to_be_empty(timeout=30000)"
+            "find": "expect(print_history_page.elements.complimentary_pages_tooltip).to_contain_text(\"complimentary\", timeout=10000)",
+            "replace_with": "complimentary_tooltip = page.locator(print_history_page.elements.complimentary_pages_tooltip)\nexpect(complimentary_tooltip).to_contain_text(\"complimentary\", timeout=10000)"
           }
         },
         {
@@ -178,14 +189,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_progress_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)",
-          "expected_code": "expect(print_history_page.elements.complimentary_pages_progress_bar).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() used in test function body (Step 11, second occurrence). Elements namespace reference should be used directly.",
+          "current_code": "expect(print_history_page.elements.complimentary_pages_value).to_contain_text(\"0 of 10\", timeout=30000)",
+          "expected_code": "complimentary_value = page.locator(print_history_page.elements.complimentary_pages_value)\nexpect(complimentary_value).to_contain_text(\"0 of 10\", timeout=30000)",
+          "explanation": "Elements-based locator used directly in expect() without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_progress_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)\n            expect(complimentary_progress_bar).to_be_visible(timeout=30000)\n            bar_color = complimentary_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
-            "replace_with": "expect(print_history_page.elements.complimentary_pages_progress_bar).to_be_visible(timeout=30000)\n            bar_color = print_history_page.elements.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")"
+            "find": "expect(print_history_page.elements.complimentary_pages_value).to_contain_text(\"0 of 10\", timeout=30000)",
+            "replace_with": "complimentary_value = page.locator(print_history_page.elements.complimentary_pages_value)\nexpect(complimentary_value).to_contain_text(\"0 of 10\", timeout=30000)"
           }
         },
         {
@@ -194,14 +205,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_value = page.locator(print_history_page.elements.complimentary_pages_value)",
-          "expected_code": "expect(print_history_page.elements.complimentary_pages_value).to_contain_text(\"6\", timeout=30000)",
-          "explanation": "Inline page.locator() used in test function body (Step 11, value check). Elements namespace reference should be used directly.",
+          "current_code": "expect(print_history_page.elements.complimentary_pages_value).to_contain_text(\"Pause Plan\", timeout=30000)",
+          "expected_code": "complimentary_value = page.locator(print_history_page.elements.complimentary_pages_value)\nexpect(complimentary_value).to_contain_text(\"Pause Plan\", timeout=30000)",
+          "explanation": "Elements-based locator used directly in expect() without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_value = page.locator(print_history_page.elements.complimentary_pages_value)\n            expect(complimentary_value).to_contain_text(\"6\", timeout=30000)",
-            "replace_with": "expect(print_history_page.elements.complimentary_pages_value).to_contain_text(\"6\", timeout=30000)"
+            "find": "expect(print_history_page.elements.complimentary_pages_value).to_contain_text(\"Pause Plan\", timeout=30000)",
+            "replace_with": "complimentary_value = page.locator(print_history_page.elements.complimentary_pages_value)\nexpect(complimentary_value).to_contain_text(\"Pause Plan\", timeout=30000)"
           }
         },
         {
@@ -210,14 +221,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_progress_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)",
-          "expected_code": "expect(print_history_page.elements.complimentary_pages_progress_bar).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() used in test function body (Step 13). Elements namespace reference should be used directly.",
+          "current_code": "expect(print_history_page.elements.complimentary_pages_info_message).to_be_visible(timeout=30000)",
+          "expected_code": "complimentary_info_msg = page.locator(print_history_page.elements.complimentary_pages_info_message)\nexpect(complimentary_info_msg).to_be_visible(timeout=30000)",
+          "explanation": "Elements-based locator used directly in expect() without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_progress_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)\n            expect(complimentary_progress_bar).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.elements.complimentary_pages_progress_bar).to_be_visible(timeout=30000)"
+            "find": "expect(print_history_page.elements.complimentary_pages_info_message).to_be_visible(timeout=30000)",
+            "replace_with": "complimentary_info_msg = page.locator(print_history_page.elements.complimentary_pages_info_message)\nexpect(complimentary_info_msg).to_be_visible(timeout=30000)"
           }
         },
         {
@@ -226,14 +237,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "additional_progress_bar = page.locator(print_history_page.elements.additional_pages_progress_bar)",
-          "expected_code": "expect(print_history_page.elements.additional_pages_progress_bar).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() used in test function body (Step 13, additional pages). Elements namespace reference should be used directly.",
+          "current_code": "expect(print_history_page.elements.complimentary_pages_info_message).not_to_be_empty()",
+          "expected_code": "complimentary_info_msg = page.locator(print_history_page.elements.complimentary_pages_info_message)\nexpect(complimentary_info_msg).not_to_be_empty()",
+          "explanation": "Elements-based locator used directly in expect() without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "additional_progress_bar = page.locator(print_history_page.elements.additional_pages_progress_bar)\n            expect(additional_progress_bar).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.elements.additional_pages_progress_bar).to_be_visible(timeout=30000)"
+            "find": "expect(print_history_page.elements.complimentary_pages_info_message).not_to_be_empty()",
+            "replace_with": "complimentary_info_msg = page.locator(print_history_page.elements.complimentary_pages_info_message)\nexpect(complimentary_info_msg).not_to_be_empty()"
           }
         },
         {
@@ -242,14 +253,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "additional_progress_bar = page.locator(print_history_page.elements.additional_pages_progress_bar)",
-          "expected_code": "expect(print_history_page.elements.additional_pages_progress_bar).to_be_visible(timeout=30000)\n            bar_color = print_history_page.elements.additional_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
-          "explanation": "Inline page.locator() used in test function body (Step 14). Elements namespace reference should be used directly.",
+          "current_code": "bar_color = print_history_page.elements.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
+          "expected_code": "complimentary_progress_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)\nbar_color = complimentary_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
+          "explanation": "Calling .evaluate() directly on Elements attribute without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "additional_progress_bar = page.locator(print_history_page.elements.additional_pages_progress_bar)\n            expect(additional_progress_bar).to_be_visible(timeout=30000)\n            bar_color = additional_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
-            "replace_with": "expect(print_history_page.elements.additional_pages_progress_bar).to_be_visible(timeout=30000)\n            bar_color = print_history_page.elements.additional_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")"
+            "find": "bar_color = print_history_page.elements.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
+            "replace_with": "complimentary_progress_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)\nbar_color = complimentary_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")"
           }
         },
         {
@@ -258,14 +269,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "additional_value = page.locator(print_history_page.elements.additional_pages_value)",
-          "expected_code": "expect(print_history_page.elements.additional_pages_value).to_contain_text(\"5 of 10\", timeout=30000)",
-          "explanation": "Inline page.locator() used in test function body (Step 14, value check). Elements namespace reference should be used directly.",
+          "current_code": "expect(print_history_page.elements.additional_pages_progress_bar).to_be_visible(timeout=30000)",
+          "expected_code": "additional_progress_bar = page.locator(print_history_page.elements.additional_pages_progress_bar)\nexpect(additional_progress_bar).to_be_visible(timeout=30000)",
+          "explanation": "Elements-based locator used directly in expect() without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "additional_value = page.locator(print_history_page.elements.additional_pages_value)\n            expect(additional_value).to_contain_text(\"5 of 10\", timeout=30000)",
-            "replace_with": "expect(print_history_page.elements.additional_pages_value).to_contain_text(\"5 of 10\", timeout=30000)"
+            "find": "expect(print_history_page.elements.additional_pages_progress_bar).to_be_visible(timeout=30000)",
+            "replace_with": "additional_progress_bar = page.locator(print_history_page.elements.additional_pages_progress_bar)\nexpect(additional_progress_bar).to_be_visible(timeout=30000)"
           }
         },
         {
@@ -274,14 +285,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "additional_info_icon = page.locator(print_history_page.elements.additional_pages_info_icon)",
-          "expected_code": "expect(print_history_page.elements.additional_pages_info_icon).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() used in test function body (Step 15). Elements namespace reference should be used directly.",
+          "current_code": "bar_color = print_history_page.elements.additional_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
+          "expected_code": "additional_progress_bar = page.locator(print_history_page.elements.additional_pages_progress_bar)\nbar_color = additional_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
+          "explanation": "Calling .evaluate() directly on Elements attribute without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "additional_info_icon = page.locator(print_history_page.elements.additional_pages_info_icon)\n            expect(additional_info_icon).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.elements.additional_pages_info_icon).to_be_visible(timeout=30000)"
+            "find": "bar_color = print_history_page.elements.additional_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
+            "replace_with": "additional_progress_bar = page.locator(print_history_page.elements.additional_pages_progress_bar)\nbar_color = additional_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")"
           }
         },
         {
@@ -290,14 +301,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "additional_info_icon = page.locator(print_history_page.elements.additional_pages_info_icon)",
-          "expected_code": "if GlobalState.device_type == 'mobile' or GlobalState.device_type == 'tablet':\n                print_history_page.elements.additional_pages_info_icon.click()\n            else:\n                print_history_page.elements.additional_pages_info_icon.hover()",
-          "explanation": "Inline page.locator() used in test function body (Step 16). Elements namespace reference should be used directly for click/hover actions.",
+          "current_code": "expect(print_history_page.elements.additional_pages_value).to_contain_text(\"5 of 10\", timeout=30000)",
+          "expected_code": "additional_value = page.locator(print_history_page.elements.additional_pages_value)\nexpect(additional_value).to_contain_text(\"5 of 10\", timeout=30000)",
+          "explanation": "Elements-based locator used directly in expect() without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "additional_info_icon = page.locator(print_history_page.elements.additional_pages_info_icon)\n            if GlobalState.device_type == 'mobile' or GlobalState.device_type == 'tablet':\n                additional_info_icon.click()\n            else:\n                additional_info_icon.hover()",
-            "replace_with": "if GlobalState.device_type == 'mobile' or GlobalState.device_type == 'tablet':\n                print_history_page.elements.additional_pages_info_icon.click()\n            else:\n                print_history_page.elements.additional_pages_info_icon.hover()"
+            "find": "expect(print_history_page.elements.additional_pages_value).to_contain_text(\"5 of 10\", timeout=30000)",
+            "replace_with": "additional_value = page.locator(print_history_page.elements.additional_pages_value)\nexpect(additional_value).to_contain_text(\"5 of 10\", timeout=30000)"
           }
         },
         {
@@ -306,14 +317,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "additional_tooltip = page.locator(print_history_page.elements.additional_pages_tooltip)",
-          "expected_code": "expect(print_history_page.elements.additional_pages_tooltip).to_be_visible(timeout=10000)",
-          "explanation": "Inline page.locator() used in test function body (Step 16, tooltip verification). Elements namespace reference should be used directly.",
+          "current_code": "expect(print_history_page.elements.additional_pages_info_icon).to_be_visible(timeout=30000)",
+          "expected_code": "additional_info_icon = page.locator(print_history_page.elements.additional_pages_info_icon)\nexpect(additional_info_icon).to_be_visible(timeout=30000)",
+          "explanation": "Elements-based locator used directly in expect() without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "additional_tooltip = page.locator(print_history_page.elements.additional_pages_tooltip)\n            expect(additional_tooltip).to_be_visible(timeout=10000)\n            expect(additional_tooltip).not_to_be_empty(timeout=10000)",
-            "replace_with": "expect(print_history_page.elements.additional_pages_tooltip).to_be_visible(timeout=10000)\n            expect(print_history_page.elements.additional_pages_tooltip).not_to_be_empty(timeout=10000)"
+            "find": "expect(print_history_page.elements.additional_pages_info_icon).to_be_visible(timeout=30000)",
+            "replace_with": "additional_info_icon = page.locator(print_history_page.elements.additional_pages_info_icon)\nexpect(additional_info_icon).to_be_visible(timeout=30000)"
           }
         },
         {
@@ -322,14 +333,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "additional_info_message = page.locator(print_history_page.elements.additional_pages_info_message)",
-          "expected_code": "expect(print_history_page.elements.additional_pages_info_message).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() used in test function body (Step 17). Elements namespace reference should be used directly.",
+          "current_code": "print_history_page.elements.additional_pages_info_icon.click()",
+          "expected_code": "additional_info_icon = page.locator(print_history_page.elements.additional_pages_info_icon)\nadditional_info_icon.click()",
+          "explanation": "Calling .click() directly on Elements attribute without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "additional_info_message = page.locator(print_history_page.elements.additional_pages_info_message)\n            expect(additional_info_message).to_be_visible(timeout=30000)\n            expect(additional_info_message).to_contain_text(\"block\", timeout=30000)",
-            "replace_with": "expect(print_history_page.elements.additional_pages_info_message).to_be_visible(timeout=30000)\n            expect(print_history_page.elements.additional_pages_info_message).to_contain_text(\"block\", timeout=30000)"
+            "find": "print_history_page.elements.additional_pages_info_icon.click()",
+            "replace_with": "additional_info_icon = page.locator(print_history_page.elements.additional_pages_info_icon)\nadditional_info_icon.click()"
           }
         },
         {
@@ -338,14 +349,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_progress_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)",
-          "expected_code": "expect(print_history_page.elements.complimentary_pages_progress_bar).to_be_visible(timeout=30000)\n            bar_color = print_history_page.elements.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
-          "explanation": "Inline page.locator() used in test function body (Step 18). Elements namespace reference should be used directly.",
+          "current_code": "print_history_page.elements.additional_pages_info_icon.hover()",
+          "expected_code": "additional_info_icon = page.locator(print_history_page.elements.additional_pages_info_icon)\nadditional_info_icon.hover()",
+          "explanation": "Calling .hover() directly on Elements attribute without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_progress_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)\n            expect(complimentary_progress_bar).to_be_visible(timeout=30000)\n            bar_color = complimentary_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
-            "replace_with": "expect(print_history_page.elements.complimentary_pages_progress_bar).to_be_visible(timeout=30000)\n            bar_color = print_history_page.elements.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")"
+            "find": "print_history_page.elements.additional_pages_info_icon.hover()",
+            "replace_with": "additional_info_icon = page.locator(print_history_page.elements.additional_pages_info_icon)\nadditional_info_icon.hover()"
           }
         },
         {
@@ -354,14 +365,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "bar_width = complimentary_progress_bar.evaluate(\"el => window.getComputedStyle(el).width\")\n            parent_width = complimentary_progress_bar.evaluate(\"el => window.getComputedStyle(el.parentElement).width\")",
-          "expected_code": "bar_width = print_history_page.elements.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).width\")\n            parent_width = print_history_page.elements.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el.parentElement).width\")",
-          "explanation": "Using variable created from page.locator() wrapper (Step 18, width checks). Should use elements namespace reference directly.",
+          "current_code": "expect(print_history_page.elements.additional_pages_tooltip).to_be_visible(timeout=10000)",
+          "expected_code": "additional_tooltip = page.locator(print_history_page.elements.additional_pages_tooltip)\nexpect(additional_tooltip).to_be_visible(timeout=10000)",
+          "explanation": "Elements-based locator used directly in expect() without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "bar_width = complimentary_progress_bar.evaluate(\"el => window.getComputedStyle(el).width\")\n            parent_width = complimentary_progress_bar.evaluate(\"el => window.getComputedStyle(el.parentElement).width\")",
-            "replace_with": "bar_width = print_history_page.elements.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).width\")\n            parent_width = print_history_page.elements.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el.parentElement).width\")"
+            "find": "expect(print_history_page.elements.additional_pages_tooltip).to_be_visible(timeout=10000)",
+            "replace_with": "additional_tooltip = page.locator(print_history_page.elements.additional_pages_tooltip)\nexpect(additional_tooltip).to_be_visible(timeout=10000)"
           }
         },
         {
@@ -370,14 +381,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "complimentary_value = page.locator(print_history_page.elements.complimentary_pages_value)",
-          "expected_code": "expect(print_history_page.elements.complimentary_pages_value).to_contain_text(\"10 of 10\", timeout=30000)",
-          "explanation": "Inline page.locator() used in test function body (Step 18, final value check). Elements namespace reference should be used directly.",
+          "current_code": "expect(print_history_page.elements.additional_pages_tooltip).not_to_be_empty()",
+          "expected_code": "additional_tooltip = page.locator(print_history_page.elements.additional_pages_tooltip)\nexpect(additional_tooltip).not_to_be_empty()",
+          "explanation": "Elements-based locator used directly in expect() without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "complimentary_value = page.locator(print_history_page.elements.complimentary_pages_value)\n            expect(complimentary_value).to_contain_text(\"10 of 10\", timeout=30000)",
-            "replace_with": "expect(print_history_page.elements.complimentary_pages_value).to_contain_text(\"10 of 10\", timeout=30000)"
+            "find": "expect(print_history_page.elements.additional_pages_tooltip).not_to_be_empty()",
+            "replace_with": "additional_tooltip = page.locator(print_history_page.elements.additional_pages_tooltip)\nexpect(additional_tooltip).not_to_be_empty()"
           }
         },
         {
@@ -386,14 +397,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "total_pages_element = page.locator(print_history_page.elements.total_printed_pages)",
-          "expected_code": "expect(print_history_page.elements.total_printed_pages).to_be_visible(timeout=30000)\n            total_pages_text = print_history_page.elements.total_printed_pages.text_content()",
-          "explanation": "Inline page.locator() used in test function body (Step 19). Elements namespace reference should be used directly.",
+          "current_code": "expect(print_history_page.elements.additional_pages_info_message).to_be_visible(timeout=30000)",
+          "expected_code": "additional_info_msg = page.locator(print_history_page.elements.additional_pages_info_message)\nexpect(additional_info_msg).to_be_visible(timeout=30000)",
+          "explanation": "Elements-based locator used directly in expect() without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "total_pages_element = page.locator(print_history_page.elements.total_printed_pages)\n            expect(total_pages_element).to_be_visible(timeout=30000)\n            total_pages_text = total_pages_element.text_content()",
-            "replace_with": "expect(print_history_page.elements.total_printed_pages).to_be_visible(timeout=30000)\n            total_pages_text = print_history_page.elements.total_printed_pages.text_content()"
+            "find": "expect(print_history_page.elements.additional_pages_info_message).to_be_visible(timeout=30000)",
+            "replace_with": "additional_info_msg = page.locator(print_history_page.elements.additional_pages_info_message)\nexpect(additional_info_msg).to_be_visible(timeout=30000)"
           }
         },
         {
@@ -402,14 +413,14 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "billing_card = page.locator(print_history_page.elements.billing_cycle_period_card)",
-          "expected_code": "expect(print_history_page.elements.billing_cycle_period_card).to_be_visible(timeout=30000)\n            print_history_page.elements.billing_cycle_period_card.screenshot(path=\"screenshots/billing_cycle_card_visual.png\")",
-          "explanation": "Inline page.locator() used in test function body (Step 20, screenshot). Elements namespace reference should be used directly.",
+          "current_code": "expect(print_history_page.elements.additional_pages_info_message).to_contain_text(\"block\", timeout=30000)",
+          "expected_code": "additional_info_msg = page.locator(print_history_page.elements.additional_pages_info_message)\nexpect(additional_info_msg).to_contain_text(\"block\", timeout=30000)",
+          "explanation": "Elements-based locator used directly in expect() without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "billing_card = page.locator(print_history_page.elements.billing_cycle_period_card)\n            expect(billing_card).to_be_visible(timeout=30000)\n            billing_card.screenshot(path=\"screenshots/billing_cycle_card_visual.png\")",
-            "replace_with": "expect(print_history_page.elements.billing_cycle_period_card).to_be_visible(timeout=30000)\n            print_history_page.elements.billing_cycle_period_card.screenshot(path=\"screenshots/billing_cycle_card_visual.png\")"
+            "find": "expect(print_history_page.elements.additional_pages_info_message).to_contain_text(\"block\", timeout=30000)",
+            "replace_with": "additional_info_msg = page.locator(print_history_page.elements.additional_pages_info_message)\nexpect(additional_info_msg).to_contain_text(\"block\", timeout=30000)"
           }
         },
         {
@@ -418,110 +429,171 @@
           "severity": "CRITICAL",
           "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "billing_card = page.locator(print_history_page.elements.billing_cycle_period_card)",
-          "expected_code": "expect(print_history_page.elements.billing_cycle_period_card).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() used in test function body (Step 21, responsive loop). Elements namespace reference should be used directly.",
+          "current_code": "bar_width = print_history_page.elements.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).width\")",
+          "expected_code": "complimentary_progress_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)\nbar_width = complimentary_progress_bar.evaluate(\"el => window.getComputedStyle(el).width\")",
+          "explanation": "Calling .evaluate() directly on Elements attribute without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "billing_card = page.locator(print_history_page.elements.billing_cycle_period_card)\n                expect(billing_card).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.elements.billing_cycle_period_card).to_be_visible(timeout=30000)"
+            "find": "bar_width = print_history_page.elements.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).width\")",
+            "replace_with": "complimentary_progress_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)\nbar_width = complimentary_progress_bar.evaluate(\"el => window.getComputedStyle(el).width\")"
           }
         },
         {
           "violation_id": "V024",
-          "rule_id": "PROHIBITION_8",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "locator_inside_locator",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "plan_pause_info_locator = page.locator(print_history_page.elements.plan_pause_info)",
-          "expected_code": "Use print_history_page.elements.plan_pause_info directly without page.locator() wrapper",
-          "explanation": "Wrapping an elements namespace string selector inside page.locator() creates a Locator-inside-locator pattern. The elements.plan_pause_info is a string selector that should be used directly with expect() or accessed via page.locator() ONLY when the page object doesn't provide a direct property. Since this is in the elements namespace, it should be accessed as print_history_page.elements.plan_pause_info directly in expect() calls, not wrapped in page.locator().",
+          "current_code": "parent_width = print_history_page.elements.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el.parentElement).width\")",
+          "expected_code": "complimentary_progress_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)\nparent_width = complimentary_progress_bar.evaluate(\"el => window.getComputedStyle(el.parentElement).width\")",
+          "explanation": "Calling .evaluate() directly on Elements attribute without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "plan_pause_info_locator = page.locator(print_history_page.elements.plan_pause_info)",
-            "replace_with": "# Use elements namespace reference directly in expect() - no page.locator() wrapper needed"
+            "find": "parent_width = print_history_page.elements.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el.parentElement).width\")",
+            "replace_with": "complimentary_progress_bar = page.locator(print_history_page.elements.complimentary_pages_progress_bar)\nparent_width = complimentary_progress_bar.evaluate(\"el => window.getComputedStyle(el.parentElement).width\")"
           }
         },
         {
           "violation_id": "V025",
-          "rule_id": "CHECKPOINT_A12",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_elements_namespace",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "All page.locator(print_history_page.elements.X) patterns throughout the script",
-          "expected_code": "Direct usage: print_history_page.elements.X in expect() and action calls",
-          "explanation": "The script consistently wraps elements namespace references in page.locator() throughout. The framework pattern for Elements-based locators is to access them directly via page_obj.elements.locator_name in expect() assertions and action calls, NOT to wrap them in page.locator(). This is a systematic pattern violation affecting 23 occurrences.",
+          "current_code": "expect(print_history_page.elements.total_printed_pages).to_be_visible(timeout=30000)",
+          "expected_code": "total_pages_element = page.locator(print_history_page.elements.total_printed_pages)\nexpect(total_pages_element).to_be_visible(timeout=30000)",
+          "explanation": "Elements-based locator used directly in expect() without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "page.locator(print_history_page.elements.",
-            "replace_with": "print_history_page.elements."
+            "find": "expect(print_history_page.elements.total_printed_pages).to_be_visible(timeout=30000)",
+            "replace_with": "total_pages_element = page.locator(print_history_page.elements.total_printed_pages)\nexpect(total_pages_element).to_be_visible(timeout=30000)"
           }
         },
         {
           "violation_id": "V026",
-          "rule_id": "CHECKPOINT_B03",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_assertion",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "# Step 10: Print 6 pages (less than plan limit)\n            for _ in range(6):\n                common.send_rtp_devicestatus(\n                    entity_id=printer_data.entity_id,\n                    cloud_id=printer_data.cloud_id,\n                    device_uuid=printer_data.device_uuid\n                )\n                page.wait_for_timeout(1000)\n            page.wait_for_timeout(5000)\n            subscription_data_step10 = common.subscription_data_from_gemini(tenant_id)\n            pages_printed = subscription_data_step10.get('pages_printed', subscription_data_step10.get('page_count', 0))\n            assert pages_printed >= 6, f\"Expected at least 6 pages printed, got {pages_printed}\"",
-          "expected_code": "# Step 10: Print 6 pages (less than plan limit)\n            for _ in range(6):\n                common.send_rtp_devicestatus(\n                    entity_id=printer_data.entity_id,\n                    cloud_id=printer_data.cloud_id,\n                    device_uuid=printer_data.device_uuid\n                )\n                page.wait_for_timeout(1000)\n            page.wait_for_timeout(5000)\n            subscription_data_step10 = common.subscription_data_from_gemini(tenant_id)\n            pages_printed = subscription_data_step10.get('pages_printed', subscription_data_step10.get('page_count', 0))\n            # Use expect() assertion instead of assert\n            # Note: For API response validation, assert is acceptable but expect() is preferred for consistency\n            assert pages_printed >= 6, f\"Expected at least 6 pages printed, got {pages_printed}\"\n            framework_logger.info(f\"Verified {pages_printed} pages printed via API\")",
-          "explanation": "Step 10 expected result is 'Print job registered successfully'. The script uses Python assert instead of Playwright expect() for verification. While assert is technically acceptable for API response validation, the framework standards prefer expect() for consistency. However, since this is API data validation (not UI element verification), the assert usage is marginally acceptable. The more critical issue is that there's no explicit expect() assertion for the UI state after printing.",
-          "fix_action": "ADD_ASSERTION",
+          "current_code": "total_pages_text = print_history_page.elements.total_printed_pages.text_content()",
+          "expected_code": "total_pages_element = page.locator(print_history_page.elements.total_printed_pages)\ntotal_pages_text = total_pages_element.text_content()",
+          "explanation": "Calling .text_content() directly on Elements attribute without page.locator() wrapper.",
+          "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "insert_after": "framework_logger.info(\"Step 10: Printed 6 pages successfully\")",
-            "assertion_code": "# Verify print job registration via API response\n            # Note: API validation uses assert; UI verification should use expect()"
+            "find": "total_pages_text = print_history_page.elements.total_printed_pages.text_content()",
+            "replace_with": "total_pages_element = page.locator(print_history_page.elements.total_printed_pages)\ntotal_pages_text = total_pages_element.text_content()"
           }
         },
         {
           "violation_id": "V027",
-          "rule_id": "CHECKPOINT_B03",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_assertion",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "# Step 12: Print 9 more pages (total 15, exceeding limit)\n            for _ in range(9):\n                common.send_rtp_devicestatus(\n                    entity_id=printer_data.entity_id,\n                    cloud_id=printer_data.cloud_id,\n                    device_uuid=printer_data.device_uuid\n                )\n                page.wait_for_timeout(1000)\n            page.wait_for_timeout(5000)\n            subscription_data_step12 = common.subscription_data_from_gemini(tenant_id)\n            pages_printed = subscription_data_step12.get('pages_printed', subscription_data_step12.get('page_count', 0))\n            assert pages_printed >= 15, f\"Expected at least 15 pages printed, got {pages_printed}\"",
-          "expected_code": "# Step 12: Print 9 more pages (total 15, exceeding limit)\n            for _ in range(9):\n                common.send_rtp_devicestatus(\n                    entity_id=printer_data.entity_id,\n                    cloud_id=printer_data.cloud_id,\n                    device_uuid=printer_data.device_uuid\n                )\n                page.wait_for_timeout(1000)\n            page.wait_for_timeout(5000)\n            subscription_data_step12 = common.subscription_data_from_gemini(tenant_id)\n            pages_printed = subscription_data_step12.get('pages_printed', subscription_data_step12.get('page_count', 0))\n            # Use expect() assertion instead of assert\n            assert pages_printed >= 15, f\"Expected at least 15 pages printed, got {pages_printed}\"\n            framework_logger.info(f\"Verified {pages_printed} pages printed via API\")",
-          "explanation": "Step 12 expected result is 'Print job registered successfully'. Same issue as Step 10 - uses Python assert instead of expect(). While acceptable for API validation, lacks explicit UI verification.",
-          "fix_action": "ADD_ASSERTION",
+          "current_code": "expect(print_history_page.elements.billing_cycle_period_card).to_be_visible(timeout=30000)",
+          "expected_code": "billing_card = page.locator(print_history_page.elements.billing_cycle_period_card)\nexpect(billing_card).to_be_visible(timeout=30000)",
+          "explanation": "Elements-based locator used directly in expect() without page.locator() wrapper.",
+          "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "insert_after": "framework_logger.info(\"Step 12: Printed 9 additional pages (15 total) exceeding complimentary limit\")",
-            "assertion_code": "# Verify print job registration via API response"
+            "find": "expect(print_history_page.elements.billing_cycle_period_card).to_be_visible(timeout=30000)",
+            "replace_with": "billing_card = page.locator(print_history_page.elements.billing_cycle_period_card)\nexpect(billing_card).to_be_visible(timeout=30000)"
           }
         },
         {
           "violation_id": "V028",
-          "rule_id": "CHECKPOINT_D14",
+          "rule_id": "PROHIBITION_6",
           "severity": "CRITICAL",
-          "category": "missing_expect_timeout",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(print_history_page.elements.complimentary_pages_info_message).not_to_be_empty(timeout=30000)",
-          "expected_code": "expect(print_history_page.elements.complimentary_pages_info_message).not_to_be_empty()",
-          "explanation": "The not_to_be_empty() assertion does not accept a timeout parameter in Playwright. Timeout should only be specified for assertions that support it (to_be_visible, to_be_hidden, etc.). This will cause a runtime error.",
+          "current_code": "print_history_page.elements.billing_cycle_period_card.screenshot(path=\"screenshots/billing_cycle_card_visual.png\")",
+          "expected_code": "billing_card = page.locator(print_history_page.elements.billing_cycle_period_card)\nbilling_card.screenshot(path=\"screenshots/billing_cycle_card_visual.png\")",
+          "explanation": "Calling .screenshot() directly on Elements attribute without page.locator() wrapper.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(print_history_page.elements.complimentary_pages_info_message).not_to_be_empty(timeout=30000)",
-            "replace_with": "expect(print_history_page.elements.complimentary_pages_info_message).not_to_be_empty()"
+            "find": "print_history_page.elements.billing_cycle_period_card.screenshot(path=\"screenshots/billing_cycle_card_visual.png\")",
+            "replace_with": "billing_card = page.locator(print_history_page.elements.billing_cycle_period_card)\nbilling_card.screenshot(path=\"screenshots/billing_cycle_card_visual.png\")"
           }
         },
         {
           "violation_id": "V029",
-          "rule_id": "CHECKPOINT_D14",
+          "rule_id": "CHECKPOINT_B01",
           "severity": "CRITICAL",
-          "category": "missing_expect_timeout",
+          "category": "missing_precondition_setup",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(print_history_page.elements.additional_pages_tooltip).not_to_be_empty(timeout=10000)",
-          "expected_code": "expect(print_history_page.elements.additional_pages_tooltip).not_to_be_empty()",
-          "explanation": "The not_to_be_empty() assertion does not accept a timeout parameter in Playwright. This will cause a runtime error.",
+          "current_code": "# TODO: Add actual pause plan trigger method call here\n# Example: GeminiRAHelper.pause_subscription(page) or DashboardHelper.pause_plan(page)",
+          "expected_code": "# Use actual pause plan method from helper or implement inline\nGeminiRAHelper.pause_subscription(page)  # or appropriate method",
+          "explanation": "Precondition 4 requires pausing the plan, but the code has a TODO comment instead of actual implementation. This is a critical missing precondition that will cause the test to fail.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(print_history_page.elements.additional_pages_tooltip).not_to_be_empty(timeout=10000)",
-            "replace_with": "expect(print_history_page.elements.additional_pages_tooltip).not_to_be_empty()"
+            "find": "# TODO: Add actual pause plan trigger method call here\n# Example: GeminiRAHelper.pause_subscription(page) or DashboardHelper.pause_plan(page)",
+            "replace_with": "# Implement pause plan action - this needs actual method from helper\n# GeminiRAHelper.pause_subscription(page) or similar"
+          }
+        },
+        {
+          "violation_id": "V030",
+          "rule_id": "CHECKPOINT_E03",
+          "severity": "MINOR",
+          "category": "placeholder_todo_comment",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "# TODO: Add actual pause plan trigger method call here",
+          "expected_code": "REMOVE - implement actual code",
+          "explanation": "TODO comment indicates incomplete implementation. All placeholder comments must be removed before production.",
+          "fix_action": "REMOVE_LINE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "line_to_remove": "# TODO: Add actual pause plan trigger method call here"
+          }
+        },
+        {
+          "violation_id": "V031",
+          "rule_id": "CHECKPOINT_E04",
+          "severity": "MINOR",
+          "category": "verbose_logging",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "Multiple log lines in Step 11 and Step 14",
+          "expected_code": "One concise log line per step",
+          "explanation": "Steps 11 and 14 have multiple framework_logger.info() calls. Coding standards require concise logging - 1 log line per step maximum.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "framework_logger.info(f\"Complimentary progress bar color: {bar_color}\")\nassert \"rgb(0, 0, 0)\" in bar_color or \"black\" in bar_color.lower(), f\"Expected black color, got {bar_color}\"\nexpect(print_history_page.elements.complimentary_pages_value).to_contain_text(\"6\", timeout=30000)\nframework_logger.info(\"Step 11: Verified progress bar filled with black color and updated to 6 of 10 used\")",
+            "replace_with": "assert \"rgb(0, 0, 0)\" in bar_color or \"black\" in bar_color.lower(), f\"Expected black color, got {bar_color}\"\nexpect(print_history_page.elements.complimentary_pages_value).to_contain_text(\"6\", timeout=30000)\nframework_logger.info(\"Step 11: Verified progress bar filled with black color and updated to 6 of 10 used\")"
+          }
+        },
+        {
+          "violation_id": "V032",
+          "rule_id": "CHECKPOINT_E04",
+          "severity": "MINOR",
+          "category": "verbose_logging",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "framework_logger.info(f\"Additional progress bar color: {bar_color}\")\nassert \"rgb(255, 255, 0)\" in bar_color or \"yellow\" in bar_color.lower(), f\"Expected yellow color, got {bar_color}\"",
+          "expected_code": "assert \"rgb(255, 255, 0)\" in bar_color or \"yellow\" in bar_color.lower(), f\"Expected yellow color, got {bar_color}\"",
+          "explanation": "Verbose logging - remove intermediate color logging, keep only final step completion log.",
+          "fix_action": "REMOVE_LINE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "line_to_remove": "framework_logger.info(f\"Additional progress bar color: {bar_color}\")"
+          }
+        },
+        {
+          "violation_id": "V033",
+          "rule_id": "CHECKPOINT_E04",
+          "severity": "MINOR",
+          "category": "verbose_logging",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "framework_logger.info(f\"Progress bar width: {bar_width}, parent width: {parent_width}\")",
+          "expected_code": "REMOVE - verbose debug logging",
+          "explanation": "Verbose debug logging of width values. Keep only final step completion log.",
+          "fix_action": "REMOVE_LINE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "line_to_remove": "framework_logger.info(f\"Progress bar width: {bar_width}, parent width: {parent_width}\")"
           }
         }
       ]
@@ -530,48 +602,85 @@
       "file_path": "additional_generations/page_additions/print_history_page_additions.py",
       "file_type": "page_addition",
       "test_case_id": "C44873414",
-      "score": 100,
-      "violation_count": 0,
+      "score": 94,
+      "violation_count": 2,
       "critical_count": 0,
-      "moderate_count": 0,
+      "moderate_count": 2,
       "minor_count": 0,
-      "deduction": 0,
+      "deduction": 4,
       "checkpoints_evaluated": 7,
       "checkpoints_passed": [
         "F01",
         "F02",
         "F03",
-        "F04",
         "F05",
-        "F06",
         "F07"
       ],
-      "checkpoints_failed": [],
-      "violations": []
+      "checkpoints_failed": [
+        "F04",
+        "F06"
+      ],
+      "violations": [
+        {
+          "violation_id": "V034",
+          "rule_id": "CHECKPOINT_F04",
+          "severity": "MODERATE",
+          "category": "missing_elements_class_structure",
+          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
+          "current_code": "class Elements:\n    plan_pause_info = \"[data-testid='plan-pause-info']\"\n    billing_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"\n    # ... other locators",
+          "expected_code": "# These should be added as class attributes to the existing Elements class in PrintHistoryPage\n# Not as a standalone class in the additions file",
+          "explanation": "The page additions file defines a standalone Elements class, but this should be merged into the existing PrintHistoryPage.Elements class. The file correctly documents merge instructions but the structure shown is for reference only - it should not be a complete class definition in the additions file.",
+          "fix_action": "RESTRUCTURE",
+          "fix_details": {
+            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
+            "description": "The Elements class structure is correct for merge instructions but should be clearly marked as reference only. The actual merge will add these as attributes to the existing Elements class in pages/print_history_page.py.",
+            "current_structure": "Standalone class definition",
+            "required_structure": "Attribute definitions with clear merge instructions"
+          }
+        },
+        {
+          "violation_id": "V035",
+          "rule_id": "CHECKPOINT_F06",
+          "severity": "MODERATE",
+          "category": "locator_usage_verification",
+          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
+          "current_code": "total_printed_pages locator defined but not in existing PrintHistoryPage",
+          "expected_code": "Verify this locator name matches existing page object or update test script",
+          "explanation": "The page additions file defines total_printed_pages locator, but the mapping report shows PrintHistoryPage already has total_printed_pages locator. Need to verify if this is a duplicate or if the selector is being updated.",
+          "fix_action": "ADD_CODE",
+          "fix_details": {
+            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
+            "insert_after": "# MERGE NOTES:",
+            "code_to_add": "# NOTE: total_printed_pages may already exist in PrintHistoryPage - verify before merging to avoid duplicates"
+          }
+        }
+      ]
     }
   ],
   "violation_summary": {
     "by_severity": {
       "CRITICAL": 29,
-      "MODERATE": 0,
-      "MINOR": 0
+      "MODERATE": 2,
+      "MINOR": 4
     },
     "by_category": {
-      "inline_page_locator": 23,
-      "locator_inside_locator": 1,
-      "missing_elements_namespace": 1,
-      "missing_assertion": 2,
-      "missing_expect_timeout": 2
+      "inline_page_locator": 28,
+      "missing_precondition_setup": 1,
+      "placeholder_todo_comment": 1,
+      "verbose_logging": 3,
+      "missing_elements_class_structure": 1,
+      "locator_usage_verification": 1
     },
     "by_rule": {
-      "PROHIBITION_6": 23,
-      "PROHIBITION_8": 1,
-      "CHECKPOINT_A12": 1,
-      "CHECKPOINT_B03": 2,
-      "CHECKPOINT_D14": 2
+      "PROHIBITION_6": 28,
+      "CHECKPOINT_B01": 1,
+      "CHECKPOINT_E03": 1,
+      "CHECKPOINT_E04": 3,
+      "CHECKPOINT_F04": 1,
+      "CHECKPOINT_F06": 1
     },
-    "most_common_violation": "PROHIBITION_6 (inline_page_locator) — 23 occurrences",
-    "most_impacted_file": "test_scripts/billing_cycle_period_card.py — 29 violations, score 13"
+    "most_common_violation": "PROHIBITION_6 (inline_page_locator) — 28 occurrences",
+    "most_impacted_file": "test_scripts/billing_cycle_period_card.py — 33 violations, score 10"
   },
   "fix_priority_order": [
     {
@@ -601,72 +710,91 @@
         "V020",
         "V021",
         "V022",
-        "V023"
+        "V023",
+        "V024",
+        "V025",
+        "V026",
+        "V027",
+        "V028"
       ],
-      "total_count": 23,
-      "total_deduction": 69,
+      "total_count": 28,
+      "total_deduction": 84,
       "affected_files": [
         "test_scripts/billing_cycle_period_card.py"
       ],
-      "fix_approach": "Replace every page.locator(print_history_page.elements.X) pattern with direct usage of print_history_page.elements.X in expect() assertions and action calls. The Elements namespace pattern in this framework requires direct access without page.locator() wrapper. This is a systematic pattern error affecting the entire script. Apply a global find-replace: page.locator(print_history_page.elements. → print_history_page.elements."
+      "fix_approach": "Replace ALL instances of print_history_page.elements.{locator_name}.{method}() with the correct pattern: locator_var = page.locator(print_history_page.elements.{locator_name}), then use locator_var.{method}(). The Elements class stores string selectors that MUST be wrapped with page.locator() before use. This is the framework's Pattern B for Elements containers."
     },
     {
       "priority": 2,
-      "category": "missing_expect_timeout",
+      "category": "missing_precondition_setup",
       "severity": "CRITICAL",
       "violation_ids": [
-        "V028",
         "V029"
       ],
-      "total_count": 2,
-      "total_deduction": 6,
+      "total_count": 1,
+      "total_deduction": 3,
       "affected_files": [
         "test_scripts/billing_cycle_period_card.py"
       ],
-      "fix_approach": "Remove timeout parameter from not_to_be_empty() assertions. This assertion method does not accept timeout parameter in Playwright and will cause runtime errors. Replace expect(element).not_to_be_empty(timeout=N) with expect(element).not_to_be_empty()."
+      "fix_approach": "Implement the actual pause plan action by calling the appropriate helper method or implementing inline code. Remove the TODO comment and add working code to pause the subscription."
     },
     {
       "priority": 3,
-      "category": "missing_assertion",
-      "severity": "CRITICAL",
+      "category": "verbose_logging",
+      "severity": "MINOR",
       "violation_ids": [
-        "V026",
-        "V027"
+        "V031",
+        "V032",
+        "V033"
       ],
-      "total_count": 2,
-      "total_deduction": 6,
+      "total_count": 3,
+      "total_deduction": 3,
       "affected_files": [
         "test_scripts/billing_cycle_period_card.py"
       ],
-      "fix_approach": "Steps 10 and 12 use Python assert for API response validation instead of expect(). While assert is marginally acceptable for API data validation, the framework prefers expect() for consistency. More critically, these steps lack explicit UI verification after printing. Consider adding expect() assertions for UI state after print operations complete."
+      "fix_approach": "Remove verbose intermediate logging statements. Keep only one concise log line per step that summarizes the step completion."
     },
     {
       "priority": 4,
-      "category": "missing_elements_namespace",
-      "severity": "CRITICAL",
+      "category": "missing_elements_class_structure",
+      "severity": "MODERATE",
       "violation_ids": [
-        "V025"
+        "V034"
       ],
       "total_count": 1,
-      "total_deduction": 3,
+      "total_deduction": 2,
       "affected_files": [
-        "test_scripts/billing_cycle_period_card.py"
+        "additional_generations/page_additions/print_history_page_additions.py"
       ],
-      "fix_approach": "This is a duplicate categorization of the inline_page_locator issue. The systematic pattern of wrapping elements namespace references in page.locator() violates the framework's Elements access pattern. Fix by removing all page.locator() wrappers around elements namespace references."
+      "fix_approach": "Clarify that the Elements class shown is for reference/merge instructions only, not a standalone implementation. The actual merge will add these attributes to the existing Elements class in PrintHistoryPage."
     },
     {
       "priority": 5,
-      "category": "locator_inside_locator",
-      "severity": "CRITICAL",
+      "category": "locator_usage_verification",
+      "severity": "MODERATE",
       "violation_ids": [
-        "V024"
+        "V035"
       ],
       "total_count": 1,
-      "total_deduction": 3,
+      "total_deduction": 2,
+      "affected_files": [
+        "additional_generations/page_additions/print_history_page_additions.py"
+      ],
+      "fix_approach": "Add note to verify total_printed_pages locator doesn't duplicate existing locator in PrintHistoryPage before merging."
+    },
+    {
+      "priority": 6,
+      "category": "placeholder_todo_comment",
+      "severity": "MINOR",
+      "violation_ids": [
+        "V030"
+      ],
+      "total_count": 1,
+      "total_deduction": 1,
       "affected_files": [
         "test_scripts/billing_cycle_period_card.py"
       ],
-      "fix_approach": "This is also a duplicate categorization of the inline_page_locator issue. Wrapping elements namespace string selectors in page.locator() creates the Locator-inside-locator anti-pattern. Fix by using elements namespace references directly without page.locator() wrapper."
+      "fix_approach": "Remove TODO comment after implementing actual pause plan code."
     }
   ]
 }
