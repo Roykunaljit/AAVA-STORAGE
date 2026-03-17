@@ -27,48 +27,30 @@ from playwright.sync_api import expect
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# ADD TO PrintHistoryPage CLASS - Elements Inner Class
+# ADD TO EXISTING PrintHistoryPage.Elements class:
+# (These are additions to the existing Elements inner class, not a new class)
 # ═══════════════════════════════════════════════════════════════════════════════
 
-# In PrintHistoryPage class, add this Elements inner class:
-class Elements:
-    """Locator definitions for PrintHistoryPage - Billing Cycle Period Card elements."""
-    
-    # Billing Cycle Period Card elements
-    plan_pause_info = "[data-testid='plan-pause-info']"
-    billing_cycle_period_card = "[data-testid='billing-cycle-period-card']"
-    complimentary_pages_progress_bar = "[data-testid='complimentary-pages-progress-bar']"
-    complimentary_pages_value = "[data-testid='complimentary-pages-value']"
-    complimentary_pages_info_icon = "[data-testid='complimentary-pages-info-icon']"
-    complimentary_pages_info_message = "[data-testid='complimentary-pages-info-message']"
-    complimentary_pages_tooltip = "[data-testid='complimentary-pages-tooltip']"
-    additional_pages_progress_bar = "[data-testid='additional-pages-progress-bar']"
-    additional_pages_value = "[data-testid='additional-pages-value']"
-    additional_pages_info_icon = "[data-testid='additional-pages-info-icon']"
-    additional_pages_info_message = "[data-testid='additional-pages-info-message']"
-    additional_pages_tooltip = "[data-testid='additional-pages-tooltip']"
+plan_pause_info = "[data-testid='plan-pause-info']"
+billing_cycle_period_card = "[data-testid='billing-cycle-period-card']"
+complimentary_pages_progress_bar = "[data-testid='complimentary-pages-progress-bar']"
+complimentary_pages_value = "[data-testid='complimentary-pages-value']"
+complimentary_pages_info_icon = "[data-testid='complimentary-pages-info-icon']"
+complimentary_pages_info_message = "[data-testid='complimentary-pages-info-message']"
+complimentary_pages_tooltip = "[data-testid='complimentary-pages-tooltip']"
+additional_pages_progress_bar = "[data-testid='additional-pages-progress-bar']"
+additional_pages_value = "[data-testid='additional-pages-value']"
+additional_pages_info_icon = "[data-testid='additional-pages-info-icon']"
+additional_pages_info_message = "[data-testid='additional-pages-info-message']"
+additional_pages_tooltip = "[data-testid='additional-pages-tooltip']"
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# ADD TO PrintHistoryPage.__init__ METHOD
+# ACCESS IN TEST SCRIPT AS:
+# page.locator(print_history_page.elements.plan_pause_info)
+# page.locator(print_history_page.elements.billing_cycle_period_card)
+# etc.
 # ═══════════════════════════════════════════════════════════════════════════════
-
-# In PrintHistoryPage.__init__, instantiate the Elements class:
-# self.elements = self.Elements()
-
-# Then create locator properties using the elements:
-# self.plan_pause_info = page.locator(self.elements.plan_pause_info)
-# self.billing_cycle_period_card = page.locator(self.elements.billing_cycle_period_card)
-# self.complimentary_pages_progress_bar = page.locator(self.elements.complimentary_pages_progress_bar)
-# self.complimentary_pages_value = page.locator(self.elements.complimentary_pages_value)
-# self.complimentary_pages_info_icon = page.locator(self.elements.complimentary_pages_info_icon)
-# self.complimentary_pages_info_message = page.locator(self.elements.complimentary_pages_info_message)
-# self.complimentary_pages_tooltip = page.locator(self.elements.complimentary_pages_tooltip)
-# self.additional_pages_progress_bar = page.locator(self.elements.additional_pages_progress_bar)
-# self.additional_pages_value = page.locator(self.elements.additional_pages_value)
-# self.additional_pages_info_icon = page.locator(self.elements.additional_pages_info_icon)
-# self.additional_pages_info_message = page.locator(self.elements.additional_pages_info_message)
-# self.additional_pages_tooltip = page.locator(self.elements.additional_pages_tooltip)
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -77,27 +59,27 @@ class Elements:
 
 def verify_plan_pause_info_not_displayed(self):
     """Verify plan pause information is not displayed."""
-    expect(self.plan_pause_info).not_to_be_visible(timeout=10000)
+    expect(self.page.locator(self.elements.plan_pause_info)).not_to_be_visible(timeout=10000)
 
 
 def verify_plan_pause_info_displayed(self):
     """Verify plan pause information is displayed."""
-    expect(self.plan_pause_info).to_be_visible(timeout=30000)
+    expect(self.page.locator(self.elements.plan_pause_info)).to_be_visible(timeout=30000)
 
 
 def verify_complimentary_pages_value(self, expected_used, expected_total, pause_plan=True):
     """Verify complimentary pages value displays correct usage."""
-    expect(self.complimentary_pages_value).to_contain_text(f"{expected_used} of {expected_total}", timeout=30000)
+    expect(self.page.locator(self.elements.complimentary_pages_value)).to_contain_text(f"{expected_used} of {expected_total}", timeout=30000)
     if pause_plan:
-        expect(self.complimentary_pages_value).to_contain_text("Pause Plan", timeout=30000)
+        expect(self.page.locator(self.elements.complimentary_pages_value)).to_contain_text("Pause Plan", timeout=30000)
 
 
 def hover_complimentary_info_icon(self):
     """Hover over complimentary pages info icon to display tooltip."""
-    expect(self.complimentary_pages_info_icon).to_be_visible(timeout=30000)
-    self.complimentary_pages_info_icon.hover()
+    expect(self.page.locator(self.elements.complimentary_pages_info_icon)).to_be_visible(timeout=30000)
+    self.page.locator(self.elements.complimentary_pages_info_icon).hover()
 
 
 def verify_additional_pages_value(self, expected_used, expected_total):
     """Verify additional pages value displays correct usage."""
-    expect(self.additional_pages_value).to_contain_text(f"{expected_used} of {expected_total}", timeout=30000)
+    expect(self.page.locator(self.elements.additional_pages_value)).to_contain_text(f"{expected_used} of {expected_total}", timeout=30000)
