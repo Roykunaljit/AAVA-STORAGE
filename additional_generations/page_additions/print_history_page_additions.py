@@ -47,21 +47,19 @@ class Elements:
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# EXAMPLE __init__ METHOD IMPLEMENTATION
-# (This shows how to convert string selectors to Locator properties)
+# ACTUAL __init__ IMPLEMENTATION REQUIRED
 # ═══════════════════════════════════════════════════════════════════════════════
+# Add these lines to PrintHistoryPage.__init__ after super().__init__(page):
 
-# In the PrintHistoryPage.__init__ method, add these lines after super().__init__(page):
-#
-# self.plan_pause_info = page.locator(self.elements.plan_pause_info)
-# self.billing_cycle_period_card = page.locator(self.elements.billing_cycle_period_card)
-# self.complimentary_pages_progress_bar = page.locator(self.elements.complimentary_pages_progress_bar)
-# self.complimentary_pages_value = page.locator(self.elements.complimentary_pages_value)
-# self.complimentary_pages_info_icon = page.locator(self.elements.complimentary_pages_info_icon)
-# self.complimentary_pages_info_message = page.locator(self.elements.complimentary_pages_info_message)
-# self.complimentary_pages_tooltip = page.locator(self.elements.complimentary_pages_tooltip)
-# self.additional_pages_progress_bar = page.locator(self.elements.additional_pages_progress_bar)
-# self.additional_pages_value = page.locator(self.elements.additional_pages_value)
-# self.additional_pages_info_icon = page.locator(self.elements.additional_pages_info_icon)
-# self.additional_pages_info_message = page.locator(self.elements.additional_pages_info_message)
-# self.additional_pages_tooltip = page.locator(self.elements.additional_pages_tooltip)
+self.plan_pause_info = page.locator(self.elements.plan_pause_info)
+self.billing_cycle_period_card = page.locator(self.elements.billing_cycle_period_card)
+self.complimentary_pages_progress_bar = page.locator(self.elements.complimentary_pages_progress_bar)
+self.complimentary_pages_value = page.locator(self.elements.complimentary_pages_value)
+self.complimentary_pages_info_icon = page.locator(self.elements.complimentary_pages_info_icon)
+self.complimentary_pages_info_message = page.locator(self.elements.complimentary_pages_info_message)
+self.complimentary_pages_tooltip = page.locator(self.elements.complimentary_pages_tooltip)
+self.additional_pages_progress_bar = page.locator(self.elements.additional_pages_progress_bar)
+self.additional_pages_value = page.locator(self.elements.additional_pages_value)
+self.additional_pages_info_icon = page.locator(self.elements.additional_pages_info_icon)
+self.additional_pages_info_message = page.locator(self.elements.additional_pages_info_message)
+self.additional_pages_tooltip = page.locator(self.elements.additional_pages_tooltip)
