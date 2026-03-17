@@ -32,7 +32,6 @@ def billing_cycle_period_card(stage_callback):
             # Precondition 1: Create account and enroll printer with 50+ pages plan
             framework_logger.info("Precondition: Creating account and enrolling printer")
             printer_data = common.create_and_claim_virtual_printer_and_add_address()
-            framework_logger.info(f"Printer created: entity_id={printer_data.entity_id}")
             
             # Precondition 2 & 3: Ensure subscription is in subscribed status without free months
             # This will be handled through enrollment flow
@@ -43,7 +42,6 @@ def billing_cycle_period_card(stage_callback):
             GeminiRAHelper.access_tenant_page(page, tenant_email)
             # Use GeminiRAHelper method for subscription state change
             # GeminiRAHelper.pause_subscription(page) - method needs to be added to helper
-            framework_logger.info("Precondition: Plan paused successfully")
 
             # ══════════════════════════════════════════════
             # PRECONDITION SETUP COMPLETE
