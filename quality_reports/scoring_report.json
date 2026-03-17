@@ -1,14 +1,14 @@
 {
   "scoring_metadata": {
-    "scored_at": "2025-01-15T16:30:00Z",
+    "scored_at": "2025-01-15T16:45:00Z",
     "scorer": "Test_Script_Quality_Auditor",
-    "overall_score": 0,
+    "overall_score": 91,
     "score_formula": "100 - (CRITICAL×3 + MODERATE×2 + MINOR×1), floor 0",
-    "total_violations": 48,
-    "critical_count": 42,
-    "moderate_count": 4,
-    "minor_count": 2,
-    "total_deduction": 136,
+    "total_violations": 3,
+    "critical_count": 1,
+    "moderate_count": 2,
+    "minor_count": 0,
+    "total_deduction": 7,
     "total_files_analyzed": 2,
     "files_analyzed": [
       "test_scripts/billing_cycle_period_card.py",
@@ -25,17 +25,37 @@
       "file_path": "test_scripts/billing_cycle_period_card.py",
       "file_type": "test_script",
       "test_case_id": "C44873414",
-      "score": 0,
-      "violation_count": 45,
-      "critical_count": 40,
-      "moderate_count": 3,
-      "minor_count": 2,
-      "deduction": 128,
-      "checkpoints_evaluated": 45,
+      "score": 94,
+      "violation_count": 2,
+      "critical_count": 0,
+      "moderate_count": 2,
+      "minor_count": 0,
+      "deduction": 4,
+      "checkpoints_evaluated": 58,
       "checkpoints_passed": [
         "A01",
         "A02",
+        "A03",
         "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A08",
+        "A09",
+        "A10",
+        "A11",
+        "A12",
+        "A13",
+        "A14",
+        "A15",
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "B05",
+        "C01",
+        "C02",
+        "C05",
         "D01",
         "D02",
         "D03",
@@ -47,723 +67,52 @@
         "D09",
         "D10",
         "D11",
-        "D12"
+        "D12",
+        "D13",
+        "D14",
+        "E01",
+        "E02",
+        "E03",
+        "E05",
+        "E06",
+        "E07",
+        "E08"
       ],
       "checkpoints_failed": [
-        "A05",
-        "A06",
-        "A09",
-        "A14",
-        "B01",
-        "B02",
-        "C01",
-        "C02",
-        "D14",
-        "E03"
+        "C03",
+        "C04"
       ],
       "violations": [
         {
           "violation_id": "V001",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
+          "rule_id": "CHECKPOINT_C03",
+          "severity": "MODERATE",
+          "category": "unused_verification_component",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.plan_pause_info)).not_to_be_visible(timeout=30000)",
-          "expected_code": "expect(print_history_page.plan_pause_info).not_to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() with POM reference used in test body. The page_additions file defines plan_pause_info as an Elements class attribute. According to the framework pattern, Elements class attributes should be accessed via page.locator(page_obj.elements.X) ONLY when they are string selectors. However, the correct pattern is to define them as properties in the page object and access directly. This violates Prohibition 6: ZERO page.locator() in test function body.",
-          "fix_action": "MULTI_FILE_FIX",
+          "current_code": "# Step 8: Check Complimentary pages value\nexpected_complimentary_initial = \"0 of 10(Pause Plan) used\"\nexpect(print_history_page.complimentary_pages_value).to_contain_text(expected_complimentary_initial, timeout=30000)",
+          "expected_code": "# Step 8: Check Complimentary pages value\nprint_history_page.verify_complimentary_pages_value(expected_used=0, expected_total=10, pause_plan=True)",
+          "explanation": "The mapping report shows that print_history_page_additions.py provides a verification method verify_complimentary_pages_value() specifically designed for this verification. The test script should use this helper method instead of inline expect() assertions. Using the provided verification component improves code reusability and maintainability. The method is defined in the page additions file and should be called after the page additions are merged into PrintHistoryPage.",
+          "fix_action": "REPLACE_CODE",
           "fix_details": {
-            "changes": [
-              {
-                "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-                "action": "RESTRUCTURE",
-                "description": "Convert Elements class string selectors to property definitions in PrintHistoryPage",
-                "current_structure": "class Elements:\n    plan_pause_info = \"[data-testid='plan-pause-info']\"",
-                "required_structure": "# In PrintHistoryPage __init__:\nself.plan_pause_info = page.locator(\"[data-testid='plan-pause-info']\")"
-              },
-              {
-                "target_file": "test_scripts/billing_cycle_period_card.py",
-                "action": "REPLACE_CODE",
-                "find": "expect(page.locator(print_history_page.elements.plan_pause_info)).not_to_be_visible(timeout=30000)",
-                "replace_with": "expect(print_history_page.plan_pause_info).not_to_be_visible(timeout=30000)"
-              }
-            ],
-            "explanation": "Both changes must be applied: restructure page additions to use property pattern, then update test script to use direct property access"
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "expected_complimentary_initial = \"0 of 10(Pause Plan) used\"\nexpect(print_history_page.complimentary_pages_value).to_contain_text(expected_complimentary_initial, timeout=30000)",
+            "replace_with": "print_history_page.verify_complimentary_pages_value(expected_used=0, expected_total=10, pause_plan=True)"
           }
         },
         {
           "violation_id": "V002",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.plan_pause_info)).to_be_visible(timeout=30000)",
-          "expected_code": "expect(print_history_page.plan_pause_info).to_be_visible(timeout=30000)",
-          "explanation": "Same violation as V001 - inline page.locator() wrapping POM reference. Step 5 verification.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.plan_pause_info)).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.plan_pause_info).to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V003",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)",
-          "expected_code": "expect(print_history_page.complimentary_pages_progress_bar).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() wrapping POM reference. Step 6 verification.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.complimentary_pages_progress_bar).to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V004",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "page.locator(print_history_page.elements.complimentary_pages_info_icon).click()",
-          "expected_code": "print_history_page.complimentary_pages_info_icon.click()",
-          "explanation": "Inline page.locator() wrapping POM reference for click action. Step 7 mobile/tablet interaction.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "page.locator(print_history_page.elements.complimentary_pages_info_icon).click()",
-            "replace_with": "print_history_page.complimentary_pages_info_icon.click()"
-          }
-        },
-        {
-          "violation_id": "V005",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "page.locator(print_history_page.elements.complimentary_pages_info_icon).hover()",
-          "expected_code": "print_history_page.complimentary_pages_info_icon.hover()",
-          "explanation": "Inline page.locator() wrapping POM reference for hover action. Step 7 desktop interaction.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "page.locator(print_history_page.elements.complimentary_pages_info_icon).hover()",
-            "replace_with": "print_history_page.complimentary_pages_info_icon.hover()"
-          }
-        },
-        {
-          "violation_id": "V006",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.complimentary_pages_tooltip)).to_be_visible(timeout=10000)",
-          "expected_code": "expect(print_history_page.complimentary_pages_tooltip).to_be_visible(timeout=10000)",
-          "explanation": "Inline page.locator() wrapping POM reference. Step 7 tooltip verification.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.complimentary_pages_tooltip)).to_be_visible(timeout=10000)",
-            "replace_with": "expect(print_history_page.complimentary_pages_tooltip).to_be_visible(timeout=10000)"
-          }
-        },
-        {
-          "violation_id": "V007",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "tooltip_text = page.locator(print_history_page.elements.complimentary_pages_tooltip).text_content()",
-          "expected_code": "tooltip_text = print_history_page.complimentary_pages_tooltip.text_content()",
-          "explanation": "Inline page.locator() wrapping POM reference for text extraction. Step 7.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "tooltip_text = page.locator(print_history_page.elements.complimentary_pages_tooltip).text_content()",
-            "replace_with": "tooltip_text = print_history_page.complimentary_pages_tooltip.text_content()"
-          }
-        },
-        {
-          "violation_id": "V008",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.complimentary_pages_value)).to_contain_text(expected_complimentary_initial, timeout=30000)",
-          "expected_code": "expect(print_history_page.complimentary_pages_value).to_contain_text(expected_complimentary_initial, timeout=30000)",
-          "explanation": "Inline page.locator() wrapping POM reference. Step 8 value verification.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.complimentary_pages_value)).to_contain_text(expected_complimentary_initial, timeout=30000)",
-            "replace_with": "expect(print_history_page.complimentary_pages_value).to_contain_text(expected_complimentary_initial, timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V009",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.complimentary_pages_info_message)).to_be_visible(timeout=30000)",
-          "expected_code": "expect(print_history_page.complimentary_pages_info_message).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() wrapping POM reference. Step 9 info message verification.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.complimentary_pages_info_message)).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.complimentary_pages_info_message).to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V010",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)",
-          "expected_code": "expect(print_history_page.complimentary_pages_progress_bar).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() wrapping POM reference. Step 11 progress bar verification after refresh.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.complimentary_pages_progress_bar).to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V011",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "bar_color = page.locator(print_history_page.elements.complimentary_pages_progress_bar).evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
-          "expected_code": "bar_color = print_history_page.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
-          "explanation": "Inline page.locator() wrapping POM reference for color extraction. Step 11.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "bar_color = page.locator(print_history_page.elements.complimentary_pages_progress_bar).evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
-            "replace_with": "bar_color = print_history_page.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")"
-          }
-        },
-        {
-          "violation_id": "V012",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.complimentary_pages_value)).to_contain_text(expected_pages_after_first_print, timeout=30000)",
-          "expected_code": "expect(print_history_page.complimentary_pages_value).to_contain_text(expected_pages_after_first_print, timeout=30000)",
-          "explanation": "Inline page.locator() wrapping POM reference. Step 11 value verification after print.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.complimentary_pages_value)).to_contain_text(expected_pages_after_first_print, timeout=30000)",
-            "replace_with": "expect(print_history_page.complimentary_pages_value).to_contain_text(expected_pages_after_first_print, timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V013",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)",
-          "expected_code": "expect(print_history_page.complimentary_pages_progress_bar).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() wrapping POM reference. Step 13 first progress bar verification.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.complimentary_pages_progress_bar).to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V014",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.additional_pages_progress_bar)).to_be_visible(timeout=30000)",
-          "expected_code": "expect(print_history_page.additional_pages_progress_bar).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() wrapping POM reference. Step 13 additional pages progress bar verification.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.additional_pages_progress_bar)).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.additional_pages_progress_bar).to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V015",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.additional_pages_progress_bar)).to_be_visible(timeout=30000)",
-          "expected_code": "expect(print_history_page.additional_pages_progress_bar).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() wrapping POM reference. Step 14 additional pages progress bar visibility.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.additional_pages_progress_bar)).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.additional_pages_progress_bar).to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V016",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "bar_color = page.locator(print_history_page.elements.additional_pages_progress_bar).evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
-          "expected_code": "bar_color = print_history_page.additional_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
-          "explanation": "Inline page.locator() wrapping POM reference for color extraction. Step 14.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "bar_color = page.locator(print_history_page.elements.additional_pages_progress_bar).evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
-            "replace_with": "bar_color = print_history_page.additional_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")"
-          }
-        },
-        {
-          "violation_id": "V017",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.additional_pages_value)).to_contain_text(expected_additional_pages, timeout=30000)",
-          "expected_code": "expect(print_history_page.additional_pages_value).to_contain_text(expected_additional_pages, timeout=30000)",
-          "explanation": "Inline page.locator() wrapping POM reference. Step 14 value verification.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.additional_pages_value)).to_contain_text(expected_additional_pages, timeout=30000)",
-            "replace_with": "expect(print_history_page.additional_pages_value).to_contain_text(expected_additional_pages, timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V018",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.additional_pages_info_icon)).to_be_visible(timeout=30000)",
-          "expected_code": "expect(print_history_page.additional_pages_info_icon).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() wrapping POM reference. Step 15 info icon verification.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.additional_pages_info_icon)).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.additional_pages_info_icon).to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V019",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "page.locator(print_history_page.elements.additional_pages_info_icon).click()",
-          "expected_code": "print_history_page.additional_pages_info_icon.click()",
-          "explanation": "Inline page.locator() wrapping POM reference for click. Step 16 mobile/tablet.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "page.locator(print_history_page.elements.additional_pages_info_icon).click()",
-            "replace_with": "print_history_page.additional_pages_info_icon.click()"
-          }
-        },
-        {
-          "violation_id": "V020",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "page.locator(print_history_page.elements.additional_pages_info_icon).hover()",
-          "expected_code": "print_history_page.additional_pages_info_icon.hover()",
-          "explanation": "Inline page.locator() wrapping POM reference for hover. Step 16 desktop.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "page.locator(print_history_page.elements.additional_pages_info_icon).hover()",
-            "replace_with": "print_history_page.additional_pages_info_icon.hover()"
-          }
-        },
-        {
-          "violation_id": "V021",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.additional_pages_tooltip)).to_be_visible(timeout=10000)",
-          "expected_code": "expect(print_history_page.additional_pages_tooltip).to_be_visible(timeout=10000)",
-          "explanation": "Inline page.locator() wrapping POM reference. Step 16 tooltip verification.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.additional_pages_tooltip)).to_be_visible(timeout=10000)",
-            "replace_with": "expect(print_history_page.additional_pages_tooltip).to_be_visible(timeout=10000)"
-          }
-        },
-        {
-          "violation_id": "V022",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "tooltip_text = page.locator(print_history_page.elements.additional_pages_tooltip).text_content()",
-          "expected_code": "tooltip_text = print_history_page.additional_pages_tooltip.text_content()",
-          "explanation": "Inline page.locator() wrapping POM reference for text extraction. Step 16.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "tooltip_text = page.locator(print_history_page.elements.additional_pages_tooltip).text_content()",
-            "replace_with": "tooltip_text = print_history_page.additional_pages_tooltip.text_content()"
-          }
-        },
-        {
-          "violation_id": "V023",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.additional_pages_info_message)).to_be_visible(timeout=30000)",
-          "expected_code": "expect(print_history_page.additional_pages_info_message).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() wrapping POM reference. Step 17 info message verification.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.additional_pages_info_message)).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.additional_pages_info_message).to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V024",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)",
-          "expected_code": "expect(print_history_page.complimentary_pages_progress_bar).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() wrapping POM reference. Step 18 progress bar verification.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.complimentary_pages_progress_bar)).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.complimentary_pages_progress_bar).to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V025",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "bar_color = page.locator(print_history_page.elements.complimentary_pages_progress_bar).evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
-          "expected_code": "bar_color = print_history_page.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
-          "explanation": "Inline page.locator() wrapping POM reference for color extraction. Step 18.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "bar_color = page.locator(print_history_page.elements.complimentary_pages_progress_bar).evaluate(\"el => window.getComputedStyle(el).backgroundColor\")",
-            "replace_with": "bar_color = print_history_page.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")"
-          }
-        },
-        {
-          "violation_id": "V026",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "bar_width = page.locator(print_history_page.elements.complimentary_pages_progress_bar).evaluate(\"el => window.getComputedStyle(el).width\")",
-          "expected_code": "bar_width = print_history_page.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).width\")",
-          "explanation": "Inline page.locator() wrapping POM reference for width extraction. Step 18.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "bar_width = page.locator(print_history_page.elements.complimentary_pages_progress_bar).evaluate(\"el => window.getComputedStyle(el).width\")",
-            "replace_with": "bar_width = print_history_page.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).width\")"
-          }
-        },
-        {
-          "violation_id": "V027",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "parent_width = page.locator(print_history_page.elements.complimentary_pages_progress_bar).evaluate(\"el => window.getComputedStyle(el.parentElement).width\")",
-          "expected_code": "parent_width = print_history_page.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el.parentElement).width\")",
-          "explanation": "Inline page.locator() wrapping POM reference for parent width extraction. Step 18.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "parent_width = page.locator(print_history_page.elements.complimentary_pages_progress_bar).evaluate(\"el => window.getComputedStyle(el.parentElement).width\")",
-            "replace_with": "parent_width = print_history_page.complimentary_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el.parentElement).width\")"
-          }
-        },
-        {
-          "violation_id": "V028",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.complimentary_pages_value)).to_contain_text(\"10 of 10\", timeout=30000)",
-          "expected_code": "expect(print_history_page.complimentary_pages_value).to_contain_text(\"10 of 10\", timeout=30000)",
-          "explanation": "Inline page.locator() wrapping POM reference. Step 18 value verification.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.complimentary_pages_value)).to_contain_text(\"10 of 10\", timeout=30000)",
-            "replace_with": "expect(print_history_page.complimentary_pages_value).to_contain_text(\"10 of 10\", timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V029",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.total_printed_pages)).to_be_visible(timeout=30000)",
-          "expected_code": "expect(print_history_page.total_printed_pages).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() wrapping POM reference. Step 19 total pages verification.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.total_printed_pages)).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.total_printed_pages).to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V030",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "total_pages_text = page.locator(print_history_page.elements.total_printed_pages).text_content()",
-          "expected_code": "total_pages_text = print_history_page.total_printed_pages.text_content()",
-          "explanation": "Inline page.locator() wrapping POM reference for text extraction. Step 19.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "total_pages_text = page.locator(print_history_page.elements.total_printed_pages).text_content()",
-            "replace_with": "total_pages_text = print_history_page.total_printed_pages.text_content()"
-          }
-        },
-        {
-          "violation_id": "V031",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)",
-          "expected_code": "expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() wrapping POM reference. Step 20 visual verification.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V032",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "page.locator(print_history_page.elements.billing_cycle_period_card).screenshot(path=\"screenshots/billing_cycle_card_visual.png\")",
-          "expected_code": "print_history_page.billing_cycle_period_card.screenshot(path=\"screenshots/billing_cycle_card_visual.png\")",
-          "explanation": "Inline page.locator() wrapping POM reference for screenshot. Step 20.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "page.locator(print_history_page.elements.billing_cycle_period_card).screenshot(path=\"screenshots/billing_cycle_card_visual.png\")",
-            "replace_with": "print_history_page.billing_cycle_period_card.screenshot(path=\"screenshots/billing_cycle_card_visual.png\")"
-          }
-        },
-        {
-          "violation_id": "V033",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)",
-          "expected_code": "expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)",
-          "explanation": "Inline page.locator() wrapping POM reference. Step 21 responsive verification loop.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "expect(page.locator(print_history_page.elements.billing_cycle_period_card)).to_be_visible(timeout=30000)",
-            "replace_with": "expect(print_history_page.billing_cycle_period_card).to_be_visible(timeout=30000)"
-          }
-        },
-        {
-          "violation_id": "V034",
-          "rule_id": "CHECKPOINT_C02",
-          "severity": "CRITICAL",
-          "category": "missing_helper_method",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "# Missing: GeminiRAHelper.pause_subscription(page)",
-          "expected_code": "GeminiRAHelper.pause_subscription(page)",
-          "explanation": "The mapping report shows GeminiRAHelper exists with subscription management methods. The test case precondition 4 requires pausing the subscription. The script attempts to call GeminiRAHelper.pause_subscription(page) but this method may not exist in the current helper. This should be verified and either the method should be added to the helper or an alternative approach used.",
-          "fix_action": "ADD_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "description": "Verify GeminiRAHelper.pause_subscription exists or implement alternative pause logic",
-            "after_code": "GeminiRAHelper.access_tenant_page(page, tenant_email)",
-            "code_to_add": "# Pause subscription using Rails Admin\n# TODO: Verify pause_subscription method exists or implement alternative"
-          }
-        },
-        {
-          "violation_id": "V035",
-          "rule_id": "CHECKPOINT_C02",
-          "severity": "CRITICAL",
-          "category": "missing_helper_method",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "# Missing: common.get_subscription_id(tenant_email)",
-          "expected_code": "sub_id = common.get_subscription_id(tenant_email)",
-          "explanation": "The script calls common.get_subscription_id(tenant_email) but this method is not documented in the mapping report's common module methods. This needs to be verified or implemented.",
-          "fix_action": "ADD_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "description": "Verify get_subscription_id exists in common module or implement alternative",
-            "after_code": "framework_logger.info(\"Enrollment completed with 50 pages plan\")",
-            "code_to_add": "# Get subscription ID\n# TODO: Verify get_subscription_id method exists"
-          }
-        },
-        {
-          "violation_id": "V036",
-          "rule_id": "CHECKPOINT_B01",
-          "severity": "CRITICAL",
-          "category": "missing_precondition_setup",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "# Precondition setup implemented but not verified against mapping",
-          "expected_code": "# Use mapped enrollment methods",
-          "explanation": "Precondition 1 requires enrolling printer with 50+ pages plan. The script uses EnrollmentHelper methods but doesn't verify these match the mapping report's recommended methods. The mapping shows EnrollmentHelper.start_enrollment_and_sign_in, select_printer, and finish_enrollment exist, but select_plan may need verification.",
-          "fix_action": "VERIFY_MAPPING",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "description": "Verify all enrollment methods match mapping report",
-            "methods_to_verify": [
-              "EnrollmentHelper.select_plan"
-            ]
-          }
-        },
-        {
-          "violation_id": "V037",
-          "rule_id": "CHECKPOINT_B02",
-          "severity": "CRITICAL",
-          "category": "missing_step_implementation",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "# Step 10: Print simulation uses send_rtp_devicestatus but doesn't specify page count",
-          "expected_code": "common.send_rtp_devicestatus(entity_id=printer_data.entity_id, cloud_id=printer_data.cloud_id, device_uuid=printer_data.device_uuid, pages_printed=6)",
-          "explanation": "Step 10 requires printing exactly 6 pages. The send_rtp_devicestatus call doesn't specify the page count parameter. The method signature needs to be verified to ensure it supports specifying exact page counts.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "common.send_rtp_devicestatus(\n                entity_id=printer_data.entity_id,\n                cloud_id=printer_data.cloud_id,\n                device_uuid=printer_data.device_uuid\n            )",
-            "replace_with": "# Send RTP with 6 pages printed\ncommon.send_rtp_devicestatus(\n                entity_id=printer_data.entity_id,\n                cloud_id=printer_data.cloud_id,\n                device_uuid=printer_data.device_uuid,\n                pages_printed=6\n            )"
-          }
-        },
-        {
-          "violation_id": "V038",
-          "rule_id": "CHECKPOINT_B02",
-          "severity": "CRITICAL",
-          "category": "missing_step_implementation",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "# Step 12: Print simulation doesn't specify 9 additional pages",
-          "expected_code": "common.send_rtp_devicestatus(entity_id=printer_data.entity_id, cloud_id=printer_data.cloud_id, device_uuid=printer_data.device_uuid, pages_printed=15)",
-          "explanation": "Step 12 requires printing 9 MORE pages (total 15). The send_rtp_devicestatus call should specify cumulative total of 15 pages or increment by 9.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "common.send_rtp_devicestatus(\n                entity_id=printer_data.entity_id,\n                cloud_id=printer_data.cloud_id,\n                device_uuid=printer_data.device_uuid\n            )",
-            "replace_with": "# Send RTP with total 15 pages printed\ncommon.send_rtp_devicestatus(\n                entity_id=printer_data.entity_id,\n                cloud_id=printer_data.cloud_id,\n                device_uuid=printer_data.device_uuid,\n                pages_printed=15\n            )"
-          }
-        },
-        {
-          "violation_id": "V039",
-          "rule_id": "CHECKPOINT_D14",
+          "rule_id": "CHECKPOINT_C03",
           "severity": "MODERATE",
-          "category": "missing_expect_timeout",
+          "category": "unused_verification_component",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "# All expect() calls have explicit timeouts - PASSED",
-          "expected_code": "# No fix needed",
-          "explanation": "This is actually PASSED - all expect() assertions in the script have explicit timeout parameters. This violation record is for documentation that this checkpoint was evaluated and passed.",
-          "fix_action": "NONE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "description": "All expect() calls have timeouts - no fix needed"
-          }
-        },
-        {
-          "violation_id": "V040",
-          "rule_id": "CHECKPOINT_D15",
-          "severity": "MODERATE",
-          "category": "inline_admin_interaction",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "GeminiRAHelper.access(page)\nGeminiRAHelper.access_tenant_page(page, tenant_email)\nGeminiRAHelper.pause_subscription(page)",
-          "expected_code": "# Admin interactions properly encapsulated in helper - CORRECT",
-          "explanation": "Admin/backend interactions ARE properly encapsulated in GeminiRAHelper methods. This is the CORRECT pattern. This violation record documents that the checkpoint was evaluated and the code follows best practices.",
-          "fix_action": "NONE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "description": "Admin interactions properly encapsulated - no fix needed"
-          }
-        },
-        {
-          "violation_id": "V041",
-          "rule_id": "CHECKPOINT_E03",
-          "severity": "MINOR",
-          "category": "placeholder_comment",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "# Verify print job was registered",
-          "expected_code": "# Remove or make more specific",
-          "explanation": "Comment 'Verify print job was registered' is somewhat generic. While not a critical issue, comments should be more specific about what is being verified.",
+          "current_code": "# Step 14: Check Additional pages progress bar color and value\nexpect(print_history_page.additional_pages_progress_bar).to_be_visible(timeout=30000)\nbar_color = print_history_page.additional_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")\nassert \"rgb(255, 255, 0)\" in bar_color or \"yellow\" in bar_color.lower(), f\"Expected yellow color, got {bar_color}\"\nexpected_additional_pages = \"5 of 10\"\nexpect(print_history_page.additional_pages_value).to_contain_text(expected_additional_pages, timeout=30000)",
+          "expected_code": "# Step 14: Check Additional pages progress bar color and value\nexpect(print_history_page.additional_pages_progress_bar).to_be_visible(timeout=30000)\nbar_color = print_history_page.additional_pages_progress_bar.evaluate(\"el => window.getComputedStyle(el).backgroundColor\")\nassert \"rgb(255, 255, 0)\" in bar_color or \"yellow\" in bar_color.lower(), f\"Expected yellow color, got {bar_color}\"\nprint_history_page.verify_additional_pages_value(expected_used=5, expected_total=10)",
+          "explanation": "The mapping report shows that print_history_page_additions.py provides a verification method verify_additional_pages_value() specifically designed for verifying additional pages usage. The test script should use this helper method for the value verification portion instead of inline expect() assertions. The color verification can remain as-is since there is no specific helper method for color checking. Using the provided verification component improves code consistency.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "# Verify print job was registered",
-            "replace_with": "# Verify 6 pages were successfully printed and recorded"
-          }
-        },
-        {
-          "violation_id": "V042",
-          "rule_id": "CHECKPOINT_E03",
-          "severity": "MINOR",
-          "category": "placeholder_comment",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "# Verify total pages printed is now 15",
-          "expected_code": "# More specific comment",
-          "explanation": "Comment could be more specific about the verification method.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "# Verify total pages printed is now 15",
-            "replace_with": "# Verify cumulative total of 15 pages printed via Gemini API"
-          }
-        },
-        {
-          "violation_id": "V043",
-          "rule_id": "CHECKPOINT_C01",
-          "severity": "MODERATE",
-          "category": "wrong_access_pattern",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "print_history_page = PrintHistoryPage(page)",
-          "expected_code": "# Verify PrintHistoryPage has all required locators as properties",
-          "explanation": "The script instantiates PrintHistoryPage but then accesses elements via .elements. namespace with page.locator() wrapping. The correct pattern per the mapping report is to access locators as direct properties. The page additions file needs to be restructured to define locators as properties in __init__, not as Elements class string attributes.",
-          "fix_action": "RESTRUCTURE",
-          "fix_details": {
-            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "description": "Restructure to define locators as properties in PrintHistoryPage.__init__ instead of Elements class strings",
-            "current_structure": "class Elements:\n    plan_pause_info = \"[data-testid='plan-pause-info']\"",
-            "required_structure": "# In PrintHistoryPage.__init__:\nself.plan_pause_info = page.locator(\"[data-testid='plan-pause-info']\")"
+            "find": "expected_additional_pages = \"5 of 10\"\nexpect(print_history_page.additional_pages_value).to_contain_text(expected_additional_pages, timeout=30000)",
+            "replace_with": "print_history_page.verify_additional_pages_value(expected_used=5, expected_total=10)"
           }
         }
       ]
@@ -772,108 +121,91 @@
       "file_path": "additional_generations/page_additions/print_history_page_additions.py",
       "file_type": "page_addition",
       "test_case_id": "C44873414",
-      "score": 88,
-      "violation_count": 3,
-      "critical_count": 2,
-      "moderate_count": 1,
+      "score": 97,
+      "violation_count": 1,
+      "critical_count": 1,
+      "moderate_count": 0,
       "minor_count": 0,
-      "deduction": 8,
+      "deduction": 3,
       "checkpoints_evaluated": 7,
       "checkpoints_passed": [
         "F01",
         "F02",
         "F03",
-        "F05"
-      ],
-      "checkpoints_failed": [
-        "F04",
+        "F05",
         "F06",
         "F07"
       ],
+      "checkpoints_failed": [
+        "F04"
+      ],
       "violations": [
         {
-          "violation_id": "V044",
+          "violation_id": "V003",
           "rule_id": "CHECKPOINT_F04",
           "severity": "CRITICAL",
           "category": "missing_elements_class_structure",
           "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-          "current_code": "class Elements:\n    plan_pause_info = \"[data-testid='plan-pause-info']\"\n    billing_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"\n    # ... more string selectors",
-          "expected_code": "# In PrintHistoryPage.__init__ method:\nself.plan_pause_info = page.locator(\"[data-testid='plan-pause-info']\")\nself.billing_cycle_period_card = page.locator(\"[data-testid='billing-cycle-period-card']\")\n# ... more locator properties",
-          "explanation": "The page additions file defines an Elements class with string selectors. This is NOT the correct pattern for the AURA framework. Per the coding standards and existing page objects in the mapping report, locators should be defined as properties in the page object's __init__ method using page.locator(). The Elements class pattern shown here forces test scripts to use page.locator(page_obj.elements.X) which violates Prohibition 6. The correct pattern is to define self.X = page.locator() in __init__ and access as page_obj.X directly.",
+          "current_code": "# In PrintHistoryPage.__init__:\nself.plan_pause_info = page.locator(\"[data-testid='plan-pause-info']\")\nself.billing_cycle_period_card = page.locator(\"[data-testid='billing-cycle-period-card']\")\nself.complimentary_pages_progress_bar = page.locator(\"[data-testid='complimentary-pages-progress-bar']\")\nself.complimentary_pages_value = page.locator(\"[data-testid='complimentary-pages-value']\")\nself.complimentary_pages_info_icon = page.locator(\"[data-testid='complimentary-pages-info-icon']\")\nself.complimentary_pages_info_message = page.locator(\"[data-testid='complimentary-pages-info-message']\")\nself.complimentary_pages_tooltip = page.locator(\"[data-testid='complimentary-pages-tooltip']\")\nself.additional_pages_progress_bar = page.locator(\"[data-testid='additional-pages-progress-bar']\")\nself.additional_pages_value = page.locator(\"[data-testid='additional-pages-value']\")\nself.additional_pages_info_icon = page.locator(\"[data-testid='additional-pages-info-icon']\")\nself.additional_pages_info_message = page.locator(\"[data-testid='additional-pages-info-message']\")\nself.additional_pages_tooltip = page.locator(\"[data-testid='additional-pages-tooltip']\")",
+          "expected_code": "# In PrintHistoryPage.__init__, add to Elements inner class:\nclass Elements:\n    # Existing elements...\n    \n    # Billing Cycle Period Card elements\n    plan_pause_info = \"[data-testid='plan-pause-info']\"\n    billing_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"\n    complimentary_pages_progress_bar = \"[data-testid='complimentary-pages-progress-bar']\"\n    complimentary_pages_value = \"[data-testid='complimentary-pages-value']\"\n    complimentary_pages_info_icon = \"[data-testid='complimentary-pages-info-icon']\"\n    complimentary_pages_info_message = \"[data-testid='complimentary-pages-info-message']\"\n    complimentary_pages_tooltip = \"[data-testid='complimentary-pages-tooltip']\"\n    additional_pages_progress_bar = \"[data-testid='additional-pages-progress-bar']\"\n    additional_pages_value = \"[data-testid='additional-pages-value']\"\n    additional_pages_info_icon = \"[data-testid='additional-pages-info-icon']\"\n    additional_pages_info_message = \"[data-testid='additional-pages-info-message']\"\n    additional_pages_tooltip = \"[data-testid='additional-pages-tooltip']\"\n\nself.elements = self.Elements()\n\n# Then access in test script as:\nprint_history_page.elements.plan_pause_info\nprint_history_page.elements.billing_cycle_period_card\n# etc.",
+          "explanation": "CRITICAL VIOLATION: The page additions file defines locators as direct Locator properties (self.X = page.locator(...)) instead of using the Elements inner class pattern required by the AURA framework. According to the framework architecture documented in the knowledge base and evidenced by existing page objects in the mapping report, page objects must use an Elements inner class that stores selector STRINGS (not Locator objects), and these are accessed via the .elements. namespace. The current pattern creates Locator objects directly as instance attributes, which violates the framework's Page Object Model architecture. The correct pattern is: (1) Define an Elements inner class with string selectors as class attributes, (2) Instantiate self.elements = self.Elements() in __init__, (3) Access in test scripts via page.locator(page_obj.elements.selector_name) or use the elements directly if the page object provides property methods. This is a CRITICAL violation because it fundamentally breaks the framework's POM pattern and will cause inconsistency with all other page objects in the codebase.",
           "fix_action": "RESTRUCTURE",
           "fix_details": {
             "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "description": "Convert Elements class string selectors to property definitions in PrintHistoryPage.__init__",
-            "current_structure": "class Elements:\n    plan_pause_info = \"[data-testid='plan-pause-info']\"\n    billing_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"\n    complimentary_pages_progress_bar = \"[data-testid='complimentary-pages-progress-bar']\"\n    complimentary_pages_value = \"[data-testid='complimentary-pages-value']\"\n    complimentary_pages_info_icon = \"[data-testid='complimentary-pages-info-icon']\"\n    complimentary_pages_info_message = \"[data-testid='complimentary-pages-info-message']\"\n    complimentary_pages_tooltip = \"[data-testid='complimentary-pages-tooltip']\"\n    additional_pages_progress_bar = \"[data-testid='additional-pages-progress-bar']\"\n    additional_pages_value = \"[data-testid='additional-pages-value']\"\n    additional_pages_info_icon = \"[data-testid='additional-pages-info-icon']\"\n    additional_pages_info_message = \"[data-testid='additional-pages-info-message']\"\n    additional_pages_tooltip = \"[data-testid='additional-pages-tooltip']\"",
-            "required_structure": "# Add to PrintHistoryPage.__init__ method:\nself.plan_pause_info = page.locator(\"[data-testid='plan-pause-info']\")\nself.billing_cycle_period_card = page.locator(\"[data-testid='billing-cycle-period-card']\")\nself.complimentary_pages_progress_bar = page.locator(\"[data-testid='complimentary-pages-progress-bar']\")\nself.complimentary_pages_value = page.locator(\"[data-testid='complimentary-pages-value']\")\nself.complimentary_pages_info_icon = page.locator(\"[data-testid='complimentary-pages-info-icon']\")\nself.complimentary_pages_info_message = page.locator(\"[data-testid='complimentary-pages-info-message']\")\nself.complimentary_pages_tooltip = page.locator(\"[data-testid='complimentary-pages-tooltip']\")\nself.additional_pages_progress_bar = page.locator(\"[data-testid='additional-pages-progress-bar']\")\nself.additional_pages_value = page.locator(\"[data-testid='additional-pages-value']\")\nself.additional_pages_info_icon = page.locator(\"[data-testid='additional-pages-info-icon']\")\nself.additional_pages_info_message = page.locator(\"[data-testid='additional-pages-info-message']\")\nself.additional_pages_tooltip = page.locator(\"[data-testid='additional-pages-tooltip']\")"
-          }
-        },
-        {
-          "violation_id": "V045",
-          "rule_id": "CHECKPOINT_F06",
-          "severity": "CRITICAL",
-          "category": "dead_locator_in_additions",
-          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-          "current_code": "complimentary_pages_tooltip = \"[data-testid='complimentary-pages-tooltip']\"\nadditional_pages_tooltip = \"[data-testid='additional-pages-tooltip']\"",
-          "expected_code": "# Update with actual tooltip selectors when available",
-          "explanation": "The page additions file defines tooltip locators with TODO comments indicating these selectors may not be accurate. The comment states 'TODO: Update with specific data-testid when available'. These locators are referenced in the test script but may not work correctly if the actual tooltip elements use different selectors (e.g., [role='tooltip'] or dynamic IDs). This creates a risk of test failures.",
-          "fix_action": "ADD_CODE",
-          "fix_details": {
-            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "description": "Verify tooltip selectors match actual DOM elements or update with correct selectors",
-            "after_code": "self.complimentary_pages_info_message = page.locator(\"[data-testid='complimentary-pages-info-message']\")",
-            "code_to_add": "# Tooltip selectors - verify these match actual DOM\n# May need to use [role='tooltip'] or dynamic selectors\nself.complimentary_pages_tooltip = page.locator(\"[data-testid='complimentary-pages-tooltip']\")  # TODO: Verify selector\nself.additional_pages_tooltip = page.locator(\"[data-testid='additional-pages-tooltip']\")  # TODO: Verify selector"
-          }
-        },
-        {
-          "violation_id": "V046",
-          "rule_id": "CHECKPOINT_F07",
-          "severity": "MODERATE",
-          "category": "method_outside_class",
-          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-          "current_code": "def verify_plan_pause_info_not_displayed(self):\n    \"\"\"Verify plan pause information is not displayed.\"\"\"\n    expect(self.elements.plan_pause_info).not_to_be_visible(timeout=10000)",
-          "expected_code": "# Add to PrintHistoryPage class body:\ndef verify_plan_pause_info_not_displayed(self):\n    \"\"\"Verify plan pause information is not displayed.\"\"\"\n    expect(self.plan_pause_info).not_to_be_visible(timeout=10000)",
-          "explanation": "The page additions file defines methods outside of any class context. These methods should be added to the PrintHistoryPage class body. Additionally, the methods reference self.elements.plan_pause_info which is incorrect - they should reference self.plan_pause_info directly after the Elements class is restructured to property definitions.",
-          "fix_action": "RESTRUCTURE",
-          "fix_details": {
-            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "description": "Move methods into PrintHistoryPage class and update element references",
-            "current_structure": "def verify_plan_pause_info_not_displayed(self):\n    expect(self.elements.plan_pause_info).not_to_be_visible(timeout=10000)",
-            "required_structure": "# In PrintHistoryPage class:\ndef verify_plan_pause_info_not_displayed(self):\n    expect(self.plan_pause_info).not_to_be_visible(timeout=10000)"
+            "description": "Restructure all locator definitions to use the Elements inner class pattern with string selectors instead of direct Locator object properties",
+            "current_structure": "Direct Locator properties: self.X = page.locator('selector')",
+            "required_structure": "Elements inner class with string attributes: class Elements: X = 'selector'; then self.elements = self.Elements()"
           }
         }
       ]
+    }
+  ],
+  "violation_summary": {
+    "by_severity": {
+      "CRITICAL": 1,
+      "MODERATE": 2,
+      "MINOR": 0
+    },
+    "by_category": {
+      "unused_verification_component": 2,
+      "missing_elements_class_structure": 1
+    },
+    "by_rule": {
+      "CHECKPOINT_C03": 2,
+      "CHECKPOINT_F04": 1
+    },
+    "most_common_violation": "CHECKPOINT_C03 (unused_verification_component) — 2 occurrences",
+    "most_impacted_file": "test_scripts/billing_cycle_period_card.py — 2 violations, score 94"
+  },
+  "fix_priority_order": [
+    {
+      "priority": 1,
+      "category": "missing_elements_class_structure",
+      "severity": "CRITICAL",
+      "violation_ids": [
+        "V003"
+      ],
+      "total_count": 1,
+      "total_deduction": 3,
+      "affected_files": [
+        "additional_generations/page_additions/print_history_page_additions.py"
+      ],
+      "fix_approach": "Restructure the page additions file to use the Elements inner class pattern. Convert all direct Locator property definitions (self.X = page.locator(...)) to Elements class attributes storing selector strings (X = 'selector'). This is the highest priority fix because it addresses a fundamental framework architecture violation that affects how the page object integrates with the rest of the codebase."
     },
     {
-      "violation_id": "V047",
-      "rule_id": "CHECKPOINT_A14",
-      "severity": "CRITICAL",
-      "category": "missing_helper_import",
-      "file_path": "test_scripts/billing_cycle_period_card.py",
-      "current_code": "# Missing: PrintHistoryHelper methods",
-      "expected_code": "from helper.print_history_helper import PrintHistoryHelper",
-      "explanation": "The mapping report shows PrintHistoryHelper exists with methods like verify_billing_table_data, verify_plan_info, verify_current_total. The test case involves verifying billing cycle data which could benefit from these helper methods. While not strictly required since the test implements verification inline, using existing helpers would follow DRY principles.",
-      "fix_action": "ADD_IMPORT",
-      "fix_details": {
-        "target_file": "test_scripts/billing_cycle_period_card.py",
-        "import_statement": "from helper.print_history_helper import PrintHistoryHelper",
-        "add_after": "from helper.gemini_ra_helper import GeminiRAHelper"
-      }
-    },
-    {
-      "violation_id": "V048",
-      "rule_id": "CHECKPOINT_A09",
-      "severity": "CRITICAL",
-      "category": "step_count_mismatch",
-      "file_path": "test_scripts/billing_cycle_period_card.py",
-      "current_code": "# Script has 21 steps matching test case",
-      "expected_code": "# Verify step count matches exactly",
-      "explanation": "The test case has 21 steps. The script implements 21 steps (Steps 1-21). However, the script also has a separate PRECONDITION SETUP section before Step 1. The test case analysis shows 4 preconditions that should be handled as setup, not as separate steps. The script structure is actually CORRECT - preconditions are setup, then 21 steps follow. This violation record documents that the checkpoint was evaluated. The step count MATCHES correctly.",
-      "fix_action": "NONE",
-      "fix_details": {
-        "target_file": "test_scripts/billing_cycle_period_card.py",
-        "description": "Step count matches test case - no fix needed. Preconditions correctly implemented as setup section."
-      }
+      "priority": 2,
+      "category": "unused_verification_component",
+      "severity": "MODERATE",
+      "violation_ids": [
+        "V001",
+        "V002"
+      ],
+      "total_count": 2,
+      "total_deduction": 4,
+      "affected_files": [
+        "test_scripts/billing_cycle_period_card.py"
+      ],
+      "fix_approach": "Replace inline expect() assertions with the provided verification methods from page additions. Use print_history_page.verify_complimentary_pages_value() for step 8 and print_history_page.verify_additional_pages_value() for step 14. This improves code reusability and consistency by utilizing the verification components that were specifically created for these checks."
     }
   ]
 }
