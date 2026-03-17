@@ -64,7 +64,14 @@ def billing_cycle_period_card(stage_callback):
             framework_logger.info("Precondition: Pausing subscription plan")
             GeminiRAHelper.access(page)
             GeminiRAHelper.access_tenant_page(page, tenant_email)
-            GeminiRAHelper.pause_subscription(page)
+            # Navigate to subscription edit page
+            page.locator("a:has-text('Edit')").first.click()
+            page.wait_for_load_state('networkidle', timeout=30000)
+            # Find and select pause subscription option
+            page.locator("select[name='subscription[subscription_state]']").select_option('paused')
+            # Save changes
+            page.locator("input[type='submit'][value='Save']").click()
+            page.wait_for_load_state('networkidle', timeout=30000)
             GeminiRAHelper.verify_rails_admin_info(page, "Subscription State", "paused", retry=True)
             framework_logger.info("Subscription paused successfully")
 
@@ -83,7 +90,7 @@ def billing_cycle_period_card(stage_callback):
 
             # Step 2: Check the Billing Cycle Period card - verify plan pause info NOT displayed
             expect(print_history_page.print_history_card).to_be_visible(timeout=30000)
-            expect(print_history_page.plan_pause_info).not_to_be_visible(timeout=30000)
+            expect(print_history_page.plan_pause_info).to_be_hidden(timeout=30000)
             framework_logger.info("Step 2: Verified plan pause information is not displayed")
 
             # Step 3: Event shift 32 days and trigger billing charge
@@ -141,8 +148,7 @@ def billing_cycle_period_card(stage_callback):
             pages_printed = subscription_data_step10.get('pages_printed', subscription_data_step10.get('page_count', 0))
             assert pages_printed >= 6, f"Expected at least 6 pages printed, got {pages_printed}"
             expect(print_history_page.complimentary_pages_value).to_contain_text("6", timeout=30000)
-            framework_logger.info("Step 10: Simulated printing 6 pages")
-            framework_logger.info("Step 10: Verified 6 pages printed and displayed")
+            framework_logger.info("Step 10: Simulated printing 6 pages and verified display")
 
             # Step 11: Refresh page and verify progress bar updated
             page.reload()
@@ -164,8 +170,7 @@ def billing_cycle_period_card(stage_callback):
             pages_printed = subscription_data_step12.get('pages_printed', subscription_data_step12.get('page_count', 0))
             assert pages_printed >= 15, f"Expected at least 15 pages printed, got {pages_printed}"
             expect(print_history_page.complimentary_pages_value).to_contain_text("10", timeout=30000)
-            framework_logger.info("Step 12: Additional print job registered")
-            framework_logger.info("Step 12: Verified 15 pages printed total")
+            framework_logger.info("Step 12: Additional print job registered - 15 pages printed total")
 
             # Step 13: Refresh and verify both progress bars displayed
             page.reload()
