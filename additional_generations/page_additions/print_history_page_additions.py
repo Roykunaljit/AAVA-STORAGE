@@ -40,3 +40,58 @@ class Elements:
     additional_pages_info_icon = "[data-testid='additional-pages-info-icon']"
     additional_pages_info_message = "[data-testid='additional-pages-info-message']"
     additional_pages_tooltip = "[role='tooltip']:near([data-testid='additional-pages-info-icon'])"
+    total_printed_pages = "[data-testid='total-printed-pages']"
+
+
+# Property methods to access Elements-based locators
+@property
+def plan_pause_info(self):
+    return self.page.locator(self.elements.plan_pause_info)
+
+@property
+def billing_cycle_period_card(self):
+    return self.page.locator(self.elements.billing_cycle_period_card)
+
+@property
+def complimentary_pages_progress_bar(self):
+    return self.page.locator(self.elements.complimentary_pages_progress_bar)
+
+@property
+def complimentary_pages_value(self):
+    return self.page.locator(self.elements.complimentary_pages_value)
+
+@property
+def complimentary_pages_info_icon(self):
+    return self.page.locator(self.elements.complimentary_pages_info_icon)
+
+@property
+def complimentary_pages_info_message(self):
+    return self.page.locator(self.elements.complimentary_pages_info_message)
+
+@property
+def complimentary_pages_tooltip(self):
+    return self.page.locator(self.elements.complimentary_pages_tooltip)
+
+@property
+def additional_pages_progress_bar(self):
+    return self.page.locator(self.elements.additional_pages_progress_bar)
+
+@property
+def additional_pages_value(self):
+    return self.page.locator(self.elements.additional_pages_value)
+
+@property
+def additional_pages_info_icon(self):
+    return self.page.locator(self.elements.additional_pages_info_icon)
+
+@property
+def additional_pages_info_message(self):
+    return self.page.locator(self.elements.additional_pages_info_message)
+
+@property
+def additional_pages_tooltip(self):
+    return self.page.locator(self.elements.additional_pages_tooltip)
+
+@property
+def total_printed_pages(self):
+    return self.page.locator(self.elements.total_printed_pages)
