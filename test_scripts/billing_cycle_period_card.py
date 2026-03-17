@@ -67,10 +67,10 @@ def billing_cycle_period_card(stage_callback):
             subscription_page_url = f"{GlobalState.gemini_ra_url}/subscriptions/{subscription_id}/edit"
             page.goto(subscription_page_url)
             page.wait_for_load_state('networkidle', timeout=30000)
-            page.select_option("select#subscription_subscription_state", "paused")
-            page.click("button[type='submit']")
+            page.select_option('select#subscription_subscription_state', 'paused')
+            page.click('button[type="submit"]')
             page.wait_for_load_state('networkidle', timeout=30000)
-            GeminiRAHelper.verify_rails_admin_info(page, "Subscription State", "paused", retry=True)
+            GeminiRAHelper.verify_rails_admin_info(page, 'Subscription State', 'paused', retry=True)
             framework_logger.info("Precondition 4: Subscription paused via Rails Admin")
 
             # ══════════════════════════════════════════════
@@ -88,7 +88,7 @@ def billing_cycle_period_card(stage_callback):
 
             # Step 2: Check the Billing Cycle Period card - verify plan pause info NOT displayed
             expect(print_history_page.print_history_card).to_be_visible(timeout=30000)
-            expect(print_history_page.elements.plan_pause_info).not_to_be_visible(timeout=30000)
+            expect(print_history_page.plan_pause_info).not_to_be_visible(timeout=30000)
             framework_logger.info("Step 2: Verified plan pause information is not displayed")
 
             # Step 3: Event shift 32 days and trigger billing charge
@@ -110,7 +110,7 @@ def billing_cycle_period_card(stage_callback):
 
             # Step 5: Check the Billing Cycle Period card - verify plan pause info IS displayed
             expect(print_history_page.print_history_card).to_be_visible(timeout=30000)
-            expect(print_history_page.elements.plan_pause_info).to_be_visible(timeout=30000)
+            expect(print_history_page.plan_pause_info).to_be_visible(timeout=30000)
             framework_logger.info("Step 5: Verified plan pause information is displayed")
 
             # Step 6: Check the progress bar - verify Complimentary pages progress bar displayed
@@ -123,7 +123,7 @@ def billing_cycle_period_card(stage_callback):
             else:
                 print_history_page.complimentary_pages_info_icon.hover()
             expect(print_history_page.complimentary_pages_tooltip).to_be_visible(timeout=10000)
-            expect(print_history_page.complimentary_pages_tooltip).not_to_be_empty()
+            expect(print_history_page.complimentary_pages_tooltip).not_to_be_empty(timeout=30000)
             framework_logger.info("Step 7: Verified tooltip displays with message")
 
             # Step 8: Check Complimentary pages value
@@ -133,7 +133,7 @@ def billing_cycle_period_card(stage_callback):
 
             # Step 9: Check message below Complimentary pages
             expect(print_history_page.complimentary_pages_info_message).to_be_visible(timeout=30000)
-            expect(print_history_page.complimentary_pages_info_message).not_to_be_empty()
+            expect(print_history_page.complimentary_pages_info_message).not_to_be_empty(timeout=30000)
             framework_logger.info("Step 9: Verified information message with plan info")
 
             # Step 10: Print 6 pages (less than plan limit)
@@ -197,7 +197,7 @@ def billing_cycle_period_card(stage_callback):
             else:
                 print_history_page.additional_pages_info_icon.hover()
             expect(print_history_page.additional_pages_tooltip).to_be_visible(timeout=10000)
-            expect(print_history_page.additional_pages_tooltip).not_to_be_empty()
+            expect(print_history_page.additional_pages_tooltip).not_to_be_empty(timeout=30000)
             framework_logger.info("Step 16: Additional pages tooltip verified")
 
             # Step 17: Check message below Additional pages
@@ -216,7 +216,7 @@ def billing_cycle_period_card(stage_callback):
             framework_logger.info("Step 18: Complimentary pages progress bar full (10 of 10)")
 
             # Step 19: Check total pages printed
-            billing_card = print_history_page.elements.billing_cycle_period_card
+            billing_card = print_history_page.billing_cycle_period_card
             total_pages_element = print_history_page.total_printed_pages
             expect(total_pages_element).to_be_visible(timeout=30000)
             total_pages_text = total_pages_element.text_content()
