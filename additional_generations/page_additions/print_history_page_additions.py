@@ -31,6 +31,12 @@ Merge instructions:
 # Attributes to add to the EXISTING PrintHistoryPage.Elements inner class:
 # (Do NOT create a new Elements class - add these to the existing one)
 
+# Example structure (for reference only - do not copy the class definition):
+# class PrintHistoryPage:
+#     class Elements:
+#         # ... existing attributes ...
+#         # ADD THE FOLLOWING ATTRIBUTES HERE:
+
 plan_pause_info = "[data-testid='plan-pause-info']"
 billing_cycle_period_card = "[data-testid='billing-cycle-period-card']"
 complimentary_pages_progress_bar = "[data-testid='complimentary-pages-progress-bar']"
