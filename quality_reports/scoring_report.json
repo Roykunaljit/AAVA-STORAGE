@@ -1,14 +1,14 @@
 {
   "scoring_metadata": {
-    "scored_at": "2026-03-18T17:20:00Z",
+    "scored_at": "2026-03-18T17:55:00Z",
     "scorer": "Test_Script_Quality_Auditor",
-    "overall_score": 94,
+    "overall_score": 79,
     "score_formula": "100 - (CRITICAL×3 + MODERATE×2 + MINOR×1), floor 0",
-    "total_violations": 3,
-    "critical_count": 0,
-    "moderate_count": 2,
-    "minor_count": 1,
-    "total_deduction": 5,
+    "total_violations": 8,
+    "critical_count": 5,
+    "moderate_count": 3,
+    "minor_count": 0,
+    "total_deduction": 21,
     "total_files_analyzed": 2,
     "files_analyzed": [
       "test_scripts/billing_cycle_period_card.py",
@@ -25,19 +25,18 @@
       "file_path": "test_scripts/billing_cycle_period_card.py",
       "file_type": "test_script",
       "test_case_id": "C44873414",
-      "score": 96,
-      "violation_count": 2,
-      "critical_count": 0,
-      "moderate_count": 1,
-      "minor_count": 1,
-      "deduction": 3,
+      "score": 79,
+      "violation_count": 8,
+      "critical_count": 5,
+      "moderate_count": 3,
+      "minor_count": 0,
+      "deduction": 21,
       "checkpoints_evaluated": 45,
       "checkpoints_passed": [
         "A01",
         "A02",
         "A03",
         "A04",
-        "A05",
         "A06",
         "A07",
         "A08",
@@ -58,6 +57,7 @@
         "C03",
         "C04",
         "C05",
+        "C06",
         "D01",
         "D02",
         "D03",
@@ -71,52 +71,212 @@
         "D11",
         "D12",
         "D13",
-        "D14",
+        "D15",
         "E01",
         "E02",
         "E03",
+        "E04",
         "E05",
         "E06",
         "E07",
         "E08"
       ],
       "checkpoints_failed": [
-        "D15",
-        "E04"
+        "A05",
+        "D14"
       ],
       "violations": [
         {
           "violation_id": "V001",
-          "rule_id": "CHECKPOINT_D15",
-          "severity": "MODERATE",
-          "category": "incomplete_precondition_implementation",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "# Precondition 4: Pause the plan via Rails Admin\nGeminiRAHelper.access(page)\nGeminiRAHelper.access_tenant_page(page, tenant_email)\n# Navigate to subscription edit and manually pause\n# TODO: Implement pause_subscription method in GeminiRAHelper or use UI navigation\nframework_logger.info(\"Precondition 4: Navigated to tenant page for manual pause\")",
-          "expected_code": "# Precondition 4: Pause the plan via Rails Admin\nGeminiRAHelper.access(page)\nGeminiRAHelper.access_tenant_page(page, tenant_email)\nGeminiRAHelper.pause_subscription(page)\nframework_logger.info(\"Precondition 4: Plan paused successfully\")",
-          "explanation": "Precondition 4 from the test case requires pausing the subscription plan before the test begins. The current implementation has a TODO comment indicating the pause functionality is not implemented. This is a MODERATE violation because the precondition setup is incomplete - the test cannot execute correctly without actually pausing the plan. The mapping report shows GeminiRAHelper exists with methods for subscription operations, but pause_subscription is not listed. This should either use an existing Rails Admin method or be implemented as a helper addition.",
-          "fix_action": "ADD_CODE",
+          "current_code": "page.locator(f\"a:has-text('{tenant_email}')\").first.click()",
+          "expected_code": "# This Rails Admin interaction should be encapsulated in a helper method\n# Create a helper method in RABaseHelper or GeminiRAHelper:\n# @staticmethod\n# def click_tenant_link(page, tenant_email):\n#     page.locator(f\"a:has-text('{tenant_email}')\").first.click()\n# Then use: RABaseHelper.click_tenant_link(page, tenant_email)",
+          "explanation": "Inline page.locator() with hardcoded selector used in test body. This violates Prohibition 6 which states: ZERO page.locator() in test function body. While this is a Rails Admin interaction, it should still be encapsulated in a helper method rather than using inline locators directly in the test script. The test script should only use page object properties or helper methods.",
+          "fix_action": "MULTI_FILE_FIX",
           "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "# Navigate to subscription edit and manually pause\n# TODO: Implement pause_subscription method in GeminiRAHelper or use UI navigation\nframework_logger.info(\"Precondition 4: Navigated to tenant page for manual pause\")",
-            "replace_with": "# Pause the subscription using Rails Admin\nRABaseHelper.access_page(page, \"Subscriptions\")\npage.locator(f\"a:has-text('{tenant_email}')\").first.click()\npage.locator(\"a:has-text('Edit')\").click()\npage.locator(\"#subscription_state\").select_option(\"paused\")\npage.locator(\"input[type='submit'][value='Update Subscription']\").click()\npage.wait_for_selector(\"div.alert-success\", timeout=30000)\nframework_logger.info(\"Precondition 4: Plan paused successfully via Rails Admin\")",
-            "description": "Replace TODO comment with actual Rails Admin navigation and pause operation. Uses RABaseHelper for page navigation and direct Playwright locators for Rails Admin form interaction since this is admin-specific functionality not in the main page objects."
+            "changes": [
+              {
+                "target_file": "helper/ra_base_helper.py",
+                "action": "ADD_METHOD",
+                "method_name": "click_tenant_link",
+                "method_code": "@staticmethod\ndef click_tenant_link(page, tenant_email):\n    \"\"\"Click the tenant link in Rails Admin search results.\"\"\"\n    page.locator(f\"a:has-text('{tenant_email}')\").first.click()",
+                "add_after": "def access_page(page, page_name):"
+              },
+              {
+                "target_file": "test_scripts/billing_cycle_period_card.py",
+                "action": "REPLACE_CODE",
+                "find": "page.locator(f\"a:has-text('{tenant_email}')\").first.click()",
+                "replace_with": "RABaseHelper.click_tenant_link(page, tenant_email)"
+              }
+            ],
+            "explanation": "Add helper method to RABaseHelper and replace inline locator usage in test script"
           }
         },
         {
           "violation_id": "V002",
-          "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
-          "category": "verbose_logging",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "inline_page_locator",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "framework_logger.info(\"Preconditions 1-3 completed: Enrollment with 50 pages plan, verified subscribed status without free months\")",
-          "expected_code": "framework_logger.info(\"Preconditions 1-3 completed: Printer enrolled with 50 pages plan, subscription verified as subscribed without free months\")",
-          "explanation": "The logging statement is acceptable but could be slightly more concise. This is a MINOR violation under coding standard E04 which states logging should be concise with 1 log line per step. The current log is clear and informative, so this is a very minor style issue. The suggested replacement is marginally more concise while maintaining clarity.",
+          "current_code": "page.locator(\"a:has-text('Edit')\").click()",
+          "expected_code": "# Add to RABaseHelper:\n# @staticmethod\n# def click_edit_link(page):\n#     page.locator(\"a:has-text('Edit')\").click()\n# Then use: RABaseHelper.click_edit_link(page)",
+          "explanation": "Inline page.locator() with hardcoded selector used in test body. This violates Prohibition 6. The Edit link interaction should be encapsulated in a helper method.",
+          "fix_action": "MULTI_FILE_FIX",
+          "fix_details": {
+            "changes": [
+              {
+                "target_file": "helper/ra_base_helper.py",
+                "action": "ADD_METHOD",
+                "method_name": "click_edit_link",
+                "method_code": "@staticmethod\ndef click_edit_link(page):\n    \"\"\"Click the Edit link in Rails Admin.\"\"\"\n    page.locator(\"a:has-text('Edit')\").click()",
+                "add_after": "def click_tenant_link(page, tenant_email):"
+              },
+              {
+                "target_file": "test_scripts/billing_cycle_period_card.py",
+                "action": "REPLACE_CODE",
+                "find": "page.locator(\"a:has-text('Edit')\").click()",
+                "replace_with": "RABaseHelper.click_edit_link(page)"
+              }
+            ],
+            "explanation": "Add helper method and replace inline locator"
+          }
+        },
+        {
+          "violation_id": "V003",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "inline_page_locator",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "page.locator(\"#subscription_state\").select_option(\"paused\")",
+          "expected_code": "# Add to GeminiRAHelper:\n# @staticmethod\n# def set_subscription_state(page, state):\n#     page.locator(\"#subscription_state\").select_option(state)\n# Then use: GeminiRAHelper.set_subscription_state(page, \"paused\")",
+          "explanation": "Inline page.locator() with hardcoded selector used in test body. This violates Prohibition 6. The subscription state selection should be encapsulated in a helper method.",
+          "fix_action": "MULTI_FILE_FIX",
+          "fix_details": {
+            "changes": [
+              {
+                "target_file": "helper/gemini_ra_helper.py",
+                "action": "ADD_METHOD",
+                "method_name": "set_subscription_state",
+                "method_code": "@staticmethod\ndef set_subscription_state(page, state):\n    \"\"\"Set subscription state in Rails Admin edit form.\n    \n    Args:\n        page: Playwright page object\n        state: Subscription state (e.g., 'paused', 'subscribed', 'cancelled')\n    \"\"\"\n    page.locator(\"#subscription_state\").select_option(state)",
+                "add_after": "def event_shift(page, event_shift, force_billing=True):"
+              },
+              {
+                "target_file": "test_scripts/billing_cycle_period_card.py",
+                "action": "REPLACE_CODE",
+                "find": "page.locator(\"#subscription_state\").select_option(\"paused\")",
+                "replace_with": "GeminiRAHelper.set_subscription_state(page, \"paused\")"
+              }
+            ],
+            "explanation": "Add helper method and replace inline locator"
+          }
+        },
+        {
+          "violation_id": "V004",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "inline_page_locator",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "page.locator(\"input[type='submit'][value='Update Subscription']\").click()",
+          "expected_code": "# Add to GeminiRAHelper:\n# @staticmethod\n# def submit_subscription_update(page):\n#     page.locator(\"input[type='submit'][value='Update Subscription']\").click()\n# Then use: GeminiRAHelper.submit_subscription_update(page)",
+          "explanation": "Inline page.locator() with hardcoded selector used in test body. This violates Prohibition 6. The form submission should be encapsulated in a helper method.",
+          "fix_action": "MULTI_FILE_FIX",
+          "fix_details": {
+            "changes": [
+              {
+                "target_file": "helper/gemini_ra_helper.py",
+                "action": "ADD_METHOD",
+                "method_name": "submit_subscription_update",
+                "method_code": "@staticmethod\ndef submit_subscription_update(page):\n    \"\"\"Submit the subscription update form in Rails Admin.\"\"\"\n    page.locator(\"input[type='submit'][value='Update Subscription']\").click()",
+                "add_after": "def set_subscription_state(page, state):"
+              },
+              {
+                "target_file": "test_scripts/billing_cycle_period_card.py",
+                "action": "REPLACE_CODE",
+                "find": "page.locator(\"input[type='submit'][value='Update Subscription']\").click()",
+                "replace_with": "GeminiRAHelper.submit_subscription_update(page)"
+              }
+            ],
+            "explanation": "Add helper method and replace inline locator"
+          }
+        },
+        {
+          "violation_id": "V005",
+          "rule_id": "PROHIBITION_6",
+          "severity": "CRITICAL",
+          "category": "inline_page_locator",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "page.wait_for_selector(\"div.alert-success\", timeout=30000)",
+          "expected_code": "# Add to GeminiRAHelper:\n# @staticmethod\n# def wait_for_success_alert(page, timeout=30000):\n#     page.wait_for_selector(\"div.alert-success\", timeout=timeout)\n# Then use: GeminiRAHelper.wait_for_success_alert(page)",
+          "explanation": "Inline page.wait_for_selector() with hardcoded selector used in test body. While wait_for_selector is a Playwright method, using it with a hardcoded selector string violates the spirit of Prohibition 6. The wait should be encapsulated in a helper method.",
+          "fix_action": "MULTI_FILE_FIX",
+          "fix_details": {
+            "changes": [
+              {
+                "target_file": "helper/gemini_ra_helper.py",
+                "action": "ADD_METHOD",
+                "method_name": "wait_for_success_alert",
+                "method_code": "@staticmethod\ndef wait_for_success_alert(page, timeout=30000):\n    \"\"\"Wait for success alert to appear in Rails Admin.\n    \n    Args:\n        page: Playwright page object\n        timeout: Timeout in milliseconds (default 30000)\n    \"\"\"\n    page.wait_for_selector(\"div.alert-success\", timeout=timeout)",
+                "add_after": "def submit_subscription_update(page):"
+              },
+              {
+                "target_file": "test_scripts/billing_cycle_period_card.py",
+                "action": "REPLACE_CODE",
+                "find": "page.wait_for_selector(\"div.alert-success\", timeout=30000)",
+                "replace_with": "GeminiRAHelper.wait_for_success_alert(page)"
+              }
+            ],
+            "explanation": "Add helper method and replace inline selector"
+          }
+        },
+        {
+          "violation_id": "V006",
+          "rule_id": "CHECKPOINT_D14",
+          "severity": "MODERATE",
+          "category": "incorrect_expect_syntax",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "expect(print_history_page.complimentary_pages_tooltip).not_to_be_empty(timeout=30000)",
+          "expected_code": "expect(print_history_page.complimentary_pages_tooltip).not_to_be_empty()",
+          "explanation": "The Playwright expect().not_to_be_empty() assertion does not accept a timeout parameter. The timeout parameter is only valid for assertions that wait for conditions like to_be_visible(), to_be_hidden(), etc. The not_to_be_empty() assertion checks the current state immediately without waiting. If you need to wait for the element first, use a separate wait or to_be_visible() before checking if it's empty.",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "framework_logger.info(\"Preconditions 1-3 completed: Enrollment with 50 pages plan, verified subscribed status without free months\")",
-            "replace_with": "framework_logger.info(\"Preconditions 1-3 completed: Printer enrolled with 50 pages plan, subscription verified as subscribed without free months\")",
-            "description": "Minor wording improvement for conciseness. This is a very minor style issue and the original is acceptable."
+            "find": "expect(print_history_page.complimentary_pages_tooltip).not_to_be_empty(timeout=30000)",
+            "replace_with": "expect(print_history_page.complimentary_pages_tooltip).not_to_be_empty()"
+          }
+        },
+        {
+          "violation_id": "V007",
+          "rule_id": "CHECKPOINT_D14",
+          "severity": "MODERATE",
+          "category": "incorrect_expect_syntax",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "expect(print_history_page.complimentary_pages_info_message).not_to_be_empty(timeout=30000)",
+          "expected_code": "expect(print_history_page.complimentary_pages_info_message).not_to_be_empty()",
+          "explanation": "The Playwright expect().not_to_be_empty() assertion does not accept a timeout parameter. Remove the timeout parameter from this assertion.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "expect(print_history_page.complimentary_pages_info_message).not_to_be_empty(timeout=30000)",
+            "replace_with": "expect(print_history_page.complimentary_pages_info_message).not_to_be_empty()"
+          }
+        },
+        {
+          "violation_id": "V008",
+          "rule_id": "CHECKPOINT_D14",
+          "severity": "MODERATE",
+          "category": "incorrect_expect_syntax",
+          "file_path": "test_scripts/billing_cycle_period_card.py",
+          "current_code": "expect(print_history_page.additional_pages_tooltip).not_to_be_empty(timeout=30000)",
+          "expected_code": "expect(print_history_page.additional_pages_tooltip).not_to_be_empty()",
+          "explanation": "The Playwright expect().not_to_be_empty() assertion does not accept a timeout parameter. Remove the timeout parameter from this assertion.",
+          "fix_action": "REPLACE_CODE",
+          "fix_details": {
+            "target_file": "test_scripts/billing_cycle_period_card.py",
+            "find": "expect(print_history_page.additional_pages_tooltip).not_to_be_empty(timeout=30000)",
+            "replace_with": "expect(print_history_page.additional_pages_tooltip).not_to_be_empty()"
           }
         }
       ]
@@ -125,106 +285,77 @@
       "file_path": "additional_generations/page_additions/print_history_page_additions.py",
       "file_type": "page_addition",
       "test_case_id": "C44873414",
-      "score": 98,
-      "violation_count": 1,
+      "score": 100,
+      "violation_count": 0,
       "critical_count": 0,
-      "moderate_count": 1,
+      "moderate_count": 0,
       "minor_count": 0,
-      "deduction": 2,
+      "deduction": 0,
       "checkpoints_evaluated": 7,
       "checkpoints_passed": [
         "F01",
         "F02",
         "F03",
+        "F04",
         "F05",
         "F06",
         "F07"
       ],
-      "checkpoints_failed": [
-        "F04"
-      ],
-      "violations": [
-        {
-          "violation_id": "V003",
-          "rule_id": "CHECKPOINT_F04",
-          "severity": "MODERATE",
-          "category": "missing_elements_class_structure",
-          "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-          "current_code": "# Attributes to add to the EXISTING PrintHistoryPage.Elements inner class:\n# (Do NOT create a new Elements class - add these to the existing one)\n\n# Example structure (for reference only - do not copy the class definition):\n# class PrintHistoryPage:\n#     class Elements:\n#         # ... existing attributes ...\n#         # ADD THE FOLLOWING ATTRIBUTES HERE:\n\nplan_pause_info = \"[data-testid='plan-pause-info']\"\nbilling_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"",
-          "expected_code": "# Attributes to add to the EXISTING PrintHistoryPage.Elements inner class:\n\nclass Elements:\n    \"\"\"Additional locators for billing cycle period card elements.\n    \n    Merge these into the existing PrintHistoryPage.Elements class.\n    \"\"\"\n    plan_pause_info = \"[data-testid='plan-pause-info']\"\n    billing_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"",
-          "explanation": "The page additions file defines locators as module-level attributes instead of within an Elements class structure. While the merge instructions are clear and correct, the actual code structure does not follow the framework's Page Object Model pattern where locators should be defined as class attributes within an Elements inner class. This is a MODERATE violation of checkpoint F04 which requires locators to be defined for Elements inner class pattern. The current structure makes it harder to understand the code organization and could lead to merge errors. The file should define a sample Elements class structure that can be copied into the target file, even though the merge instructions correctly state to add to the existing class.",
-          "fix_action": "RESTRUCTURE",
-          "fix_details": {
-            "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "description": "Restructure the locator definitions to be within an Elements class structure for clarity and consistency with framework patterns.",
-            "current_structure": "Module-level attribute definitions with comments explaining where to add them",
-            "required_structure": "Elements class definition containing all locator attributes as class attributes, with clear docstring explaining this is a reference structure to be merged into the existing Elements class in the target file"
-          }
-        }
-      ]
+      "checkpoints_failed": [],
+      "violations": []
     }
   ],
   "violation_summary": {
     "by_severity": {
-      "CRITICAL": 0,
-      "MODERATE": 2,
-      "MINOR": 1
+      "CRITICAL": 5,
+      "MODERATE": 3,
+      "MINOR": 0
     },
     "by_category": {
-      "incomplete_precondition_implementation": 1,
-      "verbose_logging": 1,
-      "missing_elements_class_structure": 1
+      "inline_page_locator": 5,
+      "incorrect_expect_syntax": 3
     },
     "by_rule": {
-      "CHECKPOINT_D15": 1,
-      "CHECKPOINT_E04": 1,
-      "CHECKPOINT_F04": 1
+      "PROHIBITION_6": 5,
+      "CHECKPOINT_D14": 3
     },
-    "most_common_violation": "Each rule violated once - no pattern",
-    "most_impacted_file": "test_scripts/billing_cycle_period_card.py - 2 violations, score 96"
+    "most_common_violation": "PROHIBITION_6 (inline_page_locator) — 5 occurrences",
+    "most_impacted_file": "test_scripts/billing_cycle_period_card.py — 8 violations, score 79"
   },
   "fix_priority_order": [
     {
       "priority": 1,
-      "category": "incomplete_precondition_implementation",
-      "severity": "MODERATE",
+      "category": "inline_page_locator",
+      "severity": "CRITICAL",
       "violation_ids": [
-        "V001"
+        "V001",
+        "V002",
+        "V003",
+        "V004",
+        "V005"
       ],
-      "total_count": 1,
-      "total_deduction": 2,
+      "total_count": 5,
+      "total_deduction": 15,
       "affected_files": [
         "test_scripts/billing_cycle_period_card.py"
       ],
-      "fix_approach": "Replace the TODO comment in Precondition 4 with actual Rails Admin navigation code to pause the subscription. Use RABaseHelper.access_page() to navigate to Subscriptions, locate the tenant's subscription, click Edit, change state to 'paused', and submit the form. Add wait for success confirmation."
+      "fix_approach": "All five inline page.locator() calls are in the Rails Admin pause plan setup section (Precondition 4). These should be encapsulated into helper methods. Add three methods to GeminiRAHelper (set_subscription_state, submit_subscription_update, wait_for_success_alert) and two methods to RABaseHelper (click_tenant_link, click_edit_link). Then replace all inline locator calls in the test script with the corresponding helper method calls. This will eliminate all CRITICAL violations and improve code reusability."
     },
     {
       "priority": 2,
-      "category": "missing_elements_class_structure",
+      "category": "incorrect_expect_syntax",
       "severity": "MODERATE",
       "violation_ids": [
-        "V003"
+        "V006",
+        "V007",
+        "V008"
       ],
-      "total_count": 1,
-      "total_deduction": 2,
-      "affected_files": [
-        "additional_generations/page_additions/print_history_page_additions.py"
-      ],
-      "fix_approach": "Restructure the page additions file to define locators within an Elements class structure for clarity. Create a sample Elements class with all locator attributes as class attributes, with a clear docstring explaining this is a reference structure to be merged into the existing PrintHistoryPage.Elements class."
-    },
-    {
-      "priority": 3,
-      "category": "verbose_logging",
-      "severity": "MINOR",
-      "violation_ids": [
-        "V002"
-      ],
-      "total_count": 1,
-      "total_deduction": 1,
+      "total_count": 3,
+      "total_deduction": 6,
       "affected_files": [
         "test_scripts/billing_cycle_period_card.py"
       ],
-      "fix_approach": "Minor wording improvement to make the precondition completion log slightly more concise. This is a very minor style issue and the original is acceptable."
+      "fix_approach": "Remove the timeout parameter from all three expect().not_to_be_empty() assertions. The not_to_be_empty() assertion does not accept a timeout parameter in Playwright. The elements are already waited for with to_be_visible() assertions before these checks, so the timeout is unnecessary. Simply remove 'timeout=30000' from each of these three assertions."
     }
   ]
 }
