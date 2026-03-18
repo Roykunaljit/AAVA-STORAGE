@@ -1,14 +1,14 @@
 {
   "scoring_metadata": {
-    "scored_at": "2026-03-18T08:15:00Z",
+    "scored_at": "2026-03-18T08:55:00Z",
     "scorer": "Test_Script_Quality_Auditor",
-    "overall_score": 82,
+    "overall_score": 94,
     "score_formula": "100 - (CRITICAL×3 + MODERATE×2 + MINOR×1), floor 0",
-    "total_violations": 9,
-    "critical_count": 2,
-    "moderate_count": 4,
-    "minor_count": 3,
-    "total_deduction": 18,
+    "total_violations": 3,
+    "critical_count": 1,
+    "moderate_count": 1,
+    "minor_count": 1,
+    "total_deduction": 6,
     "total_files_analyzed": 2,
     "files_analyzed": [
       "test_scripts/billing_cycle_period_card.py",
@@ -25,17 +25,18 @@
       "file_path": "test_scripts/billing_cycle_period_card.py",
       "file_type": "test_script",
       "test_case_id": "C44873414",
-      "score": 79,
-      "violation_count": 7,
-      "critical_count": 2,
-      "moderate_count": 3,
-      "minor_count": 2,
-      "deduction": 14,
+      "score": 95,
+      "violation_count": 2,
+      "critical_count": 1,
+      "moderate_count": 1,
+      "minor_count": 0,
+      "deduction": 5,
       "checkpoints_evaluated": 45,
       "checkpoints_passed": [
         "A01",
         "A02",
         "A03",
+        "A04",
         "A05",
         "A06",
         "A07",
@@ -43,6 +44,7 @@
         "A09",
         "A10",
         "A11",
+        "A12",
         "A13",
         "A15",
         "B01",
@@ -50,10 +52,12 @@
         "B03",
         "B04",
         "B05",
+        "C01",
         "C02",
         "C03",
         "C04",
         "C05",
+        "D01",
         "D02",
         "D03",
         "D05",
@@ -65,159 +69,54 @@
         "D11",
         "D12",
         "D13",
+        "D14",
+        "D15",
         "E01",
         "E02",
         "E03",
+        "E04",
         "E05",
         "E06",
         "E07",
         "E08"
       ],
       "checkpoints_failed": [
-        "A04",
-        "A12",
-        "C01",
-        "D01",
-        "D04",
-        "D14",
-        "E04"
+        "A14",
+        "D04"
       ],
       "violations": [
         {
           "violation_id": "V001",
-          "rule_id": "PROHIBITION_7",
+          "rule_id": "PROHIBITION_5",
           "severity": "CRITICAL",
-          "category": "function_docstring",
+          "category": "missing_helper_method",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "def billing_cycle_period_card(stage_callback):\n    framework_logger.info(\"=== C44873414 - Billing Cycle Period card flow started ===\")",
-          "expected_code": "\"\"\"Test Case C44873414 - Billing Cycle Period card.\n\nVerifies Billing Cycle Period card display and behavior on Print and Payment History page\nwhen subscription plan is paused, including complimentary pages progress bar, additional\npages tracking, tooltips, and page usage information across different printing scenarios.\n\nTest Case ID: C44873414\nModule: HP Instant Ink\nPriority: P2\nTest Type: Regression\n\"\"\"\n\nimport traceback\n\nfrom playwright.sync_api import expect\nimport urllib3\nurllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)",
-          "explanation": "The module-level docstring is currently placed INSIDE the function definition. According to PROHIBITION_7, function-level docstrings are not allowed. The docstring should be at MODULE level (before imports) to describe the test case. This is a CRITICAL violation because it violates the framework's documentation structure.",
-          "fix_action": "RESTRUCTURE",
+          "current_code": "GeminiRAHelper.pause_subscription(page, tenant_email)",
+          "expected_code": "# Use Rails Admin to manually pause subscription via UI or use existing GeminiRAHelper methods\n# Alternative: Navigate to subscription edit page and change state",
+          "explanation": "The script calls GeminiRAHelper.pause_subscription(page, tenant_email) but this method does not exist in the codebase according to the mapping report. The mapping report shows GeminiRAHelper has methods like access(), access_tenant_page(), event_shift(), subscription_to_subscribed(), verify_rails_admin_info(), but NOT pause_subscription(). This violates Prohibition 5 which requires bidirectional import-usage: every mapped helper matching a test step must be imported AND called, and conversely, no helper method should be called if it doesn't exist in the codebase. The precondition requires pausing the plan, but the correct implementation should use existing Rails Admin navigation methods to manually pause via the UI, or this method needs to be added to GeminiRAHelper first.",
+          "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "description": "Move the docstring from inside the function to module level (before imports)",
-            "before_structure": "def billing_cycle_period_card(stage_callback):\n    framework_logger.info(...)",
-            "after_structure": "\"\"\"Module docstring\"\"\"\n\nimport traceback\n...\n\ndef billing_cycle_period_card(stage_callback):\n    framework_logger.info(...)",
-            "find": "\"\"\"Test Case C44873414 - Billing Cycle Period card.\n\nVerifies Billing Cycle Period card display and behavior on Print and Payment History page\nwhen subscription plan is paused, including complimentary pages progress bar, additional\npages tracking, tooltips, and page usage information across different printing scenarios.\n\nTest Case ID: C44873414\nModule: HP Instant Ink\nPriority: P2\nTest Type: Regression\n\"\"\"\n\nimport traceback",
-            "replace_with": "import traceback"
+            "find": "# Precondition 4: Pause the plan via Rails Admin\n            GeminiRAHelper.pause_subscription(page, tenant_email)\n            framework_logger.info(\"Precondition 4: Subscription paused via Rails Admin\")",
+            "replace_with": "# Precondition 4: Pause the plan via Rails Admin\n            GeminiRAHelper.access(page)\n            GeminiRAHelper.access_tenant_page(page, tenant_email)\n            # Navigate to subscription edit and manually pause\n            # TODO: Implement pause_subscription method in GeminiRAHelper or use UI navigation\n            framework_logger.info(\"Precondition 4: Navigated to tenant page for manual pause\")",
+            "additional_replacements": []
           }
         },
         {
           "violation_id": "V002",
-          "rule_id": "PROHIBITION_6",
-          "severity": "CRITICAL",
-          "category": "inline_page_locator",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "edit_link = page.locator(\"a:has-text('Edit')\")\nedit_link.click()\npage.wait_for_load_state('networkidle', timeout=30000)\n\nsubscription_state_dropdown = page.locator(\"select[name='subscription[subscription_state]']\")\nsubscription_state_dropdown.select_option('paused')\n\nsave_button = page.locator(\"input[type='submit'][value='Save']\")\nsave_button.click()",
-          "expected_code": "# This entire Rails Admin interaction should be encapsulated in a helper method:\n# GeminiRAHelper.pause_subscription(page, tenant_email)\n# OR if the helper doesn't exist, create it in helper_additions",
-          "explanation": "Precondition 4 contains multiple inline page.locator() calls with hardcoded selectors for Rails Admin interactions. This violates PROHIBITION_6 which states: ZERO page.locator() in test function body. The comment in the code acknowledges this: 'TODO: This should be refactored into a helper method to avoid inline locators.' These admin interactions should be encapsulated in GeminiRAHelper.pause_subscription() or a similar helper method. This is CRITICAL because it violates the framework's separation of concerns and makes the test brittle.",
-          "fix_action": "MULTI_FILE_FIX",
-          "fix_details": {
-            "changes": [
-              {
-                "target_file": "additional_generations/helper_additions/gemini_ra_helper_additions.py",
-                "action": "ADD_CODE",
-                "code_to_add": "@staticmethod\ndef pause_subscription(page: Page, tenant_email: str):\n    \"\"\"Pause a subscription via Rails Admin.\n    \n    Args:\n        page: Playwright page object\n        tenant_email: Email of the tenant whose subscription to pause\n    \"\"\"\n    GeminiRAHelper.access(page)\n    GeminiRAHelper.access_tenant_page(page, tenant_email)\n    \n    # Navigate to subscription edit page\n    edit_link = page.locator(\"a:has-text('Edit')\")\n    edit_link.click()\n    page.wait_for_load_state('networkidle', timeout=30000)\n    \n    # Update state to paused\n    subscription_state_dropdown = page.locator(\"select[name='subscription[subscription_state]']\")\n    subscription_state_dropdown.select_option('paused')\n    \n    # Save changes\n    save_button = page.locator(\"input[type='submit'][value='Save']\")\n    save_button.click()\n    page.wait_for_load_state('networkidle', timeout=30000)\n    \n    # Verify state changed\n    GeminiRAHelper.verify_rails_admin_info(page, 'Subscription State', 'paused', retry=True)"
-              },
-              {
-                "target_file": "test_scripts/billing_cycle_period_card.py",
-                "action": "REPLACE_CODE",
-                "find": "# Precondition 4: Pause the plan via Rails Admin\n            # Note: GeminiRAHelper.pause_subscription() does not exist in the codebase per mapping report.\n            # Using inline Rails Admin interaction as prescribed by scoring report fix.\n            # TODO: This should be refactored into a helper method to avoid inline locators.\n            GeminiRAHelper.access(page)\n            GeminiRAHelper.access_tenant_page(page, tenant_email)\n            \n            # Navigate to subscription edit page and update state to paused\n            edit_link = page.locator(\"a:has-text('Edit')\")\n            edit_link.click()\n            page.wait_for_load_state('networkidle', timeout=30000)\n            \n            subscription_state_dropdown = page.locator(\"select[name='subscription[subscription_state]']\")\n            subscription_state_dropdown.select_option('paused')\n            \n            save_button = page.locator(\"input[type='submit'][value='Save']\")\n            save_button.click()\n            page.wait_for_load_state('networkidle', timeout=30000)\n            \n            GeminiRAHelper.verify_rails_admin_info(page, 'Subscription State', 'paused', retry=True)\n            framework_logger.info(\"Precondition 4: Subscription paused via Rails Admin\")",
-                "replace_with": "# Precondition 4: Pause the plan via Rails Admin\n            GeminiRAHelper.pause_subscription(page, tenant_email)\n            framework_logger.info(\"Precondition 4: Subscription paused via Rails Admin\")"
-              }
-            ],
-            "explanation": "Create helper method to encapsulate Rails Admin pause operation, then replace inline code with helper call"
-          }
-        },
-        {
-          "violation_id": "V003",
-          "rule_id": "CHECKPOINT_D01",
-          "severity": "MODERATE",
-          "category": "missing_module_docstring",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "\"\"\"Test Case C44873414 - Billing Cycle Period card.\n\nVerifies Billing Cycle Period card display and behavior on Print and Payment History page\nwhen subscription plan is paused, including complimentary pages progress bar, additional\npages tracking, tooltips, and page usage information across different printing scenarios.\n\nTest Case ID: C44873414\nModule: HP Instant Ink\nPriority: P2\nTest Type: Regression\n\"\"\"\n\nimport traceback",
-          "expected_code": "\"\"\"Test Case C44873414 - Billing Cycle Period card.\n\nVerifies Billing Cycle Period card display and behavior on Print and Payment History page\nwhen subscription plan is paused, including complimentary pages progress bar, additional\npages tracking, tooltips, and page usage information across different printing scenarios.\n\nTest Case ID: C44873414\nModule: HP Instant Ink\nPriority: P2\nTest Type: Regression\n\"\"\"\n\nimport traceback",
-          "explanation": "This is the same issue as V001 - the docstring needs to be at module level. Once V001 is fixed, this checkpoint will pass. Marking as MODERATE because it's a structural issue that affects documentation but not runtime behavior.",
-          "fix_action": "SAME_AS_V001",
-          "fix_details": {
-            "note": "This violation will be resolved when V001 is fixed"
-          }
-        },
-        {
-          "violation_id": "V004",
           "rule_id": "CHECKPOINT_D04",
           "severity": "MODERATE",
           "category": "wrong_import_order",
           "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "from core.playwright_manager import PlaywrightManager\nfrom core.settings import framework_logger, GlobalState",
-          "expected_code": "from core.playwright_manager import PlaywrightManager\nfrom core.settings import framework_logger",
-          "explanation": "GlobalState is imported but never used in the test script. The only reference to device_type uses GlobalState.device_type in steps 7 and 16, but this is checking a runtime configuration value. However, GlobalState itself is never directly referenced as an import. According to CHECKPOINT_D04 and PROHIBITION_5 (bidirectional import-usage), unused imports should be removed. This is MODERATE because it doesn't affect functionality but violates clean code principles.",
-          "fix_action": "REMOVE_IMPORT",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "import_to_remove": ", GlobalState",
-            "find": "from core.settings import framework_logger, GlobalState",
-            "replace_with": "from core.settings import framework_logger"
-          }
-        },
-        {
-          "violation_id": "V005",
-          "rule_id": "CHECKPOINT_D14",
-          "severity": "MODERATE",
-          "category": "missing_expect_timeout",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "expect(print_history_page.complimentary_pages_tooltip).not_to_be_empty(timeout=30000)",
-          "expected_code": "expect(print_history_page.complimentary_pages_tooltip).not_to_be_empty(timeout=30000)",
-          "explanation": "Actually, this expect() call DOES have an explicit timeout. However, there are several other expect() calls that are missing timeouts. Let me identify the actual violations.",
-          "fix_action": "NO_FIX_NEEDED",
-          "fix_details": {
-            "note": "This was a false identification - the timeout is present"
-          }
-        },
-        {
-          "violation_id": "V006",
-          "rule_id": "CHECKPOINT_C01",
-          "severity": "MODERATE",
-          "category": "wrong_access_pattern",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "print_history_page = PrintHistoryPage(page)",
-          "expected_code": "print_history_page = PrintHistoryPage(page)",
-          "explanation": "The test script correctly uses the page object pattern. All element access goes through print_history_page.{element_name} which accesses properties that internally use self.page.locator(self.elements.{element_name}). This follows the framework pattern correctly. This is NOT a violation - removing this entry.",
-          "fix_action": "NO_VIOLATION",
-          "fix_details": {
-            "note": "False positive - access pattern is correct"
-          }
-        },
-        {
-          "violation_id": "V007",
-          "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
-          "category": "verbose_logging",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "framework_logger.info(\"Precondition setup completed: Enrollment with 50 pages plan\")\n            \n            # Precondition 2 & 3: Ensure subscription is in subscribed status without free months\n            org_token, tenant_id = common.get_org_aware_token(tenant_email)\n            subscription_data = common.subscription_data_from_gemini(tenant_id)\n            subscription_id = subscription_data['id']\n            free_months = subscription_data.get('free_months')\n            assert free_months is None or free_months == 0, f\"Subscription has free months: {free_months}\"\n            framework_logger.info(\"Verified subscription has no free months\")\n            common.validate_subscription_state(subscription_id, 'subscribed')\n            framework_logger.info(\"Verified subscription is in subscribed status\")",
-          "expected_code": "framework_logger.info(\"Preconditions 1-3 completed: Enrollment with 50 pages plan, verified subscribed status without free months\")",
-          "explanation": "The precondition setup section has multiple log lines for related operations. According to coding standards, logging should be concise with 1 log line per logical step. The precondition setup could be consolidated into fewer log statements. This is MINOR because it doesn't affect functionality, just log verbosity.",
+          "current_code": "import traceback\n\nfrom playwright.sync_api import expect\nimport urllib3\nurllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)",
+          "expected_code": "import traceback\n\nimport urllib3\nurllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)\n\nfrom playwright.sync_api import expect",
+          "explanation": "Import order does not follow the framework standard. According to coding standards section 4 (Import Organization), the correct order is: 1) Standard library imports, 2) Third-party imports (urllib3, playwright), 3) Core framework imports, 4) Page imports, 5) Helper imports, 6) Common module. Currently, urllib3 is imported AFTER playwright.sync_api, but both are third-party imports and should be grouped together with urllib3 first (alphabetically). The current order has: traceback (stdlib) → playwright (third-party) → urllib3 (third-party). Correct order should be: traceback (stdlib) → urllib3 (third-party) → playwright (third-party).",
           "fix_action": "REPLACE_CODE",
           "fix_details": {
             "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "framework_logger.info(\"Precondition setup completed: Enrollment with 50 pages plan\")\n            \n            # Precondition 2 & 3: Ensure subscription is in subscribed status without free months\n            org_token, tenant_id = common.get_org_aware_token(tenant_email)\n            subscription_data = common.subscription_data_from_gemini(tenant_id)\n            subscription_id = subscription_data['id']\n            free_months = subscription_data.get('free_months')\n            assert free_months is None or free_months == 0, f\"Subscription has free months: {free_months}\"\n            framework_logger.info(\"Verified subscription has no free months\")\n            common.validate_subscription_state(subscription_id, 'subscribed')\n            framework_logger.info(\"Verified subscription is in subscribed status\")",
-            "replace_with": "org_token, tenant_id = common.get_org_aware_token(tenant_email)\n            subscription_data = common.subscription_data_from_gemini(tenant_id)\n            subscription_id = subscription_data['id']\n            free_months = subscription_data.get('free_months')\n            assert free_months is None or free_months == 0, f\"Subscription has free months: {free_months}\"\n            common.validate_subscription_state(subscription_id, 'subscribed')\n            framework_logger.info(\"Preconditions 1-3 completed: Enrollment with 50 pages plan, verified subscribed status without free months\")"
-          }
-        },
-        {
-          "violation_id": "V008",
-          "rule_id": "CHECKPOINT_E04",
-          "severity": "MINOR",
-          "category": "verbose_logging",
-          "file_path": "test_scripts/billing_cycle_period_card.py",
-          "current_code": "subscription_data_after_shift = common.subscription_data_from_gemini(tenant_id)\n            framework_logger.info(f\"Time shift completed - subscription data updated\")\n            framework_logger.info(\"Step 3: Time shifted and billing triggered successfully\")",
-          "expected_code": "subscription_data_after_shift = common.subscription_data_from_gemini(tenant_id)\n            framework_logger.info(\"Step 3: Time shifted 32 days and billing triggered successfully\")",
-          "explanation": "Step 3 has two consecutive log lines for the same logical operation. This should be consolidated into a single log statement. MINOR severity as it's a style issue.",
-          "fix_action": "REPLACE_CODE",
-          "fix_details": {
-            "target_file": "test_scripts/billing_cycle_period_card.py",
-            "find": "subscription_data_after_shift = common.subscription_data_from_gemini(tenant_id)\n            framework_logger.info(f\"Time shift completed - subscription data updated\")\n            framework_logger.info(\"Step 3: Time shifted and billing triggered successfully\")",
-            "replace_with": "subscription_data_after_shift = common.subscription_data_from_gemini(tenant_id)\n            framework_logger.info(\"Step 3: Time shifted 32 days and billing triggered successfully\")"
+            "find": "import traceback\n\nfrom playwright.sync_api import expect\nimport urllib3\nurllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)",
+            "replace_with": "import traceback\n\nimport urllib3\nurllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)\n\nfrom playwright.sync_api import expect",
+            "additional_replacements": []
           }
         }
       ]
@@ -225,39 +124,40 @@
     {
       "file_path": "additional_generations/page_additions/print_history_page_additions.py",
       "file_type": "page_addition",
-      "test_case_id": null,
-      "score": 98,
+      "test_case_id": "C44873414",
+      "score": 97,
       "violation_count": 1,
       "critical_count": 0,
-      "moderate_count": 1,
-      "minor_count": 0,
-      "deduction": 2,
+      "moderate_count": 0,
+      "minor_count": 1,
+      "deduction": 1,
       "checkpoints_evaluated": 7,
       "checkpoints_passed": [
         "F01",
         "F02",
         "F03",
+        "F04",
         "F05",
-        "F07"
+        "F06"
       ],
       "checkpoints_failed": [
-        "F04"
+        "F07"
       ],
       "violations": [
         {
-          "violation_id": "V009",
-          "rule_id": "CHECKPOINT_F04",
-          "severity": "MODERATE",
-          "category": "elements_class_structure",
+          "violation_id": "V003",
+          "rule_id": "CHECKPOINT_F07",
+          "severity": "MINOR",
+          "category": "page_additions_format",
           "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-          "current_code": "class Elements:\n    \"\"\"Locators for billing cycle period card elements.\"\"\"\n    plan_pause_info = \"[data-testid='plan-pause-info']\"\n    billing_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"\n    complimentary_pages_progress_bar = \"[data-testid='complimentary-pages-progress-bar']\"\n    complimentary_pages_value = \"[data-testid='complimentary-pages-value']\"\n    complimentary_pages_info_icon = \"[data-testid='complimentary-pages-info-icon']\"\n    complimentary_pages_info_message = \"[data-testid='complimentary-pages-info-message']\"\n    complimentary_pages_tooltip = \"[role='tooltip']:near([data-testid='complimentary-pages-info-icon'])\"\n    additional_pages_progress_bar = \"[data-testid='additional-pages-progress-bar']\"\n    additional_pages_value = \"[data-testid='additional-pages-value']\"\n    additional_pages_info_icon = \"[data-testid='additional-pages-info-icon']\"\n    additional_pages_info_message = \"[data-testid='additional-pages-info-message']\"\n    additional_pages_tooltip = \"[role='tooltip']:near([data-testid='additional-pages-info-icon'])\"\n    total_printed_pages = \"[data-testid='total-printed-pages']\"",
-          "expected_code": "# Attributes to add to PrintHistoryPage.Elements inner class:\n# (Add these to the EXISTING Elements class in print_history_page.py)\n\nplan_pause_info = \"[data-testid='plan-pause-info']\"\nbilling_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"\ncomplimentary_pages_progress_bar = \"[data-testid='complimentary-pages-progress-bar']\"\ncomplimentary_pages_value = \"[data-testid='complimentary-pages-value']\"\ncomplimentary_pages_info_icon = \"[data-testid='complimentary-pages-info-icon']\"\ncomplimentary_pages_info_message = \"[data-testid='complimentary-pages-info-message']\"\ncomplimentary_pages_tooltip = \"[role='tooltip']:near([data-testid='complimentary-pages-info-icon'])\"\nadditional_pages_progress_bar = \"[data-testid='additional-pages-progress-bar']\"\nadditional_pages_value = \"[data-testid='additional-pages-value']\"\nadditional_pages_info_icon = \"[data-testid='additional-pages-info-icon']\"\nadditional_pages_info_message = \"[data-testid='additional-pages-info-message']\"\nadditional_pages_tooltip = \"[role='tooltip']:near([data-testid='additional-pages-info-icon'])\"\ntotal_printed_pages = \"[data-testid='total-printed-pages']\"",
-          "explanation": "The page additions file defines a complete standalone 'class Elements:' which suggests creating a NEW class. However, according to the merge instructions and framework pattern, these attributes should be ADDED to the EXISTING Elements inner class in PrintHistoryPage. The file should show the attributes WITHOUT the class wrapper, with clear instructions to add them to the existing class. The current structure might cause confusion during manual merge - someone might try to add a second Elements class instead of merging into the existing one. This is MODERATE because the merge instructions are clear, but the code structure could be misleading.",
-          "fix_action": "REPLACE_CODE",
+          "current_code": "# Attributes to add to the EXISTING PrintHistoryPage.Elements inner class:\n# (Do NOT create a new Elements class - add these to the existing one)\n\nplan_pause_info = \"[data-testid='plan-pause-info']\"",
+          "expected_code": "# In the EXISTING PrintHistoryPage.Elements class, add these attributes:\n\nclass Elements:\n    # ... existing attributes ...\n    plan_pause_info = \"[data-testid='plan-pause-info']\"",
+          "explanation": "The page additions file provides attributes and property methods in a flat format without showing the proper class structure context. While the instructions are clear about adding to the EXISTING Elements class, the file format makes it ambiguous for automated merging. Best practice for page additions is to show the class structure context even if it's a comment, to make it crystal clear where each piece of code should be inserted. This is a minor documentation/format issue that doesn't affect functionality but could cause confusion during manual merging.",
+          "fix_action": "ADD_CODE",
           "fix_details": {
             "target_file": "additional_generations/page_additions/print_history_page_additions.py",
-            "find": "class Elements:\n    \"\"\"Locators for billing cycle period card elements.\"\"\"\n    plan_pause_info = \"[data-testid='plan-pause-info']\"\n    billing_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"\n    complimentary_pages_progress_bar = \"[data-testid='complimentary-pages-progress-bar']\"\n    complimentary_pages_value = \"[data-testid='complimentary-pages-value']\"\n    complimentary_pages_info_icon = \"[data-testid='complimentary-pages-info-icon']\"\n    complimentary_pages_info_message = \"[data-testid='complimentary-pages-info-message']\"\n    complimentary_pages_tooltip = \"[role='tooltip']:near([data-testid='complimentary-pages-info-icon'])\"\n    additional_pages_progress_bar = \"[data-testid='additional-pages-progress-bar']\"\n    additional_pages_value = \"[data-testid='additional-pages-value']\"\n    additional_pages_info_icon = \"[data-testid='additional-pages-info-icon']\"\n    additional_pages_info_message = \"[data-testid='additional-pages-info-message']\"\n    additional_pages_tooltip = \"[role='tooltip']:near([data-testid='additional-pages-info-icon'])\"\n    total_printed_pages = \"[data-testid='total-printed-pages']\"",
-            "replace_with": "# Attributes to add to the EXISTING PrintHistoryPage.Elements inner class:\n# (Do NOT create a new Elements class - add these to the existing one)\n\nplan_pause_info = \"[data-testid='plan-pause-info']\"\nbilling_cycle_period_card = \"[data-testid='billing-cycle-period-card']\"\ncomplimentary_pages_progress_bar = \"[data-testid='complimentary-pages-progress-bar']\"\ncomplimentary_pages_value = \"[data-testid='complimentary-pages-value']\"\ncomplimentary_pages_info_icon = \"[data-testid='complimentary-pages-info-icon']\"\ncomplimentary_pages_info_message = \"[data-testid='complimentary-pages-info-message']\"\ncomplimentary_pages_tooltip = \"[role='tooltip']:near([data-testid='complimentary-pages-info-icon'])\"\nadditional_pages_progress_bar = \"[data-testid='additional-pages-progress-bar']\"\nadditional_pages_value = \"[data-testid='additional-pages-value']\"\nadditional_pages_info_icon = \"[data-testid='additional-pages-info-icon']\"\nadditional_pages_info_message = \"[data-testid='additional-pages-info-message']\"\nadditional_pages_tooltip = \"[role='tooltip']:near([data-testid='additional-pages-info-icon'])\"\ntotal_printed_pages = \"[data-testid='total-printed-pages'\""
+            "insert_after": "# (Do NOT create a new Elements class - add these to the existing one)",
+            "code_to_add": "\n# Example structure (for reference only - do not copy the class definition):\n# class PrintHistoryPage:\n#     class Elements:\n#         # ... existing attributes ...\n#         # ADD THE FOLLOWING ATTRIBUTES HERE:"
           }
         }
       ]
@@ -265,47 +165,27 @@
   ],
   "violation_summary": {
     "by_severity": {
-      "CRITICAL": 2,
-      "MODERATE": 4,
-      "MINOR": 2
+      "CRITICAL": 1,
+      "MODERATE": 1,
+      "MINOR": 1
     },
     "by_category": {
-      "function_docstring": 1,
-      "inline_page_locator": 1,
-      "missing_module_docstring": 1,
+      "missing_helper_method": 1,
       "wrong_import_order": 1,
-      "elements_class_structure": 1,
-      "verbose_logging": 2
+      "page_additions_format": 1
     },
     "by_rule": {
-      "PROHIBITION_7": 1,
-      "PROHIBITION_6": 1,
-      "CHECKPOINT_D01": 1,
+      "PROHIBITION_5": 1,
       "CHECKPOINT_D04": 1,
-      "CHECKPOINT_F04": 1,
-      "CHECKPOINT_E04": 2
+      "CHECKPOINT_F07": 1
     },
-    "most_common_violation": "CHECKPOINT_E04 (verbose_logging) — 2 occurrences",
-    "most_impacted_file": "test_scripts/billing_cycle_period_card.py — 7 violations, score 79"
+    "most_common_violation": "Each rule violated once",
+    "most_impacted_file": "test_scripts/billing_cycle_period_card.py — 2 violations, score 95"
   },
   "fix_priority_order": [
     {
       "priority": 1,
-      "category": "inline_page_locator",
-      "severity": "CRITICAL",
-      "violation_ids": [
-        "V002"
-      ],
-      "total_count": 1,
-      "total_deduction": 3,
-      "affected_files": [
-        "test_scripts/billing_cycle_period_card.py"
-      ],
-      "fix_approach": "Create GeminiRAHelper.pause_subscription() helper method to encapsulate Rails Admin pause operation. Add the method to helper_additions/gemini_ra_helper_additions.py, then replace the inline Rails Admin interaction code in precondition 4 with a single helper call."
-    },
-    {
-      "priority": 2,
-      "category": "function_docstring",
+      "category": "missing_helper_method",
       "severity": "CRITICAL",
       "violation_ids": [
         "V001"
@@ -315,64 +195,35 @@
       "affected_files": [
         "test_scripts/billing_cycle_period_card.py"
       ],
-      "fix_approach": "Move the module docstring from inside the function definition to module level (before imports). This is the same fix as V003 (missing_module_docstring) - both will be resolved together."
+      "fix_approach": "Replace the call to non-existent GeminiRAHelper.pause_subscription() with existing Rails Admin navigation methods. Either implement the pause_subscription method in GeminiRAHelper first, or use manual UI navigation to pause the subscription via Rails Admin interface."
     },
     {
-      "priority": 3,
-      "category": "elements_class_structure",
+      "priority": 2,
+      "category": "wrong_import_order",
       "severity": "MODERATE",
       "violation_ids": [
-        "V009"
+        "V002"
       ],
       "total_count": 1,
       "total_deduction": 2,
       "affected_files": [
-        "additional_generations/page_additions/print_history_page_additions.py"
+        "test_scripts/billing_cycle_period_card.py"
       ],
-      "fix_approach": "Remove the 'class Elements:' wrapper from the page additions file and replace with a comment clarifying that these attributes should be added to the EXISTING Elements class in PrintHistoryPage. This prevents confusion during manual merge."
+      "fix_approach": "Reorder imports to follow framework standard: stdlib → third-party (urllib3 before playwright) → core → pages → helpers → common. Move urllib3 import and warning suppression before the playwright import."
     },
     {
-      "priority": 4,
-      "category": "missing_module_docstring",
-      "severity": "MODERATE",
+      "priority": 3,
+      "category": "page_additions_format",
+      "severity": "MINOR",
       "violation_ids": [
         "V003"
       ],
       "total_count": 1,
-      "total_deduction": 2,
+      "total_deduction": 1,
       "affected_files": [
-        "test_scripts/billing_cycle_period_card.py"
+        "additional_generations/page_additions/print_history_page_additions.py"
       ],
-      "fix_approach": "Same fix as V001 - move docstring to module level."
-    },
-    {
-      "priority": 5,
-      "category": "wrong_import_order",
-      "severity": "MODERATE",
-      "violation_ids": [
-        "V004"
-      ],
-      "total_count": 1,
-      "total_deduction": 2,
-      "affected_files": [
-        "test_scripts/billing_cycle_period_card.py"
-      ],
-      "fix_approach": "Remove unused GlobalState import from core.settings import statement."
-    },
-    {
-      "priority": 6,
-      "category": "verbose_logging",
-      "severity": "MINOR",
-      "violation_ids": [
-        "V007",
-        "V008"
-      ],
-      "total_count": 2,
-      "total_deduction": 2,
-      "affected_files": [
-        "test_scripts/billing_cycle_period_card.py"
-      ],
-      "fix_approach": "Consolidate multiple consecutive log statements for the same logical operation into single concise log lines. V007: Combine precondition logs. V008: Combine step 3 logs."
+      "fix_approach": "Add class structure context comments to make it clearer where each piece of code should be inserted during manual merging. This is a documentation enhancement that doesn't affect functionality."
     }
   ]
 }
