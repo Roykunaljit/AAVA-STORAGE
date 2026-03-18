@@ -58,14 +58,19 @@ def billing_cycle_period_card(stage_callback):
             free_months = subscription_data.get('free_months')
             assert free_months is None or free_months == 0, f"Subscription has free months: {free_months}"
             common.validate_subscription_state(subscription_id, 'subscribed')
-            framework_logger.info("Preconditions 1-3 completed: Enrollment with 50 pages plan, verified subscribed status without free months")
+            framework_logger.info("Preconditions 1-3 completed: Printer enrolled with 50 pages plan, subscription verified as subscribed without free months")
             
             # Precondition 4: Pause the plan via Rails Admin
             GeminiRAHelper.access(page)
             GeminiRAHelper.access_tenant_page(page, tenant_email)
-            # Navigate to subscription edit and manually pause
-            # TODO: Implement pause_subscription method in GeminiRAHelper or use UI navigation
-            framework_logger.info("Precondition 4: Navigated to tenant page for manual pause")
+            # Pause the subscription using Rails Admin
+            RABaseHelper.access_page(page, "Subscriptions")
+            page.locator(f"a:has-text('{tenant_email}')").first.click()
+            page.locator("a:has-text('Edit')").click()
+            page.locator("#subscription_state").select_option("paused")
+            page.locator("input[type='submit'][value='Update Subscription']").click()
+            page.wait_for_selector("div.alert-success", timeout=30000)
+            framework_logger.info("Precondition 4: Plan paused successfully via Rails Admin")
 
             # ══════════════════════════════════════════════
             # PRECONDITION SETUP COMPLETE - TEST STEPS BEGIN
