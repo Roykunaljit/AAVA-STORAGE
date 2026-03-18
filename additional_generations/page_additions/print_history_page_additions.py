@@ -19,37 +19,34 @@ and page usage tracking across complimentary and additional page allocations.
 Merge instructions:
 1. Open pages/print_history_page.py in the AURA-FRAMEWORK repository
 2. Locate the existing 'class Elements:' inner class (should be near the top of PrintHistoryPage class)
-3. Add the following 13 attributes to the EXISTING Elements class (after existing attributes):
-   (Do NOT create a new Elements class - add these to the existing one)
+3. Add the following 13 attributes from the Elements class below to the EXISTING Elements class
 4. Scroll to the end of the PrintHistoryPage class body (before the final closing)
-5. Add all 13 property methods listed in this file
+5. Add all 13 property methods listed after the Elements class
 6. Save the file
 7. Run the test script to verify all locators work
 8. If any locators fail, inspect the actual HTML and update the data-testid values
 """
 
 # Attributes to add to the EXISTING PrintHistoryPage.Elements inner class:
-# (Do NOT create a new Elements class - add these to the existing one)
 
-# Example structure (for reference only - do not copy the class definition):
-# class PrintHistoryPage:
-#     class Elements:
-#         # ... existing attributes ...
-#         # ADD THE FOLLOWING ATTRIBUTES HERE:
-
-plan_pause_info = "[data-testid='plan-pause-info']"
-billing_cycle_period_card = "[data-testid='billing-cycle-period-card']"
-complimentary_pages_progress_bar = "[data-testid='complimentary-pages-progress-bar']"
-complimentary_pages_value = "[data-testid='complimentary-pages-value']"
-complimentary_pages_info_icon = "[data-testid='complimentary-pages-info-icon']"
-complimentary_pages_info_message = "[data-testid='complimentary-pages-info-message']"
-complimentary_pages_tooltip = "[role='tooltip']:near([data-testid='complimentary-pages-info-icon'])"
-additional_pages_progress_bar = "[data-testid='additional-pages-progress-bar']"
-additional_pages_value = "[data-testid='additional-pages-value']"
-additional_pages_info_icon = "[data-testid='additional-pages-info-icon']"
-additional_pages_info_message = "[data-testid='additional-pages-info-message']"
-additional_pages_tooltip = "[role='tooltip']:near([data-testid='additional-pages-info-icon'])"
-total_printed_pages = "[data-testid='total-printed-pages']"
+class Elements:
+    """Additional locators for billing cycle period card elements.
+    
+    Merge these into the existing PrintHistoryPage.Elements class.
+    """
+    plan_pause_info = "[data-testid='plan-pause-info']"
+    billing_cycle_period_card = "[data-testid='billing-cycle-period-card']"
+    complimentary_pages_progress_bar = "[data-testid='complimentary-pages-progress-bar']"
+    complimentary_pages_value = "[data-testid='complimentary-pages-value']"
+    complimentary_pages_info_icon = "[data-testid='complimentary-pages-info-icon']"
+    complimentary_pages_info_message = "[data-testid='complimentary-pages-info-message']"
+    complimentary_pages_tooltip = "[role='tooltip']:near([data-testid='complimentary-pages-info-icon'])"
+    additional_pages_progress_bar = "[data-testid='additional-pages-progress-bar']"
+    additional_pages_value = "[data-testid='additional-pages-value']"
+    additional_pages_info_icon = "[data-testid='additional-pages-info-icon']"
+    additional_pages_info_message = "[data-testid='additional-pages-info-message']"
+    additional_pages_tooltip = "[role='tooltip']:near([data-testid='additional-pages-info-icon'])"
+    total_printed_pages = "[data-testid='total-printed-pages']"
 
 
 # Property methods to add to PrintHistoryPage class:
