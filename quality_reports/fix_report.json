@@ -1,45 +1,96 @@
 {
   "fix_metadata": {
-    "fixed_at": "2026-03-18T17:25:00Z",
+    "fixed_at": "2026-03-18T18:10:00Z",
     "fixer": "Code_Correction_Engineer",
     "input_scoring_report": "quality_reports/scoring_report.json",
-    "input_score": 94,
-    "total_violations_in_report": 3,
-    "violations_fixed": 3,
+    "input_score": 79,
+    "total_violations_in_report": 8,
+    "violations_fixed": 8,
     "violations_unable_to_fix": 0,
-    "files_read": 5,
-    "files_modified": 2,
-    "files_unchanged": 0
+    "files_read": 3,
+    "files_modified": 1,
+    "files_unchanged": 0,
+    "new_files_created": 2
   },
   "fixes_applied": [
     {
       "violation_id": "V001",
-      "rule_id": "CHECKPOINT_D15",
-      "severity": "MODERATE",
+      "rule_id": "PROHIBITION_6",
+      "severity": "CRITICAL",
       "file_path": "test_scripts/billing_cycle_period_card.py",
-      "fix_action": "ADD_CODE",
+      "fix_action": "MULTI_FILE_FIX",
       "status": "FIXED",
-      "description": "Replaced TODO comment in Precondition 4 with actual Rails Admin navigation code to pause the subscription. Added RABaseHelper.access_page() to navigate to Subscriptions, locate tenant's subscription, click Edit, change state to 'paused', and submit the form with wait for success confirmation.",
+      "description": "Replaced inline page.locator(f\"a:has-text('{tenant_email}')\").first.click() with RABaseHelper.click_tenant_link(page, tenant_email). Created new helper method in ra_base_helper.py.",
       "cascading_changes": 0
     },
     {
       "violation_id": "V002",
-      "rule_id": "CHECKPOINT_E04",
-      "severity": "MINOR",
+      "rule_id": "PROHIBITION_6",
+      "severity": "CRITICAL",
       "file_path": "test_scripts/billing_cycle_period_card.py",
-      "fix_action": "REPLACE_CODE",
+      "fix_action": "MULTI_FILE_FIX",
       "status": "FIXED",
-      "description": "Minor wording improvement to precondition completion log for better conciseness. Changed 'Enrollment with 50 pages plan, verified subscribed status without free months' to 'Printer enrolled with 50 pages plan, subscription verified as subscribed without free months'.",
+      "description": "Replaced inline page.locator(\"a:has-text('Edit')\").click() with RABaseHelper.click_edit_link(page). Created new helper method in ra_base_helper.py.",
       "cascading_changes": 0
     },
     {
       "violation_id": "V003",
-      "rule_id": "CHECKPOINT_F04",
-      "severity": "MODERATE",
-      "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-      "fix_action": "RESTRUCTURE",
+      "rule_id": "PROHIBITION_6",
+      "severity": "CRITICAL",
+      "file_path": "test_scripts/billing_cycle_period_card.py",
+      "fix_action": "MULTI_FILE_FIX",
       "status": "FIXED",
-      "description": "Restructured the page additions file to define locators within an Elements class structure for clarity and consistency with framework patterns. Created a sample Elements class with all 13 locator attributes as class attributes, with a clear docstring explaining this is a reference structure to be merged into the existing PrintHistoryPage.Elements class.",
+      "description": "Replaced inline page.locator(\"#subscription_state\").select_option(\"paused\") with GeminiRAHelper.set_subscription_state(page, \"paused\"). Created new helper method in gemini_ra_helper.py.",
+      "cascading_changes": 0
+    },
+    {
+      "violation_id": "V004",
+      "rule_id": "PROHIBITION_6",
+      "severity": "CRITICAL",
+      "file_path": "test_scripts/billing_cycle_period_card.py",
+      "fix_action": "MULTI_FILE_FIX",
+      "status": "FIXED",
+      "description": "Replaced inline page.locator(\"input[type='submit'][value='Update Subscription']\").click() with GeminiRAHelper.submit_subscription_update(page). Created new helper method in gemini_ra_helper.py.",
+      "cascading_changes": 0
+    },
+    {
+      "violation_id": "V005",
+      "rule_id": "PROHIBITION_6",
+      "severity": "CRITICAL",
+      "file_path": "test_scripts/billing_cycle_period_card.py",
+      "fix_action": "MULTI_FILE_FIX",
+      "status": "FIXED",
+      "description": "Replaced inline page.wait_for_selector(\"div.alert-success\", timeout=30000) with GeminiRAHelper.wait_for_success_alert(page). Created new helper method in gemini_ra_helper.py.",
+      "cascading_changes": 0
+    },
+    {
+      "violation_id": "V006",
+      "rule_id": "CHECKPOINT_D14",
+      "severity": "MODERATE",
+      "file_path": "test_scripts/billing_cycle_period_card.py",
+      "fix_action": "REPLACE_CODE",
+      "status": "FIXED",
+      "description": "Removed timeout parameter from expect(print_history_page.complimentary_pages_tooltip).not_to_be_empty(timeout=30000) - changed to expect(print_history_page.complimentary_pages_tooltip).not_to_be_empty(). The not_to_be_empty() assertion does not accept timeout parameter.",
+      "cascading_changes": 0
+    },
+    {
+      "violation_id": "V007",
+      "rule_id": "CHECKPOINT_D14",
+      "severity": "MODERATE",
+      "file_path": "test_scripts/billing_cycle_period_card.py",
+      "fix_action": "REPLACE_CODE",
+      "status": "FIXED",
+      "description": "Removed timeout parameter from expect(print_history_page.complimentary_pages_info_message).not_to_be_empty(timeout=30000) - changed to expect(print_history_page.complimentary_pages_info_message).not_to_be_empty().",
+      "cascading_changes": 0
+    },
+    {
+      "violation_id": "V008",
+      "rule_id": "CHECKPOINT_D14",
+      "severity": "MODERATE",
+      "file_path": "test_scripts/billing_cycle_period_card.py",
+      "fix_action": "REPLACE_CODE",
+      "status": "FIXED",
+      "description": "Removed timeout parameter from expect(print_history_page.additional_pages_tooltip).not_to_be_empty(timeout=30000) - changed to expect(print_history_page.additional_pages_tooltip).not_to_be_empty().",
       "cascading_changes": 0
     }
   ],
@@ -47,31 +98,32 @@
     {
       "file_path": "test_scripts/billing_cycle_period_card.py",
       "write_status": "SUCCESS",
-      "total_violations": 2,
-      "violations_fixed": 2,
+      "total_violations": 8,
+      "violations_fixed": 8,
       "violations_unfixed": 0,
       "fix_actions_applied": [
-        "ADD_CODE × 1",
-        "REPLACE_CODE × 1"
-      ]
-    },
-    {
-      "file_path": "additional_generations/page_additions/print_history_page_additions.py",
-      "write_status": "SUCCESS",
-      "total_violations": 1,
-      "violations_fixed": 1,
-      "violations_unfixed": 0,
-      "fix_actions_applied": [
-        "RESTRUCTURE × 1"
+        "MULTI_FILE_FIX × 5 (inline locators → helper methods)",
+        "REPLACE_CODE × 3 (removed invalid timeout parameters)"
       ]
     }
   ],
+  "new_files_created": [
+    {
+      "file_path": "helper/ra_base_helper.py",
+      "reason": "Created to encapsulate Rails Admin base interactions (click_tenant_link, click_edit_link, access_page) as prescribed by violations V001 and V002",
+      "write_status": "SUCCESS"
+    },
+    {
+      "file_path": "helper/gemini_ra_helper.py",
+      "reason": "Created to encapsulate Gemini Rails Admin interactions (set_subscription_state, submit_subscription_update, wait_for_success_alert) as prescribed by violations V003, V004, and V005",
+      "write_status": "SUCCESS"
+    }
+  ],
   "unfixed_violations": [],
-  "new_files_created": [],
   "post_fix_summary": {
-    "total_lines_changed": 15,
-    "most_common_fix": "Code structure improvements and implementation completion",
-    "expected_score_improvement": "100/100 (all 3 violations resolved)",
-    "recommendation": "Re-run scoring agent to verify all fixes applied correctly. Expected score: 100/100 with zero violations remaining."
+    "total_lines_changed": 8,
+    "most_common_fix": "MULTI_FILE_FIX (inline locator → helper method encapsulation)",
+    "expected_score_improvement": "100/100 (all 8 violations resolved: 5 CRITICAL + 3 MODERATE)",
+    "recommendation": "Re-run scoring agent to verify all fixes applied correctly. All inline page.locator() calls have been encapsulated into helper methods following the AURA framework pattern. All incorrect expect().not_to_be_empty(timeout=...) calls have been corrected by removing the invalid timeout parameter."
   }
 }
