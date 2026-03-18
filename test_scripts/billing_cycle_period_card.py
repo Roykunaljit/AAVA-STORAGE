@@ -65,11 +65,11 @@ def billing_cycle_period_card(stage_callback):
             GeminiRAHelper.access_tenant_page(page, tenant_email)
             # Pause the subscription using Rails Admin
             RABaseHelper.access_page(page, "Subscriptions")
-            page.locator(f"a:has-text('{tenant_email}')").first.click()
-            page.locator("a:has-text('Edit')").click()
-            page.locator("#subscription_state").select_option("paused")
-            page.locator("input[type='submit'][value='Update Subscription']").click()
-            page.wait_for_selector("div.alert-success", timeout=30000)
+            RABaseHelper.click_tenant_link(page, tenant_email)
+            RABaseHelper.click_edit_link(page)
+            GeminiRAHelper.set_subscription_state(page, "paused")
+            GeminiRAHelper.submit_subscription_update(page)
+            GeminiRAHelper.wait_for_success_alert(page)
             framework_logger.info("Precondition 4: Plan paused successfully via Rails Admin")
 
             # ══════════════════════════════════════════════
@@ -121,7 +121,7 @@ def billing_cycle_period_card(stage_callback):
             else:
                 print_history_page.complimentary_pages_info_icon.hover()
             expect(print_history_page.complimentary_pages_tooltip).to_be_visible(timeout=10000)
-            expect(print_history_page.complimentary_pages_tooltip).not_to_be_empty(timeout=30000)
+            expect(print_history_page.complimentary_pages_tooltip).not_to_be_empty()
             framework_logger.info("Step 7: Verified tooltip displays with message")
 
             # Step 8: Check Complimentary pages value
@@ -131,7 +131,7 @@ def billing_cycle_period_card(stage_callback):
 
             # Step 9: Check message below Complimentary pages
             expect(print_history_page.complimentary_pages_info_message).to_be_visible(timeout=30000)
-            expect(print_history_page.complimentary_pages_info_message).not_to_be_empty(timeout=30000)
+            expect(print_history_page.complimentary_pages_info_message).not_to_be_empty()
             framework_logger.info("Step 9: Verified information message with plan info")
 
             # Step 10: Print 6 pages (less than plan limit)
@@ -195,7 +195,7 @@ def billing_cycle_period_card(stage_callback):
             else:
                 print_history_page.additional_pages_info_icon.hover()
             expect(print_history_page.additional_pages_tooltip).to_be_visible(timeout=10000)
-            expect(print_history_page.additional_pages_tooltip).not_to_be_empty(timeout=30000)
+            expect(print_history_page.additional_pages_tooltip).not_to_be_empty()
             framework_logger.info("Step 16: Additional pages tooltip verified")
 
             # Step 17: Check message below Additional pages
