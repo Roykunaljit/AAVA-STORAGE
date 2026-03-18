@@ -63,7 +63,13 @@ def billing_cycle_period_card(stage_callback):
             # Precondition 4: Pause the plan
             GeminiRAHelper.access(page)
             GeminiRAHelper.access_tenant_page(page, tenant_email)
-            GeminiRAHelper.pause_subscription(page, subscription_id)
+            # Pause subscription via Rails Admin edit interface
+            # Navigate to subscription edit page and update state to paused
+            page.locator("a:has-text('Edit')").click()
+            page.wait_for_load_state('networkidle', timeout=30000)
+            page.locator("select[name='subscription[subscription_state]']").select_option('paused')
+            page.locator("input[type='submit'][value='Save']").click()
+            page.wait_for_load_state('networkidle', timeout=30000)
             GeminiRAHelper.verify_rails_admin_info(page, 'Subscription State', 'paused', retry=True)
             framework_logger.info("Precondition 4: Subscription paused via Rails Admin")
 
