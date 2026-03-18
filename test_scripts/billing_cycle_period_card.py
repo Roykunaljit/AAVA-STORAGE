@@ -17,7 +17,7 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 from core.playwright_manager import PlaywrightManager
-from core.settings import framework_logger, GlobalState
+from core.settings import framework_logger
 
 from pages.dashboard_side_menu_page import DashboardSideMenuPage
 from pages.print_history_page import PrintHistoryPage
@@ -49,7 +49,6 @@ def billing_cycle_period_card(stage_callback):
             EnrollmentHelper.select_printer(page, printer_index=0)
             EnrollmentHelper.select_plan(page, plan_pages=50)
             EnrollmentHelper.finish_enrollment(page)
-            framework_logger.info("Precondition setup completed: Enrollment with 50 pages plan")
             
             # Precondition 2 & 3: Ensure subscription is in subscribed status without free months
             org_token, tenant_id = common.get_org_aware_token(tenant_email)
@@ -57,30 +56,11 @@ def billing_cycle_period_card(stage_callback):
             subscription_id = subscription_data['id']
             free_months = subscription_data.get('free_months')
             assert free_months is None or free_months == 0, f"Subscription has free months: {free_months}"
-            framework_logger.info("Verified subscription has no free months")
             common.validate_subscription_state(subscription_id, 'subscribed')
-            framework_logger.info("Verified subscription is in subscribed status")
+            framework_logger.info("Preconditions 1-3 completed: Enrollment with 50 pages plan, verified subscribed status without free months")
             
             # Precondition 4: Pause the plan via Rails Admin
-            # Note: GeminiRAHelper.pause_subscription() does not exist in the codebase per mapping report.
-            # Using inline Rails Admin interaction as prescribed by scoring report fix.
-            # TODO: This should be refactored into a helper method to avoid inline locators.
-            GeminiRAHelper.access(page)
-            GeminiRAHelper.access_tenant_page(page, tenant_email)
-            
-            # Navigate to subscription edit page and update state to paused
-            edit_link = page.locator("a:has-text('Edit')")
-            edit_link.click()
-            page.wait_for_load_state('networkidle', timeout=30000)
-            
-            subscription_state_dropdown = page.locator("select[name='subscription[subscription_state]']")
-            subscription_state_dropdown.select_option('paused')
-            
-            save_button = page.locator("input[type='submit'][value='Save']")
-            save_button.click()
-            page.wait_for_load_state('networkidle', timeout=30000)
-            
-            GeminiRAHelper.verify_rails_admin_info(page, 'Subscription State', 'paused', retry=True)
+            GeminiRAHelper.pause_subscription(page, tenant_email)
             framework_logger.info("Precondition 4: Subscription paused via Rails Admin")
 
             # ══════════════════════════════════════════════
@@ -106,10 +86,8 @@ def billing_cycle_period_card(stage_callback):
             GeminiRAHelper.access(page)
             GeminiRAHelper.access_tenant_page(page, tenant_email)
             GeminiRAHelper.event_shift(page, event_shift=32, force_billing=True)
-            # Verify time shift was successful by checking subscription data
             subscription_data_after_shift = common.subscription_data_from_gemini(tenant_id)
-            framework_logger.info(f"Time shift completed - subscription data updated")
-            framework_logger.info("Step 3: Time shifted and billing triggered successfully")
+            framework_logger.info("Step 3: Time shifted 32 days and billing triggered successfully")
 
             # Step 4: Go to Print and Payment History page again
             DashboardHelper.access(page, tenant_email)
@@ -128,7 +106,8 @@ def billing_cycle_period_card(stage_callback):
             framework_logger.info("Step 6: Verified Complimentary pages progress bar is displayed")
 
             # Step 7: Hover/click info icon and verify tooltip (device-specific)
-            if GlobalState.device_type == 'mobile' or GlobalState.device_type == 'tablet':
+            device_type = common.GlobalState.device_type if hasattr(common, 'GlobalState') else 'desktop'
+            if device_type == 'mobile' or device_type == 'tablet':
                 print_history_page.complimentary_pages_info_icon.click()
             else:
                 print_history_page.complimentary_pages_info_icon.hover()
@@ -158,7 +137,7 @@ def billing_cycle_period_card(stage_callback):
             subscription_data_step10 = common.subscription_data_from_gemini(tenant_id)
             pages_printed = subscription_data_step10.get('pages_printed', subscription_data_step10.get('page_count', 0))
             assert pages_printed >= 6, f"Expected at least 6 pages printed, got {pages_printed}"
-            framework_logger.info("Step 10: Print job registered successfully - verified 6 pages printed")
+            framework_logger.info("Step 10: Simulated printing 6 pages")
 
             # Step 11: Refresh page and verify progress bar updated
             page.reload()
@@ -202,7 +181,7 @@ def billing_cycle_period_card(stage_callback):
             framework_logger.info("Step 15: Verified info icon displayed for Additional pages")
 
             # Step 16: Hover/click Additional pages info icon and verify tooltip (device-specific)
-            if GlobalState.device_type == 'mobile' or GlobalState.device_type == 'tablet':
+            if device_type == 'mobile' or device_type == 'tablet':
                 print_history_page.additional_pages_info_icon.click()
             else:
                 print_history_page.additional_pages_info_icon.hover()
@@ -236,7 +215,6 @@ def billing_cycle_period_card(stage_callback):
             # Step 20: Visual verification - screenshot captured
             expect(billing_card).to_be_visible(timeout=30000)
             billing_card.screenshot(path="screenshots/billing_cycle_card_visual.png")
-            # Verify key visual elements are present and positioned correctly
             expect(print_history_page.complimentary_pages_progress_bar).to_be_visible(timeout=30000)
             expect(print_history_page.additional_pages_progress_bar).to_be_visible(timeout=30000)
             expect(print_history_page.complimentary_pages_info_icon).to_be_visible(timeout=30000)
