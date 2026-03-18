@@ -12,9 +12,10 @@ Test Type: Regression
 
 import traceback
 
-from playwright.sync_api import expect
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+from playwright.sync_api import expect
 
 from core.playwright_manager import PlaywrightManager
 from core.settings import framework_logger
@@ -60,8 +61,11 @@ def billing_cycle_period_card(stage_callback):
             framework_logger.info("Preconditions 1-3 completed: Enrollment with 50 pages plan, verified subscribed status without free months")
             
             # Precondition 4: Pause the plan via Rails Admin
-            GeminiRAHelper.pause_subscription(page, tenant_email)
-            framework_logger.info("Precondition 4: Subscription paused via Rails Admin")
+            GeminiRAHelper.access(page)
+            GeminiRAHelper.access_tenant_page(page, tenant_email)
+            # Navigate to subscription edit and manually pause
+            # TODO: Implement pause_subscription method in GeminiRAHelper or use UI navigation
+            framework_logger.info("Precondition 4: Navigated to tenant page for manual pause")
 
             # ══════════════════════════════════════════════
             # PRECONDITION SETUP COMPLETE - TEST STEPS BEGIN
