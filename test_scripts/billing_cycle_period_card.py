@@ -17,8 +17,7 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 from core.playwright_manager import PlaywrightManager
-from core.settings import framework_logger
-from core.settings import GlobalState
+from core.settings import framework_logger, GlobalState
 
 from pages.dashboard_side_menu_page import DashboardSideMenuPage
 from pages.print_history_page import PrintHistoryPage
@@ -64,12 +63,7 @@ def billing_cycle_period_card(stage_callback):
             # Precondition 4: Pause the plan
             GeminiRAHelper.access(page)
             GeminiRAHelper.access_tenant_page(page, tenant_email)
-            subscription_page_url = f"{GlobalState.gemini_ra_url}/subscriptions/{subscription_id}/edit"
-            page.goto(subscription_page_url)
-            page.wait_for_load_state('networkidle', timeout=30000)
-            page.select_option('select#subscription_subscription_state', 'paused')
-            page.click('button[type="submit"]')
-            page.wait_for_load_state('networkidle', timeout=30000)
+            GeminiRAHelper.pause_subscription(page, subscription_id)
             GeminiRAHelper.verify_rails_admin_info(page, 'Subscription State', 'paused', retry=True)
             framework_logger.info("Precondition 4: Subscription paused via Rails Admin")
 
